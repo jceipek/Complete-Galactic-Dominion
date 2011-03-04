@@ -1,1 +1,17 @@
-Herro worrd.
+For more help go to:
+http://www.kernel.org/pub/software/scm/git/docs/
+
+####To add files to the repository:
+####YOU MUST BE IN THE LOCAL DIRECTORY
+
+##for new files:
+git add <filename>
+
+##to commit changes to your local repository
+git commit -am "message goes here"
+
+##to commit changes to the public repository
+git push origin master
+
+##updates your local repository
+git pull
