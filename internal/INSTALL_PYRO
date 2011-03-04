@@ -1,0 +1,13 @@
+____________________________________________________
+
+INSTRUCTIONS TO DOWNLOAD PYRO (PYthon Remote Object)
+____________________________________________________
+
+wget http://www.xs4all.nl/~irmen/pyro3/download/Pyro-3.12.tar.gz
+tar -xzf Pyro-3.12.tar.gz
+cd Pyro-3.12
+sudo python setup.py install
+
+____________________________________________________
+
+You are now done!  Yay!  (E-mail Jared if this doesn't work.)
