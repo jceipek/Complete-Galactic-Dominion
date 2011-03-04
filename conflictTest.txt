@@ -11,7 +11,7 @@ These are extraneous lines.
 These are extraneous lines.
 These are extraneous lines.
 This is the midpoint.
-Patrick is in the midpoint.
+Patrick is still in the midpoint.
 These are extraneous lines.
 These are extraneous lines.
 These are extraneous lines.
