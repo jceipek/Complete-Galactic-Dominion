@@ -1,1 +1,13 @@
-I read you
+For more help go to:
+http://www.kernel.org/pub/software/scm/git/docs/
+
+####To add files to the repository:
+
+##for new files:
+git add {filename}
+
+##to commit changes to your repository
+git commit -am "message goes here"
+
+##to commit changes to the public repository
+git push origin master
