@@ -27,7 +27,7 @@ class testAdd(unittest.TestCase):
         """
 
     def testAddInts(self):
-        self.assertEqual(self.add(self.num1,self.num1), 10)
+        self.assertEqual(self.add(self.num1,self.num1), 11)
 
     def testAddFloats(self):
         self.assertEqual(self.add(self.num2,self.num2), 22.8)
