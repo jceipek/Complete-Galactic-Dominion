@@ -1,0 +1,6 @@
+####instructions for setting up dev environment
+##installing the confict management program
+sudo apt-get install meld
+
+#if "git pull" produces a conflict, run:
+git mergetool
