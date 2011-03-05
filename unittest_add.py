@@ -39,7 +39,7 @@ class testAdd(unittest.TestCase):
         self.assertEqual(self.add(self.num3,self.num3), -8)
         
     def testAddPosNegInts(self):
-        self.assertEqual(self.add(self.num1,self.num3), 1)
+        self.assertEqual(self.add(self.num1,self.num3), 1.5)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(testAdd)
