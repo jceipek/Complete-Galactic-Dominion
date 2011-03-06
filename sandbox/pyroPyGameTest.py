@@ -24,6 +24,8 @@ if __name__=="__main__":
     ball = pygame.image.load("ball.png")
     ballrect = ball.get_rect()
 
+	main(ballrect)
+
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
@@ -37,5 +39,3 @@ if __name__=="__main__":
         screen.blit(ball, ballrect)
         pygame.display.flip()
         pygame.time.delay(2)
-
-    main(ballrect)
