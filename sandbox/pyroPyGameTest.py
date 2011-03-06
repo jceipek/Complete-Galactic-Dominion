@@ -3,7 +3,7 @@ import sys, pygame
 
 def main(obj):
     Pyro.core.initServer()
-    daemon=Pyro.core.Daemon()
+    daemon=Pyro.core.Daemon(host='cgdci.olin.edu')
     uri=daemon.connect(obj,"pyBallRect")
 
     print "The daemon runs on port:",daemon.port
