@@ -24,7 +24,7 @@ if __name__=="__main__":
     ball = pygame.image.load("ball.png")
     ballrect = ball.get_rect()
 
-	main(ballrect)
+    main(ballrect)
 
     while 1:
         for event in pygame.event.get():
