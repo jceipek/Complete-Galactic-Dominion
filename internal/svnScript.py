@@ -6,5 +6,4 @@ os.popen('svn add /home/is/subversionRepo/complete-galactic-dominion/*')
 gitres = os.popen('git log -1')
 gitcommit = gitres.read()
 gitres.close()
-os.popen('svn ci /home/is/subversionRepo/complete-galactic-dominion/ -m ' + '"'+''.join(gitcommit.split('\n')[4:]+'\n'+gitcommit.split('\n')[1]
-+'"')
+os.popen('svn ci /home/is/subversionRepo/complete-galactic-dominion/ -m ' + '"'+''.join(gitcommit.split('\n')[4:]+'\n'+gitcommit.split('\n')[1]+'"')
