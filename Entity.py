@@ -31,5 +31,6 @@ class Entity(MapObject,pygame.sprite.Sprite):
         pass
 
     def showDescription(self):
-        """Show the user the description of the entity."""
+        """Show the user the description of the entity.
+        Needs to return more than just a string, eventually."""
         return self.description
