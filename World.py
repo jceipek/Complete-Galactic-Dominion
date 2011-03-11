@@ -1,3 +1,5 @@
+import numpy as n
+
 class World():
     """A container for everything that the player can see by scrolling
     around the map."""
@@ -17,9 +19,9 @@ class World():
         # May change this to a numpy style array of WorldSquares
         self.worldSquareDict = {}
 
-        # Populate worldSquareDict.  Indicies start at 1.
-        for c in range(1,worldColumns+1):
-            for r in range(1,worldRows+1):
+        # Populate worldSquareDict.  Indicies start at 0.
+        for c in range(worldColumns):
+            for r in range(worldRows):
                 ### Currently empty instances
                 self.worldSquareDict[(c,r)] = WorldSquare()
 
@@ -37,4 +39,4 @@ class WorldSquare():
         # Dictionary mapping tuples of world column/row indicies to
         # WorldSquares.  Should only contain static objects (not units)
         # Will be used for many functions, including pathfinding.
-        self.positionDict = {}
+        self.positionDict = n.array()
