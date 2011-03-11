@@ -1,0 +1,50 @@
+Hello everyone!  Today we're going to learn how to make a submodule!
+
+You've probably seen expressions of the form "module.submodule" before.
+
+Now, I'll explain what this means.
+
+Essentially, this means that the file structure is such that there is a 
+subfolder of the current directory you are in which is called "module".
+
+All folders in a module must contain a function called __init__.py
+Python looks at this file to decide what to automatically import from that 
+folder.
+
+Now, let's say this is our class structure:
+
+\Current-Working-Directory (the one we're working in)
+	currentfile.py (the file we're trying to import from)
+	\folder
+		__init__.py
+		thing1.py (contains classes A and B)
+		thing2.py (contains classes AA and BB)
+
+Within currentfile.py, one could say:
+
+from folder import A, BB
+
+This would import classes A (from thing1.py) and BB (thing2.py) into the 
+current namespace, meaning, you can call them by A() and BB().
+
+We could also say:
+
+import folder
+
+This would import all classes defined to be imported in __init__.py.
+
+If __init__.py has the lines:
+
+from thing1 import *
+from thing2 import *
+
+...then we are allowing all of the classes and functions they contain to
+be accessible within the folder namespace.
+
+Therefore, we could make an instance of class AA with folder.AA()
+
+If we do:
+
+from folder import *
+
+We can simply do AA() to make an instance of class AA.

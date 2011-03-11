@@ -1,8 +1,13 @@
 import Builder
 class Structure(Builder)
 """Defines structues which are built by units"""
-	timeToBuild=0 #first definition of timeToBuild
-	resourcesRequired=None #first definition of resourcesRequired
-	def __init__(self):
-		Builder.__init__(self)
+
+        def __init__(self, imagePath, colorkey=None):
+                Builder.__init__(self, imagePath, colorkey)
+
+                # first definition of resourcesRequired
+                self.resourcesRequired = []
+
+                # first definition of timeToBuild
+                self.timeToBuild = 0
 		

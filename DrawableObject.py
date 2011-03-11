@@ -6,10 +6,10 @@ class DrawableObject():
     def __init__(self, imagePath, colorkey=None):
 
         # First class to have image and rect objects
-        self.image, self.rect = loadImage(imagePath,colorkey)
+        self.image, self.rect = self.loadImage(imagePath,colorkey)
 
     # First loadImage method
-    def loadImage(name, colorkey=None):
+    def loadImage(self, name, colorkey=None):
         fullname = os.path.join('data', name)
         try:
             image = pygame.image.load(fullname)
