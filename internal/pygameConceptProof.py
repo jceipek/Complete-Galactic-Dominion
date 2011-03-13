@@ -102,7 +102,7 @@ class Ball:
         self.image = image
         self.rect = image.get_rect()
         #This works because Rect starts at 0.0,0.0
-        self.rect.move_ip(int(x+0.5),int(y+0.5))
+        self.rect.center = (int(x+0.5),int(y+0.5))
     
     def face_ip(self,locVec):
         self.dir = self.loc.pointTo(locVec)
@@ -111,10 +111,10 @@ class Ball:
     def move_ip(self,eTime):
         if eTime>0:
             disp = self.dir.unit()
-            disp = disp.scale(eTime*self.speed).list()
-            self.loc.x += disp[0]
-            self.loc.y += disp[1]
-            self.rect.move_ip(disp)
+            disp = disp.scale(eTime*self.speed)
+            self.loc.x += disp.x
+            self.loc.y += disp.y
+            self.rect.center = (int(self.loc.x+0.5),int(self.loc.y+0.5))
         
     def update_ip(self,eTime):
     	if eTime*self.speed >= self.loc.diff(self.dest).mag():
@@ -148,7 +148,7 @@ pygame.init()
 screen = pygame.display.set_mode(size)
 
 #Set up ball
-aBall = Ball(0.0,0.0,speed=0.2)
+aBall = Ball(0.0,0.0,speed=0.5)
 aBall.dir = Vector(1.0,1.0)
 aBall.dest = Vector(0.0,0.0)
 aBall.dir = aBall.loc.pointTo(aBall.dest)
@@ -183,7 +183,6 @@ while RUNNING:
     
     #Paste the ball image on the screen in the rectangle ballrect
     screen.blit(aBall.image, aBall.rect)
-    
     #Update the screen by switching buffers
     pygame.display.flip()
     
