@@ -99,7 +99,7 @@ class Ball:
         self.dest = Vector(x,y)
         self.dir = Vector(dx,dy)
         self.speed = speed
-        self.image = image
+        self.image = image.convert_alpha()
         self.rect = image.get_rect()
         #This works because Rect starts at 0.0,0.0
         self.rect.center = (int(x+0.5),int(y+0.5))
@@ -155,6 +155,11 @@ aBall.dir = aBall.loc.pointTo(aBall.dest)
 
 mouse = Mouse()
 
+
+font = pygame.font.Font(pygame.font.get_default_font(), 16)
+txt = font.render("FPS: ***", True, (255,255,255))
+txtbound = txt.get_rect()
+
 while RUNNING:
     last_time = pygame.time.get_ticks()
 
@@ -183,10 +188,15 @@ while RUNNING:
     
     #Paste the ball image on the screen in the rectangle ballrect
     screen.blit(aBall.image, aBall.rect)
+    
+    txt = font.render("FPS: "+str(1000/ms_elapsed), True, (255,255,255))
+    screen.blit(txt, txtbound)
     #Update the screen by switching buffers
     pygame.display.flip()
     
     #Determine the time it took 
+    
+    
     ms_elapsed = pygame.time.get_ticks() - last_time
 
 pygame.quit() #quit properly, without an exception
