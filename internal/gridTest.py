@@ -60,7 +60,6 @@ font = pygame.font.Font(pygame.font.get_default_font(), 16)
 txt = font.render("FPS: ***", True, (255,255,255))
 txtbound = txt.get_rect()
 
-
 while RUNNING:
 	last_time = pygame.time.get_ticks()
 	
@@ -69,9 +68,22 @@ while RUNNING:
 	mPos = pygame.mouse.get_pos()
 	#screenLoc = (mPos[0]-screenSize[0]/2.0+0.05,mPos[1]-screenSize[1]/2.0)
 	if not deadZone.collidepoint(mPos) and screenZone.collidepoint(mPos):
-		screenLoc[0] += (mPos[0]-deadZone.center[0])*scrollSpeed
-		screenLoc[1] += (mPos[1]-deadZone.center[1])*scrollSpeed
-		print (mPos[0]-deadZone.center[0])*scrollSpeed
+		dx = (mPos[0]-deadZone.center[0])
+		dy = (mPos[1]-deadZone.center[1])
+		if dx < 0:
+			dx += deadZoneSize[0]/2.0
+		else:
+			dx -= deadZoneSize[0]/2.0
+
+		if dy < 0:
+			dy += deadZoneSize[0]/2.0
+		else:
+			dy -= deadZoneSize[0]/2.0
+			
+		screenLoc[0] += dx*scrollSpeed
+		screenLoc[1] += dy*scrollSpeed
+		
+		print dx,dy
 		#print mPos
 	
 	drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
