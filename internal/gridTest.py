@@ -1,4 +1,5 @@
 import pygame
+import math
 
 gridSize = 100
 squareSize = 64
@@ -48,7 +49,7 @@ screenLoc = [0.0, 0.0]
 deadZoneSize = (width-100,height-100)
 deadZone = pygame.Rect((0, 0), deadZoneSize)
 deadZone.center = (width/2.0,height/2.0)
-scrollSpeed = 0.03
+scrollSpeed = 2
 
 RUNNING = True
 pygame.init()
@@ -70,20 +71,20 @@ while RUNNING:
 	if not deadZone.collidepoint(mPos) and screenZone.collidepoint(mPos):
 		dx = (mPos[0]-deadZone.center[0])
 		dy = (mPos[1]-deadZone.center[1])
-		if dx < 0:
-			dx += deadZoneSize[0]/2.0
-		else:
-			dx -= deadZoneSize[0]/2.0
+		magnitude=math.sqrt(dx**2+dy**2) #distance from center
+		dirx=dx/magnitude #x component of unit direction
+		diry=dy/magnitude #y component of unit direction
 
-		if dy < 0:
-			dy += deadZoneSize[0]/2.0
-		else:
-			dy -= deadZoneSize[0]/2.0
+		dx=math.fabs(dx)-deadZoneSize[0]/2.0
+		dy=math.fabs(dy)-deadZoneSize[1]/2.0
+		if dx<0: dx=0
+		if dy<0: dy=0
+		speedCoeff=math.sqrt(dx**2+dy**2)/50
 			
-		screenLoc[0] += dx*scrollSpeed
-		screenLoc[1] += dy*scrollSpeed
+		screenLoc[0] += dirx*scrollSpeed*speedCoeff
+		screenLoc[1] += diry*scrollSpeed*speedCoeff
 		
-		print dx,dy
+		print speedCoeff
 		#print mPos
 	
 	drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
