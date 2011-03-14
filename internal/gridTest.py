@@ -61,6 +61,7 @@ font = pygame.font.Font(pygame.font.get_default_font(), 16)
 txt = font.render("FPS: ***", True, (255,255,255))
 txtbound = txt.get_rect()
 
+
 while RUNNING:
 	last_time = pygame.time.get_ticks()
 	
