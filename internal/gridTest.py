@@ -1,6 +1,6 @@
 import pygame
 
-gridSize = 4#51
+gridSize = 100
 squareSize = 64
 
 grid = dict()
@@ -34,7 +34,7 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
 			
 			left = int(x*squareSize-screenLoc[0])
 			top = int(y*squareSize-screenLoc[1])
-			rect = pygame.Rect((left, top), (squareSize,squareSize))
+			rect = pygame.Rect((left, top), (squareSize,)*2)
 			pygame.draw.rect(screen, color, rect)
 			
 			txt = font.render(str((x%gridSize,y%gridSize)), True, (255,0,0))
@@ -44,14 +44,22 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
 
 
 screenSize = (width, height) = (640, 480)
+screenLoc = [0.0, 0.0]
+deadZoneSize = (width-100,height-100)
+deadZone = pygame.Rect((0, 0), deadZoneSize)
+deadZone.center = (width/2.0,height/2.0)
+scrollSpeed = 0.03
+
 RUNNING = True
 pygame.init()
 screen = pygame.display.set_mode(screenSize)
+screenZone = screen.get_rect()
 ms_elapsed = pygame.time.get_ticks()
 
 font = pygame.font.Font(pygame.font.get_default_font(), 16)
 txt = font.render("FPS: ***", True, (255,255,255))
 txtbound = txt.get_rect()
+
 
 while RUNNING:
 	last_time = pygame.time.get_ticks()
@@ -59,9 +67,16 @@ while RUNNING:
 	screen.fill((255,0,0)) #not necessary if we draw everywhere
 	
 	mPos = pygame.mouse.get_pos()
-	screenLoc = (mPos[0]-screenSize[0]/2.0,mPos[1]-screenSize[1]/2.0)
+	#screenLoc = (mPos[0]-screenSize[0]/2.0+0.05,mPos[1]-screenSize[1]/2.0)
+	if not deadZone.collidepoint(mPos) and screenZone.collidepoint(mPos):
+		screenLoc[0] += (mPos[0]-deadZone.center[0])*scrollSpeed
+		screenLoc[1] += (mPos[1]-deadZone.center[1])*scrollSpeed
+		print (mPos[0]-deadZone.center[0])*scrollSpeed
+		#print mPos
 	
 	drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
+	
+	pygame.draw.rect(screen, (150,150,0), deadZone, 3)
 	
 	txt = font.render("FPS: "+str(1000/ms_elapsed), True, (0,150,150))
 	screen.blit(txt, txtbound)
