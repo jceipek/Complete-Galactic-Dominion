@@ -47,11 +47,8 @@ screenSize = (width, height) = (640, 480)
 screenLoc = [0.0, 0.0]
 deadZoneSize = (width-100,height-100)
 deadZone = pygame.Rect((0, 0), deadZoneSize)
-deadZoneX = pygame.Rect((0, 0), (width,deadZoneSize[1]))
-deadZoneY = pygame.Rect((0, 0), (deadZoneSize[0],height))
-deadZone.center = deadZoneX.center = deadZoneY.center = (width/2.0,height/2.0)
-
-scrollSpeed = 0.05
+deadZone.center = (width/2.0,height/2.0)
+scrollSpeed = 0.03
 
 RUNNING = True
 pygame.init()
@@ -71,21 +68,23 @@ while RUNNING:
 	mPos = pygame.mouse.get_pos()
 	#screenLoc = (mPos[0]-screenSize[0]/2.0+0.05,mPos[1]-screenSize[1]/2.0)
 	if not deadZone.collidepoint(mPos) and screenZone.collidepoint(mPos):
-		if deadZoneX.collidepoint(mPos):
-			dx = (mPos[0]-deadZone.center[0])
-			if dx < 0:
-				dx += deadZoneSize[0]/2.0
-			else:
-				dx -= deadZoneSize[0]/2.0
-			screenLoc[0] += dx*scrollSpeed
+		dx = (mPos[0]-deadZone.center[0])
+		dy = (mPos[1]-deadZone.center[1])
+		if dx < 0:
+			dx += deadZoneSize[0]/2.0
+		else:
+			dx -= deadZoneSize[0]/2.0
+
+		if dy < 0:
+			dy += deadZoneSize[0]/2.0
+		else:
+			dy -= deadZoneSize[0]/2.0
 			
-		if deadZoneY.collidepoint(mPos):
-			dy = (mPos[1]-deadZone.center[1])
-			if dy < 0:
-				dy += deadZoneSize[0]/2.0
-			else:
-				dy -= deadZoneSize[0]/2.0
-			screenLoc[1] -= dy*scrollSpeed
+		screenLoc[0] += dx*scrollSpeed
+		screenLoc[1] += dy*scrollSpeed
+		
+		print dx,dy
+		#print mPos
 	
 	drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
 	
