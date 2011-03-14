@@ -1,6 +1,6 @@
 import pygame
 
-gridSize = 15#51
+gridSize = 4#51
 squareSize = 64
 
 grid = dict()
@@ -19,15 +19,15 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
 	#screenLoc is the absolute pixel location of the screen with respect to the
 	#grid corners
 	
-	miny = int((screenLoc[1]//squareSize)%gridSize)
-	maxy = int(((screenLoc[1]+screenSize[1])//squareSize+1)%gridSize)
+	miny = int((screenLoc[1]//squareSize))
+	maxy = int(((screenLoc[1]+screenSize[1])//squareSize+1))
 	
-	minx = int((screenLoc[0]//squareSize)%gridSize)
-	maxx = int(((screenLoc[0]+screenSize[0])//squareSize+1)%gridSize)
+	minx = int((screenLoc[0]//squareSize))
+	maxx = int(((screenLoc[0]+screenSize[0])//squareSize+1))
 	
 	for y in range(miny,maxy):
 		for x in range(minx,maxx):
-			if grid[(x,y)] == 0:
+			if grid[(x%gridSize,y%gridSize)] == 0:
 				color = (0,0,0)
 			else:
 				color = (255,255,255)
@@ -37,7 +37,7 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
 			rect = pygame.Rect((left, top), (squareSize,squareSize))
 			pygame.draw.rect(screen, color, rect)
 			
-			txt = font.render(str((x,y)), True, (0,0,255))
+			txt = font.render(str((x%gridSize,y%gridSize)), True, (255,0,0))
 			txtbound = txt.get_rect()
 			txtbound.center = (left+squareSize/2,top+squareSize/2)
    			screen.blit(txt, txtbound)
@@ -56,14 +56,14 @@ txtbound = txt.get_rect()
 while RUNNING:
 	last_time = pygame.time.get_ticks()
 	
-	#screen.fill((255,0,0)) #not necessary if we draw everywhere
+	screen.fill((255,0,0)) #not necessary if we draw everywhere
 	
 	mPos = pygame.mouse.get_pos()
-	screenLoc = (mPos[0],mPos[1])
+	screenLoc = (mPos[0]-screenSize[0]/2.0,mPos[1]-screenSize[1]/2.0)
 	
 	drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
 	
-	txt = font.render("FPS: "+str(1000/ms_elapsed), True, (255,0,0))
+	txt = font.render("FPS: "+str(1000/ms_elapsed), True, (0,150,150))
 	screen.blit(txt, txtbound)
 	
 	for event in pygame.event.get():
