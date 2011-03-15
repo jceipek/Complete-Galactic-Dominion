@@ -75,9 +75,9 @@ for y in range(gridSize):
 		
 		grid[(x,y)] = square
 
-hud1 = pygame.image.load("hud_sism.png").convert_alpha()
+hud1 = pygame.image.load("HUD_sism.png").convert_alpha()
 hudZone1 = hud1.get_rect()
-hud2 = pygame.image.load("hud_sibottom.png").convert()
+hud2 = pygame.image.load("HUD_sibottom.png").convert()
 hudZone2 = hud2.get_rect()
 hudZone2.bottom = height
 
