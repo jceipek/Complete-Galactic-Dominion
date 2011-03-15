@@ -119,6 +119,7 @@ while RUNNING:
 	screen.blit(txt, txtbound)
 	
 	for event in pygame.event.get():
+                print event
 		if event.type == pygame.QUIT:
 			RUNNING = False
 	
