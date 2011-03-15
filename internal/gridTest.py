@@ -40,7 +40,7 @@ screenLoc = [0.0, 0.0]
 deadZoneSize = (width-200,height-200)
 deadZone = pygame.Rect((0, 0), deadZoneSize)
 deadZone.center = (width/2.0,height/2.0)
-scrollSpeed = 15
+scrollSpeed = 1
 
 RUNNING = True
 pygame.init()
@@ -81,6 +81,9 @@ hud2 = pygame.image.load("HUD_sibottom.png").convert()
 hudZone2 = hud2.get_rect()
 hudZone2.bottom = height
 
+minFPS = 100
+maxFPS = 0
+
 while RUNNING:
 	last_time = pygame.time.get_ticks()
 	
@@ -98,8 +101,8 @@ while RUNNING:
 		if dx<0: dx=0
 		if dy<0: dy=0
 		speedCoeff=pow(dx**2+dy**2,0.5)/(width-deadZoneSize[0])*2.0
-		screenLoc[0] += dirx*scrollSpeed*speedCoeff
-		screenLoc[1] += diry*scrollSpeed*speedCoeff
+		screenLoc[0] += dirx*scrollSpeed*speedCoeff*ms_elapsed
+		screenLoc[1] += diry*scrollSpeed*speedCoeff*ms_elapsed
 		
 		#print speedCoeff
 		#print mPos
