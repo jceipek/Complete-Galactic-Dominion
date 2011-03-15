@@ -24,15 +24,18 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
 			
 			screen.blit(grid[(x%gridSize,y%gridSize)],rect)
 			
+			"""
 			txt = font.render(str((x%gridSize,y%gridSize)), True, (255,0,0))
 			txtbound = txt.get_rect()
 			txtbound.center = (left+squareSize/2,top+squareSize/2)
    			screen.blit(txt, txtbound)
+   			#"""
+   			
 
 gridSize = 100
 squareSize = 64
 
-screenSize = (width, height) = (640, 480)
+screenSize = (width, height) = (1024, 768)
 screenLoc = [0.0, 0.0]
 deadZoneSize = (width-200,height-200)
 deadZone = pygame.Rect((0, 0), deadZoneSize)
@@ -45,7 +48,7 @@ screen = pygame.display.set_mode(screenSize)
 screenZone = screen.get_rect()
 ms_elapsed = pygame.time.get_ticks()
 
-font = pygame.font.Font(pygame.font.get_default_font(), 12)
+font = pygame.font.Font(pygame.font.get_default_font(), 16)
 txt = font.render("FPS: ***", True, (255,255,255))
 txtbound = txt.get_rect()
 
@@ -54,21 +57,32 @@ grid = dict()
 grass1 = pygame.image.load("grass1.png").convert()
 grass2 = pygame.image.load("grass2.png").convert()
 
+from random import choice,seed
+seed(44)
 for y in range(gridSize):
+	grass = [grass1,grass2]
 	for x in range(gridSize):
+		
+		square = choice(grass)
+		"""
 		if (x%2 == 0 and y%2 == 0) or (x%2 == 1 and y%2 == 1):
 			#checker black
 			square = grass1
 		else:
 			#checker white
 			square = grass2
+		"""
+		
 		grid[(x,y)] = square
 
+hud1 = pygame.image.load("hud_sism.png").convert_alpha()
+hudZone1 = hud1.get_rect()
+hud2 = pygame.image.load("hud_sibottom.png").convert()
+hudZone2 = hud2.get_rect()
+hudZone2.bottom = height
 
 while RUNNING:
 	last_time = pygame.time.get_ticks()
-	
-	screen.fill((255,0,0)) #not necessary if we draw everywhere
 	
 	mPos = pygame.mouse.get_pos()
 	#screenLoc = (mPos[0]-screenSize[0]/2.0+0.05,mPos[1]-screenSize[1]/2.0)
@@ -93,6 +107,10 @@ while RUNNING:
 	drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
 	
 	pygame.draw.rect(screen, (150,150,0), deadZone, 3)
+	
+	screen.blit(hud1, hudZone1)
+	
+	screen.blit(hud2, hudZone2)
 	
 	txt = font.render("FPS: "+str(1000/ms_elapsed), True, (0,150,150))
 	screen.blit(txt, txtbound)
