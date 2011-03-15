@@ -46,7 +46,7 @@ RUNNING = True
 pygame.init()
 screen = pygame.display.set_mode(screenSize)
 screenZone = screen.get_rect()
-ms_elapsed = pygame.time.get_ticks()
+ms_elapsed = 1
 
 font = pygame.font.Font(pygame.font.get_default_font(), 16)
 txt = font.render("FPS: ***", True, (255,255,255))
@@ -81,8 +81,11 @@ hud2 = pygame.image.load("HUD_sibottom.png").convert()
 hudZone2 = hud2.get_rect()
 hudZone2.bottom = height
 
-minFPS = 100
-maxFPS = 0
+minFPS = 0
+maxFPS = 100
+
+# Initialize a game clock
+gameClock = pygame.time.Clock()
 
 while RUNNING:
 	last_time = pygame.time.get_ticks()
@@ -115,7 +118,7 @@ while RUNNING:
 	
 	screen.blit(hud2, hudZone2)
 	
-	txt = font.render("FPS: "+str(1000/ms_elapsed), True, (0,150,150))
+	txt = font.render("FPS: "+str(int(gameClock.get_fps())), True, (0,150,150))
 	screen.blit(txt, txtbound)
 	
 	for event in pygame.event.get():
@@ -125,7 +128,7 @@ while RUNNING:
 	
 	pygame.display.flip()
 	
-	ms_elapsed = pygame.time.get_ticks() - last_time
+	ms_elapsed = gameClock.tick(maxFPS)
 	
             
 pygame.quit()
