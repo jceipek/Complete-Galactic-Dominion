@@ -174,7 +174,7 @@ def manageNetworkConnection(host='localhost',port=51423):
                         for request in requestQueue:
                                 print 'Sending data:',request
                                 try:
-                                        fd.write(request)
+                                        fd.write(request+'\n')
                                 except socket.error,e:
                                         print 'Error sending data: %s' % e
                                         sys.exit(1)
@@ -188,14 +188,16 @@ def manageNetworkConnection(host='localhost',port=51423):
                                         sys.exit(1)
                                 try:
                                         for line in fd:
+                                                if not len(line.strip()):
+                                                        break
                                                 print 'There is something to read'
-                                                message=cPickle.loads(line.strip())
+                                                print 'Message from socket: '+line.strip()
+                                                message=line.strip().split(',')
+                                                message=(int(message[0]),int(message[1]))
                                                 global BALL
-                                                print 'Message from socket: '+line
                                                 interpretMessage(message,BALL)
-                                                print 'give me something'
-                                except:
-                                        pass#Handle exceptions
+                                except Exception,e:
+                                        print 'Error: ',e#Handle exceptions
                                 
                         requestQueue=[]
 
@@ -214,15 +216,15 @@ def sendRequest(mousePosition,ball):
         global requestQueue
         global BALL
         BALL=ball
-        print 'Adding request to queue'
         #pickle requests and add them to the queue
-        request=cPickle.dumps(mousePosition)
+        request='%d,%d' % mousePosition
         with requestQueueLock:
                 print 'Request manager aquired requestQueueLock'
+                print 'Adding request to queue'
                 requestQueue.append(request)
+                print requestQueue
         print 'Request manager released requestQueueLock'
         time.sleep(.01)
-        print requestQueue
 
 #Establish network connection
 RUNNING = True
