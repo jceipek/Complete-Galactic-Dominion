@@ -32,6 +32,4 @@ def renderer():
 
 if __name__ == '__main__':
    print "starting Renderer"
-   a=threading.Thread(target=renderer)
-   a.start()
-   a.join()
+   renderer()
