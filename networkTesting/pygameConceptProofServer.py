@@ -160,9 +160,12 @@ font = pygame.font.Font(pygame.font.get_default_font(), 16)
 txt = font.render("FPS: ***", True, (255,255,255))
 txtbound = txt.get_rect()
 
-while RUNNING:
-    last_time = pygame.time.get_ticks()
+gameClock=pygame.time.Clock()
+max_fps = 60
 
+while RUNNING:
+    #last_time = pygame.time.get_ticks()
+    ms_elapsed = gameClock.tick(max_fps)
 
 	########EVENTS#################
     for event in pygame.event.get():
@@ -189,14 +192,13 @@ while RUNNING:
     #Paste the ball image on the screen in the rectangle ballrect
     screen.blit(aBall.image, aBall.rect)
     
-    txt = font.render("FPS: "+str(1000/ms_elapsed), True, (255,255,255))
+    #txt = font.render("FPS: "+str(1000/ms_elapsed), True, (255,255,255))
+    txt = font.render("FPS: %d"%gameClock.get_fps(), True, (255,255,255))
     screen.blit(txt, txtbound)
     #Update the screen by switching buffers
     pygame.display.flip()
     
     #Determine the time it took 
-    
-    
-    ms_elapsed = pygame.time.get_ticks() - last_time
+    #ms_elapsed = pygame.time.get_ticks() - last_time
 
 pygame.quit() #quit properly, without an exception

@@ -25,6 +25,7 @@ class Window(object):
 	def __init__(self,width=640,height=480,fullscreenMode=False):
 		pygame.init()
 		self.resolution = (width,height)
+		self.fullscreenMode = fullscreenMode
 		self.updateScreenMode()
 		self.active = True
 		self.loop()
