@@ -1,4 +1,4 @@
-import sys, pygame, threading, socket, sys, time, cPickle
+import sys, pygame
 
 class Mouse:
 	"""
@@ -131,111 +131,6 @@ def interpretMessage(message,ball):
     #Currently assumes tuple or list input for message
     ball.face_ip(Vector(float(message[0]),float(message[1])))
 
-def manageNetworkConnection(host='localhost',port=51423):
-        print 'Managing Network Connection'
-        global requestQueue
-
-        #create socket
-        try:
-                clientSocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        except socket.error, e:
-                print 'Error creating socket %s' % e
-                sys.exit(1)
-
-        #determine the port
-        try:
-                port=int(port)
-        except ValueError:
-                #look up the port
-                port = socket.getservbyname(port,'tcp')
-        except socket.error,e:
-                print 'Couldn\'t find your port'
-                sys.exit(1)
-
-        try:
-                clientSocket.connect((host,port))
-        except socket.gaierror, e:
-                print 'Address error: %s' % e
-                sys.exit(1)
-        except socket.error, e:
-                print 'Connection error: %s' % e
-                sys.exit(1)
-
-        fd = clientSocket.makefile('rw',0)
-
-        def recieveServerData(sockFile):
-                while RUNNING:
-                        try:
-                                for line in sockFile:
-                                        if not len(line.strip()):
-                                                break
-                                        print 'There is something to read'
-                                        print 'Message from socket: '+line.strip()
-                                        message=line.strip().split(',')
-                                        message=(int(message[0]),int(message[1]))
-                                        global BALL
-                                        interpretMessage(message,BALL)
-                        except Exception,e:
-                                print 'Error: ',e#Handle exceptions
-                        
-        dataRecieptThread=threading.Thread(target=recieveServerData,args=(fd,))
-        dataRecieptThread.start()
-        #Send and recieve data
-        global RUNNING
-        print 'running: '+str(RUNNING)
-        while RUNNING:
-                #Write to the socket
-                if len(requestQueue):
-                        with requestQueueLock:
-                                print 'Network manager aquired requestQueueLock'
-                                for request in requestQueue:
-                                        print 'Sending data:',request
-                                        try:
-                                                fd.write(request+'\n')
-                                        except socket.error,e:
-                                                print 'Error sending data: %s' % e
-                                                sys.exit(1)
-                                #Flush the write
-                                try:
-                                        fd.flush()
-                                        print 'Data successfully sent'
-                                except socket.error, e:
-                                        print 'Error sending data (detected by flush): %s' % e
-                                        sys.exit(1)
-                                requestQueue=[]
-                        print 'Network manager released requestQueueLock'
-                #Allow time for requests to be made
-                time.sleep(.01)
-
-        print 'Closing network connection'
-        clientSocket.close()
-        pass#connect to server
-        #look for available requests
-        #send messages to server
-        #listen for responses
-        #send response to interpretMessage
-
-def sendRequest(mousePosition,ball):
-        global requestQueue
-        global BALL
-        BALL=ball
-        #pickle requests and add them to the queue
-        request='%d,%d' % mousePosition
-        with requestQueueLock:
-                print 'Request manager aquired requestQueueLock'
-                print 'Adding request to queue'
-                requestQueue.append(request)
-                print requestQueue
-        print 'Request manager released requestQueueLock'
-        time.sleep(.01)
-
-#Establish network connection
-RUNNING = True
-requestQueue=[]
-requestQueueLock=threading.Lock()
-networkThread = threading.Thread(target=manageNetworkConnection)
-networkThread.start()
-
 #Background color
 bg = (51, 51, 255)
 
@@ -245,6 +140,8 @@ ms_elapsed = 1
 
 #Screen Parameters
 size = (width, height) = (640, 480)
+
+RUNNING = True
 
 pygame.init()
 
@@ -263,13 +160,11 @@ font = pygame.font.Font(pygame.font.get_default_font(), 16)
 txt = font.render("FPS: ***", True, (255,255,255))
 txtbound = txt.get_rect()
 
-gameClock=pygame.time.Clock()
-max_fps = 60
+# Initialize a game clock
+gameClock = pygame.time.Clock()
 
 while RUNNING:
-    ms_elapsed = gameClock.tick(max_fps)
-
-
+        
 	########EVENTS#################
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN or \
@@ -281,7 +176,7 @@ while RUNNING:
             
     if mouse.isTapActive():
     	#specify new destination
-    	sendRequest(mouse.pos(),aBall)
+    	interpretMessage(mouse.pos(),aBall)
     	mouse.clearEvents_ip()
     ###############################
     
@@ -294,15 +189,14 @@ while RUNNING:
     
     #Paste the ball image on the screen in the rectangle ballrect
     screen.blit(aBall.image, aBall.rect)
-    
-    txt = font.render("FPS: %d"%gameClock.get_fps(), True, (255,255,255))
+    print ms_elapsed,1000/ms_elapsed
+    txt = font.render("FPS: "+str(int(gameClock.get_fps())), True, (255,255,255))
     screen.blit(txt, txtbound)
     #Update the screen by switching buffers
     pygame.display.flip()
     
-    #Determine the time it took 
-    
-    
-    ms_elapsed = pygame.time.get_ticks() - last_time
+    #Determine the amount of time that has passed since the previous tick
+    #Limits framerate to 300fps
+    ms_elapsed = gameClock.tick(300)
 
 pygame.quit() #quit properly, without an exception
