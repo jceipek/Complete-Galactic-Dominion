@@ -163,44 +163,47 @@ def manageNetworkConnection(host='localhost',port=51423):
 
         fd = clientSocket.makefile('rw',0)
 
+        def recieveServerData(sockFile):
+                while RUNNING:
+                        try:
+                                for line in sockFile:
+                                        if not len(line.strip()):
+                                                break
+                                        print 'There is something to read'
+                                        print 'Message from socket: '+line.strip()
+                                        message=line.strip().split(',')
+                                        message=(int(message[0]),int(message[1]))
+                                        global BALL
+                                        interpretMessage(message,BALL)
+                        except Exception,e:
+                                print 'Error: ',e#Handle exceptions
+                        
+        dataRecieptThread=threading.Thread(target=recieveServerData,args=(fd,))
+        dataRecieptThread.start()
         #Send and recieve data
         global RUNNING
         print 'running: '+str(RUNNING)
         while RUNNING:
-                #print 'Im in a loop'
                 #Write to the socket
-                with requestQueueLock:
-                        #print 'Network manager aquired requestQueueLock'
-                        for request in requestQueue:
-                                print 'Sending data:',request
-                                try:
-                                        fd.write(request+'\n')
-                                except socket.error,e:
-                                        print 'Error sending data: %s' % e
-                                        sys.exit(1)
-                        #Flush the write
-                        if len(requestQueue):
+                if len(requestQueue):
+                        with requestQueueLock:
+                                print 'Network manager aquired requestQueueLock'
+                                for request in requestQueue:
+                                        print 'Sending data:',request
+                                        try:
+                                                fd.write(request+'\n')
+                                        except socket.error,e:
+                                                print 'Error sending data: %s' % e
+                                                sys.exit(1)
+                                #Flush the write
                                 try:
                                         fd.flush()
                                         print 'Data successfully sent'
                                 except socket.error, e:
                                         print 'Error sending data (detected by flush): %s' % e
                                         sys.exit(1)
-                                try:
-                                        for line in fd:
-                                                if not len(line.strip()):
-                                                        break
-                                                print 'There is something to read'
-                                                print 'Message from socket: '+line.strip()
-                                                message=line.strip().split(',')
-                                                message=(int(message[0]),int(message[1]))
-                                                global BALL
-                                                interpretMessage(message,BALL)
-                                except Exception,e:
-                                        print 'Error: ',e#Handle exceptions
-                                
-                        requestQueue=[]
-
+                                requestQueue=[]
+                        print 'Network manager released requestQueueLock'
                 #Allow time for requests to be made
                 time.sleep(.01)
 
