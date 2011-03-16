@@ -1,10 +1,5 @@
 from random import randint
 import threading
-#import pygame
-#from multiprocessing import Process, Pipe, Lock
-
-
-#pygame.init()
 
 
 def eventManager(events):
