@@ -1,7 +1,6 @@
 from random import randint
 import threading
 
-
 def eventManager(events):
 	print "Event Manager loop"
 	for event in events:
