@@ -3,9 +3,7 @@ from random import randint
 #import pygame
 from multiprocessing import Process, Pipe, Lock
 
-
 #pygame.init()
-
 
 def eventManager(events):
 	print "Event Manager loop"
