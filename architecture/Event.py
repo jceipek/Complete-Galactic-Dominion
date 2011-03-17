@@ -44,6 +44,20 @@ class GenericDebugEvent(Event):
         Event.__init__(self)
         self.verboseInfo = info
 
+class RenderEvent(Event):
+    """
+    Request to draw to the display surface
+    """
+    def __init__(self,displaySurface):
+        Event.__init__(self)
+        self.displaySurface = displaySurface
+
+class RefreshEvent(Event):
+    """
+    Request to update the screen
+    """
+    pass
+
 class StartEvent(Event):
     """
     Request to begin monitoring input in the window

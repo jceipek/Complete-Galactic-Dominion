@@ -51,6 +51,11 @@ class Debugger(object):
                         self.trackedEvents.append(Event.GenericDebugEvent)
                      elif line[len(etrack):] == "StartEvent":
                         self.trackedEvents.append(Event.StartEvent)
+                     elif line[len(etrack):] == "RenderEvent":
+                        self.trackedEvents.append(Event.RenderEvent)
+                     elif line[len(etrack):] == "RefreshEvent":
+                        self.trackedEvents.append(Event.RefreshEvent)
+                        
                      #ADD MORE EVENTS HERE
         
         print("Debugging Setup:")

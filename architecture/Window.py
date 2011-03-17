@@ -58,8 +58,15 @@ class Window(Listener):
             #QUESTION: will this cause additional overhead? Should we call the renderer fn
             #directly?
             #NOT YET IMPLEMENTED PROPERLY - drawing here for now
-            #print "Updating now."
-            self.displaySurface.fill((0,0,0))
+
+            #self.manager.post(Event.UpdateEvent())
+            
+            #Note: the renderer does not update or display anything.
+            #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
+            self.manager.post(Event.RenderEvent(self.displaySurface))
+            
+            self.manager.post(Event.RefreshEvent())
+            
             pygame.display.flip()
             TMP_ms_elapsed = TMP_gameClock.tick()
         
@@ -91,9 +98,14 @@ class Window(Listener):
         #Overriding Listener implementation
         if isinstance( event, Event.StartEvent ):
             self.run()
-        if isinstance( event, Event.QuitEvent ):
+        elif isinstance( event, Event.QuitEvent ):
             self.deactivate()
+        elif isinstance( event, Event.RefreshEvent ):
+            self.refresh()
 
+    def refresh(self):
+        pygame.display.flip()
+    
     def deactivate(self):
         #Called when the window needs to be closed.
         #This will prevent processing of any more user input events,
