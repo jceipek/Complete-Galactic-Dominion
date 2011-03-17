@@ -19,6 +19,8 @@ class Window(Listener):
     #    resolution = (widthPx,heightPx)
     #    active = bool
     #    displaySurface = pygame.display
+    #    gameClock = pygame.time.Clock()
+    #    gameFrametime = ms since last frame
     """
     
     def __init__(self,manager,width=640,height=480,fullscreenMode=False):
@@ -29,12 +31,14 @@ class Window(Listener):
         # A Window is a listener because it has to know when to change (close, for example)
         
         pygame.init()
-        global TMP_ACTIVE
+        #global TMP_ACTIVE
+        self.gameClock = pygame.time.Clock()
+        self.gameFrametime = 0
         self.resolution = (width,height)
         self.fullscreenMode = fullscreenMode
         self.updateScreenMode()
         self.active = True
-        TMP_ACTIVE = True
+        #TMP_ACTIVE = True
         
     def updateScreenMode(self):
         if self.fullscreenMode:
@@ -43,14 +47,14 @@ class Window(Listener):
             self.displaySurface = pygame.display.set_mode(self.resolution)
 
     def run(self):
-        TMP_ms_elapsed = 0 #should be in the renderer
-        TMP_gameClock = pygame.time.Clock() #should be in the renderer
-        #while self.active: #This version should be used once events are implemented
+        self.updateClock()
+        #TMP_ms_elapsed = 0 #should be in the renderer
+        #TMP_gameClock = pygame.time.Clock() #should be in the renderer
         while self.active:
             #Pass all pygame events to a parser thread for wrapping in standardized events
             #I DON'T KNOW IF THIS WILL WORK PROPERLY FOR MULTIPLE EVENTS, YET - Julian
-            threading.Thread(target=self.pygameEventPoster,args=(pygame.event.get(),)).start()
-            
+            #threading.Thread(target=self.pygameEventPoster,args=(pygame.event.get(),)).start()
+            self.pygameEventPoster(pygame.event.get())
             #Send the update event. I see no reason to thread this given the
             #pygame implementation. This will simply send an event that the
             #event manager will pass to the occurrence manager to send to the
@@ -67,8 +71,8 @@ class Window(Listener):
             
             self.manager.post(Event.RefreshEvent())
             
-            pygame.display.flip()
-            TMP_ms_elapsed = TMP_gameClock.tick()
+            #pygame.display.flip()
+            #TMP_ms_elapsed = TMP_gameClock.tick()
         
         pygame.quit()
         
@@ -102,9 +106,16 @@ class Window(Listener):
             self.deactivate()
         elif isinstance( event, Event.RefreshEvent ):
             self.refresh()
+        elif isinstance( event, Event.RefreshCompleteEvent ):
+            self.updateClock()
 
+    def updateClock(self):
+        self.gameFrametime = self.gameClock.tick()
+        self.manager.post(Event.GenericDebugEvent(str(self.gameFrametime)))
+        
     def refresh(self):
         pygame.display.flip()
+        self.manager.post(Event.RefreshCompleteEvent())
     
     def deactivate(self):
         #Called when the window needs to be closed.

@@ -4,6 +4,7 @@ It will change once we have two managers. Start small, right? :)
 """
 
 from Debugger import Debugger
+import Event
 
 class Manager(object):
     """
@@ -29,8 +30,10 @@ class Manager(object):
         ##IN THE ACTUAL CODE, THIS FUNCTION WILL MAKE SURE EVENTS ONLY GET SENT 
         ##TO LISTENERS WHICH MIGHT CARE. SOME LISTENERS SHOULD START THEIR OWN 
         ##THREADS
+        
         for listener in self.listeners:
             #NOTE: If the weakref has died, it will be 
             #automatically removed, so we don't have 
             #to worry about it.
             listener.notify(event)
+            

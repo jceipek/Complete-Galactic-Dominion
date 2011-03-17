@@ -58,6 +58,12 @@ class RefreshEvent(Event):
     """
     pass
 
+class RefreshCompleteEvent(Event):
+    """
+    Called when drawing to the screen is completed
+    """
+    pass
+
 class StartEvent(Event):
     """
     Request to begin monitoring input in the window
