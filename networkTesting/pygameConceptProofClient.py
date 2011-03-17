@@ -167,8 +167,9 @@ def manageNetworkConnection(host='localhost',port=51423):
                 while RUNNING:
                         try:
                                 for line in sockFile:
-                                        if not len(line.strip()):
-                                                break
+                                        if line.strip()=='quit':
+                                                print 'Terminating listener to server'
+                                                return
                                         print 'There is something to read'
                                         print 'Message from socket: '+line.strip()
                                         message=line.strip().split(',')
@@ -177,6 +178,12 @@ def manageNetworkConnection(host='localhost',port=51423):
                                         interpretMessage(message,BALL)
                         except Exception,e:
                                 print 'Error: ',e#Handle exceptions
+        def sendCloseMessage(sockFile):
+                try:
+                        sockFile.write('quit\n')
+                        sockFile.flush()
+                except:
+                        sys.exit(1)
                         
         dataRecieptThread=threading.Thread(target=recieveServerData,args=(fd,))
         dataRecieptThread.start()
@@ -208,12 +215,8 @@ def manageNetworkConnection(host='localhost',port=51423):
                 time.sleep(.01)
 
         print 'Closing network connection'
+        sendCloseMessage(fd)
         clientSocket.close()
-        pass#connect to server
-        #look for available requests
-        #send messages to server
-        #listen for responses
-        #send response to interpretMessage
 
 def sendRequest(mousePosition,ball):
         global requestQueue

@@ -22,12 +22,13 @@ def handleChild(clientSocket):
     socketFiles[fd]=1
     while True:
         data=fd.readline()#recieve 4096 bytes at a time
-        print 'Something was read'
-        print 'Message from client:',data
-        if not len(data):#if there is no more data left
+        print 'Message from client:',data.strip()
+        if data.strip()=='quit':#if there is no more data left
+            fd.write(data+'\n')#send the data back to the client
+            fd.flush()
             break
         for aFile in socketFiles:
-            aFile.write(data+'\n')#send the data back to the client
+            aFile.write(data)#send the data to all of the clients
             aFile.flush()
 
     #close the connection
