@@ -9,7 +9,7 @@ class NetworkEntity(object):
     def __init__(self,host,port):
         self.host=host
         try:
-            self.port=int(port):
+            self.port=int(port)
         except ValueError:
             try:
                 self.port = socket.getservbyname(port,'tcp')
@@ -32,9 +32,9 @@ class Server(NetworkEntity):
         self.socketThreads=dict()
         self.connectionThread=None
 
-        serverSocket.bind((self.host,self.port))
+        self.socket.bind((self.host,self.port))
 
-    def listenAndConnect(numPendingConnections=5):
+    def listenAndConnect(self,numPendingConnections=5):
         
         def connectToAllClients():
             while self.connecting:
@@ -51,13 +51,14 @@ class Server(NetworkEntity):
         self.socket.listen(numPendingConnections)
         self.connecting=True
         self.connectionThread=threading.Thread(target=connectToAllClients)
+        self.connectionThread.start()
 
-    def removeSocketThread(sockThrd):
-        del socketThreads[sockThrd]
+    def removeSocketThread(self,sockThrd):
+        del self.socketThreads[sockThrd]
         
     def __del__(self):
         self.connecting=False
-        for sock in socketThreads:
+        for sock in self.socketThreads:
             try:
                 del sock
             except KeyboardInterrupt:
@@ -88,7 +89,7 @@ class Client(NetworkEntity):
                 print 'Error creating socket %s' % e
                 sys.exit(1)
         try:
-                self.connect((self.host,self.port))
+                self.socket.connect((self.host,self.port))
         except socket.gaierror, e:
                 print 'Address error: %s' % e
                 sys.exit(1)
@@ -98,8 +99,8 @@ class Client(NetworkEntity):
         self.connected=True
         self.socketThread=SocketThread(self,self.socket)
 
-    def sendRequest(request):
-        socketThread.write(request)
+    def sendRequest(self,request):
+        self.socketThread.write(request)
 
     def removeSocketThread(sockThrd):
         self.socketThread=None
@@ -121,27 +122,27 @@ class MessengerClient(Client):
 class SocketThread(object):
     def __init__(self,parent,sock):
         self.parent=parent
-        self.thread=threading.Thread(target=self.processInput)
+        self.thread=threading.Thread(target=self.processInput,args=())
         self.socket=sock
         self.file=self.socket.makefile('rw',0)
         self.alive=True
         self.thread.start()
         
-    def write(messageList):
+    def write(self,messageList):
         #this may need to change
         for line in messageList.split('\n'):
-            self.file.write(line)
+            self.file.write(line+'\n')
         self.file.flush()
         
-    def processInput():
+    def processInput(self):
         line = ''
         while self.alive:
-            while True
+            while True:
                 nline = self.file.readline()
-                if nline == parent.STOP_MESSAGE:
+                if nline == self.parent.STOP_MESSAGE:
                     break
-                line.append(nline)
-            if line.strip() == parent.CLOSE_MESSAGE:
+                line+=nline 
+            if line.strip() == self.parent.CLOSE_MESSAGE:
                 del self
                 return
             self.parent.processInput(self,line)
