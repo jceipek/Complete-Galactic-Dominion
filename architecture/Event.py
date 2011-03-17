@@ -16,7 +16,7 @@ class MouseLocals:
     SCROLL_UP = 4
     SCROLL_DOWN = 5
 
-class MouseEvent(Event):
+class MouseClickedEvent(Event):
     """
     Basic mouse event.
     

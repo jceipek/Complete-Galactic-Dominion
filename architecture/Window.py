@@ -78,11 +78,11 @@ class Window(Listener):
             elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
                 state = Event.MouseLocals.MOUSE_PRESSED
                 buttonId = rawEvent.button
-                realEvent = Event.MouseEvent(rawEvent.pos,state,buttonId)
+                realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)
             elif rawEvent.type == pygame.MOUSEBUTTONUP:
                 state = Event.MouseLocals.MOUSE_RELEASED
                 buttonId = rawEvent.button
-                realEvent = Event.MouseEvent(rawEvent.pos,state,buttonId)
+                realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)
         
             if realEvent:
                 self.manager.post(realEvent) #this scares me -Julian

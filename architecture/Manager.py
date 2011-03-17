@@ -3,6 +3,8 @@ This is copied almost verbatim from the MVC tutorial.
 It will change once we have two managers. Start small, right? :)
 """
 
+import Debugger
+
 class Manager:
     """
     this object is responsible for coordinating most communication
@@ -21,11 +23,8 @@ class Manager:
             del self.listeners[ listener ]
 
     def post( self, event ):
-        print(type(event))
-        if event.verboseInfo:
-            print(event.verboseInfo)
-        #if not isinstance(event, TickEvent):
-        #    logMsg( "     Message: " + event.name + " " + event.type)
+        if Debugger.SYMBOLS_ENABLED:
+            Debugger.logMsg(event)
         ##IN THE ACTUAL CODE, THIS FUNCTION WILL MAKE SURE EVENTS ONLY GET SENT TO LISTENERS WHICH MIGHT CARE
         for listener in self.listeners:
             #NOTE: If the weakref has died, it will be 
