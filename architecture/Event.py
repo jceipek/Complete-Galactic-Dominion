@@ -35,7 +35,7 @@ class MouseClickedEvent(Event):
         "\tButton State: "+str(self.state)+"\n"+\
         "\tButton Pressed: "+str(self.buttonId)+"\n"
 
-class UpdateEvent(Event)
+class UpdateEvent(Event):
     """
     Request to update objects.
     
