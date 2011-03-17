@@ -15,6 +15,12 @@ class Debugger(object):
     """
     
     def __init__(self):
+        import Event
+        
+        for name in dir(Event):
+            obj = getattr(Event, name)
+            print obj
+        
         self.SYMBOLS_ENABLED = False
         self.VERBOSE_MODE = False
         self.trackedEvents = []

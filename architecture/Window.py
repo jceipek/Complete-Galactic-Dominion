@@ -57,7 +57,7 @@ class Window(Listener):
 
             #Tell the objects on screen to update.
             #NOTE: NOTHING INTERCEPTS THIS AT THE MOMENT
-            self.manager.post(Event.UpdateEvent())
+            self.manager.post(Event.UpdateEvent(self.gameFrametime))
             
             #Note: the renderer does not update or display anything.
             #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
