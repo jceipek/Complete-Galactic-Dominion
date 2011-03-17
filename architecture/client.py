@@ -29,4 +29,5 @@ def init():
     gameWindow.run()
 
 if __name__ == '__main__':
+    #Connect to server
    init()

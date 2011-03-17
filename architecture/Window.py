@@ -14,6 +14,35 @@ def TMP_eventParser(pygameEvents): # USING TMP_ TO INDICATE TEMPORARY IMPLEMENTA
         print rawEvent
 
 class Window(object):
+<<<<<<< HEAD
+	"""
+	A wrapper for a pygame screen, providing easily accessible
+	functionality such as setting the window resolution and
+	enabling full screen mode. It also intercepts pygame events
+	for processing in a separate thread and sets up a drawing
+	loop.
+	
+	#Attributes:
+	#	fullscreenMode = bool
+	#	resolution = (widthPx,heightPx)
+	#	active = bool
+	#	displaySurface = pygame.display
+	"""
+	
+	def __init__(self,width=640,height=480,fullscreenMode=False):
+		pygame.init()
+		self.resolution = (width,height)
+		self.fullscreenMode = fullscreenMode
+		self.updateScreenMode()
+		self.active = True
+		self.loop()
+		
+	def updateScreenMode(self):
+		if fullscreenMode:
+			self.displaySurface = pygame.display.set_mode(self.resolution,pygame.FULLSCREEN)
+		else:
+			pygame.display.set_mode(self.resolution)
+=======
     """
     A wrapper for a pygame screen, providing easily accessible
     functionality such as setting the window resolution and
@@ -42,6 +71,7 @@ class Window(object):
             self.displaySurface = pygame.display.set_mode(self.resolution,pygame.FULLSCREEN)
         else:
             self.displaySurface = pygame.display.set_mode(self.resolution)
+>>>>>>> 0e9ddc18d77decbd2e42e6679e995b6c1bf875f4
 
     def run(self):
         TMP_ms_elapsed = 0
@@ -63,6 +93,8 @@ class Window(object):
             self.displaySurface.fill((0,0,0))
             pygame.display.flip()
             TMP_ms_elapsed = TMP_gameClock.tick()
+<<<<<<< HEAD
+=======
         
         print "Quitting now."
         pygame.quit()
@@ -72,3 +104,4 @@ class Window(object):
         #This will prevent processing of any more user input events,
         #so the program should preferably be closed at this point
         self.active = False
+>>>>>>> 0e9ddc18d77decbd2e42e6679e995b6c1bf875f4
