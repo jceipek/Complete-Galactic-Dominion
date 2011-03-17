@@ -20,7 +20,7 @@ class NetworkEntity(object):
     def processInput(self,sockThrd,data):
         pass#this should be overwritten in all non-abstract subclasses of NetworkEntity
 
-    def removeSocketThread(sockThrd):
+    def removeSocketThread(self,sockThrd):
         pass#clean up any references to the appropriate socket thread
 
 class Server(NetworkEntity):
@@ -45,27 +45,29 @@ class Server(NetworkEntity):
                 except:
                     traceback.print_exc()
                     continue
+                print 'Connection Established'
                 s=SocketThread(self,clientSocket)
                 self.socketThreads[s]=s.file
 
         self.socket.listen(numPendingConnections)
         self.connecting=True
         self.connectionThread=threading.Thread(target=connectToAllClients)
-        self.connectionThread.setDaemon(True)
-        self.connectionThread.start()
+        self.connectionThread.start()#this is a non daemonic thread and will prevent the server from exiting
 
     def removeSocketThread(self,sockThrd):
-        del self.socketThreads[sockThrd]
+        try:
+            del(self.socketThreads[sockThrd])
+        except:
+            pass
         
     def __del__(self):
         self.connecting=False
-        for sock in self.socketThreads:
-            try:
-                del sock
-            except KeyboardInterrupt:
-                raise
-            except:
-                traceback.print_exc()
+        try:
+            del(self.socketThreads)
+        except KeyboardInterrupt:
+            raise
+        except:
+            traceback.print_exc()
         self.socket.close()
 
 class PrintServer(Server):
@@ -103,12 +105,13 @@ class Client(NetworkEntity):
     def sendRequest(self,request):
         self.socketThread.write(request)
 
-    def removeSocketThread(sockThrd):
+    def removeSocketThread(self,sockThrd):
         self.socketThread=None
     
     def __del__(self):
+        print 'Deleting Client'
         try:
-            del sock
+            self.socketThread.__del__()
         except KeyboardInterrupt:
             raise
         except:
@@ -117,8 +120,9 @@ class Client(NetworkEntity):
 class MessengerClient(Client):
     def __init__(self,message,host='localhost',port=51423):
         Client.__init__(self,host,port)
-        self.sendRequest(message+'\n'+self.STOP_MESSAGE)
-        del self
+        print 'Sending message: %s' % message
+        self.sendRequest(message)
+        self.__del__()
             
 class SocketThread(object):
     def __init__(self,parent,sock):
@@ -133,23 +137,34 @@ class SocketThread(object):
     def write(self,message):
         #this may need to change
         self.file.write(message+'\n')
-        self.file.write(self.parent.STOP_MESSAGE)
+        self.file.write(self.parent.STOP_MESSAGE+'\n')
         self.file.flush()
         
     def processInput(self):
         while self.alive:
             line = ''
+            flag=False
             for nline in self.file:
+                flag=True
+                print 'Something to read: %s' % nline.strip()
                 if nline.strip() == self.parent.STOP_MESSAGE:
                     break
                 line+=nline 
-            if line.strip() == self.parent.CLOSE_MESSAGE:
-                del self
+            if line.strip() == self.parent.CLOSE_MESSAGE or flag == False:
+                self.__del__()
                 return
+            flag=False
             self.parent.processInput(self,line)
-            #handles input and output from the socket
+            line=''
         
     def __del__(self):
         self.alive=False
         self.parent.removeSocketThread(self)
-        self.socket.close()
+        try:
+            self.write(self.parent.CLOSE_MESSAGE)
+        except:
+            pass
+        try:
+            self.socket.close()
+        except:
+            pass
