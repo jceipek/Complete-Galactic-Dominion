@@ -13,6 +13,8 @@ class Unit(pygame.sprite.Sprite):
         Builder.__init__(self, imagePath, colorkey)
         Unit.allUnits.add(self)
 
+        self.status=IDLE
+
     def update(self):
         """Called by game each frame to update object."""
         pass
@@ -21,3 +23,7 @@ class Unit(pygame.sprite.Sprite):
         """Removes the current Sprite from all groups.  It will no longer
         be associated with this class."""
         pygame.sprite.Sprite.kill(self)
+
+    def move(self, distx, disty):
+        """moves unit"""
+        
