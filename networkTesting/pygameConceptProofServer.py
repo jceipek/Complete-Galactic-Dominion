@@ -40,7 +40,7 @@ def handleChild(clientSocket):
 serverSocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 serverSocket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 
-serverSocket.bind((host,51423))#bind to the port
+serverSocket.bind((host,port))#bind to the port
 serverSocket.listen(1)
 
 #the parent thread will listen for new connections
