@@ -22,7 +22,7 @@ def init():
     #Create the occurence manager for high-level events
     #NOT YET IMPLEMENTED
     
-    #Create and register the listeners
+    #Create and register the standard listeners
     #NOT YET IMPLEMENTED
     
     #Start the game loop
