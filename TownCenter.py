@@ -6,3 +6,9 @@ class TownCenter(Structure):
 	def __init__(self):
 		Structure.__init__(self)
 
+	def update(self):
+		"""called each frame to update object"""
+
+	def build(self):
+		"""build first Unit in unitsBuilt queue"""
+
