@@ -3,6 +3,15 @@ import pygame
 
 class Entity(MapObject,pygame.sprite.Sprite):
     """A foreground MapObject with which one can interact."""
+
+	description: description of behavior, abilities
+	x: position
+	y: position
+	maxHealth: maximum/ default health points
+	curHealth: current health
+	size: radius of collision
+	status: status of entity
+	
     
     def __init__(self, imagePath, colorkey=None,
                  description = 'No information available.'):    
@@ -20,7 +29,13 @@ class Entity(MapObject,pygame.sprite.Sprite):
         # Menu options should be added to this dictionary.
         self.options = {'Description': showDescription}
 
-    # First initialization of update method
+    	
+	Methods:
+	die(self): entity is removed from map
+	changeHealth(self, numHits): decreases the health of the entity based on number of hits
+	update(self): updates entity- performs actions	
+
+	# First initialization of update method
     def update(self):
         """All Sprite objects should have an update function."""
         pass
@@ -34,3 +49,5 @@ class Entity(MapObject,pygame.sprite.Sprite):
         """Show the user the description of the entity.
         Needs to return more than just a string, eventually."""
         return self.description
+
+
