@@ -1,7 +1,6 @@
 """
 All debug setings can be configured with debug.config
-This file must simply be updated every time a new
-debugable event or debug option is added to the program.
+New events added to Event.py are automagically supported
 """
 
 import Event
@@ -15,11 +14,16 @@ class Debugger(object):
     """
     
     def __init__(self):
+    
+        #Set up a dictionary of all events in the Event module.
+        #This will allow the debugger to understand any event in the config file
         import Event
-        
+        events = dict()
         for name in dir(Event):
             obj = getattr(Event, name)
-            print obj
+            if '<class' in str(obj):
+                eventName = str(obj).split('.')[1].replace("'>","")
+                events[eventName] = obj
         
         self.SYMBOLS_ENABLED = False
         self.VERBOSE_MODE = False
@@ -49,22 +53,8 @@ class Debugger(object):
                      elif line[len(vmode):] == "False":
                         self.VERBOSE_MODE = False
                 elif line.find(etrack) == 0:
-                     if line[len(etrack):] == "MouseClickedEvent":
-                        self.trackedEvents.append(Event.MouseClickedEvent)
-                     elif line[len(etrack):] == "QuitEvent":
-                        self.trackedEvents.append(Event.QuitEvent)
-                     elif line[len(etrack):] == "GenericDebugEvent":
-                        self.trackedEvents.append(Event.GenericDebugEvent)
-                     elif line[len(etrack):] == "StartEvent":
-                        self.trackedEvents.append(Event.StartEvent)
-                     elif line[len(etrack):] == "RenderEvent":
-                        self.trackedEvents.append(Event.RenderEvent)
-                     elif line[len(etrack):] == "RefreshEvent":
-                        self.trackedEvents.append(Event.RefreshEvent)
-                     elif line[len(etrack):] == "UpdateEvent":
-                        self.trackedEvents.append(Event.UpdateEvent)
-                        
-                     #ADD MORE EVENTS HERE
+                     if line[len(etrack):] in events:
+                        self.trackedEvents.append(events[line[len(etrack):]])
         
         print("Debugging Setup:")
         if self.SYMBOLS_ENABLED:
