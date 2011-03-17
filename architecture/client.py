@@ -9,14 +9,17 @@ import threading
 import Listener
 from Manager import Manager
 from Window import Window
+from Debugger import Debugger
 
 def init():
     """
     Game initialization function.
     """
     
+    debugger = Debugger()
+    
     #Create the event manager for low-level events
-    eventManager = Manager() #more specific manager class will be needed later
+    eventManager = Manager(debugger) #more specific manager class will be needed later
     
     #Create the occurence manager for high-level events (same across client and server)
     #NOT YET IMPLEMENTED

@@ -3,17 +3,18 @@ This is copied almost verbatim from the MVC tutorial.
 It will change once we have two managers. Start small, right? :)
 """
 
-import Debugger
+from Debugger import Debugger
 
-class Manager:
+class Manager(object):
     """
     this object is responsible for coordinating most communication
     between the Model, View, and Controller.
     """
-    def __init__(self):
+    def __init__(self,debugger):
         from weakref import WeakKeyDictionary
         self.listeners = WeakKeyDictionary()
         self.eventQueue= []
+        self.debugger = debugger
 
     def registerListener( self, listener ):
         self.listeners[ listener ] = 1
@@ -23,8 +24,8 @@ class Manager:
             del self.listeners[ listener ]
 
     def post( self, event ):
-        if Debugger.SYMBOLS_ENABLED:
-            Debugger.logMsg(event)
+        if self.debugger.SYMBOLS_ENABLED:
+            self.debugger.logMsg(event)
         ##IN THE ACTUAL CODE, THIS FUNCTION WILL MAKE SURE EVENTS ONLY GET SENT TO LISTENERS WHICH MIGHT CARE
         for listener in self.listeners:
             #NOTE: If the weakref has died, it will be 
