@@ -45,8 +45,12 @@ class Debugger(object):
                 elif line.find(etrack) == 0:
                      if line[len(etrack):] == "MouseClickedEvent":
                         self.trackedEvents.append(Event.MouseClickedEvent)
-                     if line[len(etrack):] == "QuitEvent":
+                     elif line[len(etrack):] == "QuitEvent":
                         self.trackedEvents.append(Event.QuitEvent)
+                     elif line[len(etrack):] == "GenericDebugEvent":
+                        self.trackedEvents.append(Event.GenericDebugEvent)
+                     elif line[len(etrack):] == "StartEvent":
+                        self.trackedEvents.append(Event.StartEvent)
                      #ADD MORE EVENTS HERE
         
         print("Debugging Setup:")

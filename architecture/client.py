@@ -7,6 +7,7 @@ import threading
 
 #Import necessary user defined classes required for the client
 import Listener
+import Event
 from Manager import Manager
 from Window import Window
 from Debugger import Debugger
@@ -28,8 +29,8 @@ def init():
     #NOT YET FULLY IMPLEMENTED
     gameWindow = Window(eventManager)
     
-    #Start the game loop
-    gameWindow.run()
+    #Notify the manager that the window should start to accept input:
+    eventManager.post(Event.StartEvent())
 
 if __name__ == '__main__':
     #Connect to server

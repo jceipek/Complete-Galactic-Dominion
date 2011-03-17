@@ -26,7 +26,9 @@ class Manager(object):
     def post( self, event ):
         if self.debugger.SYMBOLS_ENABLED:
             self.debugger.logMsg(event)
-        ##IN THE ACTUAL CODE, THIS FUNCTION WILL MAKE SURE EVENTS ONLY GET SENT TO LISTENERS WHICH MIGHT CARE
+        ##IN THE ACTUAL CODE, THIS FUNCTION WILL MAKE SURE EVENTS ONLY GET SENT 
+        ##TO LISTENERS WHICH MIGHT CARE. SOME LISTENERS SHOULD START THEIR OWN 
+        ##THREADS
         for listener in self.listeners:
             #NOTE: If the weakref has died, it will be 
             #automatically removed, so we don't have 

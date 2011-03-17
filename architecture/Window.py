@@ -89,6 +89,8 @@ class Window(Listener):
             
     def notify(self, event):
         #Overriding Listener implementation
+        if isinstance( event, Event.StartEvent ):
+            self.run()
         if isinstance( event, Event.QuitEvent ):
             self.deactivate()
 

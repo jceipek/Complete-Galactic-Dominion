@@ -35,6 +35,22 @@ class MouseClickedEvent(Event):
         "\tButton State: "+str(self.state)+"\n"+\
         "\tButton Pressed: "+str(self.buttonId)+"\n"
 
+class GenericDebugEvent(Event):
+    """
+    Fire this event instead of using a print statement for debugging purposes.
+    """
+
+    def __init__(self,info):
+        Event.__init__(self)
+        self.verboseInfo = info
+
+class StartEvent(Event):
+    """
+    Request to begin monitoring input in the window
+    """
+    #ATTRIBUTES UNKNOWN FOR THE MOMENT
+    pass
+
 class QuitEvent(Event):
     """
     Request to close the program
