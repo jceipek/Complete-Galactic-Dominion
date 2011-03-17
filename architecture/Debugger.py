@@ -55,6 +55,8 @@ class Debugger(object):
                         self.trackedEvents.append(Event.RenderEvent)
                      elif line[len(etrack):] == "RefreshEvent":
                         self.trackedEvents.append(Event.RefreshEvent)
+                     elif line[len(etrack):] == "UpdateEvent":
+                        self.trackedEvents.append(Event.UpdateEvent)
                         
                      #ADD MORE EVENTS HERE
         

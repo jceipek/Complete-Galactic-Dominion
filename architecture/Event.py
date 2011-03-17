@@ -35,6 +35,19 @@ class MouseClickedEvent(Event):
         "\tButton State: "+str(self.state)+"\n"+\
         "\tButton Pressed: "+str(self.buttonId)+"\n"
 
+class UpdateEvent(Event)
+    """
+    Request to update objects.
+    
+    #Attributes:
+    #   elapsedTime = time that has passed since the last frame. Used to sync 
+                      movement speed across different hardware
+    """
+
+    def __init__(self,elapsedTime):
+        Event.__init__(self)
+        self.elapsedTime = elapsedTime
+        
 class GenericDebugEvent(Event):
     """
     Fire this event instead of using a print statement for debugging purposes.

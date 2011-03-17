@@ -53,17 +53,11 @@ class Window(Listener):
         while self.active:
             #Pass all pygame events to a parser thread for wrapping in standardized events
             #I DON'T KNOW IF THIS WILL WORK PROPERLY FOR MULTIPLE EVENTS, YET - Julian
-            #threading.Thread(target=self.pygameEventPoster,args=(pygame.event.get(),)).start()
-            self.pygameEventPoster(pygame.event.get())
-            #Send the update event. I see no reason to thread this given the
-            #pygame implementation. This will simply send an event that the
-            #event manager will pass to the occurrence manager to send to the
-            #renderer (in the same thread + process) and the updater (in a separate thread)
-            #QUESTION: will this cause additional overhead? Should we call the renderer fn
-            #directly?
-            #NOT YET IMPLEMENTED PROPERLY - drawing here for now
+            threading.Thread(target=self.pygameEventPoster,args=(pygame.event.get(),)).start()
 
-            #self.manager.post(Event.UpdateEvent())
+            #Tell the objects on screen to update.
+            #NOTE: NOTHING INTERCEPTS THIS AT THE MOMENT
+            self.manager.post(Event.UpdateEvent())
             
             #Note: the renderer does not update or display anything.
             #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
