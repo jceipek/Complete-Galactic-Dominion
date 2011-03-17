@@ -17,7 +17,7 @@ class NetworkEntity(object):
                 print 'Couldn\'t find your port: %s' % e
                 sys.exit(1)
 
-    def processInput(sockThrd,data):
+    def processInput(self,sockThrd,data):
         pass#this should be overwritten in all non-abstract subclasses of NetworkEntity
 
     def removeSocketThread(sockThrd):
@@ -51,6 +51,7 @@ class Server(NetworkEntity):
         self.socket.listen(numPendingConnections)
         self.connecting=True
         self.connectionThread=threading.Thread(target=connectToAllClients)
+        self.connectionThread.setDaemon(True)
         self.connectionThread.start()
 
     def removeSocketThread(self,sockThrd):
@@ -68,15 +69,15 @@ class Server(NetworkEntity):
         self.socket.close()
 
 class PrintServer(Server):
-    def processInput(sockThrd,data):
+    def processInput(self,sockThrd,data):
         print data
 
 class EchoServer(Server):
-    def processInput(sockThrd,data):
+    def processInput(self,sockThrd,data):
         sockThrd.write(data)
 
 class BroadcastServer(Server):
-    def processInput(sockThrd,data):
+    def processInput(self,sockThrd,data):
         for sock in self.socketThreads.keys():
             sock.write(data)
 
@@ -116,7 +117,7 @@ class Client(NetworkEntity):
 class MessengerClient(Client):
     def __init__(self,message,host='localhost',port=51423):
         Client.__init__(self,host,port)
-        self.sendRequest(message)
+        self.sendRequest(message+'\n'+self.STOP_MESSAGE)
         del self
             
 class SocketThread(object):
@@ -126,20 +127,20 @@ class SocketThread(object):
         self.socket=sock
         self.file=self.socket.makefile('rw',0)
         self.alive=True
+        self.thread.setDaemon(True)
         self.thread.start()
         
-    def write(self,messageList):
+    def write(self,message):
         #this may need to change
-        for line in messageList.split('\n'):
-            self.file.write(line+'\n')
+        self.file.write(message+'\n')
+        self.file.write(self.parent.STOP_MESSAGE)
         self.file.flush()
         
     def processInput(self):
-        line = ''
         while self.alive:
-            while True:
-                nline = self.file.readline()
-                if nline == self.parent.STOP_MESSAGE:
+            line = ''
+            for nline in self.file:
+                if nline.strip() == self.parent.STOP_MESSAGE:
                     break
                 line+=nline 
             if line.strip() == self.parent.CLOSE_MESSAGE:
