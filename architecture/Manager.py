@@ -21,6 +21,9 @@ class Manager:
             del self.listeners[ listener ]
 
     def post( self, event ):
+        print(type(event))
+        if event.verboseInfo:
+            print(event.verboseInfo)
         #if not isinstance(event, TickEvent):
         #    logMsg( "     Message: " + event.name + " " + event.type)
         ##IN THE ACTUAL CODE, THIS FUNCTION WILL MAKE SURE EVENTS ONLY GET SENT TO LISTENERS WHICH MIGHT CARE

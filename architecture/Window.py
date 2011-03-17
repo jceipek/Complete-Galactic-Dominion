@@ -63,7 +63,6 @@ class Window(Listener):
             pygame.display.flip()
             TMP_ms_elapsed = TMP_gameClock.tick()
         
-        print("Quitting now.") #Should be a debug message
         pygame.quit()
         
     def pygameEventPoster(self,pygameEvents):
@@ -76,6 +75,14 @@ class Window(Listener):
             realEvent = None
             if rawEvent.type == pygame.QUIT:
                 realEvent = Event.QuitEvent()
+            elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
+                state = Event.MouseLocals.MOUSE_PRESSED
+                buttonId = rawEvent.button
+                realEvent = Event.MouseEvent(rawEvent.pos,state,buttonId)
+            elif rawEvent.type == pygame.MOUSEBUTTONUP:
+                state = Event.MouseLocals.MOUSE_RELEASED
+                buttonId = rawEvent.button
+                realEvent = Event.MouseEvent(rawEvent.pos,state,buttonId)
         
             if realEvent:
                 self.manager.post(realEvent) #this scares me -Julian
