@@ -6,8 +6,8 @@ class Villager(Unit)
     buildType=None
     def __init__(self, imagePath, colorkey=None):
         Unit.__init__(self, imagePath, colorkey)
-        self.status=IDLE
-        self.efficieny=1
+        self.status=Entity.Locals.IDLE
+        self.efficieny=(1,1,1,1) #Move, Build, Gather, Attack
         
     def gather(self, resource):
          """gathers resource"""
@@ -21,3 +21,4 @@ class Villager(Unit)
 
     def update(self):
         """called each frame to update object"""
+        self.dtime()

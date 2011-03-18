@@ -1,5 +1,6 @@
 import MapObject
 import pygame
+from collections import deque
 
 class Entity(MapObject,pygame.sprite.Sprite):
     """A foreground MapObject with which one can interact."""
@@ -25,7 +26,7 @@ class Entity(MapObject,pygame.sprite.Sprite):
 	self.maxHealth=100
 	self.curHealth=self.maxHealth
 	self.size=100 #radius of collision
-	self.status=Entity.Stats.IDLE
+	self.status=Entity.Locals.IDLE
 	self.time=pygame.time.get_ticks()
 	self.timePrev=0
 	self.timePassed=self.time-self.timePrev
@@ -64,10 +65,16 @@ class Entity(MapObject,pygame.sprite.Sprite):
 	    self.die()
 
 
-class Stats:
+class Locals:
+    #Statuses
     IDLE = 0
     MOVING = 1
     BUILDING = 2
     GATHERING = 3
     ATTACKING = 4
+    #Efficiency
+    MOVE=0
+    BUILD=1
+    GATHER=2
+    ATTACK=3
 

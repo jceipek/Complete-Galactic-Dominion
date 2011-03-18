@@ -14,7 +14,7 @@ class Unit(pygame.sprite.Sprite):
         Builder.__init__(self, imagePath, colorkey)
         Unit.allUnits.add(self)
 
-        self.status=IDLE
+        self.status=Entity.Locals.IDLE
         self.efficiency=1
         self.path=[]#queue of future tuple destinations
         self.dest=None #current destination
@@ -30,7 +30,7 @@ class Unit(pygame.sprite.Sprite):
         pygame.sprite.Sprite.kill(self)
 
     def move(self):
-        """changes position of unit"""
+        """changes position of unit in direction of dest"""
         if (self.x,self.y)==self.dest: #may need to have room for error
             if len(self.path)<1:
                 self.status=Entity.Stats.IDLE
