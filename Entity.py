@@ -50,4 +50,9 @@ class Entity(MapObject,pygame.sprite.Sprite):
         Needs to return more than just a string, eventually."""
         return self.description
 
-
+class EnumStatuses:
+	IDLE = 0
+	GATHERING = 1
+	ATTACKING = 2
+	MOVING = 3
+	BUILDING = 4
