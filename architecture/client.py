@@ -13,16 +13,19 @@ from Grid import InfiniteGrid,FiniteGrid
 from Debugger import Debugger
 from Renderer import Renderer
 
+from Event import EventTimer
+
 def init():
     """
     Game initialization function.
     """
 
     debugger = Debugger()
+    eventTimer = EventTimer()
     
     #Create the event manager for low-level events
 
-    eventManager = Manager(debugger) #more specific manager class will be needed later
+    eventManager = Manager(eventTimer,debugger) #more specific manager class will be needed later
     
     #Create the occurence manager for high-level events (same across client and server)
     #NOT YET IMPLEMENTED

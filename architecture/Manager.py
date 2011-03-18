@@ -11,10 +11,11 @@ class Manager(object):
     this object is responsible for coordinating most communication
     between the Model, View, and Controller.
     """
-    def __init__(self,debugger):
+    def __init__(self,eventTimer,debugger):
         from weakref import WeakKeyDictionary
         self.listeners = WeakKeyDictionary()
         self.eventQueue= []
+        self.eventTimer = eventTimer
         self.debugger = debugger
 
     def registerListener( self, listener ):
@@ -25,6 +26,8 @@ class Manager(object):
             del self.listeners[ listener ]
 
     def post( self, event ):
+        event.timeFired = self.eventTimer.getTime()
+    
         if self.debugger.SYMBOLS_ENABLED:
             self.debugger.logMsg(event)
         ##IN THE ACTUAL CODE, THIS FUNCTION WILL MAKE SURE EVENTS ONLY GET SENT 
