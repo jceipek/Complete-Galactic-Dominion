@@ -21,6 +21,7 @@ class Window(Listener):
     #    displaySurface = pygame.display
     #    gameClock = pygame.time.Clock()
     #    gameFrametime = ms since last frame
+    #    pygameEvents
     """
     
     def __init__(self,manager,width=640,height=480,fullscreenMode=False):
@@ -38,7 +39,7 @@ class Window(Listener):
         self.fullscreenMode = fullscreenMode
         self.updateScreenMode()
         self.active = True
-        #TMP_ACTIVE = True
+        self.pygameEvents = []
         
     def updateScreenMode(self):
         if self.fullscreenMode:
@@ -48,12 +49,16 @@ class Window(Listener):
 
     def run(self):
         self.updateClock()
-        #TMP_ms_elapsed = 0 #should be in the renderer
-        #TMP_gameClock = pygame.time.Clock() #should be in the renderer
+
+        self.pygameEventThread = threading.Thread(target=self.pygameEventPoster)
+        self.pygameEventThread.setDaemon(True)
+        self.pygameEventThread.start()
+        
         while self.active:
             #Pass all pygame events to a parser thread for wrapping in standardized events
             #I DON'T KNOW IF THIS WILL WORK PROPERLY FOR MULTIPLE EVENTS, YET - Julian
-            threading.Thread(target=self.pygameEventPoster,args=(pygame.event.get(),)).start()
+            
+            self.pygameEvents = pygame.event.get()
 
             #Tell the objects on screen to update.
             #NOTE: NOTHING INTERCEPTS THIS AT THE MOMENT
@@ -64,34 +69,33 @@ class Window(Listener):
             self.manager.post(Event.RenderEvent(self.displaySurface))
             
             self.manager.post(Event.RefreshEvent())
-            
-            #pygame.display.flip()
-            #TMP_ms_elapsed = TMP_gameClock.tick()
-        
+
         pygame.quit()
         
-    def pygameEventPoster(self,pygameEvents):
+    def pygameEventPoster(self):
         #Convert pygame events to useful events and send them to the manager if needed
         #WARNING: THIS IS A THREADED FUNCTION. BE VERY CAREFUL WHEN CODING HERE.
         
-        for rawEvent in pygameEvents:
-
-            #NOT YET FULLY IMPLEMENTED - more events needed
-            realEvent = None
-            if rawEvent.type == pygame.QUIT:
-                realEvent = Event.QuitEvent()
-            elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
-                state = Event.MouseLocals.MOUSE_PRESSED
-                buttonId = rawEvent.button
-                realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)
-            elif rawEvent.type == pygame.MOUSEBUTTONUP:
-                state = Event.MouseLocals.MOUSE_RELEASED
-                buttonId = rawEvent.button
-                realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)
-        
-            if realEvent:
-                self.manager.post(realEvent) #this scares me -Julian
+        while self.active:
             
+            for rawEvent in self.pygameEvents:
+    
+                #NOT YET FULLY IMPLEMENTED - more events needed
+                realEvent = None
+                if rawEvent.type == pygame.QUIT:
+                    realEvent = Event.QuitEvent()
+                elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
+                    state = Event.MouseLocals.MOUSE_PRESSED
+                    buttonId = rawEvent.button
+                    realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)
+                elif rawEvent.type == pygame.MOUSEBUTTONUP:
+                    state = Event.MouseLocals.MOUSE_RELEASED
+                    buttonId = rawEvent.button
+                    realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)
+
+                if realEvent:
+                    self.manager.post(realEvent) #this scares me -Julian
+
     def notify(self, event):
         #Overriding Listener implementation
         if isinstance( event, Event.StartEvent ):
