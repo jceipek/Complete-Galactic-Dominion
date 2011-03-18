@@ -15,7 +15,7 @@ CGD is currently in the early stages of development, and as such, it is unplayab
 QUICK GIT REFERENCE:
 ====================
 For more help go to:
-[[http://www.kernel.org/pub/software/scm/git/docs/]]
+http://www.kernel.org/pub/software/scm/git/docs/
 
 ####To add files to the repository:
 ####YOU MUST BE IN THE LOCAL DIRECTORY
