@@ -2,7 +2,7 @@
 import pygame.image
 
 class DrawableObject():
-    '''This is the super class of all object that will be drawn to the screen'''
+    """This is the super class of all object that can be drawn to the screen"""
     def __init__(self, imagePath, colorkey=None):
 
         # First class to have image and rect objects

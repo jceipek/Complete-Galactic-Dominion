@@ -2,24 +2,35 @@ import MapObject
 import pygame
 
 class EnumStatuses:
-	IDLE = 0
-	GATHERING = 1
-	ATTACKING = 2
-	MOVING = 3
-	BUILDING = 4
+    IDLE = 0
+    GATHERING = 1
+    ATTACKING = 2
+    MOVING = 3
+    BUILDING = 4
 
 
 class Entity(MapObject,pygame.sprite.Sprite):
-    """A foreground MapObject with which one can interact."""
-
-	description: description of behavior, abilities
-	x: position
-	y: position
-	maxHealth: maximum/ default health points
-	curHealth: current health
-	size: radius of collision
-	status: status of entity
-	
+    """
+    A foreground MapObject with which one can interact.
+    
+    These objects may contain worlds inside them.
+    
+    #Attributes:
+    #   world = world inside this entity. None if this is an entity that cannot 
+                                          be entered
+    
+    ###### Attributes in progress
+    description: description of behavior, abilities
+    x: position
+    y: position
+    maxHealth: maximum/ default health points
+    curHealth: current health
+    size: radius of collision
+    status: status of entity
+    ######
+    
+    """
+    
     
     def __init__(self, imagePath, colorkey=None,
                  description = 'No information available.'):    
@@ -37,13 +48,13 @@ class Entity(MapObject,pygame.sprite.Sprite):
         # Menu options should be added to this dictionary.
         self.options = {'Description': showDescription}
 
-    	
-	Methods:
-	die(self): entity is removed from map
-	changeHealth(self, numHits): decreases the health of the entity based on number of hits
-	update(self): updates entity- performs actions	
+        
+    Methods:
+    die(self): entity is removed from map
+    changeHealth(self, numHits): decreases the health of the entity based on number of hits
+    update(self): updates entity- performs actions    
 
-	# First initialization of update method
+    # First initialization of update method
     def update(self):
         """All Sprite objects should have an update function."""
         pass

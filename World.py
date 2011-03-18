@@ -7,6 +7,12 @@ class World():
     
     The boundaries for displaying a World are specified in the interface, which
     is capable of displaying a portion of a World. - Julian
+    
+    #Attributes:
+    #   grid
+    #   resource counts on a per-player basis
+    #   resourceCountDerived = boolean explaining whether resources are 
+                               dependent on sub-worlds
     """
     
     def __init__(self):
