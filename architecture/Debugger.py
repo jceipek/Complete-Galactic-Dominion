@@ -22,7 +22,7 @@ class Debugger(object):
         for name in dir(Event):
             obj = getattr(Event, name)
             if '<class' in str(obj):
-                eventName = str(obj).split('.')[1].replace("'>","")
+                eventName = str(obj).split('.')[-1].replace("'>","")
                 events[eventName] = obj
         
         self.SYMBOLS_ENABLED = False
