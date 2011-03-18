@@ -1,6 +1,6 @@
 import Unit
 
-class Villager
+class Villager(Unit)
     """A kind of Unit that can gather resources."""
 
     buildType=None
