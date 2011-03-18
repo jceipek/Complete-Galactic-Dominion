@@ -31,7 +31,7 @@ class Entity(MapObject,pygame.sprite.Sprite):
 	self.timePassed=self.time-self.timePrev
 
 
-	# First initialization of update method
+    # First initialization of update method
     def update(self):
         """All Sprite objects should have an update function."""
 
