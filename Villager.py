@@ -7,6 +7,7 @@ class Villager(Unit)
     def __init__(self, imagePath, colorkey=None):
         Unit.__init__(self, imagePath, colorkey)
         self.status=IDLE
+        self.efficieny=1
         
     def gather(self, resource):
          """gathers resource"""
@@ -14,8 +15,9 @@ class Villager(Unit)
     def attack(self, enemy):
         """attacks enemy unit"""
 
-    def build(self, struct, position):
-        """builds structure at position"""
+    def build(self):
+        """keeps villiager in place while structure is being built"""
+        pass
 
     def update(self):
         """called each frame to update object"""
