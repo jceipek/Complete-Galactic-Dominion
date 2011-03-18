@@ -1,14 +1,15 @@
 import numpy as n
 
 class World():
-    """A container for everything that the player can see by scrolling
-    around the map."""
+    """A World is an object that contains everything in the current environment
+    that the player is able to see on the map by scrolling around. A World could
+    thus be a planet, a spaceship, a building, etc... - Julian
+    
+    The boundaries for displaying a World are specified in the interface, which
+    is capable of displaying a portion of a World. - Julian
+    """
     
     def __init__(self):
-        """This will eventually need some kind of 
-        view boundaries, and will probably overwrite
-        the display method in drawable object to limit
-        it to the viewing area"""
 
         # Represents number of WorldSquares to have
         self.worldColumns = 10
