@@ -1,6 +1,14 @@
 import MapObject
 import pygame
 
+class EnumStatuses:
+	IDLE = 0
+	GATHERING = 1
+	ATTACKING = 2
+	MOVING = 3
+	BUILDING = 4
+
+
 class Entity(MapObject,pygame.sprite.Sprite):
     """A foreground MapObject with which one can interact."""
 
@@ -50,9 +58,4 @@ class Entity(MapObject,pygame.sprite.Sprite):
         Needs to return more than just a string, eventually."""
         return self.description
 
-class EnumStatuses:
-	IDLE = 0
-	GATHERING = 1
-	ATTACKING = 2
-	MOVING = 3
-	BUILDING = 4
+
