@@ -59,8 +59,9 @@ grass2 = pygame.image.load("grass2.png").convert()
 
 from random import choice,seed
 seed(44)
+grass = [grass1,grass2]
 for y in range(gridSize):
-	grass = [grass1,grass2]
+	
 	for x in range(gridSize):
 		
 		square = choice(grass)

@@ -9,6 +9,7 @@ import threading
 import Event
 from Manager import Manager
 from Window import Window
+from Grid import InfiniteGrid,FiniteGrid
 from Debugger import Debugger
 from Renderer import Renderer
 
@@ -28,6 +29,9 @@ def init():
     
     #Create and register the standard listeners
     #NOT YET FULLY IMPLEMENTED
+
+    #grid = InfiniteGrid(eventManager,(100,100),64)
+    grid = FiniteGrid(eventManager,(3,2),64)
     
     renderer = Renderer(eventManager)
     

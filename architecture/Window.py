@@ -66,7 +66,7 @@ class Window(Listener):
             
             #Note: the renderer does not update or display anything.
             #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
-            self.manager.post(Event.RenderEvent(self.displaySurface))
+            self.manager.post(Event.RenderEvent(self.displaySurface,self.resolution))
             
             self.manager.post(Event.RefreshEvent())
 
@@ -77,7 +77,7 @@ class Window(Listener):
         #WARNING: THIS IS A THREADED FUNCTION. BE VERY CAREFUL WHEN CODING HERE.
         
         while self.active:
-            
+
             for rawEvent in self.pygameEvents:
     
                 #NOT YET FULLY IMPLEMENTED - more events needed
