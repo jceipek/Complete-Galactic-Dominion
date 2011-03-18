@@ -33,7 +33,7 @@ class Unit(pygame.sprite.Sprite):
         """changes position of unit in direction of dest"""
         if (self.x,self.y)==self.dest: #may need to have room for error
             if len(self.path)<1:
-                self.status=Entity.Stats.IDLE
+                self.status=Entity.Locals.IDLE
                 return 
             else:
                 self.dest=self.path.popleft()
