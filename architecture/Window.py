@@ -67,8 +67,6 @@ class Window(Listener):
             #Note: the renderer does not update or display anything.
             #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
             self.manager.post(Event.RenderEvent(self.displaySurface,self.resolution))
-            
-            self.manager.post(Event.RefreshEvent())
 
         pygame.quit()
         
@@ -77,9 +75,9 @@ class Window(Listener):
         #WARNING: THIS IS A THREADED FUNCTION. BE VERY CAREFUL WHEN CODING HERE.
         
         while self.active:
-
-            for rawEvent in self.pygameEvents:
-    
+            if self.pygameEvents:
+                rawEvent = self.pygameEvents.pop()
+            
                 #NOT YET FULLY IMPLEMENTED - more events needed
                 realEvent = None
                 if rawEvent.type == pygame.QUIT:
@@ -92,7 +90,7 @@ class Window(Listener):
                     state = Event.MouseLocals.MOUSE_RELEASED
                     buttonId = rawEvent.button
                     realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)
-
+    
                 if realEvent:
                     self.manager.post(realEvent) #this scares me -Julian
 

@@ -19,4 +19,6 @@ class Renderer(Listener):
             #event.displaySurface.fill((randint(0,255),\
             #randint(0,255),\
             #randint(0,255)))
-            pass
+            
+            #Done rendering? Draw to the screen
+            self.manager.post(Event.RefreshEvent())
