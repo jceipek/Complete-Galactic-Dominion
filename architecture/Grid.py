@@ -73,6 +73,7 @@ class FiniteGrid(Grid):
     
     def __init__(self,manager,size = (100,100),squareSize = 64):
         Grid.__init__(self,manager,size,squareSize)
+        self.emptySquare = TMP_Terrain(exists = False)
         
     def draw(self,surface,screenLoc,screenSize):
         squareSize = self.grid[(0,0)].pxSize
@@ -92,4 +93,4 @@ class FiniteGrid(Grid):
                 if squareLoc in self.grid:
                     self.grid[squareLoc].draw(surface,(left,top))
                 else:
-                    TMP_Terrain(exists = False)
+                    self.emptySquare.draw(surface,(left,top))
