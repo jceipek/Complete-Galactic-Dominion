@@ -16,6 +16,9 @@ class Renderer(Listener):
         #Overriding Listener Implementation
         if isinstance( event, Event.RenderEvent ):
             #In the actual implementation, messages will be sent out to do things like this
-            event.displaySurface.fill((randint(0,255),\
-            randint(0,255),\
-            randint(0,255)))
+            #event.displaySurface.fill((randint(0,255),\
+            #randint(0,255),\
+            #randint(0,255)))
+            
+            #Done rendering? Draw to the screen
+            self.manager.post(Event.RefreshEvent())

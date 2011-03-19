@@ -9,8 +9,11 @@ import threading
 import Event
 from Manager import Manager
 from Window import Window
+from Grid import InfiniteGrid,FiniteGrid
 from Debugger import Debugger
 from Renderer import Renderer
+
+from Event import EventTimer
 
 def init():
     """
@@ -18,16 +21,20 @@ def init():
     """
 
     debugger = Debugger()
+    eventTimer = EventTimer()
     
     #Create the event manager for low-level events
 
-    eventManager = Manager(debugger) #more specific manager class will be needed later
+    eventManager = Manager(eventTimer,debugger) #more specific manager class will be needed later
     
     #Create the occurence manager for high-level events (same across client and server)
     #NOT YET IMPLEMENTED
     
     #Create and register the standard listeners
     #NOT YET FULLY IMPLEMENTED
+
+    #grid = InfiniteGrid(eventManager,(100,100),64)
+    grid = FiniteGrid(eventManager,(3,2),64)
     
     renderer = Renderer(eventManager)
     

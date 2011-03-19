@@ -3,8 +3,8 @@ class TownCenter(Structure):
 	"""defines Town Center structure """
 	resourcesRequired=None
 	timeToBuild=0
-	def __init__(self):
-		Structure.__init__(self)
+	def __init__(self, imagePath, colorkey=None):
+		Structure.__init__(self, imagePath, colorkey)
 
 	def update(self):
 		"""called each frame to update object"""

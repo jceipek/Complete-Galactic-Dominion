@@ -2,6 +2,8 @@ import socket, sys, traceback, threading
 from threading import *
 
 class NetworkEntity(object):
+    '''The base class for Servers and Clients.
+           Defines basic'''
     
     STOP_MESSAGE='the_end_is_near'
     CLOSE_MESSAGE='shut_it_down'

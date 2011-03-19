@@ -77,6 +77,6 @@ class Debugger(object):
             
     def logMsg(self,event):
         if self.SYMBOLS_ENABLED and type(event) in self.trackedEvents:
-            print(type(event))
+            print(str(event.timeFired)+" "+str(type(event)))
             if self.VERBOSE_MODE:
                 print(event.verboseInfo)
