@@ -22,6 +22,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.initDeadZoneBasedOnSize()
         self.surface = pygame.Surface(size)
         self.surface.set_clip(((0,0),size))
+        self.scrollSpeed = [0,0]
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
@@ -30,7 +31,29 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.deadZoneRect = pygame.Rect((0, 0), deadZoneSize)
         self.deadZoneRect.center = (self.size[0]/2.0,\
                                     self.size[1]/2.0)
+
+    def setScrollSpeed(self,mousePos):
+        scrollFactor = 1 #to tweak scrolling speed
+        deadZoneSize = self.deadZoneRect.size
+        if self.rect.collidepoint(mousePos):
+            dx = (mousePos[0]-self.deadZoneRect.center[0]-self.loc[0])
+            dy = (mousePos[1]-self.deadZoneRect.center[1]-self.loc[1])
     
+            dx=max([0, abs(dx)-deadZoneSize[0]/2.0])
+            dy=max([0, abs(dy)-deadZoneSize[1]/2.0])
+    
+            speedCoeff=(self.rect.width-deadZoneSize[0])
+            self.scrollSpeed[0]=dx*scrollFactor/speedCoeff
+            self.scrollSpeed[1]=dy*scrollFactor/speedCoeff
+        else:
+            self.scrollSpeed = [0,0]
+            
+    def scrollBasedOnElapsedTime(self,elapsedTime):
+        newScrollLoc = list(self.scrollLoc)
+        newScrollLoc[0] += self.scrollSpeed[0]*elapsedTime
+        newScrollLoc[1] += self.scrollSpeed[1]*elapsedTime
+        self.scrollLoc = tuple(newScrollLoc)
+
     def scrollBasedOnMousePos(self,mousePos):
         #Add to the scrollLoc if the mouse position in the move event is outside 
         #of the deadZone. Adapt Berit's algorithm from gridTest in internal
@@ -40,7 +63,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         ms_elapsed = 1 #THIS IS VERY BAD! WE NEED SOME WAY TO READ THIS VALUE
         scrollSpeed = 1 #SHOULD BE DEFINED IN THE MOUSE OBJECT (when it exists)\
                         #AND PASSED UP VIA EVENTS
-
+                        #####I don't think it should. It can be calculated based
+                        #####on the mouse position.
+        
         newScrollLoc = list(self.scrollLoc)
         deadZoneSize = self.deadZoneRect.size
         if self.rect.collidepoint(mousePos):

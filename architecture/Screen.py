@@ -54,4 +54,8 @@ class MainScreen(Screen):
         self.viewport.draw(displaySurface)
         
     def processMouseMovedEvent(self,event):
-        self.viewport.scrollBasedOnMousePos(event.pos)
+        #self.viewport.scrollBasedOnMousePos(event.pos)
+        self.viewport.setScrollSpeed(event.pos)
+
+    def processUpdateEvent(self,event):
+        self.viewport.scrollBasedOnElapsedTime(event.elapsedTime)
