@@ -12,6 +12,10 @@ class Renderer(Listener):
     screen to refresh.
     """
     
+    def __init__(self, manager):
+		eventTypes = [ Event.RenderEvent ]
+		Listener.__init__(self, manager, eventTypes)
+    
     def notify(self,event):
         #Overriding Listener Implementation
         if isinstance( event, Event.RenderEvent ):

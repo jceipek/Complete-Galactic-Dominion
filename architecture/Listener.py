@@ -7,9 +7,10 @@ class Listener(object):
     #   manager = event manager to which the listener is registered
     """
 
-    def __init__(self, manager):
-        self.manager = manager
-        self.manager.registerListener(self)
+    def __init__(self, manager, eventTypes=[]):
+		self.eventTypes = eventTypes
+		self.manager = manager
+		self.manager.registerListener(self)
 
     def notify(self, event):
         #Each type of listener will override this method

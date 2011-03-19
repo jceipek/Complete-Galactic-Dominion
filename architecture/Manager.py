@@ -14,12 +14,15 @@ class Manager(object):
     def __init__(self,eventTimer,debugger):
         from weakref import WeakKeyDictionary
         self.listeners = WeakKeyDictionary()
+        self.eventTypesToListeners = WeakKeyDictionary()
         self.eventQueue= []
         self.eventTimer = eventTimer
         self.debugger = debugger
 
     def registerListener( self, listener ):
-        self.listeners[ listener ] = 1
+		for evType in listener.eventTypes:
+			self.eventTypesToListeners.setdefault(evType,[]).append(listener)
+		self.listeners[ listener ] = 1
 
     def unregisterListener( self, listener ):
         if listener in self.listeners:
@@ -34,9 +37,10 @@ class Manager(object):
         ##TO LISTENERS WHICH MIGHT CARE. SOME LISTENERS SHOULD START THEIR OWN 
         ##THREADS
         
-        for listener in self.listeners:
+        #for listener in self.listeners: ### WAS WORKING
+        for listener in self.eventTypesToListeners.get(type(event),[]):
+			listener.notify(event)
             #NOTE: If the weakref has died, it will be 
             #automatically removed, so we don't have 
             #to worry about it.
-            listener.notify(event)
             

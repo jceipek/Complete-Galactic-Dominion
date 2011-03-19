@@ -28,7 +28,10 @@ class Window(Listener):
         
         #Using this until someone can explain why super() is or is not the right way to do this
         #Waaaay too many disagreements/articles on this online
-        Listener.__init__(self,manager)
+        
+        eventTypes = [Event.StartEvent, Event.QuitEvent, Event.RefreshEvent, \
+            Event.RefreshCompleteEvent]
+        Listener.__init__(self,manager,eventTypes)
         # A Window is a listener because it has to know when to change (close, for example)
         
         pygame.init()
@@ -112,7 +115,7 @@ class Window(Listener):
             self.refresh()
         elif isinstance( event, Event.RefreshCompleteEvent ):
             self.updateClock()
-
+        
     def updateClock(self):
         self.gameFrametime = self.gameClock.tick(self.maxFPS)
         self.manager.post(Event.GenericDebugEvent(str(self.gameFrametime)))
