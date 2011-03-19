@@ -165,6 +165,7 @@ class Ball(pygame.sprite.Sprite):
     # loc #float location of object (Vector object)
     # dir #dir the object wants to move (Vector object)
     # speed #max movement speed (scalar)
+    # isSelected #bool
     
     # dest #overall destination for object
 
