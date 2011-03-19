@@ -12,8 +12,8 @@ from Window import Window
 from Grid import InfiniteGrid,FiniteGrid
 from Debugger import Debugger
 from Renderer import Renderer
-
 from Event import EventTimer
+from World import World
 
 def init():
     """
@@ -24,17 +24,17 @@ def init():
     eventTimer = EventTimer()
     
     #Create the event manager for low-level events
-
-    eventManager = Manager(eventTimer,debugger) #more specific manager class will be needed later
+    eventManager = Manager(eventTimer,debugger) #more specific manager classes will be needed later
     
     #Create the occurence manager for high-level events (same across client and server)
     #NOT YET IMPLEMENTED
     
     #Create and register the standard listeners
     #NOT YET FULLY IMPLEMENTED
-
-    #grid = InfiniteGrid(eventManager,(100,100),64)
-    grid = FiniteGrid(eventManager,(3,2),64)
+    
+    #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
+    currentWorld = World(eventManager)
+    currentWorld.createTestGrid()
     
     renderer = Renderer(eventManager)
     

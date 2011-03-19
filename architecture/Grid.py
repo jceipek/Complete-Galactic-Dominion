@@ -17,11 +17,10 @@ class TMP_Terrain(object):
                 rect = (pos,(self.pxSize,self.pxSize))
                 pygame.draw.rect(surface, (0,0,0), rect)
 
-class Grid(Listener):
-    def __init__(self,manager,gridSize = (100,100),\
+class Grid(object): #SHOULD ACTUALLY INHERIT FROM DRAWABLE OBJECT? SOME SUBCLASS?
+    def __init__(self,gridSize = (100,100),\
                        squareSize = 64,\
               terrainObjectDict = None):
-        Listener.__init__(self,manager)
         self.gridSize = gridSize
         self.grid = dict()
         self.populateGrid()
@@ -34,10 +33,6 @@ class Grid(Listener):
     def draw(self,surface,screenLoc,screenSize):
         #Overriden by Infinite and Finite Grids
         pass
-        
-    def notify(self,event):
-        if isinstance( event, Event.RenderEvent ):
-            self.draw(event.displaySurface,(0,0),event.screenSize)
 
 
 class InfiniteGrid(Grid):
@@ -45,8 +40,8 @@ class InfiniteGrid(Grid):
     A grid that functions like a torus - go off one end and come back on the 
     other side
     """
-    def __init__(self,manager,size = (100,100),squareSize = 64):
-        Grid.__init__(self,manager,size,squareSize)
+    def __init__(self,size = (100,100),squareSize = 64):
+        Grid.__init__(self,size,squareSize)
         
     def draw(self,surface,screenLoc,screenSize):
         squareSize = self.grid[(0,0)].pxSize
@@ -71,8 +66,8 @@ class FiniteGrid(Grid):
     A standard, finite grid used in most RTS games.
     """
     
-    def __init__(self,manager,size = (100,100),squareSize = 64):
-        Grid.__init__(self,manager,size,squareSize)
+    def __init__(self,size = (100,100),squareSize = 64):
+        Grid.__init__(self,size,squareSize)
         self.emptySquare = TMP_Terrain(exists = False)
         
     def draw(self,surface,screenLoc,screenSize):
