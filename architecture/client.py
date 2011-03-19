@@ -14,6 +14,7 @@ from Debugger import Debugger
 from Renderer import Renderer
 from Event import EventTimer
 from World import World
+from UserInterface import UserInterface
 
 def init():
     """
@@ -33,8 +34,11 @@ def init():
     #NOT YET FULLY IMPLEMENTED
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
-    currentWorld = World(eventManager)
+    currentWorld = World()
     currentWorld.createTestGrid()
+    
+    ui = UserInterface(eventManager)
+    ui.testInterfaceWithWorld(currentWorld)
     
     renderer = Renderer(eventManager)
     

@@ -63,7 +63,7 @@ class InfiniteGrid(Grid):
 
 class FiniteGrid(Grid):
     """
-    A standard, finite grid used in most RTS games.
+    A standard, finite grid (used in most RTS games).
     """
     
     def __init__(self,size = (100,100),squareSize = 64):
