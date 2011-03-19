@@ -81,9 +81,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         pygame.draw.rect(displaySurface, (255,0,255), self.deadZoneRect, 2)
     
     def absMousePosition:
-		"""Returns absolute position of mouse in world."""
-		relX, relY = self.mouse.getCurrentRelMousePos()
-		return (self.loc[0]+relX, self.loc[1]+relY)
-        
+        """Returns absolute position of mouse in world."""
+        relX, relY = self.mouse.getCurrentRelMousePos()
+        return (self.loc[0]+relX, self.loc[1]+relY)
+
 if __name__ == "__main__":
 	pass
