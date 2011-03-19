@@ -34,11 +34,9 @@ def init():
     #NOT YET FULLY IMPLEMENTED
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
-    currentWorld = World()
-    currentWorld.TEST_createGrid()
     
     ui = UserInterface(eventManager)
-    ui.testInterfaceWithWorld(currentWorld)
+    ui.TEST_interface()
     
     renderer = Renderer(eventManager)
     
