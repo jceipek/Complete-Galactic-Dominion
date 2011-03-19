@@ -34,5 +34,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def notify(self,event):
         if isinstance( event, Event.RenderEvent ):
             self.activeScreen.draw(event.displaySurface,event.screenSize)
-        if isinstance( event, Event.MouseMovedEvent ):
+        elif isinstance( event, Event.MouseMovedEvent ):
             self.activeScreen.processMouseMovedEvent(event)
+        elif isinstance( event, Event.UpdateEvent ):
+            self.activeScreen.processUpdateEvent(event)
