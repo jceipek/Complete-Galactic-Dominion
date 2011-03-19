@@ -28,6 +28,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.surface.set_clip(((0,0),size))
         self.scrollSpeed = [0,0]
         
+        self.calcDistance = lambda a,b: pow(a**2 + b**2, 0.5)
+        
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
         offset = int(0.3*float(self.size[0]))
@@ -75,14 +77,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if self.rect.collidepoint(mousePos):
             dx = (mousePos[0]-self.deadZoneRect.center[0])
             dy = (mousePos[1]-self.deadZoneRect.center[1])
-            magnitude=pow(dx**2+dy**2,0.5) #distance from center
+            magnitude=self.calcDistance(dx, dy) #distance from center
             dirx=dx/magnitude #x component of unit direction
             diry=dy/magnitude #y component of unit direction
     
             dx=max([0, abs(dx)-deadZoneSize[0]/2.0])
             dy=max([0, abs(dy)-deadZoneSize[1]/2.0])
     
-            speedCoeff=pow(dx**2+dy**2,0.5)/(self.rect.width-deadZoneSize[0])*2.0
+            speedCoeff=self.calcDistance(dx,dy)/(self.rect.width-deadZoneSize[0])*2.0
             newScrollLoc[0] += dirx*scrollSpeed*speedCoeff*ms_elapsed
             newScrollLoc[1] += diry*scrollSpeed*speedCoeff*ms_elapsed
             
