@@ -1,26 +1,21 @@
 import pygame
 
-def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
+def drawVisible(screen,grid,gridSize,squareSize,mapSize,screenLoc,font):
 	#screenLoc is the absolute pixel location of the screen with respect to the
 	#grid corners
 	
 	miny = int((screenLoc[1]//squareSize))
-	maxy = int(((screenLoc[1]+screenSize[1])//squareSize+1))
+	maxy = int(((screenLoc[1]+mapSize[1])//squareSize+1))
 	
 	minx = int((screenLoc[0]//squareSize))
-	maxx = int(((screenLoc[0]+screenSize[0])//squareSize+1))
+	maxx = int(((screenLoc[0]+mapSize[0])//squareSize+1))
 	
 	for y in range(miny,maxy):
 		for x in range(minx,maxx):
-			#if grid[(x%gridSize,y%gridSize)] == 0:
-			#	color = (0,0,0)
-			#else:
-			#	color = (255,255,255)
 			
 			left = int(x*squareSize-screenLoc[0])
 			top = int(y*squareSize-screenLoc[1])
 			rect = pygame.Rect((left, top), (squareSize,)*2)
-			#pygame.draw.rect(screen, color, rect)
 			
 			screen.blit(grid[(x%gridSize,y%gridSize)],rect)
 			
@@ -34,12 +29,17 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
 gridSize = 100
 squareSize = 64
 
-screenSize = (width, height) = (1024, 768)
+screenSize = (screenWidth, screenHeight) = (1024, 768)
 screenLoc = [0.0, 0.0]
 
-deadZoneSize = (width-200,height-200)
+mapSize = (mapWidth, mapHeight) = (1024, 568)
+mapLoc = [0.0, 0.0]
+gameZone = pygame.Rect((0,0),mapSize)
+
+deadZoneSize = (mapWidth-200,mapHeight-200)
 deadZone = pygame.Rect((0, 0), deadZoneSize)
-deadZone.center = (width/2.0,height/2.0)
+deadZone.center = (mapWidth/2.0,mapHeight/2.0)
+
 scrollSpeed = 1
 
 RUNNING = True
@@ -80,9 +80,9 @@ hud1 = pygame.image.load("HUD_sism.png").convert_alpha()
 hudZone1 = hud1.get_rect()
 hud2 = pygame.image.load("HUD_sibottom.png").convert()
 hudZone2 = hud2.get_rect()
-hudZone2.bottom = height
+hudZone2.bottom = screenHeight
 
-maxFPS = 60
+maxFPS = 100
 
 # Initialize a game clock
 gameClock = pygame.time.Clock()
@@ -92,23 +92,22 @@ while RUNNING:
 	
 	mPos = pygame.mouse.get_pos()
 	#screenLoc = (mPos[0]-screenSize[0]/2.0+0.05,mPos[1]-screenSize[1]/2.0)
-	if screenZone.collidepoint(mPos):
+	if gameZone.collidepoint(mPos):
 		dx = (mPos[0]-deadZone.center[0])
 		dy = (mPos[1]-deadZone.center[1])
-		
-		# distance formula
-		calcDistance = lambda a,b: pow(a**2 + b**2, 0.5)
-		
-		magnitude=calcDistance(dx,dy)
+		magnitude=pow(dx**2+dy**2,0.5) #distance from center
 		dirx=dx/magnitude #x component of unit direction
 		diry=dy/magnitude #y component of unit direction
 
 		dx=max([0, abs(dx)-deadZoneSize[0]/2.0])
 		dy=max([0, abs(dy)-deadZoneSize[1]/2.0])
 
-		speedCoeff=calcDistance(dx,dy)/(width-deadZoneSize[0])*2.0
+		speedCoeff=pow(dx**2+dy**2,0.5)/(mapWidth-deadZoneSize[0])*2.0
 		screenLoc[0] += dirx*scrollSpeed*speedCoeff*ms_elapsed
 		screenLoc[1] += diry*scrollSpeed*speedCoeff*ms_elapsed
+		
+		#print speedCoeff
+		#print mPos
 	
 	drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
 	

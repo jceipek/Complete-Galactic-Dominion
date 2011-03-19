@@ -9,16 +9,19 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     #   scrollLoc = (x,y) #World coordinates of the corner of the viewport
     #   loc = (x,y) #Corner of the viewport in screen coordinates
     #   size = (width,height) #Dimensions in screen coordinates
+    #   mouse = the mouse controlling it
     #   deadZoneRect
     """
     
     def __init__(self,world,scrollLoc,screenPos,size):
-        import pygame
         self.world = world
         self.scrollLoc = scrollLoc
         self.loc = screenPos
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
+        
+        self.mouse = Mouse()
+        
         self.initDeadZoneBasedOnSize()
         self.surface = pygame.Surface(size)
         self.surface.set_clip(((0,0),size))
@@ -60,7 +63,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         #to deal with scroll distances properly
         #Right now, it always scrolls
         
-        ms_elapsed = 1 #THIS IS VERY BAD! WE NEED SOME WAY TO READ THIS VALUE
+        mousePos = self.mouse.getCurrentRelMousePos()
+        
+        ms_elapsed = 1 # THIS SHOULD COME FROM THE GAME LOOP
         scrollSpeed = 1 #SHOULD BE DEFINED IN THE MOUSE OBJECT (when it exists)\
                         #AND PASSED UP VIA EVENTS
                         #####I don't think it should. It can be calculated based
@@ -96,3 +101,11 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         rect = ((0,0),self.size)
         pygame.draw.rect(displaySurface, (255,255,0), rect, 3)
         pygame.draw.rect(displaySurface, (255,0,255), self.deadZoneRect, 2)
+    
+    def absMousePosition(self):
+        """Returns absolute position of mouse in world."""
+        relX, relY = self.mouse.getCurrentRelMousePos()
+        return (self.loc[0]+relX, self.loc[1]+relY)
+
+if __name__ == "__main__":
+	pass
