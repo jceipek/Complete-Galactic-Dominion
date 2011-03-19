@@ -82,7 +82,6 @@ hud2 = pygame.image.load("HUD_sibottom.png").convert()
 hudZone2 = hud2.get_rect()
 hudZone2.bottom = height
 
-minFPS = 0
 maxFPS = 100
 
 # Initialize a game clock
@@ -100,10 +99,9 @@ while RUNNING:
 		dirx=dx/magnitude #x component of unit direction
 		diry=dy/magnitude #y component of unit direction
 
-		dx=abs(dx)-deadZoneSize[0]/2.0
-		dy=abs(dy)-deadZoneSize[1]/2.0
-		if dx<0: dx=0
-		if dy<0: dy=0
+		dx=max([0, abs(dx)-deadZoneSize[0]/2.0])
+		dy=max([0, abs(dy)-deadZoneSize[1]/2.0])
+
 		speedCoeff=pow(dx**2+dy**2,0.5)/(width-deadZoneSize[0])*2.0
 		screenLoc[0] += dirx*scrollSpeed*speedCoeff*ms_elapsed
 		screenLoc[1] += diry*scrollSpeed*speedCoeff*ms_elapsed
@@ -116,10 +114,9 @@ while RUNNING:
 	pygame.draw.rect(screen, (150,150,0), deadZone, 3)
 	
 	screen.blit(hud1, hudZone1)
-	
 	screen.blit(hud2, hudZone2)
 	
-	txt = font.render("FPS: "+str(int(gameClock.get_fps())), True, (0,150,150))
+	txt = font.render("FPS: %s"%int(gameClock.get_fps()), True, (0,150,150))
 	screen.blit(txt, txtbound)
 	
 	for event in pygame.event.get():
@@ -130,6 +127,5 @@ while RUNNING:
 	pygame.display.flip()
 	
 	ms_elapsed = gameClock.tick(maxFPS)
-	
-            
+	            
 pygame.quit()
