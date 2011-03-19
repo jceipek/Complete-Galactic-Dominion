@@ -75,6 +75,8 @@ class Window(Listener):
         #WARNING: THIS IS A THREADED FUNCTION. BE VERY CAREFUL WHEN CODING HERE.
         
         while self.active:
+            #Popping ensures that the list doesn't get too large and also prevents events from
+            #being processed more than once.
             if self.pygameEvents:
                 rawEvent = self.pygameEvents.pop()
             
@@ -90,6 +92,8 @@ class Window(Listener):
                     state = Event.MouseLocals.MOUSE_RELEASED
                     buttonId = rawEvent.button
                     realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)
+                elif rawEvent.type == pygame.MOUSEMOTION:
+                    realEvent = Event.MouseMovedEvent(rawEvent.pos)
     
                 if realEvent:
                     self.manager.post(realEvent) #this scares me -Julian

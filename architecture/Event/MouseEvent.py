@@ -26,3 +26,17 @@ class MouseClickedEvent(Event):
         self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"+\
         "\tButton State: "+str(self.state)+"\n"+\
         "\tButton Pressed: "+str(self.buttonId)+"\n"
+        
+class MouseMovedEvent(Event):
+    """
+    Fired when the mouse moves; keeps track of position only.
+    May have to change this later.
+    
+    #Attributes:
+    #   pos = (x,y)
+    """
+    def __init__(self,posxy):
+        Event.__init__(self)
+        self.pos = posxy
+        self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"
+    

@@ -12,6 +12,7 @@ class TMP_Terrain(object):
         if self.exists:
             if self.image == None:
                 rect = (pos,(self.pxSize,self.pxSize))
+                pygame.draw.rect(surface, (0,255,0), rect)
                 pygame.draw.rect(surface, (0,0,255), rect, 3)
             else:
                 rect = (pos,(self.pxSize,self.pxSize))
