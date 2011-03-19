@@ -37,13 +37,11 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.deadZoneRect.center = (self.size[0]/2.0+self.loc[0],\
                                     self.size[1]/2.0+self.loc[1])
     
-    def scrollBasedOnMousePos(self):
+    def scrollBasedOnMousePos(self, mousePos):
         #Add to the scrollLoc if the mouse position in the move event is outside 
         #of the deadZone. Adapt Berit's algorithm from gridTest in internal
         #to deal with scroll distances properly
         #Right now, it always scrolls
-        
-        mousePos = self.mouse.getCurrentRelMousePos()
         
         ms_elapsed = 1 # THIS SHOULD COME FROM THE GAME LOOP
         scrollSpeed = 1 #SHOULD BE DEFINED IN THE MOUSE OBJECT (when it exists)\

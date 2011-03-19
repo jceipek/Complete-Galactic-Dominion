@@ -35,4 +35,3 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.activeScreen.draw(event.displaySurface,event.screenSize)
         if isinstance( event, Event.MouseMovedEvent ):
             self.activeScreen.processMouseMovedEvent(event)
-        #Also intercept mouse move event 
