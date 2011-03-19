@@ -28,7 +28,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         self.initDeadZoneBasedOnSize()
         
-        
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
         import pygame
