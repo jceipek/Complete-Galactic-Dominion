@@ -21,7 +21,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
         
-        self.mouse = Mouse()
+        self.mouse = Mouse(scrollSensitivity = .0015)
         
         self.initDeadZoneBasedOnSize()
         self.surface = pygame.Surface(size)
@@ -39,7 +39,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                                     self.size[1]/2.0)
 
     def setScrollSpeed(self,mousePos):
-        scrollSensitivity = .001 #to tweak scrolling speed
         deadZoneHeight,deadZoneWidth = self.deadZoneRect.size
         relMousePos = (mousePos[0]-self.loc[0],mousePos[1]-self.loc[1])
         if self.rect.collidepoint(mousePos) and not self.deadZoneRect.collidepoint(relMousePos):
@@ -52,8 +51,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 ##    
 ##            self.scrollSpeed[0]=direction[0]*speedCoeffX*scrollSensitivity
 ##            self.scrollSpeed[1]=direction[1]*speedCoeffY*scrollSensitivity
-            self.scrollSpeed[0]=dx*scrollSensitivity
-            self.scrollSpeed[1]=dy*scrollSensitivity
+            self.scrollSpeed[0]=dx*self.mouse.scrollSensitivity
+            self.scrollSpeed[1]=dy*self.mouse.scrollSensitivity
             
         else:
             self.scrollSpeed = [0,0]

@@ -16,9 +16,13 @@ class Mouse:
     TAPPED = 10
     DRAGGED = 11
 
-    def __init__(self):
-		
-		# Position of the last MOUSEBUTTONUP event
+    def __init__(self,scrollSensitivity = .001):
+        
+        #How sensitive the mouse should be when scrolling the viewport
+        #SHOULD BE LOADED FROM .config file
+        self.scrollSensitivity = scrollSensitivity
+        
+        # Position of the last MOUSEBUTTONUP event
         self.upClickPos = (0,0)
         
         # Position of the last MOUSEBUTTONDOWN event
@@ -40,7 +44,7 @@ class Mouse:
         # Used to determine amount of events between a MOUSEBUTTONDOWN
         # and a MOUSEBUTTONUP event
         self.mouseDownIndex = 0
-		
+        
     def mouseClickState(self):
         """
         Determines state of mouse and returns tuple indicating
@@ -91,7 +95,7 @@ class Mouse:
     def getDragPos(self):
         """Returns position of click after mouse goes down then drags."""
         return (self.downClickPos, self.dragPos)
-	
+    
     def getCurrentRelMousePos(self):
         """
         Returns current mouse position, relative to upper-left
