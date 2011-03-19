@@ -21,6 +21,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         #DO MORE SETUP STUFF
 
     def TEST_interfaceWithWorld(self,world):
+		# STUB ###############
         self.loadWorld(world)
         
     def TEST_interface(self):

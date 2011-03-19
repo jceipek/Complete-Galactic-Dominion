@@ -69,3 +69,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         rect = (self.loc,self.size)
         pygame.draw.rect(displaySurface, (255,255,0), rect, 3)
         pygame.draw.rect(displaySurface, (255,0,255), self.deadZoneRect, 2)
+        
+if __name__ == "__main__":
+	pass
