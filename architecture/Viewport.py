@@ -28,7 +28,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.surface.set_clip(((0,0),size))
         self.scrollSpeed = [0,0]
         
-        self.calcDistance = lambda a,b: pow(a**2 + b**2, 0.5)
+        self.calcDistance = lambda a,b: (a**2 + b**2)**0.5
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
