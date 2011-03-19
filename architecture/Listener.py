@@ -7,7 +7,7 @@ class Listener(object):
     #   manager = event manager to which the listener is registered
     """
 
-    def __init__(self, manager, eventTypes=[]):
+    def __init__(self, manager, eventTypes):
 		self.eventTypes = eventTypes
 		self.manager = manager
 		self.manager.registerListener(self)
