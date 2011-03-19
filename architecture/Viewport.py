@@ -1,3 +1,5 @@
+from Mouse import Mouse
+
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     Acts as a "window" into the world it contains. Includes deadzone dimensions
@@ -8,17 +10,24 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     #   scrollLoc = (x,y) #World coordinates of the corner of the viewport
     #   loc = (x,y) #Corner of the viewport in screen coordinates
     #   size = (width,height) #Dimensions in screen coordinates
+    #   mouse = the mouse controlling it
     #   deadZoneRect
     """
     
     def __init__(self,world,scrollLoc,screenPos,size):
+		
         import pygame
+        
         self.world = world
         self.scrollLoc = scrollLoc
         self.loc = screenPos
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
+        
+        self.mouse = Mouse()
+        
         self.initDeadZoneBasedOnSize()
+        
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
@@ -29,15 +38,17 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.deadZoneRect.center = (self.size[0]/2.0+self.loc[0],\
                                     self.size[1]/2.0+self.loc[1])
     
-    def scrollBasedOnMousePos(self,mousePos):
+    def scrollBasedOnMousePos(self):
         #Add to the scrollLoc if the mouse position in the move event is outside 
         #of the deadZone. Adapt Berit's algorithm from gridTest in internal
         #to deal with scroll distances properly
         #Right now, it always scrolls
         
-        ms_elapsed = 1 #THIS IS VERY BAD! WE NEED SOME WAY TO READ THIS VALUE
+        mousePos = self.mouse.getCurrentRelMousePos()
+        
+        ms_elapsed = 1 # THIS SHOULD COME FROM THE GAME LOOP
         scrollSpeed = 1 #SHOULD BE DEFINED IN THE MOUSE OBJECT (when it exists)\
-                        #AND PASSED UP VIA EVENTS
+                        #AND PASSED UP VIA EVENTS - Why like this?
 
         newScrollLoc = list(self.scrollLoc)
         deadZoneSize = self.deadZoneRect.size
@@ -69,6 +80,11 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         rect = (self.loc,self.size)
         pygame.draw.rect(displaySurface, (255,255,0), rect, 3)
         pygame.draw.rect(displaySurface, (255,0,255), self.deadZoneRect, 2)
+    
+    def absMousePosition:
+		"""Returns absolute position of mouse in world."""
+		relX, relY = self.mouse.getCurrentRelMousePos()
+		return (self.loc[0]+relX, self.loc[1]+relY)
         
 if __name__ == "__main__":
 	pass
