@@ -39,8 +39,10 @@ def init():
     ui.TEST_interface()
     
     renderer = Renderer(eventManager)
-    
-    gameWindow = Window(eventManager)
+
+    #clippingArea=area that should be drawn to
+    clippingArea = ((ui.activeScreen.viewport.loc),(ui.activeScreen.viewport.size))
+    gameWindow = Window(eventManager,clippingArea)
     
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
