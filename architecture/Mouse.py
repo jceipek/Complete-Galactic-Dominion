@@ -42,59 +42,60 @@ class Mouse:
         self.mouseDownIndex = 0
 		
     def mouseClickState(self):
-		"""
-		Determines state of mouse and returns tuple indicating
-		[0] - mouse state --> DRAGGED, TAPPED, NONE
-		[1] - associated mouse button --> RIGHT, CENTER, LEFT, NONE
-		"""
-		if len(self.eventChain) > 0:
-			
-			curEvent = self.eventChain[-1]
-			
-			if curEvent.type == pygame.MOUSEBUTTONDOWN:
-				
-				self.mouseDownChainLen = len(self.eventChain)
-				self.mouseDownButton = curEvent.button
-				self.downClickPos = self.dragPos = curEvent.pos
-				self.isDragging = True
-				
-			elif curEvent.type == pygame.MOUSEBUTTONUP:
-				
-				idxChange = len(self.eventChain)-self.mouseDownChainLen
-				self.upClickPos = self.eventChain[-1].pos
-				
-				self.clearEvents_ip()
-				self.isDragging = False
-				
-				if idxChange > 1:
-					return (self.DRAGGED, self.mouseDownButton)
-				else: # idxChange == 1 indicates a tap
-					return (self.TAPPED, self.mouseDownButton)
-			
-			elif self.isDragging:
-				self.dragPos = curEvent.pos
-			
-		return (None,None)
+        """
+        Determines state of mouse and returns tuple indicating
+        [0] - mouse state --> DRAGGED, TAPPED, NONE
+        [1] - associated mouse button --> RIGHT, CENTER, LEFT, NONE
+        """
+        if len(self.eventChain) > 0:
+                
+            curEvent = self.eventChain[-1]
+            
+            if curEvent.type == pygame.MOUSEBUTTONDOWN:
+                    
+                self.mouseDownChainLen = len(self.eventChain)
+                self.mouseDownButton = curEvent.button
+                self.downClickPos = self.dragPos = curEvent.pos
+                self.isDragging = True
+                    
+            elif curEvent.type == pygame.MOUSEBUTTONUP:
+                    
+                idxChange = len(self.eventChain)-self.mouseDownChainLen
+                self.upClickPos = self.eventChain[-1].pos
+                
+                self.clearEvents_ip()
+                self.isDragging = False
+                
+                if idxChange > 1:
+                        return (self.DRAGGED, self.mouseDownButton)
+                else: # idxChange == 1 indicates a tap
+                        return (self.TAPPED, self.mouseDownButton)
+            
+            elif self.isDragging:
+                self.dragPos = curEvent.pos
+                
+        return (None,None)
     
     def addEvent_ip(self,event):
-		"""Adds event to eventChain queue."""
-		self.eventChain.append(event)
+        """Adds event to eventChain queue."""
+        self.eventChain.append(event)
     
     def clearEvents_ip(self):
-		"""Clears events in eventChain queue."""
-		self.eventChain = []
+        """Clears events in eventChain queue."""
+        self.eventChain = []
             
     def getFinishedPos(self):
-		"""Returns position of click after mouse goes down then up."""
-		return (self.downClickPos, self.upClickPos)
+        """Returns position of click after mouse goes down then up."""
+        return (self.downClickPos, self.upClickPos)
         
     def getDragPos(self):
-		"""Returns position of click after mouse goes down then drags."""
-		return (self.downClickPos, self.dragPos)
+        """Returns position of click after mouse goes down then drags."""
+        return (self.downClickPos, self.dragPos)
 	
-	def getCurrentRelMousePos(self):
-		"""
-		Returns current mouse position, relative to upper-left
-		corner of the viewport.
-		"""
-		return pygame.mouse.get_pos()
+    def getCurrentRelMousePos(self):
+        """
+        Returns current mouse position, relative to upper-left
+        corner of the viewport.
+        """
+        return pygame.mouse.get_pos()
+
