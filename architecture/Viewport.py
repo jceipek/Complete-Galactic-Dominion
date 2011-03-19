@@ -1,3 +1,4 @@
+import pygame
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     Acts as a "window" into the world it contains. Includes deadzone dimensions
@@ -19,15 +20,16 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
         self.initDeadZoneBasedOnSize()
+        self.surface = pygame.Surface(size)
+        self.surface.set_clip(((0,0),size))
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
-        import pygame
         offset = int(0.3*float(self.size[0]))
         deadZoneSize = (self.size[0]-offset,self.size[1]-offset)
         self.deadZoneRect = pygame.Rect((0, 0), deadZoneSize)
-        self.deadZoneRect.center = (self.size[0]/2.0+self.loc[0],\
-                                    self.size[1]/2.0+self.loc[1])
+        self.deadZoneRect.center = (self.size[0]/2.0,\
+                                    self.size[1]/2.0)
     
     def scrollBasedOnMousePos(self,mousePos):
         #Add to the scrollLoc if the mouse position in the move event is outside 
@@ -58,14 +60,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.scrollLoc = tuple(newScrollLoc)
         
     def draw(self,displaySurface):
-        self.world.grid.draw(displaySurface,\
+        
+        self.world.grid.draw(self.surface,\
                                   self.scrollLoc,\
-                                  self.size,
-                                  self.loc)
-        self.drawDebugFrames(displaySurface)
+                                  self.size)
+        self.drawDebugFrames(self.surface)
+        displaySurface.blit(self.surface, (self.loc,self.size))
                                   
     def drawDebugFrames(self,displaySurface):                  
-        import pygame
-        rect = (self.loc,self.size)
+        rect = ((0,0),self.size)
         pygame.draw.rect(displaySurface, (255,255,0), rect, 3)
         pygame.draw.rect(displaySurface, (255,0,255), self.deadZoneRect, 2)

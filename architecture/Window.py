@@ -24,7 +24,7 @@ class Window(Listener):
     #    pygameEvents
     """
     
-    def __init__(self,manager,clippingArea,width=640,height=480,fullscreenMode=False):
+    def __init__(self,manager,width=640,height=480,fullscreenMode=False):
         
         #Using this until someone can explain why super() is or is not the right way to do this
         #Waaaay too many disagreements/articles on this online
@@ -38,7 +38,6 @@ class Window(Listener):
         self.resolution = (width,height)
         self.fullscreenMode = fullscreenMode
         self.updateScreenMode()
-        self.displaySurface.set_clip(clippingArea)
         self.active = True
         self.pygameEvents = []
         
