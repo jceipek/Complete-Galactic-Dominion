@@ -1,4 +1,5 @@
 import pygame
+from Mouse import Mouse
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     Acts as a "window" into the world it contains. Includes deadzone dimensions
@@ -62,8 +63,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         #of the deadZone. Adapt Berit's algorithm from gridTest in internal
         #to deal with scroll distances properly
         #Right now, it always scrolls
-        
-        mousePos = self.mouse.getCurrentRelMousePos()
         
         ms_elapsed = 1 # THIS SHOULD COME FROM THE GAME LOOP
         scrollSpeed = 1 #SHOULD BE DEFINED IN THE MOUSE OBJECT (when it exists)\
