@@ -39,18 +39,22 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                                     self.size[1]/2.0)
 
     def setScrollSpeed(self,mousePos):
-        scrollFactor = 1 #to tweak scrolling speed
-        deadZoneSize = self.deadZoneRect.size
-        if self.rect.collidepoint(mousePos):
+        scrollSensitivity = .001 #to tweak scrolling speed
+        deadZoneHeight,deadZoneWidth = self.deadZoneRect.size
+        relMousePos = (mousePos[0]-self.loc[0],mousePos[1]-self.loc[1])
+        if self.rect.collidepoint(mousePos) and not self.deadZoneRect.collidepoint(relMousePos):
             dx = (mousePos[0]-self.deadZoneRect.center[0]-self.loc[0])
             dy = (mousePos[1]-self.deadZoneRect.center[1]-self.loc[1])
-    
-            dx=max([0, abs(dx)-deadZoneSize[0]/2.0])
-            dy=max([0, abs(dy)-deadZoneSize[1]/2.0])
-    
-            speedCoeff=(self.rect.width-deadZoneSize[0])
-            self.scrollSpeed[0]=dx*scrollFactor/speedCoeff
-            self.scrollSpeed[1]=dy*scrollFactor/speedCoeff
+##            mag = self.calcDistance(dx,dy)
+##            direction = (dx/mag,dy/mag)
+##            speedCoeffX = abs(dx)-deadZoneHeight
+##            speedCoeffY = abs(dy)-deadZoneWidth
+##    
+##            self.scrollSpeed[0]=direction[0]*speedCoeffX*scrollSensitivity
+##            self.scrollSpeed[1]=direction[1]*speedCoeffY*scrollSensitivity
+            self.scrollSpeed[0]=dx*scrollSensitivity
+            self.scrollSpeed[1]=dy*scrollSensitivity
+            
         else:
             self.scrollSpeed = [0,0]
             
@@ -106,7 +110,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def absMousePosition(self):
         """Returns absolute position of mouse in world."""
         relX, relY = self.mouse.getCurrentRelMousePos()
-        return (self.loc[0]+relX, self.loc[1]+relY)
+        return (self.scrollLoc[0]+relX, self.scrollLoc[1]+relY)
 
 if __name__ == "__main__":
 	pass
