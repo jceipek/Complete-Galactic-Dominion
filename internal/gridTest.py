@@ -82,32 +82,33 @@ hud2 = pygame.image.load("HUD_sibottom.png").convert()
 hudZone2 = hud2.get_rect()
 hudZone2.bottom = height
 
-maxFPS = 100
+maxFPS = 60
 
 # Initialize a game clock
 gameClock = pygame.time.Clock()
 
 while RUNNING:
-	last_time = pygame.time.get_ticks()
+	ms_elapsed = gameClock.tick(maxFPS)
 	
 	mPos = pygame.mouse.get_pos()
 	#screenLoc = (mPos[0]-screenSize[0]/2.0+0.05,mPos[1]-screenSize[1]/2.0)
 	if screenZone.collidepoint(mPos):
 		dx = (mPos[0]-deadZone.center[0])
 		dy = (mPos[1]-deadZone.center[1])
-		magnitude=pow(dx**2+dy**2,0.5) #distance from center
+		
+		# distance formula
+		calcDistance = lambda a,b: pow(a**2 + b**2, 0.5)
+		
+		magnitude=calcDistance(dx,dy)
 		dirx=dx/magnitude #x component of unit direction
 		diry=dy/magnitude #y component of unit direction
 
 		dx=max([0, abs(dx)-deadZoneSize[0]/2.0])
 		dy=max([0, abs(dy)-deadZoneSize[1]/2.0])
 
-		speedCoeff=pow(dx**2+dy**2,0.5)/(width-deadZoneSize[0])*2.0
+		speedCoeff=calcDistance(dx,dy)/(width-deadZoneSize[0])*2.0
 		screenLoc[0] += dirx*scrollSpeed*speedCoeff*ms_elapsed
 		screenLoc[1] += diry*scrollSpeed*speedCoeff*ms_elapsed
-		
-		#print speedCoeff
-		#print mPos
 	
 	drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
 	
@@ -125,7 +126,5 @@ while RUNNING:
 			RUNNING = False
 	
 	pygame.display.flip()
-	
-	ms_elapsed = gameClock.tick(maxFPS)
 	            
 pygame.quit()

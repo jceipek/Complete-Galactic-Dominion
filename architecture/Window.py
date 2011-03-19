@@ -33,6 +33,9 @@ class Window(Listener):
         
         pygame.init()
         #global TMP_ACTIVE
+        
+        self.maxFPS = 60
+        
         self.gameClock = pygame.time.Clock()
         self.gameFrametime = 0
         self.resolution = (width,height)
@@ -111,7 +114,7 @@ class Window(Listener):
             self.updateClock()
 
     def updateClock(self):
-        self.gameFrametime = self.gameClock.tick()
+        self.gameFrametime = self.gameClock.tick(self.maxFPS)
         self.manager.post(Event.GenericDebugEvent(str(self.gameFrametime)))
         
     def refresh(self):
