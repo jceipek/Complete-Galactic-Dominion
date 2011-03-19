@@ -30,7 +30,7 @@ class Grid(object): #SHOULD ACTUALLY INHERIT FROM DRAWABLE OBJECT? SOME SUBCLASS
             for x in range(self.gridSize[0]):                
                 self.grid[(x,y)] = TMP_Terrain(image = None,squareSize = 64)
     
-    def draw(self,surface,screenLoc,screenSize):
+    def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         #Overriden by Infinite and Finite Grids
         pass
 
@@ -43,7 +43,7 @@ class InfiniteGrid(Grid):
     def __init__(self,size = (100,100),squareSize = 64):
         Grid.__init__(self,size,squareSize)
         
-    def draw(self,surface,screenLoc,screenSize):
+    def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         squareSize = self.grid[(0,0)].pxSize
         miny = int((screenLoc[1]//squareSize))
         maxy = int(((screenLoc[1]+screenSize[1])//squareSize+1))
@@ -58,7 +58,8 @@ class InfiniteGrid(Grid):
                 rect = pygame.Rect((left, top), (squareSize,)*2)
                 
                 squareLoc = (x%self.gridSize[0],y%self.gridSize[1])
-                self.grid[squareLoc].draw(surface,(left,top))
+                self.grid[squareLoc].draw(surface,\
+                    (left+offset[0],top+offset[1]))
 
 
 class FiniteGrid(Grid):
@@ -70,7 +71,7 @@ class FiniteGrid(Grid):
         Grid.__init__(self,size,squareSize)
         self.emptySquare = TMP_Terrain(exists = False)
         
-    def draw(self,surface,screenLoc,screenSize):
+    def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         squareSize = self.grid[(0,0)].pxSize
         miny = int((screenLoc[1]//squareSize))
         maxy = int(((screenLoc[1]+screenSize[1])//squareSize+1))
@@ -86,6 +87,8 @@ class FiniteGrid(Grid):
                 
                 squareLoc = (x,y)
                 if squareLoc in self.grid:
-                    self.grid[squareLoc].draw(surface,(left,top))
+                    self.grid[squareLoc].draw(surface,\
+                    (left+offset[0],top+offset[1]))
                 else:
-                    self.emptySquare.draw(surface,(left,top))
+                    self.emptySquare.draw(surface,\
+                    (left+offset[0],top+offset[1]))

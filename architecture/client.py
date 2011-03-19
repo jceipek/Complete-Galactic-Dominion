@@ -35,7 +35,7 @@ def init():
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
     currentWorld = World()
-    currentWorld.createTestGrid()
+    currentWorld.TEST_createGrid()
     
     ui = UserInterface(eventManager)
     ui.testInterfaceWithWorld(currentWorld)

@@ -17,6 +17,6 @@ class World(object):
         self.resourceCountDict = dict() #Maps from player IDs to ResourceCount objects
         self.grid = None #Needs to be linked to a grid object
 
-    def createTestGrid(self):
+    def TEST_createGrid(self):
         from Grid import InfiniteGrid
         self.grid = InfiniteGrid((100,100),64)
