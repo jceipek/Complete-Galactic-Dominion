@@ -182,6 +182,7 @@ class Ball(pygame.sprite.Sprite):
         self.rect.center = (int(x+0.5),int(y+0.5))
         self.isSelected = False
         allSprites.add(self)
+        self.health = self.maxHealth = 15.0
     
     def deSelected(self):
 		"""Removes object from selectedSprites list."""
@@ -191,6 +192,7 @@ class Ball(pygame.sprite.Sprite):
     def reSelected(self):
 		"""Adds object to selectedSprites list."""
 		self.isSelected = True
+		self.health -= 1
 		selectedSprites.add(self)
         
     def face_ip(self,locVec):
@@ -204,7 +206,34 @@ class Ball(pygame.sprite.Sprite):
             self.loc.x += disp.x
             self.loc.y += disp.y
             self.rect.center = (int(self.loc.x+0.5),int(self.loc.y+0.5))
-        
+    
+    def draw(self):
+        if self.health > 0:
+            screen.blit(self.image, self.rect)
+            self.drawHealthBar()
+        else:
+            self.kill()
+    
+    def drawHealthBar(self):
+		
+		centerX, top = self.rect.midtop
+		width, height = self.rect.size
+		
+		hBarPadY = 3
+		hBarHeight = 10
+		hBarScaleX = 1
+		
+		hBarWidth = (hBarScaleX*width)
+		
+		hBarTop = top - hBarPadY - hBarHeight
+		scaleHealth = round((self.health/self.maxHealth)*hBarWidth)
+		
+		hRemain = (centerX-hBarWidth//2,hBarTop,scaleHealth,hBarHeight)
+		hLost = (hRemain[0]+scaleHealth,hBarTop,hBarWidth-scaleHealth,hBarHeight)
+		
+		screen.fill((0,255,0), hRemain)
+		screen.fill((255,0,0), hLost)
+    
     def update_ip(self,eTime):
         if eTime*self.speed >= self.loc.diff(self.dest).mag():
             #destination was reached
@@ -321,8 +350,10 @@ while RUNNING:
     screen.fill(bg)
     
     #Paste the ball image on the screen in the rectangle ballrect
+    #allSprites.draw(screen)
     for sprite in allSprites:
-		screen.blit(sprite.image, sprite.rect)
+		#screen.blit(sprite.image, sprite.rect)
+		sprite.draw()
     
     # Drag the left-click + drag bounding box
     if mouse.isDragging and mouse.mouseDownButton == Mouse.LEFT:

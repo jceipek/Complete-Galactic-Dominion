@@ -70,10 +70,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         #Right now, it always scrolls
         
         ms_elapsed = 1 # THIS SHOULD COME FROM THE GAME LOOP
-        scrollSpeed = 1 #SHOULD BE DEFINED IN THE MOUSE OBJECT (when it exists)\
-                        #AND PASSED UP VIA EVENTS
-                        #####I don't think it should. It can be calculated based
-                        #####on the mouse position.
         
         newScrollLoc = list(self.scrollLoc)
         deadZoneSize = self.deadZoneRect.size
@@ -88,8 +84,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             dy=max([0, abs(dy)-deadZoneSize[1]/2.0])
     
             speedCoeff=self.calcDistance(dx,dy)/(self.rect.width-deadZoneSize[0])*2.0
-            newScrollLoc[0] += dirx*scrollSpeed*speedCoeff*ms_elapsed
-            newScrollLoc[1] += diry*scrollSpeed*speedCoeff*ms_elapsed
+            newScrollLoc[0] += dirx*self.scrollSpeed[0]*speedCoeff*ms_elapsed
+            newScrollLoc[1] += diry*self.scrollSpeed[1]*speedCoeff*ms_elapsed
             
         self.scrollLoc = tuple(newScrollLoc)
         
