@@ -210,7 +210,8 @@ class Ball(pygame.sprite.Sprite):
     def draw(self):
         if self.health > 0:
             screen.blit(self.image, self.rect)
-            self.drawHealthBar()
+            if self.isSelected:
+                self.drawHealthBar()
         else:
             self.kill()
     
