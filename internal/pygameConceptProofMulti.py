@@ -1,4 +1,5 @@
 import sys, pygame
+import signage
 
 class Mouse:
     """
@@ -17,8 +18,8 @@ class Mouse:
     DRAGGED = 11
 
     def __init__(self):
-		
-		# Position of the last MOUSEBUTTONUP event
+        
+        # Position of the last MOUSEBUTTONUP event
         self.upClickPos = (0,0)
         
         # Position of the last MOUSEBUTTONDOWN event
@@ -40,57 +41,57 @@ class Mouse:
         # Used to determine amount of events between a MOUSEBUTTONDOWN
         # and a MOUSEBUTTONUP event
         self.mouseDownIndex = 0
-		
+        
     def mouseClickState(self):
-		"""
-		Determines state of mouse and returns tuple indicating
-		[0] - mouse state --> DRAGGED, TAPPED, NONE
-		[1] - associated mouse button --> RIGHT, CENTER, LEFT, NONE
-		"""
-		if len(self.eventChain) > 0:
-			
-			curEvent = self.eventChain[-1]
-			
-			if curEvent.type == pygame.MOUSEBUTTONDOWN:
-				
-				self.mouseDownChainLen = len(self.eventChain)
-				self.mouseDownButton = curEvent.button
-				self.downClickPos = self.dragPos = curEvent.pos
-				self.isDragging = True
-				
-			elif curEvent.type == pygame.MOUSEBUTTONUP:
-				
-				idxChange = len(self.eventChain)-self.mouseDownChainLen
-				self.upClickPos = self.eventChain[-1].pos
-				
-				self.clearEvents_ip()
-				self.isDragging = False
-				
-				if idxChange > 1:
-					return (self.DRAGGED, self.mouseDownButton)
-				else: # idxChange == 1 indicates a tap
-					return (self.TAPPED, self.mouseDownButton)
-			
-			elif self.isDragging:
-				self.dragPos = curEvent.pos
-			
-		return (None,None)
-    
+        """
+        Determines state of mouse and returns tuple indicating
+        [0] - mouse state --> DRAGGED, TAPPED, NONE
+        [1] - associated mouse button --> RIGHT, CENTER, LEFT, NONE
+        """
+        if len(self.eventChain) > 0:
+                
+            curEvent = self.eventChain[-1]
+            
+            if curEvent.type == pygame.MOUSEBUTTONDOWN:
+                
+                self.mouseDownChainLen = len(self.eventChain)
+                self.mouseDownButton = curEvent.button
+                self.downClickPos = self.dragPos = curEvent.pos
+                self.isDragging = True
+                    
+            elif curEvent.type == pygame.MOUSEBUTTONUP:
+                    
+                idxChange = len(self.eventChain)-self.mouseDownChainLen
+                self.upClickPos = self.eventChain[-1].pos
+                
+                self.clearEvents_ip()
+                self.isDragging = False
+                
+                if idxChange > 1:
+                    return (self.DRAGGED, self.mouseDownButton)
+                else: # idxChange == 1 indicates a tap
+                    return (self.TAPPED, self.mouseDownButton)
+        
+            elif self.isDragging:
+                self.dragPos = curEvent.pos
+            
+            return (None,None)
+
     def addEvent_ip(self,event):
-		"""Adds event to eventChain queue."""
-		self.eventChain.append(event)
+        """Adds event to eventChain queue."""
+        self.eventChain.append(event)
     
     def clearEvents_ip(self):
-		"""Clears events in eventChain queue."""
-		self.eventChain = []
+        """Clears events in eventChain queue."""
+        self.eventChain = []
             
     def getFinishedPos(self):
-		"""Returns position of click after mouse goes down then up."""
-		return (self.downClickPos, self.upClickPos)
+        """Returns position of click after mouse goes down then up."""
+        return (self.downClickPos, self.upClickPos)
         
     def getDragPos(self):
-		"""Returns position of click after mouse goes down then drags."""
-		return (self.downClickPos, self.dragPos)
+        """Returns position of click after mouse goes down then drags."""
+        return (self.downClickPos, self.dragPos)
 
 class Vector:
     """
@@ -143,15 +144,15 @@ class Vector:
         return diff
 
 def BBoxToRect(p1,p2):
-	"""
-	Takes two screen positions and returns the bounding box as a 
-	pygame.Rect object.
-	"""
-	x1,y1 = p1
-	x2,y2 = p2
-	bboxRect = (pygame.Rect(p1,(x2-x1,y2-y1)))
-	bboxRect.normalize() # Normalizes to remove negative sizes.
-	return bboxRect
+    """
+    Takes two screen positions and returns the bounding box as a 
+    pygame.Rect object.
+    """
+    x1,y1 = p1
+    x2,y2 = p2
+    bboxRect = (pygame.Rect(p1,(x2-x1,y2-y1)))
+    bboxRect.normalize() # Normalizes to remove negative sizes.
+    return bboxRect
 
 class Ball(pygame.sprite.Sprite):
     """
@@ -185,15 +186,15 @@ class Ball(pygame.sprite.Sprite):
         self.health = self.maxHealth = 15.0
     
     def deSelected(self):
-		"""Removes object from selectedSprites list."""
-		self.isSelected = False
-		selectedSprites.remove(self)
+        """Removes object from selectedSprites list."""
+        self.isSelected = False
+        selectedSprites.remove(self)
     
     def reSelected(self):
-		"""Adds object to selectedSprites list."""
-		self.isSelected = True
-		self.health -= 1
-		selectedSprites.add(self)
+        """Adds object to selectedSprites list."""
+        self.isSelected = True
+        self.health -= 1
+        selectedSprites.add(self)
         
     def face_ip(self,locVec):
         self.dir = self.loc.pointTo(locVec)
@@ -216,24 +217,24 @@ class Ball(pygame.sprite.Sprite):
             self.kill()
     
     def drawHealthBar(self):
-		
-		centerX, top = self.rect.midtop
-		width, height = self.rect.size
-		
-		hBarPadY = 3
-		hBarHeight = 10
-		hBarScaleX = 1
-		
-		hBarWidth = (hBarScaleX*width)
-		
-		hBarTop = top - hBarPadY - hBarHeight
-		scaleHealth = round((self.health/self.maxHealth)*hBarWidth)
-		
-		hRemain = (centerX-hBarWidth//2,hBarTop,scaleHealth,hBarHeight)
-		hLost = (hRemain[0]+scaleHealth,hBarTop,hBarWidth-scaleHealth,hBarHeight)
-		
-		screen.fill((0,255,0), hRemain)
-		screen.fill((255,0,0), hLost)
+        
+        centerX, top = self.rect.midtop
+        width, height = self.rect.size
+        
+        hBarPadY = 3
+        hBarHeight = 10
+        hBarScaleX = 1
+        
+        hBarWidth = (hBarScaleX*width)
+        
+        hBarTop = top - hBarPadY - hBarHeight
+        scaleHealth = round((self.health/self.maxHealth)*hBarWidth)
+        
+        hRemain = (centerX-hBarWidth//2,hBarTop,scaleHealth,hBarHeight)
+        hLost = (hRemain[0]+scaleHealth,hBarTop,hBarWidth-scaleHealth,hBarHeight)
+        
+        screen.fill((0,255,0), hRemain)
+        screen.fill((255,0,0), hLost)
     
     def update_ip(self,eTime):
         if eTime*self.speed >= self.loc.diff(self.dest).mag():
@@ -293,59 +294,70 @@ gameClock = pygame.time.Clock()
 # since the previous cycle through the loop
 newEvent = False
 
+test=signage.Sign(100,(100,100))
+test.addtext('Testing Testing Testing Testing Testing')
+
 while RUNNING:
         
     ########EVENTS#################
     for event in pygame.event.get():
         if event.type in [pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, \
          pygame.MOUSEMOTION]:
+
+            if event.type in [pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP]:
+                print event
+            
             mouse.addEvent_ip(event)
             newEvent = True
         
         if event.type == pygame.QUIT:
             RUNNING = False
-	
-	if newEvent == True:
-		newEvent = False
-		
-		clickType, clickButton = mouse.mouseClickState()
-		downClickPos, upClickPos = mouse.getFinishedPos()
-		
-		if clickType is not None:
-			
-			if clickButton == Mouse.RIGHT:
-			
-				for sprite in selectedSprites:
-					
-					interpretMessage(upClickPos,sprite)
-			
-			elif clickButton == Mouse.LEFT:
-				
-				if clickType == Mouse.DRAGGED:
-					
-					dragRect = BBoxToRect(downClickPos,upClickPos)
-					
-					# Determine if any sprites overlap with the dragged
-					# box and select/deselect them as necessary
-					for sprite in allSprites:
-						if sprite.rect.colliderect(dragRect):
-							sprite.reSelected()
-						else:
-							sprite.deSelected()
-					
-				elif clickType == Mouse.TAPPED:
-					
-					# Determine if any sprites contain the tapped point
-					# and select/deselect them as necessary
-					for sprite in allSprites:
-						if sprite.rect.collidepoint(*upClickPos):
-							sprite.reSelected()
-						else:
-							sprite.deSelected()
     
+    if newEvent == True:
+            newEvent = False
+            
+            clickType, clickButton = mouse.mouseClickState()
+            downClickPos, upClickPos = mouse.getFinishedPos()
+            
+            if clickType is not None:
+                
+                if clickButton == Mouse.RIGHT:
+                
+                    for sprite in selectedSprites:
+                                
+                        interpretMessage(upClickPos,sprite)
+                
+                    if test.rect.collidepoint(upClickPos):
+                
+                        print test.callback()
+                    
+                elif clickButton == Mouse.LEFT:
+                        
+                    if clickType == Mouse.DRAGGED:
+                        
+                        dragRect = BBoxToRect(downClickPos,upClickPos)
+                        
+                        # Determine if any sprites overlap with the dragged
+                        # box and select/deselect them as necessary
+                        for sprite in allSprites:
+                            if sprite.rect.colliderect(dragRect):
+                                sprite.reSelected()
+                            else:
+                                sprite.deSelected()
+                            
+                    elif clickType == Mouse.TAPPED:
+                            
+                        # Determine if any sprites contain the tapped point
+                        # and select/deselect them as necessary
+                        for sprite in allSprites:
+                            if sprite.rect.collidepoint(*upClickPos):
+                                sprite.reSelected()
+                            else:
+                                sprite.deSelected()
+
     #Move the ballrects in place (modifier, not pure function)
     for sprite in allSprites:
-		sprite.update_ip(ms_elapsed)
+        sprite.update_ip(ms_elapsed)
     
     #Clear the background with a bg color
     screen.fill(bg)
@@ -353,13 +365,15 @@ while RUNNING:
     #Paste the ball image on the screen in the rectangle ballrect
     #allSprites.draw(screen)
     for sprite in allSprites:
-		#screen.blit(sprite.image, sprite.rect)
-		sprite.draw()
+        #screen.blit(sprite.image, sprite.rect)
+        sprite.draw()
+    
+    test.draw(screen)
     
     # Drag the left-click + drag bounding box
     if mouse.isDragging and mouse.mouseDownButton == Mouse.LEFT:
-		bbox = BBoxToRect(*mouse.getDragPos())
-		pygame.draw.rect(screen, (150,150,0),bbox,3)
+        bbox = BBoxToRect(*mouse.getDragPos())
+        pygame.draw.rect(screen, (150,150,0),bbox,3)
 
     txt = font.render("FPS: "+str(int(gameClock.get_fps())), True, (255,255,255))
     screen.blit(txt, txtbound)
