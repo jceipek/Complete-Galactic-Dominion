@@ -54,31 +54,31 @@ clock = pygame.time.Clock()
 
 ## Menu data and functions.
 
-menu_data = (
+menu_data = [
     'Main',
-    'Item 0',
+    ('Item 0',lambda:'it worked!'),
     'Item 1',
-    (
+    [
         'Things',
         'Item 0',
         'Item 1',
         'Item 2',
-        (
+        [
             'More Things',
             'Item 0',
             'Item 1',
-        ),
-    ),
+        ],
+    ],
     'Quit',
-)
+]
 
 menu = NonBlockingPopupMenu(menu_data)
 
 def handle_menu(e):
     global menu
-    print 'Menu event: %s.%d: %s' % (e.name,e.item_id,e.text)
+    #print 'Menu event: %s.%d: %s' % (e.name,e.item_id,e.text)
     if e.name is None:
-        print 'Hide menu'
+        #print 'Hide menu'
         menu.hide()
     elif e.name == 'Main':
         if e.text == 'Quit':
@@ -154,7 +154,10 @@ while 1:
         elif e.type == MOUSEMOTION:
             cursor.rect.center = e.pos
         elif e.type == USEREVENT:
+			#if e.code == 'MENU':
+				#pass
             if e.code == 'MENU':
+                menu.performCallback(e)
                 handle_menu(e)
     
     clock.tick(60)

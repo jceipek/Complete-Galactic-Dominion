@@ -193,6 +193,8 @@ class PopupMenu(object):
         self.top = data[0]
         # dict of menus, keyed by menu title
         self.data = {self.top:[]}
+        
+        self.callbacks = {}
         # walk the nested list, creating the data dict for easy lookup
         self._walk(self.top, list(data))
         
@@ -202,7 +204,8 @@ class PopupMenu(object):
         # Save the display surface; use to clear screen
         self.screen = pygame.display.get_surface()
         self.clear_screen = self.screen.copy()
-        
+        print self.callbacks
+        for i in self.callbacks.values(): print i
         if block:
             self._run(block)
 
@@ -248,6 +251,10 @@ class PopupMenu(object):
         for menu in self.menus:
             menu.draw()
     
+    def performCallback(self,evt):
+        func = self.callbacks.get((evt.name,evt.text),lambda:None)
+        print func()
+    
     def _pick_event(self, menu, item):
         event = pygame.event.Event(USEREVENT, code='MENU',
             name=menu.name, item_id=item.item_id, text=item.text)
@@ -274,8 +281,13 @@ class PopupMenu(object):
         # Recursively walk the nested data lists, building the data dict for
         # easy lookup.
         for i,ent in enumerate(data):
+            #if isinstance(ent, str):
             if isinstance(ent, str):
                 self.data[key].append(ent)
+            elif isinstance(ent,tuple):
+                self.data[key].append(ent[0])
+                # callback to complete
+                self.callbacks[(key,ent[0])] = ent[1]
             else:
                 ent = list(ent)
                 new_key = ent[0]
