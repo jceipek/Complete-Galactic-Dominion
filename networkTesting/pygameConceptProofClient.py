@@ -131,7 +131,7 @@ def interpretMessage(message,ball):
     #Currently assumes tuple or list input for message
     ball.face_ip(Vector(float(message[0]),float(message[1])))
 
-def manageNetworkConnection(host='192.168.1.109',port=51423):
+def manageNetworkConnection(host='localhost',port=51423):
         print 'Managing Network Connection'
         global requestQueue
 

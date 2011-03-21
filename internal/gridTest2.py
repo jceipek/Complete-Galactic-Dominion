@@ -24,7 +24,7 @@ def drawVisible(screen,grid,gridSize,squareSize,mapSize,screenLoc,font):
 			txtbound = txt.get_rect()
 			txtbound.center = (left+squareSize/2,top+squareSize/2)
    			screen.blit(txt, txtbound)
-   			#"""
+   			"""
    			
 gridSize = 100
 squareSize = 64
