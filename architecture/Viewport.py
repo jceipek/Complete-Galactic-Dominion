@@ -1,5 +1,6 @@
 import pygame
 from Mouse import Mouse
+
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     Acts as a "window" into the world it contains. Includes deadzone dimensions
@@ -21,7 +22,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
         
-        self.mouse = Mouse(scrollSensitivity = .0015)
+        self.mouse = mouse
         
         self.initDeadZoneBasedOnSize()
         self.surface = pygame.Surface(size)
@@ -104,7 +105,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def absMousePosition(self):
         """Returns absolute position of mouse in world."""
-        relX, relY = self.mouse.getCurrentRelMousePos()
+        relX, relY = pygame.mouse.get_pos()
         return (self.scrollLoc[0]+relX, self.scrollLoc[1]+relY)
 
 if __name__ == "__main__":

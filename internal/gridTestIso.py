@@ -29,7 +29,17 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
             top = int(y*tile_height/2.0-screenLoc[1])
             rect = pygame.Rect((left, top), (tile_width,tile_height))
             #pygame.draw.rect(screen, color, rect)
-            screen.blit(grid[(x%gridSize,y%gridSize)][0],rect)
+            background = grid[(x%gridSize,y%gridSize)][0]
+            screen.blit(background,rect)
+    for y in range(miny,maxy):
+        for x in range(minx,maxx):
+            left = int((x-(y%2)/2.0)*tile_width-screenLoc[0])
+            top = int(y*tile_height/2.0-screenLoc[1])-64
+            rect = pygame.Rect((left, top), (tile_width,tile_height))
+            unit = grid[(x%gridSize,y%gridSize)][1]
+            if unit is not None:
+                screen.blit(unit,rect)
+
             '''
             print 'rect: ',rect
             print 'x: ', x
