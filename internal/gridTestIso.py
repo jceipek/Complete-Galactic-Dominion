@@ -16,6 +16,9 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
     tile_height = 64.0
     
     d = 0
+    
+    import random
+    
     for i in range(0, gridSizeX):
         if i%2 == 1: #If it is odd
             offset_x = tile_width / 2.0
@@ -27,7 +30,29 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
             y = i * tile_height / 2.0 - screenLoc[1]
             
             rect = pygame.Rect((x, y), (tile_width,tile_height))
-            screen.blit(grid[(j,i)],rect)
+            screen.blit(grid[(j,i)][0],rect)
+        
+            d+=1
+            #txt = font.render(str(d), False, (255,0,0))
+            txt = font.render(str((j,i)), False, (255,0,0))
+            txtbound = txt.get_rect()
+            txtbound.center = (x+tile_width / 2.0,y+tile_height / 2.0)
+            screen.blit(txt, txtbound)
+            
+            
+    for i in range(0, gridSizeX):
+        if i%2 == 1: #If it is odd
+            offset_x = tile_width / 2.0
+        else:
+            offset_x = 0
+
+        for j in range(0,gridSizeY):
+            x = j * tile_width + offset_x - screenLoc[0]
+            y = i * tile_height / 2.0 - screenLoc[1]
+            
+            if grid[(j,i)][1]:
+                rect = pygame.Rect((x+random.randint(0,32), y-64+random.randint(0,32)), (128,128)) #Hard coded building size and loc for now
+                screen.blit(grid[(j,i)][1],rect)
         
             d+=1
             #txt = font.render(str(d), False, (255,0,0))
@@ -76,6 +101,7 @@ grid = dict()
 
 grass1 = pygame.image.load("GoodIsoGrass.png").convert_alpha()
 grass2 = pygame.image.load("GoodIsoGrass.png").convert_alpha()
+building = pygame.image.load("testBuilding.png").convert_alpha()
 
 from random import choice,seed
 seed(44)
@@ -85,7 +111,8 @@ for y in range(gridSize):
     for x in range(gridSize):
         
         square = choice(grass)
-        grid[(x,y)] = square
+        unit = choice([None,building])
+        grid[(x,y)] = (square,unit)
 
 hud1 = pygame.image.load("HUD_sism.png").convert_alpha()
 hudZone1 = hud1.get_rect()
