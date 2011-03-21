@@ -1,7 +1,7 @@
 import pygame
 import time
 
-def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
+def drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSize,screenLoc,font):
     #screenLoc is the absolute pixel location of the screen with respect to the
     #grid corners
     
@@ -11,10 +11,6 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
     #minx = int((screenLoc[0]//squareSize))
     #maxx = int(((screenLoc[0]+screenSize[0])//squareSize+1))
     
-    gridSizeY = gridSize
-    gridSizeX = gridSize
-    tile_width = 128.0
-    tile_height = 64.0
     
     d = 0
 
@@ -29,14 +25,14 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
             top = int(y*tile_height/2.0-screenLoc[1])
             rect = pygame.Rect((left, top), (tile_width,tile_height))
             #pygame.draw.rect(screen, color, rect)
-            background = grid[(x%gridSize,y%gridSize)][0]
+            background = grid[(x%gridSizeX,y%gridSizeY)][0]
             screen.blit(background,rect)
     for y in range(miny,maxy):
         for x in range(minx,maxx):
             left = int((x-(y%2)/2.0)*tile_width-screenLoc[0])
             top = int(y*tile_height/2.0-screenLoc[1])-64
             rect = pygame.Rect((left, top), (tile_width,tile_height))
-            unit = grid[(x%gridSize,y%gridSize)][1]
+            unit = grid[(x%gridSizeX,y%gridSizeY)][1]
             if unit is not None:
                 screen.blit(unit,rect)
 
@@ -49,12 +45,13 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
             print 'minx: ', minx
             print 'maxx:', maxx
             print 'miny: ', miny
-            print 'maxy:', maxy 
-            txt = font.render(str((x,y)), False, (255,0,0))
+            print 'maxy:', maxy
+            '''
+            txt = font.render(str((x%gridSizeX,y%gridSizeY)), False, (0,0,0))
             txtbound = txt.get_rect()
             txtbound.center = (left+tile_width / 2.0,top+tile_height / 2.0)
             screen.blit(txt, txtbound)
-            '''
+            
 
     """
     for i in range(0, gridSizeX):
@@ -94,8 +91,11 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
             screen.blit(grid[(x%gridSize,y%gridSize)],rect)
                
        """
-gridSize = 5
-squareSize = 64
+
+tile_width = 128.0
+tile_height = 64.0
+gridSizeY = 50
+gridSizeX = 50
 
 screenSize = (width, height) = (1024, 768)
 screenLoc = [0.0, 0.0]
@@ -124,9 +124,9 @@ building = pygame.image.load("testBuilding.png").convert_alpha()
 from random import choice,seed
 seed(44)
 grass = [grass1,grass2]
-for y in range(gridSize):
+for y in range(gridSizeY):
     
-    for x in range(gridSize):
+    for x in range(gridSizeX):
         
         square = choice(grass)
         unit = choice([None,building])
@@ -168,7 +168,7 @@ while RUNNING:
         screenLoc[0] += dirx*scrollSpeed*speedCoeff*ms_elapsed
         screenLoc[1] += diry*scrollSpeed*speedCoeff*ms_elapsed
     
-    drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font)
+    drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSize,screenLoc,font)
     
     pygame.draw.rect(screen, (150,150,0), deadZone, 3)
     
