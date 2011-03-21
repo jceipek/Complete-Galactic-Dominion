@@ -52,44 +52,6 @@ pygame.display.set_caption('Click for menu. Press keys at any time. Watch stdout
 screen_rect = screen.get_rect()
 clock = pygame.time.Clock()
 
-## Menu data and functions.
-
-menu_data = [
-    'Main',
-    ('Item 0',lambda:'it worked!'),
-    'Item 1',
-    [
-        'Things',
-        'Item 0',
-        'Item 1',
-        'Item 2',
-        [
-            'More Things',
-            'Item 0',
-            'Item 1',
-        ],
-    ],
-    'Quit',
-]
-
-menu = NonBlockingPopupMenu(menu_data)
-
-def handle_menu(e):
-    global menu
-    #print 'Menu event: %s.%d: %s' % (e.name,e.item_id,e.text)
-    if e.name is None:
-        #print 'Hide menu'
-        menu.hide()
-    elif e.name == 'Main':
-        if e.text == 'Quit':
-            quit()
-    elif e.name == 'Things':
-        pass
-    elif e.name == 'More Things':
-        pass
-
-## Motion ball to demonstrate main loop still runs while menu is posted.
-
 class Ball(object):
     def __init__(self):
         self.image = pygame.surface.Surface((20,20))
@@ -126,6 +88,30 @@ class Cursor(object):
         pygame.display.get_surface().blit(self.image, self.rect)
 cursor = Cursor()
 
+## Menu data and functions.
+
+menu_data = [
+    'Main',
+    ('Item 0',lambda:'it worked!'),
+    'Item 1',
+    [
+        'Things',
+        'Item 0',
+        'Item 1',
+        'Item 2',
+        [
+            'More Things',
+            'Item 0',
+            'Item 1',
+        ],
+    ],
+    ('Quit',quit)
+]
+
+menu = NonBlockingPopupMenu(menu_data)
+
+## Motion ball to demonstrate main loop still runs while menu is posted.
+
 ## Main loop.
 
 while 1:
@@ -158,6 +144,5 @@ while 1:
 				#pass
             if e.code == 'MENU':
                 menu.performCallback(e)
-                handle_menu(e)
     
     clock.tick(60)

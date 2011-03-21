@@ -204,8 +204,7 @@ class PopupMenu(object):
         # Save the display surface; use to clear screen
         self.screen = pygame.display.get_surface()
         self.clear_screen = self.screen.copy()
-        print self.callbacks
-        for i in self.callbacks.values(): print i
+
         if block:
             self._run(block)
 
@@ -252,8 +251,13 @@ class PopupMenu(object):
             menu.draw()
     
     def performCallback(self,evt):
-        func = self.callbacks.get((evt.name,evt.text),lambda:None)
-        print func()
+		"""Performs the callback associated with an event specified
+		in the menu configuration, if any.  Closes menu is event
+		name is none"""
+		if evt.name is None:
+			self.hide()
+		else:
+			(self.callbacks.get((evt.name,evt.text),lambda:None))()
     
     def _pick_event(self, menu, item):
         event = pygame.event.Event(USEREVENT, code='MENU',
