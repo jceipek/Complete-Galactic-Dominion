@@ -1,4 +1,5 @@
 import pygame
+import time
 
 def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
     #screenLoc is the absolute pixel location of the screen with respect to the
@@ -16,9 +17,36 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
     tile_height = 64.0
     
     d = 0
+
+    miny = int(2*screenLoc[1]/tile_height)-2
+    maxy = int(2*(screenLoc[1]+screenSize[1])/tile_height)+1
+    minx = int(screenLoc[0]/tile_width)-1
+    maxx = int((screenLoc[0]+screenSize[0])/tile_width)+2
     
-    import random
-    
+    for y in range(miny,maxy):
+        for x in range(minx,maxx):
+            left = int((x-(y%2)/2.0)*tile_width-screenLoc[0])
+            top = int(y*tile_height/2.0-screenLoc[1])
+            rect = pygame.Rect((left, top), (tile_width,tile_height))
+            #pygame.draw.rect(screen, color, rect)
+            screen.blit(grid[(x%gridSize,y%gridSize)][0],rect)
+            '''
+            print 'rect: ',rect
+            print 'x: ', x
+            print 'y: ', y
+            print 'left: ', left
+            print 'top: ', top
+            print 'minx: ', minx
+            print 'maxx:', maxx
+            print 'miny: ', miny
+            print 'maxy:', maxy 
+            txt = font.render(str((x,y)), False, (255,0,0))
+            txtbound = txt.get_rect()
+            txtbound.center = (left+tile_width / 2.0,top+tile_height / 2.0)
+            screen.blit(txt, txtbound)
+            '''
+
+    """
     for i in range(0, gridSizeX):
         if i%2 == 1: #If it is odd
             offset_x = tile_width / 2.0
@@ -38,28 +66,8 @@ def drawVisible(screen,grid,gridSize,squareSize,screenSize,screenLoc,font):
             txtbound = txt.get_rect()
             txtbound.center = (x+tile_width / 2.0,y+tile_height / 2.0)
             screen.blit(txt, txtbound)
+    """
             
-            
-    for i in range(0, gridSizeX):
-        if i%2 == 1: #If it is odd
-            offset_x = tile_width / 2.0
-        else:
-            offset_x = 0
-
-        for j in range(0,gridSizeY):
-            x = j * tile_width + offset_x - screenLoc[0]
-            y = i * tile_height / 2.0 - screenLoc[1]
-            
-            if grid[(j,i)][1]:
-                rect = pygame.Rect((x+random.randint(0,32), y-64+random.randint(0,32)), (128,128)) #Hard coded building size and loc for now
-                screen.blit(grid[(j,i)][1],rect)
-        
-            d+=1
-            #txt = font.render(str(d), False, (255,0,0))
-            txt = font.render(str((j,i)), False, (255,0,0))
-            txtbound = txt.get_rect()
-            txtbound.center = (x+tile_width / 2.0,y+tile_height / 2.0)
-            screen.blit(txt, txtbound)
     """
     for y in range(miny,maxy):
         for x in range(minx,maxx):
