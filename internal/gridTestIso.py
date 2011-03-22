@@ -1,5 +1,6 @@
 import pygame
 import time
+from DrawableObjectOld import DrawableObject
 
 def drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSize,screenLoc,font):
     #screenLoc is the absolute pixel location of the screen with respect to the
@@ -13,11 +14,40 @@ def drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSiz
     
     
     d = 0
-
+    
     miny = int(2*screenLoc[1]/tile_height)-2
     maxy = int(2*(screenLoc[1]+screenSize[1])/tile_height)+1
     minx = int(screenLoc[0]/tile_width)-1
     maxx = int((screenLoc[0]+screenSize[0])/tile_width)+2
+    """
+    curGrids = []
+    rects = []
+    
+    txts = []
+    txtbounds = []
+    
+    for y in range(miny,maxy):
+        for x in range(minx,maxx):
+            left = int((x-(y%2)/2.0)*tile_width-screenLoc[0])
+            top = int(y*tile_height/2.0-screenLoc[1])
+            rects.append(pygame.Rect((left, top), (tile_width,tile_height)))
+    
+            curGrids.append(grid[(x%gridSizeX,y%gridSizeY)])
+            
+            txts.append(font.render(str((x%gridSizeX,y%gridSizeY)), False, (0,0,0)))
+            txtbound = txt.get_rect()
+            txtbound.center = (left+tile_width / 2.0,top+tile_height / 2.0)
+            txtbounds.append(txtbound)
+            
+    for i in range(len(curGrids)):
+        screen.blit(curGrids[i][0],rects[i])
+    for i in range(len(curGrids)):
+        curobj = curGrids[i][1]
+        if curobj is not None:
+            screen.blit(curobj,rects[i])
+    for i in range(len(curGrids)):
+        screen.blit(txts[i],txtbounds[i])
+    """
     
     for y in range(miny,maxy):
         for x in range(minx,maxx):
@@ -35,6 +65,7 @@ def drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSiz
             unit = grid[(x%gridSizeX,y%gridSizeY)][1]
             if unit is not None:
                 screen.blit(unit,rect)
+    
 
             '''
             print 'rect: ',rect
@@ -51,8 +82,8 @@ def drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSiz
             txtbound = txt.get_rect()
             txtbound.center = (left+tile_width / 2.0,top+tile_height / 2.0)
             screen.blit(txt, txtbound)
-            
 
+    
     """
     for i in range(0, gridSizeX):
         if i%2 == 1: #If it is odd
@@ -89,8 +120,7 @@ def drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSiz
             #pygame.draw.rect(screen, color, rect)
             
             screen.blit(grid[(x%gridSize,y%gridSize)],rect)
-               
-       """
+    """
 
 tile_width = 128.0
 tile_height = 64.0
@@ -117,6 +147,7 @@ txtbound = txt.get_rect()
 
 grid = dict()
 
+#grass1 = grass2 = DrawableObject("newGrass.png",(255,255,255))
 grass1 = pygame.image.load("GoodIsoGrass.png").convert_alpha()
 grass2 = pygame.image.load("GoodIsoGrass.png").convert_alpha()
 building = pygame.image.load("testBuilding.png").convert_alpha()
@@ -124,6 +155,7 @@ building = pygame.image.load("testBuilding.png").convert_alpha()
 from random import choice,seed
 seed(44)
 grass = [grass1,grass2]
+
 for y in range(gridSizeY):
     
     for x in range(gridSizeX):
@@ -150,7 +182,16 @@ while RUNNING:
     
     mPos = pygame.mouse.get_pos()
     #screenLoc = (mPos[0]-screenSize[0]/2.0+0.05,mPos[1]-screenSize[1]/2.0)
-    if screenZone.collidepoint(mPos):
+    #print screenLoc
+    
+    tx=(int((screenLoc[0]+mPos[0])/tile_width)-1)%gridSizeX
+    ty=(int(2*(screenLoc[1]+mPos[1])/tile_height)-2)%gridSizeY
+    
+    ## FIXME !!! SHOULD MAP TO COORDINATES OF SQUARES
+    print tx,ty
+
+    
+    if screenZone.collidepoint(mPos) and not deadZone.collidepoint(mPos):
         dx = (mPos[0]-deadZone.center[0])
         dy = (mPos[1]-deadZone.center[1])
         
@@ -167,7 +208,10 @@ while RUNNING:
         speedCoeff=calcDistance(dx,dy)/(width-deadZoneSize[0])*2.0
         screenLoc[0] += dirx*scrollSpeed*speedCoeff*ms_elapsed
         screenLoc[1] += diry*scrollSpeed*speedCoeff*ms_elapsed
-    
+        
+        # FIXME !!! TAKE MODULUS OF SCREENLOC TO PREVENT IT FROM GOING
+        # TO INFINITY!!!
+        
     drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSize,screenLoc,font)
     
     pygame.draw.rect(screen, (150,150,0), deadZone, 3)
@@ -179,9 +223,11 @@ while RUNNING:
     screen.blit(txt, txtbound)
     
     for event in pygame.event.get():
-        print event
+        #print event
         if event.type == pygame.QUIT:
             RUNNING = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            event.pos
             
     pygame.display.flip()
                 
