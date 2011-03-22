@@ -92,7 +92,22 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             newScrollLoc[1] += diry*self.scrollSpeed[1]*speedCoeff*ms_elapsed
             
         self.scrollLoc = tuple(newScrollLoc)
+    
+    def drawContainedEntities(self):
+        """
+        Draws all elements contained in the current viewport.
+        Currently finds all entities on the screen, but does not
+        draw them. FIXME please.
+        """
         
+        absSecondCorner = scrollLoc[0]+size[0],scrollLoc[1]+size[1]
+        curScreenRect = pygame.Rect(scrollLoc,absSecondCorner)
+        
+        for entityID,entity in self.world.getScreenEntities():
+            #### entity can be used to draw any entity
+            #### someone needs to implement this!!!!!!
+            pass
+    
     def draw(self,displaySurface):
         
         self.world.grid.draw(self.surface,\
