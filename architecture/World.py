@@ -20,7 +20,7 @@ class World(object):
         # multiple players own units in a world
         self.allEntities = dict()
         
-        self.grid = None #Needs to be linked to a grid object
+        self.grid = grid #Needs to be linked to a grid object, default None
         
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
