@@ -48,7 +48,15 @@ def init():
     
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
+    
+    # returns reference to dictionary of the eventManager mapping
+    # event types to a list of associated listeners
+    return eventManager.eventTypesToListeners
 
 if __name__ == '__main__':
     #Connect to server
-   init()
+    ldict = init()
+    for key in ldict:
+        listeners = ldict[key]
+        print key, ' with %d listener(s):'%len(listeners)
+        print '\t', listeners, '\n'
