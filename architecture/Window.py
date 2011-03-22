@@ -47,7 +47,7 @@ class Window(Listener):
         self.active = True
         self.pygameEvents = []
         self.controlMapping = []
-        self.setUpControlMapping()
+        #self.setUpControlMapping() FIXME
         
     def updateScreenMode(self):
         if self.fullscreenMode:
