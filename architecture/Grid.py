@@ -4,8 +4,8 @@ from Listener import Listener
         
 class TMP_Terrain(object):
     def __init__(self,image = None,tile_height = 64, tile_width= 128, exists = True):
-        self.image=pygame.image.load('newGrass.png')
-        self.image.set_colorkey((255,0,255))
+        self.image=pygame.image.load('newGrass.png') #FIXME FINITE GRIDS WILL NOT WORK NOW
+        self.image.set_colorkey((255,255,255))
         self.height=tile_height
         self.width=tile_width
         #self.image = image
@@ -70,6 +70,8 @@ class FiniteGrid(Grid):
     """
     A standard, finite grid (used in most RTS games).
     """
+    
+    #FIXME FINITE GRIDS WILL NOT WORK NOW BECAUSE OF TMP_Terrain
     
     def __init__(self,size = (100,100),tile_height=64, tile_width=128):
         Grid.__init__(self,size,tile_height=64, tile_width=128)

@@ -46,6 +46,8 @@ class Window(Listener):
         self.updateScreenMode()
         self.active = True
         self.pygameEvents = []
+        self.controlMapping = []
+        self.setUpControlMapping()
         
     def updateScreenMode(self):
         if self.fullscreenMode:
@@ -79,6 +81,8 @@ class Window(Listener):
         #Convert pygame events to useful events and send them to the manager if needed
         #WARNING: THIS IS A THREADED FUNCTION. BE VERY CAREFUL WHEN CODING HERE.
         
+        
+        
         while self.active:
             #Popping ensures that the list doesn't get too large and also prevents events from
             #being processed more than once.
@@ -102,6 +106,11 @@ class Window(Listener):
     
                 if realEvent:
                     self.manager.post(realEvent) #this scares me -Julian
+
+    def setUpControlMapping():
+        from ControlMapper import ControlMapper
+        controlMapper = ControlMapper()
+        self.controlMapping = controlMapper.mapping
 
     def notify(self, event):
         #Overriding Listener implementation
