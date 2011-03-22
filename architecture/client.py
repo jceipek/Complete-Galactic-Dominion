@@ -16,6 +16,7 @@ from Event import EventTimer
 from World import World
 from Mouse import Mouse
 from UserInterface import UserInterface
+from Universe import Universe
 
 def init():
     """
@@ -35,11 +36,12 @@ def init():
     #NOT YET FULLY IMPLEMENTED
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
-    
+
+    universe = Universe(eventManager)
     ui = UserInterface(eventManager)
     ui.TEST_interface()
     
-    renderer = Renderer(eventManager)
+    #renderer = Renderer(eventManager)
 
     #clippingArea=area that should be drawn to
     gameWindow = Window(eventManager)

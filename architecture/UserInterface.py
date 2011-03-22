@@ -38,3 +38,4 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.activeScreen.processMouseMovedEvent(event)
         elif isinstance( event, Event.UpdateEvent ):
             self.activeScreen.processUpdateEvent(event)
+            self.manager.post(Event.RefreshEvent())

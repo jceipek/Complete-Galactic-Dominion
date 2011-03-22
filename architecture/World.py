@@ -20,3 +20,6 @@ class World(object):
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
         self.grid = InfiniteGrid((100,100),64)
+
+    def update(self):
+        pass
