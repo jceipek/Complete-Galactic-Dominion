@@ -1,5 +1,5 @@
 import sys, pygame
-import signage
+import Signage
 
 class Mouse:
     """
@@ -294,7 +294,7 @@ gameClock = pygame.time.Clock()
 # since the previous cycle through the loop
 newEvent = False
 
-test=signage.Sign(100,(100,100))
+test=Signage.Sign(100,(540, 380))
 test.addtext('Testing Testing Testing Testing Testing')
 
 while RUNNING:
