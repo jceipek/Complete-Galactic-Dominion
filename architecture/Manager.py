@@ -43,4 +43,3 @@ class Manager(object):
             #NOTE: If the weakref has died, it will be 
             #automatically removed, so we don't have 
             #to worry about it.
-            

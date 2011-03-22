@@ -9,11 +9,14 @@ class Entity(MapObject,pygame.sprite.Sprite):
     # updated with each initialization of Entity and child classes
     self.__class__.IDcounter = 0
     
-    def __init__(self, imagePath, x, y, colorkey=None,
+    def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):    
         MapObject.__init__(self, imagePath, colorkey)
 	
 	self.__class__.IDcounter += 1 # Increment class counter
+	
+	# adds the entity to the provided world
+	world.addEntity(Entity)
 	
 	# sets entityID.  Unique for all Entities
 	self.entityID = self.__class__.count

@@ -18,7 +18,8 @@ class World(object):
         # maps entityID of each entity to a pointer to the entity
         # may need to map tuple of entityID and ownerID later when
         # multiple players own units in a world
-        self.allEntities = dict()
+        from weakref import WeakKeyDictionary
+        self.allEntities = WeakKeyDictionary()
         
         self.grid = grid #Needs to be linked to a grid object, default None
         
@@ -60,3 +61,8 @@ class World(object):
         maps entityID to an entity.
         """
         self.allEntities[entity.entityID] = entity
+
+    def removeEntity(self, entity):
+        """Removes an entity from the World."""
+        if entity.entityID in self.allEntities:
+            del self.allEntities[entity.entityID]
