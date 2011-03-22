@@ -13,7 +13,7 @@ class World(object):
                                dependent on sub-worlds
     """
     
-    def __init__(self, , grid=None):
+    def __init__(self, grid=None): #FIXME got rid of a comma, did we lose something?
         
         # maps entityID of each entity to a pointer to the entity
         # may need to map tuple of entityID and ownerID later when
