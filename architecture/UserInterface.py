@@ -13,11 +13,11 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                                                                            menu)
     """
     
-    def __init__(self,manager):
-        eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, Event.UpdateEvent ]
+    def __init__(self,manager,world):
+        eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, Event.UpdateEvent, Event.WorldChangeEvent]
         Listener.__init__(self,manager,eventTypes)
         self.activeOverlay = None
-        self.activeWorld = None
+        self.activeWorld = world
         self.activeScreen = None
         #DO MORE SETUP STUFF
 
@@ -28,7 +28,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def TEST_interface(self):
         from Screen import MainScreen
         testScreen = MainScreen()
-        testScreen.TEST_createViewport()
+        testScreen.TEST_createViewport(self.activeWorld)
         self.activeScreen = testScreen
         
     def notify(self,event):
@@ -39,3 +39,6 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance( event, Event.UpdateEvent ):
             self.activeScreen.processUpdateEvent(event)
             self.manager.post(Event.RefreshEvent())
+        elif isinstance( event, Event.WorldChangeEvent ):
+            self.activeWorld = event.world
+            self.activeScreen.changeWorld(event.world)
