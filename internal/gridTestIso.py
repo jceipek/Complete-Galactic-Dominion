@@ -78,10 +78,12 @@ def drawVisible(screen,grid,gridSizeX,gridSizeY,tile_width,tile_height,screenSiz
             print 'miny: ', miny
             print 'maxy:', maxy
             '''
+            
+            """
             txt = font.render(str((x%gridSizeX,y%gridSizeY)), False, (0,0,0))
             txtbound = txt.get_rect()
             txtbound.center = (left+tile_width / 2.0,top+tile_height / 2.0)
-            screen.blit(txt, txtbound)
+            screen.blit(txt, txtbound)"""
 
     
     """
@@ -144,12 +146,15 @@ ms_elapsed = 1
 font = pygame.font.Font(pygame.font.get_default_font(), 16)
 txt = font.render("FPS: ***", True, (255,255,255))
 txtbound = txt.get_rect()
+txtbound.center = (txtbound.center[0]+10,15)
 
 grid = dict()
 
 #grass1 = grass2 = DrawableObject("newGrass.png",(255,255,255))
-grass1 = pygame.image.load("GoodIsoGrass.png").convert_alpha()
-grass2 = pygame.image.load("GoodIsoGrass.png").convert_alpha()
+grass1 = pygame.image.load("newGrass.png").convert()
+grass1.set_colorkey((255,0,255))
+grass2 = grass1
+#grass2 = pygame.image.load("GoodIsoGrass.png").convert_alpha()
 building = pygame.image.load("testBuilding.png").convert_alpha()
 
 from random import choice,seed
@@ -161,12 +166,12 @@ for y in range(gridSizeY):
     for x in range(gridSizeX):
         
         square = choice(grass)
-        unit = choice([None,building])
+        unit = choice([None,building,None,None,None,None,None,None,None,None])
         grid[(x,y)] = (square,unit)
 
-hud1 = pygame.image.load("HUD_sism.png").convert_alpha()
+hud1 = pygame.image.load("fpsBar.png").convert_alpha()
 hudZone1 = hud1.get_rect()
-hud2 = pygame.image.load("HUD_sibottom.png").convert()
+hud2 = pygame.image.load("bottomHud.png").convert_alpha()
 hudZone2 = hud2.get_rect()
 hudZone2.bottom = height
 
@@ -178,7 +183,7 @@ gameClock = pygame.time.Clock()
 while RUNNING:
     ms_elapsed = gameClock.tick(maxFPS)
     
-    screen.fill((0,0,0))
+    #screen.fill((0,0,0))
     
     mPos = pygame.mouse.get_pos()
     #screenLoc = (mPos[0]-screenSize[0]/2.0+0.05,mPos[1]-screenSize[1]/2.0)
@@ -216,8 +221,8 @@ while RUNNING:
     
     pygame.draw.rect(screen, (150,150,0), deadZone, 3)
     
-    #screen.blit(hud1, hudZone1)
-    #screen.blit(hud2, hudZone2)
+    screen.blit(hud1, hudZone1)
+    screen.blit(hud2, hudZone2)
     
     txt = font.render("FPS: %s"%int(gameClock.get_fps()), True, (0,150,150))
     screen.blit(txt, txtbound)
