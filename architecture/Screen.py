@@ -1,4 +1,6 @@
 import Event
+from Viewport import Viewport
+from World import World
 
 class Screen(object): #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
@@ -37,16 +39,13 @@ class MainScreen(Screen):
         self.viewport = None
         self.hud = None
         
-    def TEST_createViewport(self):
-        from Viewport import Viewport
-        from World import World
-        testWorld = World()
-        testWorld.TEST_createGrid()
+    def TEST_createViewport(self,world):
+        world.TEST_createGrid()
         scrollLoc = (0,0)
         viewportPos = (50,20)
         #viewportSize = (640,480)
         viewportSize = (500,300)
-        testViewport = Viewport(testWorld,scrollLoc,viewportPos,viewportSize)
+        testViewport = Viewport(world,scrollLoc,viewportPos,viewportSize)
         self.viewport = testViewport
         
     def draw(self,displaySurface,size):

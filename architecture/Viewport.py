@@ -1,5 +1,5 @@
 import pygame
-from Mouse import Mouse
+#from Mouse import Mouse
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
@@ -21,6 +21,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.loc = screenPos
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
+        
+        #self.mouse = mouse
+        self.scrollSensitivity=.001
         
         self.initDeadZoneBasedOnSize()
         self.surface = pygame.Surface(size)
@@ -52,9 +55,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 ##            self.scrollSpeed[1]=direction[1]*speedCoeffY*scrollSensitivity
             #self.scrollSpeed[0]=dx*self.mouse.scrollSensitivity
             #self.scrollSpeed[1]=dy*self.mouse.scrollSensitivity
-            ### FIX TO NOT HAVE MOUSE
-            self.scrollSpeed[0]=dx*0.001
-            self.scrollSpeed[1]=dy*0.001
+            self.scrollSpeed[0]=dx*self.scrollSensitivity
+            self.scrollSpeed[1]=dy*self.scrollSensitivity
             
         else:
             self.scrollSpeed = [0,0]
