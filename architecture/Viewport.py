@@ -22,8 +22,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
         
-        self.mouse = mouse
-        
         self.initDeadZoneBasedOnSize()
         self.surface = pygame.Surface(size)
         self.surface.set_clip(((0,0),size))
@@ -52,8 +50,11 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 ##    
 ##            self.scrollSpeed[0]=direction[0]*speedCoeffX*scrollSensitivity
 ##            self.scrollSpeed[1]=direction[1]*speedCoeffY*scrollSensitivity
-            self.scrollSpeed[0]=dx*self.mouse.scrollSensitivity
-            self.scrollSpeed[1]=dy*self.mouse.scrollSensitivity
+            #self.scrollSpeed[0]=dx*self.mouse.scrollSensitivity
+            #self.scrollSpeed[1]=dy*self.mouse.scrollSensitivity
+            ### FIX TO NOT HAVE MOUSE
+            self.scrollSpeed[0]=dx*0.001
+            self.scrollSpeed[1]=dy*0.001
             
         else:
             self.scrollSpeed = [0,0]
