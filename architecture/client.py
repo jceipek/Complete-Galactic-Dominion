@@ -23,7 +23,6 @@ from Debugger import Debugger
 from Renderer import Renderer
 from Event import EventTimer
 from World import World
-from Mouse import Mouse
 from UserInterface import UserInterface
 from Universe import Universe
 
