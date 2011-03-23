@@ -1,6 +1,5 @@
 """
-This is copied almost verbatim from the MVC tutorial.
-It will change once we have two managers. Start small, right? :)
+B{The central hub of event processing. Look here after client.py}
 """
 
 from Debugger import Debugger
@@ -8,14 +7,32 @@ import Event
 
 class Manager(object):
     """
-    this object is responsible for coordinating most communication
-    between the Model, View, and Controller.
+    All communication between the L{Universe}, L{UserInterface}, and L{Window} 
+    happens here. It is essential for preserving an X{MVC} paradigm.
+    
+    L{Listener}s register themselves with the Manager, and then they can send 
+    events to the Manager. When the manager gets an event, it is interpreted
+    and passed along to any L{Listener} that is X{listening} for that event.
     """
+    
     def __init__(self,eventTimer,debugger):
+        """
+        Set up a manager with an empty L{Listener} L{WeakKeyDictionary}, an 
+        empty eventQueue, and a timer used for timestamps.
+        
+        @param listeners:
+        @param eventTypesToListeners:
+        @param eventQueue: A list of all events that come in for processing.
+        @param eventTimer: Used for timestamps.
+        
+        @param debugger: Listens for all events and records events if it is 
+        activated.
+        @type debugger: L{Debugger}
+        """
         from weakref import WeakKeyDictionary
         self.listeners = WeakKeyDictionary()
         self.eventTypesToListeners = WeakKeyDictionary()
-        self.eventQueue= []
+        self.eventQueue = []
         self.eventTimer = eventTimer
         self.debugger = debugger
 
