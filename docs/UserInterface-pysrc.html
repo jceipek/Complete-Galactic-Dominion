@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>UserInterface</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://github.com/jceipek/Complete-Galactic-Dominion">Complete-Galactic-Dominion</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;UserInterface
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="UserInterface-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="UserInterface-module.html">Module UserInterface</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-0" class="py-name" targets="Module Listener=Listener-module.html,Class Listener.Listener=Listener.Listener-class.html"><a title="Listener
+Listener.Listener" class="py-name" href="#" onclick="return doclink('link-0', 'Listener', 'link-0');">Listener</a></tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name"><a title="Listener
+Listener.Listener" class="py-name" href="#" onclick="return doclink('link-1', 'Listener', 'link-0');">Listener</a></tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-2" class="py-name" targets="Package Event=Event-module.html,Class Event.Event'.Event=Event.Event%27.Event-class.html"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-2', 'Event', 'link-2');">Event</a></tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="UserInterface"></a><div id="UserInterface-def"><a name="L4"></a><tt class="py-lineno"> 4</tt> <a class="py-toggle" href="#" id="UserInterface-toggle" onclick="return toggle('UserInterface');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="UserInterface.UserInterface-class.html">UserInterface</a><tt class="py-op">(</tt><tt class="py-base-class">Listener</tt><tt class="py-op">)</tt><tt class="py-op">:</tt>  <tt class="py-comment">#SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT</tt> </tt>
+</div><a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">    Contains all of the functionality required to present information screens to </tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">    the user and interprets user input.</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">    </tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring">    #Attributes:</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">    #   activeScreen = visible screen (i.e. loading, main menu, intro, credits,</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">                                                                          etc.)</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">    #   activeOverlay = current screen to display over game content (i.e. pause </tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">                                                                           menu)</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">     </tt>
+<a name="UserInterface.__init__"></a><div id="UserInterface.__init__-def"><a name="L16"></a><tt class="py-lineno">16</tt> <a class="py-toggle" href="#" id="UserInterface.__init__-toggle" onclick="return toggle('UserInterface.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="UserInterface.UserInterface-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">manager</tt><tt class="py-op">,</tt><tt class="py-param">world</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UserInterface.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="UserInterface.__init__-expanded"><a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">        <tt class="py-name">eventTypes</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt> <tt id="link-3" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-3', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Class Event.RenderEvent'.RenderEvent=Event.RenderEvent%27.RenderEvent-class.html"><a title="Event.RenderEvent'.RenderEvent" class="py-name" href="#" onclick="return doclink('link-4', 'RenderEvent', 'link-4');">RenderEvent</a></tt><tt class="py-op">,</tt> <tt id="link-5" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-5', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Class Event.MouseEvent.MouseMovedEvent=Event.MouseEvent.MouseMovedEvent-class.html"><a title="Event.MouseEvent.MouseMovedEvent" class="py-name" href="#" onclick="return doclink('link-6', 'MouseMovedEvent', 'link-6');">MouseMovedEvent</a></tt><tt class="py-op">,</tt> <tt id="link-7" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-7', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Class Event.UpdateEvent'.UpdateEvent=Event.UpdateEvent%27.UpdateEvent-class.html"><a title="Event.UpdateEvent'.UpdateEvent" class="py-name" href="#" onclick="return doclink('link-8', 'UpdateEvent', 'link-8');">UpdateEvent</a></tt><tt class="py-op">,</tt> <tt id="link-9" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-9', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Class Event.WorldChangeEvent'.WorldChangeEvent=Event.WorldChangeEvent%27.WorldChangeEvent-class.html"><a title="Event.WorldChangeEvent'.WorldChangeEvent" class="py-name" href="#" onclick="return doclink('link-10', 'WorldChangeEvent', 'link-10');">WorldChangeEvent</a></tt><tt class="py-op">]</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">        <tt id="link-11" class="py-name"><a title="Listener
+Listener.Listener" class="py-name" href="#" onclick="return doclink('link-11', 'Listener', 'link-0');">Listener</a></tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method ControlMapper.ControlMapper.__init__()=ControlMapper.ControlMapper-class.html#__init__,Method Debugger.Debugger.__init__()=Debugger.Debugger-class.html#__init__,Method DrawableObject.DrawableObject.__init__()=DrawableObject.DrawableObject-class.html#__init__,Method Entity.Entity.__init__()=Entity.Entity-class.html#__init__,Method Event.Event'.Event.__init__()=Event.Event%27.Event-class.html#__init__,Method Event.GenericDebugEvent'.GenericDebugEvent.__init__()=Event.GenericDebugEvent%27.GenericDebugEvent-class.html#__init__,Method Event.MouseEvent.MouseClickedEvent.__init__()=Event.MouseEvent.MouseClickedEvent-class.html#__init__,Method Event.MouseEvent.MouseMovedEvent.__init__()=Event.MouseEvent.MouseMovedEvent-class.html#__init__,Method Event.RenderEvent'.RenderEvent.__init__()=Event.RenderEvent%27.RenderEvent-class.html#__init__,Method Event.UpdateEvent'.UpdateEvent.__init__()=Event.UpdateEvent%27.UpdateEvent-class.html#__init__,Method Grid.FiniteGrid.__init__()=Grid.FiniteGrid-class.html#__init__,Method Grid.Grid.__init__()=Grid.Grid-class.html#__init__,Method Grid.InfiniteGrid.__init__()=Grid.InfiniteGrid-class.html#__init__,Method Grid.TMP_Terrain.__init__()=Grid.TMP_Terrain-class.html#__init__,Method Listener.Listener.__init__()=Listener.Listener-class.html#__init__,Method Manager.Manager.__init__()=Manager.Manager-class.html#__init__,Method MapObject.MapObject.__init__()=MapObject.MapObject-class.html#__init__,Method Mouse.Mouse.__init__()=Mouse.Mouse-class.html#__init__,Method Player.Player.__init__()=Player.Player-class.html#__init__,Method Renderer.Renderer.__init__()=Renderer.Renderer-class.html#__init__,Method Screen.MainScreen.__init__()=Screen.MainScreen-class.html#__init__,Method Screen.Screen.__init__()=Screen.Screen-class.html#__init__,Method Universe.Universe.__init__()=Universe.Universe-class.html#__init__,Method UserInterface.UserInterface.__init__()=UserInterface.UserInterface-class.html#__init__,Method Viewport.Viewport.__init__()=Viewport.Viewport-class.html#__init__,Method Window.Window.__init__()=Window.Window-class.html#__init__,Method World.World.__init__()=World.World-class.html#__init__"><a title="ControlMapper.ControlMapper.__init__
+Debugger.Debugger.__init__
+DrawableObject.DrawableObject.__init__
+Entity.Entity.__init__
+Event.Event'.Event.__init__
+Event.GenericDebugEvent'.GenericDebugEvent.__init__
+Event.MouseEvent.MouseClickedEvent.__init__
+Event.MouseEvent.MouseMovedEvent.__init__
+Event.RenderEvent'.RenderEvent.__init__
+Event.UpdateEvent'.UpdateEvent.__init__
+Grid.FiniteGrid.__init__
+Grid.Grid.__init__
+Grid.InfiniteGrid.__init__
+Grid.TMP_Terrain.__init__
+Listener.Listener.__init__
+Manager.Manager.__init__
+MapObject.MapObject.__init__
+Mouse.Mouse.__init__
+Player.Player.__init__
+Renderer.Renderer.__init__
+Screen.MainScreen.__init__
+Screen.Screen.__init__
+Universe.Universe.__init__
+UserInterface.UserInterface.__init__
+Viewport.Viewport.__init__
+Window.Window.__init__
+World.World.__init__" class="py-name" href="#" onclick="return doclink('link-12', '__init__', 'link-12');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt><tt class="py-name">manager</tt><tt class="py-op">,</tt><tt class="py-name">eventTypes</tt><tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeOverlay</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeWorld</tt> <tt class="py-op">=</tt> <tt class="py-name">world</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeScreen</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">        <tt class="py-comment">#DO MORE SETUP STUFF</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"> </tt>
+<a name="UserInterface.TEST_interfaceWithWorld"></a><div id="UserInterface.TEST_interfaceWithWorld-def"><a name="L24"></a><tt class="py-lineno">24</tt> <a class="py-toggle" href="#" id="UserInterface.TEST_interfaceWithWorld-toggle" onclick="return toggle('UserInterface.TEST_interfaceWithWorld');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="UserInterface.UserInterface-class.html#TEST_interfaceWithWorld">TEST_interfaceWithWorld</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">world</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UserInterface.TEST_interfaceWithWorld-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="UserInterface.TEST_interfaceWithWorld-expanded"><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">                <tt class="py-comment"># STUB ###############</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">loadWorld</tt><tt class="py-op">(</tt><tt class="py-name">world</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">         </tt>
+<a name="UserInterface.TEST_interface"></a><div id="UserInterface.TEST_interface-def"><a name="L28"></a><tt class="py-lineno">28</tt> <a class="py-toggle" href="#" id="UserInterface.TEST_interface-toggle" onclick="return toggle('UserInterface.TEST_interface');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="UserInterface.UserInterface-class.html#TEST_interface">TEST_interface</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UserInterface.TEST_interface-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="UserInterface.TEST_interface-expanded"><a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-keyword">from</tt> <tt id="link-13" class="py-name" targets="Module Screen=Screen-module.html,Class Screen.Screen=Screen.Screen-class.html"><a title="Screen
+Screen.Screen" class="py-name" href="#" onclick="return doclink('link-13', 'Screen', 'link-13');">Screen</a></tt> <tt class="py-keyword">import</tt> <tt id="link-14" class="py-name" targets="Class Screen.MainScreen=Screen.MainScreen-class.html"><a title="Screen.MainScreen" class="py-name" href="#" onclick="return doclink('link-14', 'MainScreen', 'link-14');">MainScreen</a></tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">        <tt class="py-name">testScreen</tt> <tt class="py-op">=</tt> <tt id="link-15" class="py-name"><a title="Screen.MainScreen" class="py-name" href="#" onclick="return doclink('link-15', 'MainScreen', 'link-14');">MainScreen</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">        <tt class="py-name">testScreen</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name" targets="Method Screen.MainScreen.TEST_createViewport()=Screen.MainScreen-class.html#TEST_createViewport"><a title="Screen.MainScreen.TEST_createViewport" class="py-name" href="#" onclick="return doclink('link-16', 'TEST_createViewport', 'link-16');">TEST_createViewport</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeWorld</tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeScreen</tt> <tt class="py-op">=</tt> <tt class="py-name">testScreen</tt> </tt>
+</div><a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">         </tt>
+<a name="UserInterface.notify"></a><div id="UserInterface.notify-def"><a name="L34"></a><tt class="py-lineno">34</tt> <a class="py-toggle" href="#" id="UserInterface.notify-toggle" onclick="return toggle('UserInterface.notify');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="UserInterface.UserInterface-class.html#notify">notify</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt><tt class="py-param">event</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="UserInterface.notify-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="UserInterface.notify-expanded"><a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt> <tt class="py-name">event</tt><tt class="py-op">,</tt> <tt id="link-17" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-17', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="Event.RenderEvent'.RenderEvent" class="py-name" href="#" onclick="return doclink('link-18', 'RenderEvent', 'link-4');">RenderEvent</a></tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeScreen</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method Grid.FiniteGrid.draw()=Grid.FiniteGrid-class.html#draw,Method Grid.Grid.draw()=Grid.Grid-class.html#draw,Method Grid.InfiniteGrid.draw()=Grid.InfiniteGrid-class.html#draw,Method Grid.TMP_Terrain.draw()=Grid.TMP_Terrain-class.html#draw,Method Screen.MainScreen.draw()=Screen.MainScreen-class.html#draw,Method Screen.Screen.draw()=Screen.Screen-class.html#draw,Method Viewport.Viewport.draw()=Viewport.Viewport-class.html#draw"><a title="Grid.FiniteGrid.draw
+Grid.Grid.draw
+Grid.InfiniteGrid.draw
+Grid.TMP_Terrain.draw
+Screen.MainScreen.draw
+Screen.Screen.draw
+Viewport.Viewport.draw" class="py-name" href="#" onclick="return doclink('link-19', 'draw', 'link-19');">draw</a></tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">.</tt><tt class="py-name">displaySurface</tt><tt class="py-op">,</tt><tt class="py-name">event</tt><tt class="py-op">.</tt><tt class="py-name">screenSize</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt> <tt class="py-name">event</tt><tt class="py-op">,</tt> <tt id="link-20" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-20', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="Event.MouseEvent.MouseMovedEvent" class="py-name" href="#" onclick="return doclink('link-21', 'MouseMovedEvent', 'link-6');">MouseMovedEvent</a></tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeScreen</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Method Screen.MainScreen.processMouseMovedEvent()=Screen.MainScreen-class.html#processMouseMovedEvent"><a title="Screen.MainScreen.processMouseMovedEvent" class="py-name" href="#" onclick="return doclink('link-22', 'processMouseMovedEvent', 'link-22');">processMouseMovedEvent</a></tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt> <tt class="py-name">event</tt><tt class="py-op">,</tt> <tt id="link-23" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-23', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="Event.UpdateEvent'.UpdateEvent" class="py-name" href="#" onclick="return doclink('link-24', 'UpdateEvent', 'link-8');">UpdateEvent</a></tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeScreen</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Method Screen.MainScreen.processUpdateEvent()=Screen.MainScreen-class.html#processUpdateEvent"><a title="Screen.MainScreen.processUpdateEvent" class="py-name" href="#" onclick="return doclink('link-25', 'processUpdateEvent', 'link-25');">processUpdateEvent</a></tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">)</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">manager</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name" targets="Method Manager.Manager.post()=Manager.Manager-class.html#post"><a title="Manager.Manager.post" class="py-name" href="#" onclick="return doclink('link-26', 'post', 'link-26');">post</a></tt><tt class="py-op">(</tt><tt id="link-27" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-27', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Class Event.RefreshEvent'.RefreshEvent=Event.RefreshEvent%27.RefreshEvent-class.html"><a title="Event.RefreshEvent'.RefreshEvent" class="py-name" href="#" onclick="return doclink('link-28', 'RefreshEvent', 'link-28');">RefreshEvent</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">        <tt class="py-keyword">elif</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt> <tt class="py-name">event</tt><tt class="py-op">,</tt> <tt id="link-29" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-29', 'Event', 'link-2');">Event</a></tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="Event.WorldChangeEvent'.WorldChangeEvent" class="py-name" href="#" onclick="return doclink('link-30', 'WorldChangeEvent', 'link-10');">WorldChangeEvent</a></tt> <tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeWorld</tt> <tt class="py-op">=</tt> <tt class="py-name">event</tt><tt class="py-op">.</tt><tt class="py-name">world</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">activeScreen</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name" targets="Method Universe.Universe.changeWorld()=Universe.Universe-class.html#changeWorld"><a title="Universe.Universe.changeWorld" class="py-name" href="#" onclick="return doclink('link-31', 'changeWorld', 'link-31');">changeWorld</a></tt><tt class="py-op">(</tt><tt class="py-name">event</tt><tt class="py-op">.</tt><tt class="py-name">world</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://github.com/jceipek/Complete-Galactic-Dominion">Complete-Galactic-Dominion</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Mar 23 02:10:53 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

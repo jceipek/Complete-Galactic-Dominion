@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>client</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://github.com/jceipek/Complete-Galactic-Dominion">Complete-Galactic-Dominion</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;client
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="client-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="client-module.html">Module client</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring">B{RUN ME FIRST!}</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-docstring">######################\n</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-docstring">#       Client       #\n</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">######################\n</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">This file is used to set up everything that clients can do and begins the </tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">program.</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">B{FIXME:}We might want to move some of this code into a function that sets up </tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">servers and clients as needed. For now, no servers have been created.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment">#Import python modules required for the client</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">threading</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-comment">#Import necessary user defined classes required for the client</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Package Event=Event-module.html,Class Event.Event'.Event=Event.Event%27.Event-class.html"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-0', 'Event', 'link-0');">Event</a></tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-1" class="py-name" targets="Module Manager=Manager-module.html,Class Manager.Manager=Manager.Manager-class.html"><a title="Manager
+Manager.Manager" class="py-name" href="#" onclick="return doclink('link-1', 'Manager', 'link-1');">Manager</a></tt> <tt class="py-keyword">import</tt> <tt id="link-2" class="py-name"><a title="Manager
+Manager.Manager" class="py-name" href="#" onclick="return doclink('link-2', 'Manager', 'link-1');">Manager</a></tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-3" class="py-name" targets="Module Window=Window-module.html,Class Window.Window=Window.Window-class.html"><a title="Window
+Window.Window" class="py-name" href="#" onclick="return doclink('link-3', 'Window', 'link-3');">Window</a></tt> <tt class="py-keyword">import</tt> <tt id="link-4" class="py-name"><a title="Window
+Window.Window" class="py-name" href="#" onclick="return doclink('link-4', 'Window', 'link-3');">Window</a></tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-5" class="py-name" targets="Module Grid=Grid-module.html,Class Grid.Grid=Grid.Grid-class.html"><a title="Grid
+Grid.Grid" class="py-name" href="#" onclick="return doclink('link-5', 'Grid', 'link-5');">Grid</a></tt> <tt class="py-keyword">import</tt> <tt id="link-6" class="py-name" targets="Class Grid.InfiniteGrid=Grid.InfiniteGrid-class.html"><a title="Grid.InfiniteGrid" class="py-name" href="#" onclick="return doclink('link-6', 'InfiniteGrid', 'link-6');">InfiniteGrid</a></tt><tt class="py-op">,</tt><tt id="link-7" class="py-name" targets="Class Grid.FiniteGrid=Grid.FiniteGrid-class.html"><a title="Grid.FiniteGrid" class="py-name" href="#" onclick="return doclink('link-7', 'FiniteGrid', 'link-7');">FiniteGrid</a></tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-8" class="py-name" targets="Module Debugger=Debugger-module.html,Class Debugger.Debugger=Debugger.Debugger-class.html"><a title="Debugger
+Debugger.Debugger" class="py-name" href="#" onclick="return doclink('link-8', 'Debugger', 'link-8');">Debugger</a></tt> <tt class="py-keyword">import</tt> <tt id="link-9" class="py-name"><a title="Debugger
+Debugger.Debugger" class="py-name" href="#" onclick="return doclink('link-9', 'Debugger', 'link-8');">Debugger</a></tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-10" class="py-name" targets="Module Renderer=Renderer-module.html,Class Renderer.Renderer=Renderer.Renderer-class.html"><a title="Renderer
+Renderer.Renderer" class="py-name" href="#" onclick="return doclink('link-10', 'Renderer', 'link-10');">Renderer</a></tt> <tt class="py-keyword">import</tt> <tt id="link-11" class="py-name"><a title="Renderer
+Renderer.Renderer" class="py-name" href="#" onclick="return doclink('link-11', 'Renderer', 'link-10');">Renderer</a></tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-12" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-12', 'Event', 'link-0');">Event</a></tt> <tt class="py-keyword">import</tt> <tt id="link-13" class="py-name" targets="Class Event.EventTimer'.EventTimer=Event.EventTimer%27.EventTimer-class.html"><a title="Event.EventTimer'.EventTimer" class="py-name" href="#" onclick="return doclink('link-13', 'EventTimer', 'link-13');">EventTimer</a></tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-14" class="py-name" targets="Module World=World-module.html,Class World.World=World.World-class.html"><a title="World
+World.World" class="py-name" href="#" onclick="return doclink('link-14', 'World', 'link-14');">World</a></tt> <tt class="py-keyword">import</tt> <tt id="link-15" class="py-name"><a title="World
+World.World" class="py-name" href="#" onclick="return doclink('link-15', 'World', 'link-14');">World</a></tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-16" class="py-name" targets="Module UserInterface=UserInterface-module.html,Class UserInterface.UserInterface=UserInterface.UserInterface-class.html"><a title="UserInterface
+UserInterface.UserInterface" class="py-name" href="#" onclick="return doclink('link-16', 'UserInterface', 'link-16');">UserInterface</a></tt> <tt class="py-keyword">import</tt> <tt id="link-17" class="py-name"><a title="UserInterface
+UserInterface.UserInterface" class="py-name" href="#" onclick="return doclink('link-17', 'UserInterface', 'link-16');">UserInterface</a></tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-18" class="py-name" targets="Module Universe=Universe-module.html,Class Universe.Universe=Universe.Universe-class.html"><a title="Universe
+Universe.Universe" class="py-name" href="#" onclick="return doclink('link-18', 'Universe', 'link-18');">Universe</a></tt> <tt class="py-keyword">import</tt> <tt id="link-19" class="py-name"><a title="Universe
+Universe.Universe" class="py-name" href="#" onclick="return doclink('link-19', 'Universe', 'link-18');">Universe</a></tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"> </tt>
+<a name="init"></a><div id="init-def"><a name="L29"></a><tt class="py-lineno">29</tt> <a class="py-toggle" href="#" id="init-toggle" onclick="return toggle('init');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="client-module.html#init">init</a><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="init-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="init-expanded"><a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line"><tt class="py-docstring">    Game initialization function.</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line"><tt class="py-docstring">        1. Creates a L{Debugger} (debugger) and L{EventTimer} (eventTimer) and </tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line"><tt class="py-docstring">           stores references to them in an instance of L{EventManager}.</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"><tt class="py-docstring">        2. Several listeners are started and registered with eventManager:</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line"><tt class="py-docstring">            - Instance of L{Universe} (universe)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line"><tt class="py-docstring">            - Instance of L{UserInterface} (ui)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-docstring">            - Instance of L{Window} (gameWindow)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"><tt class="py-docstring">        3. We send the eventManager a message to start the game</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"><tt class="py-docstring">            - This message is interpreted by the gameWindow</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">    <tt class="py-name">debugger</tt> <tt class="py-op">=</tt> <tt id="link-20" class="py-name"><a title="Debugger
+Debugger.Debugger" class="py-name" href="#" onclick="return doclink('link-20', 'Debugger', 'link-8');">Debugger</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">    <tt class="py-name">eventTimer</tt> <tt class="py-op">=</tt> <tt id="link-21" class="py-name"><a title="Event.EventTimer'.EventTimer" class="py-name" href="#" onclick="return doclink('link-21', 'EventTimer', 'link-13');">EventTimer</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">     </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">    <tt class="py-comment">#Create the event manager for low-level events</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">    <tt class="py-name">eventManager</tt> <tt class="py-op">=</tt> <tt id="link-22" class="py-name"><a title="Manager
+Manager.Manager" class="py-name" href="#" onclick="return doclink('link-22', 'Manager', 'link-1');">Manager</a></tt><tt class="py-op">(</tt><tt class="py-name">eventTimer</tt><tt class="py-op">,</tt><tt class="py-name">debugger</tt><tt class="py-op">)</tt> <tt class="py-comment">#FIXME: more specific manager\</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">                                                <tt class="py-comment">#classes will be needed later?</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">     </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">    <tt class="py-comment">#Create the occurence manager for high-level events (same across client and server)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">    <tt class="py-comment">#FIXME: NOT YET IMPLEMENTED</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">    <tt class="py-comment">#Note: Do we even need this anymore? - Julian</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">     </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">    <tt class="py-comment">#===========================================</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">    <tt class="py-comment">#Create and register the standard listeners</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">    <tt class="py-comment">#With the event manager</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">    <tt class="py-comment">#===========================================</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">    <tt class="py-comment">#FIXME: Not yet fully implemented</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">     </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">    <tt class="py-comment">#THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line"> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">    <tt class="py-name">universe</tt> <tt class="py-op">=</tt> <tt id="link-23" class="py-name"><a title="Universe
+Universe.Universe" class="py-name" href="#" onclick="return doclink('link-23', 'Universe', 'link-18');">Universe</a></tt><tt class="py-op">(</tt><tt class="py-name">eventManager</tt><tt class="py-op">)</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">    <tt class="py-name">ui</tt> <tt class="py-op">=</tt> <tt id="link-24" class="py-name"><a title="UserInterface
+UserInterface.UserInterface" class="py-name" href="#" onclick="return doclink('link-24', 'UserInterface', 'link-16');">UserInterface</a></tt><tt class="py-op">(</tt><tt class="py-name">eventManager</tt><tt class="py-op">,</tt><tt class="py-name">universe</tt><tt class="py-op">.</tt><tt class="py-name">activeWorld</tt><tt class="py-op">)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">    <tt class="py-name">ui</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Method UserInterface.UserInterface.TEST_interface()=UserInterface.UserInterface-class.html#TEST_interface"><a title="UserInterface.UserInterface.TEST_interface" class="py-name" href="#" onclick="return doclink('link-25', 'TEST_interface', 'link-25');">TEST_interface</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-comment">#FIXME: Used while the interface is not set up properly</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">    <tt class="py-name">gameWindow</tt> <tt class="py-op">=</tt> <tt id="link-26" class="py-name"><a title="Window
+Window.Window" class="py-name" href="#" onclick="return doclink('link-26', 'Window', 'link-3');">Window</a></tt><tt class="py-op">(</tt><tt class="py-name">eventManager</tt><tt class="py-op">)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">     </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">    <tt class="py-comment">#===========================================</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">     </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">    <tt class="py-comment">#Notify the manager that the window should start to accept input:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">    <tt class="py-name">eventManager</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Method Manager.Manager.post()=Manager.Manager-class.html#post"><a title="Manager.Manager.post" class="py-name" href="#" onclick="return doclink('link-27', 'post', 'link-27');">post</a></tt><tt class="py-op">(</tt><tt id="link-28" class="py-name"><a title="Event
+Event.Event'.Event" class="py-name" href="#" onclick="return doclink('link-28', 'Event', 'link-0');">Event</a></tt><tt class="py-op">.</tt><tt id="link-29" class="py-name" targets="Class Event.StartEvent'.StartEvent=Event.StartEvent%27.StartEvent-class.html"><a title="Event.StartEvent'.StartEvent" class="py-name" href="#" onclick="return doclink('link-29', 'StartEvent', 'link-29');">StartEvent</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">'__main__'</tt><tt class="py-op">:</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">    <tt class="py-comment">#FIXME: Very little implemented here.</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">    <tt class="py-comment">#Connect to server</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">    <tt id="link-30" class="py-name" targets="Function client.init()=client-module.html#init"><a title="client.init" class="py-name" href="#" onclick="return doclink('link-30', 'init', 'link-30');">init</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://github.com/jceipek/Complete-Galactic-Dominion">Complete-Galactic-Dominion</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Mar 23 02:10:53 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
