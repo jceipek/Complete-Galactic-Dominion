@@ -55,15 +55,15 @@ class Window(Listener):
     def __init__(self,manager,width=640,height=480,fullscreenMode=False):
         """
         @param manager: The event manager to which the window is registered
-        @type manager: pointer to Manager object
+        @type manager: pointer to L{Manager} object
         """
+        
+        eventTypes = [Event.StartEvent, Event.QuitEvent, Event.RefreshEvent, \
+            Event.RefreshCompleteEvent]
         
         #Using this until someone can explain why super() is or is not the right way to do this
         #Waaaay too many disagreements/articles on this online
         Listener.__init__(self,manager,eventTypes)
-        
-        eventTypes = [Event.StartEvent, Event.QuitEvent, Event.RefreshEvent, \
-            Event.RefreshCompleteEvent]
         
         pygame.init()
         

@@ -7,10 +7,20 @@ import Event
 
 class Debugger(object):
     """
-    #Attributes:
-    #   SYMBOLS_ENABLED
-    #   VERBOSE_MODE
-    #   trackedEvents
+    The debugger is used for debugging purposes during development.
+    When it is initialized, it reads from a text file (debug.config)
+    specifying options such as which events to report and whether
+    extra information about these events should be reported.
+    
+    @param SYMBOLS_ENABLED: If this is off, the debugger will do nothing.
+    @type SYMBOLS_ENABLED: bool
+    
+    @param VERBOSE_MODE: Turn this on to obtain additional information contained
+    in an event.
+    @type VERBOSE_MODE: bool
+     
+    @param trackedEvents: Events that the debugger will report.
+    @type trackedEvents: [*L{Event}.*]
     """
     
     def __init__(self):
@@ -29,33 +39,35 @@ class Debugger(object):
         self.VERBOSE_MODE = False
         self.trackedEvents = []
         
-        debugFile = open("debug.config")
-        
-        for line in debugFile:
-            #Strip extra whitespace
-            line = line.strip()
-            line = line.replace(" ","")
-            line = line.replace("\t","")
-            
-            line = line.split('#')[0]
-            if len(line)>0:
-                dmode = "SYMBOLS_ENABLED="
-                vmode = "VERBOSE_MODE="
-                etrack = "Event."
-                if line.find(dmode) == 0:
-                     if line[len(dmode):] == "True":
-                        self.SYMBOLS_ENABLED = True
-                     elif line[len(dmode):] == "False":
-                        self.SYMBOLS_ENABLED = False
-                elif line.find(vmode) == 0:
-                     if line[len(vmode):] == "True":
-                        self.VERBOSE_MODE = True
-                     elif line[len(vmode):] == "False":
-                        self.VERBOSE_MODE = False
-                elif line.find(etrack) == 0:
-                     if line[len(etrack):] in events:
-                        self.trackedEvents.append(events[line[len(etrack):]])
-        
+        try:
+            debugFile = open("debug.config")
+                
+            for line in debugFile:
+                #Strip extra whitespace
+                line = line.strip()
+                line = line.replace(" ","")
+                line = line.replace("\t","")
+                
+                line = line.split('#')[0]
+                if len(line)>0:
+                    dmode = "SYMBOLS_ENABLED="
+                    vmode = "VERBOSE_MODE="
+                    etrack = "Event."
+                    if line.find(dmode) == 0:
+                         if line[len(dmode):] == "True":
+                            self.SYMBOLS_ENABLED = True
+                         elif line[len(dmode):] == "False":
+                            self.SYMBOLS_ENABLED = False
+                    elif line.find(vmode) == 0:
+                         if line[len(vmode):] == "True":
+                            self.VERBOSE_MODE = True
+                         elif line[len(vmode):] == "False":
+                            self.VERBOSE_MODE = False
+                    elif line.find(etrack) == 0:
+                         if line[len(etrack):] in events:
+                           self.trackedEvents.append(events[line[len(etrack):]])
+        except:
+            pass
         print("Debugging Setup:")
         if self.SYMBOLS_ENABLED:
             print("\tDebugging Enabled")
