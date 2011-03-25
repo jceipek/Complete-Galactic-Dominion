@@ -116,7 +116,7 @@ class Window(Listener):
             
             #Note: the renderer does not update or display anything.
             #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
-            self.manager.post(Event.RenderEvent(self.displaySurface,self.resolution))
+            
 
         pygame.quit()
         

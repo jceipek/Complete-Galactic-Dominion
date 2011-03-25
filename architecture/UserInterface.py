@@ -14,7 +14,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     
     def __init__(self,manager,world):
-        eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, Event.UpdateEvent, Event.WorldChangeEvent]
+        eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, Event.UpdateEvent, Event.WorldChangeEvent, Event.DisplaySurfaceCreatedEvent]
         Listener.__init__(self,manager,eventTypes)
         self.activeOverlay = None
         self.activeWorld = world
@@ -30,10 +30,14 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         testScreen = MainScreen()
         testScreen.TEST_createViewport(self.activeWorld)
         self.activeScreen = testScreen
+
+    def setDisplaySurface(display,res):
+        self.displaySurface=displaySurface
+        self.resolution=res
         
     def notify(self,event):
         if isinstance( event, Event.RenderEvent ):
-            self.activeScreen.draw(event.displaySurface,event.screenSize)
+            self.activeScreen.draw(self.displaySurface,self.resolution)
         elif isinstance( event, Event.MouseMovedEvent ):
             self.activeScreen.processMouseMovedEvent(event)
         elif isinstance( event, Event.UpdateEvent ):
@@ -42,3 +46,6 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance( event, Event.WorldChangeEvent ):
             self.activeWorld = event.world
             self.activeScreen.changeWorld(event.world)
+        elif isinstance( event,Event.DisplaySurfaceCreatedEvent ):
+            self.setDisplaySurface(event.displaySurface,event.resolution)
+            
