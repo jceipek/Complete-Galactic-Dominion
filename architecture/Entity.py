@@ -41,7 +41,6 @@ class Entity(MapObject):
 	@param size: radius of collision (not currently implemented)
 	@param status: current status of the Entity.  Found in Locals.
 	
-	
 	"""
 	
         MapObject.__init__(self, imagePath, x, y, colorkey)
