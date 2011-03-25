@@ -41,4 +41,3 @@ class Universe(Listener):
     def notify(self,event):
         if isinstance(event,Event.UpdateEvent):
             self.update()#this may become a thread
-        if isinstance(event)
