@@ -114,8 +114,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.world.grid.draw(self.surface,\
                                   self.scrollLoc,\
                                   self.size)
-        self.drawDebugFrames(self.surface)
         self.drawContainedEntities()
+        self.drawDebugFrames(self.surface)
         displaySurface.blit(self.surface, (self.loc,self.size))
                                   
     def drawDebugFrames(self,displaySurface):                  

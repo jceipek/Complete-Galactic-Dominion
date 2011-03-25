@@ -25,8 +25,9 @@ from Event import EventTimer
 from World import World
 from UserInterface import UserInterface
 from Universe import Universe
-
 from Entity import Entity,TestEntity
+
+from 
 
 def init():
     """
@@ -72,16 +73,23 @@ def init():
     
     #===========================================
     
+    w.TEST_createGrid()
+    
     # Initialize 500 entities in World w
     for i in range(500):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-
     
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
+    
+    return eventManager.eventTypesToListeners
 
 if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
-    init()
+    
+    eTypestoListeners = init()
+    for key in eTypestoListeners:
+        print 'Event type: %s'%str(key)
+        print eTypestoListeners[key],'\n'
