@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><umlet_diagram><help_text>// Uncomment the following line to change the fontsize:
+// fontsize=14
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Welcome to UMLet!
+//
+// Double-click on UML elements to add them to the diagram, or to copy them
+// Edit elements by modifying the text in this panel
+// Hold Ctrl to select multiple elements
+// Use Ctrl+mouse to select via lasso
+//
+// Use Â± or Ctrl+mouse wheel to zoom
+// Drag a whole relation at its central square icon
+//
+// Press Ctrl+C to copy the whole diagram to the system clipboard (then just paste it to, eg, Word)
+// Edit the files in the "palettes" directory to create your own element palettes
+//
+// Select "Custom Elements &gt; New..." to create new element types
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// This text will be stored with each diagram;  use it for notes.</help_text><zoom_level>3</zoom_level><element><type>com.umlet.element.base.Class</type><coordinates><x>576</x><y>384</y><w>36</w><h>18</h></coordinates><panel_attributes>Player
+--
+--
+id:Float
+--
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>939</x><y>276</y><w>63</w><h>57</h></coordinates><panel_attributes>HUD
+--
+--
+-id: Long
+_-ClassAttribute: Long_
+--
+#Operation(i: int): int
+/+AbstractOperation()/
+--
+Responsibilities
+-- Resp1
+*-- Resp2*</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>852</x><y>201</y><w>63</w><h>39</h></coordinates><panel_attributes>Drawable Object
+--
+--
+imagePath:String
+image:Surface
+colorKey:Tuple(Int)
+rect:Rectangle
+--
+draw():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>873</x><y>231</y><w>104</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;36;99;45</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>384</x><y>399</y><w>96</w><h>45</h></coordinates><panel_attributes>World
+--
+--
+grid:Grid
+entities:Hashtable(String-&gt;List(Entity))
+players:List(Player)
+--
+getScreenEntities(screenRect):List(Entity)
+update():None
+addEntity(entity:Entity):None
+removeEntity(entity:Entity):Entity</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>759</x><y>276</y><w>63</w><h>33</h></coordinates><panel_attributes>MapObjects
+--
+--
+position:Tuple(Int)
+--
+owner:Player
+blockable:Boolean
+position:Tuple(Int)
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>780</x><y>231</y><w>107</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>102;9;102;36;9;45</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>864</x><y>375</y><w>63</w><h>21</h></coordinates><panel_attributes>Terrain
+--
+--
+height=Int
+width=Int</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>684</x><y>372</y><w>72</w><h>63</h></coordinates><panel_attributes>Entity
+--
+--
+description: String
+position: Tuple(x(Float),y(Float))
+maxHealth: Integer
+currHealth: Integer
+size: Integer
+status: String
+player: Player
+--
+die(): None
+changeHealth(numHits:int): None
+update(): None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>816</x><y>423</y><w>63</w><h>18</h></coordinates><panel_attributes>GrassTerrain
+--
+--
+blockable=False</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>909</x><y>423</y><w>63</w><h>18</h></coordinates><panel_attributes>WaterTerrain
+--
+--
+blockable=True</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>708</x><y>297</y><w>86</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>81;9;81;57;9;75</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>780</x><y>297</y><w>119</w><h>83</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;57;114;78</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>603</x><y>465</y><w>72</w><h>48</h></coordinates><panel_attributes>Builder
+--
+--
+creationStatus: String
+buildTypes: List(String)
+timeToBuild:Float
+resourcesRequired:Tuple(String)
+canBuild:List(Sting)
+unitsToBuild:List(Builders)
+--
+defaultBuild():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>756</x><y>465</y><w>63</w><h>18</h></coordinates><panel_attributes>NaturalObject
+--
+--
+update():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>708</x><y>426</y><w>86</w><h>44</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;27;81;39</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>627</x><y>426</y><w>95</w><h>44</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;9;90;27;9;39</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>546</x><y>552</y><w>63</w><h>42</h></coordinates><panel_attributes>Structure
+--
+--
+_IDLE:Integer_
+_BUILDING:Integer_
+_MAKING_UNITS:Integer_
+status:Integer
+--
+build(unit:Unit):None
+update():None
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>648</x><y>552</y><w>63</w><h>45</h></coordinates><panel_attributes>Unit
+--
+--
+_MOVING:Integer_
+_IDLE:Integer_
+status:Int
+efficiency:Tuple(Float)
+waypoints:List(Tuple(Float)))
+--
+update():None
+move(x:Float,y:Float):None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>756</x><y>498</y><w>63</w><h>24</h></coordinates><panel_attributes>Resource
+--
+--
+type:String
+--
+update():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>627</x><y>504</y><w>56</w><h>53</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;36;51;48</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>570</x><y>504</y><w>71</w><h>53</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>66;9;66;36;9;48</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>780</x><y>474</y><w>14</w><h>29</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;24</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>888</x><y>387</y><w>56</w><h>41</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;21;51;36</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>837</x><y>387</y><w>65</w><h>41</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>60;9;60;21;9;36</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>546</x><y>621</y><w>63</w><h>21</h></coordinates><panel_attributes>TownCenter
+--
+--
+build(unit:Unit):None
+update():None
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>651</x><y>621</y><w>102</w><h>60</h></coordinates><panel_attributes>Villager
+--
+--
+_IDLE:Int_
+_MOVING:Int_
+_GATHERING:Int_
+_BUILDING:Int_
+status:Int
+buildType:List(String)
+--
+gather(resource:Resource):None
+attack(unit:Unit):None
+build(structure:Structure,pos:Tuple(Float)):None
+update():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>672</x><y>588</y><w>14</w><h>38</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;33</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>567</x><y>585</y><w>14</w><h>41</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;36</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>756</x><y>543</y><w>63</w><h>18</h></coordinates><panel_attributes>Wood
+--
+--
+update():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>777</x><y>513</y><w>14</w><h>35</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;30</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>399</x><y>321</y><w>63</w><h>42</h></coordinates><panel_attributes>Universe
+--
+--
+worlds:List(World)
+activeWorld:World
+--
+addWorld(world):None
+changeWorld(world):None
+update():None
+notify(Event):None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>471</x><y>414</y><w>218</w><h>14</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>9;9;213;9</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>423</x><y>354</y><w>14</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;45</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>399</x><y>483</y><w>63</w><h>30</h></coordinates><panel_attributes>Grid
+--
+--
+gridSize=Tuple(Int)
+grid=Hashtable(Tuple(Int)-&gt;Terrain)
+--
+populateGrid():None
+draw():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>348</x><y>531</y><w>63</w><h>12</h></coordinates><panel_attributes>InfiniteGrid
+--
+--
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>447</x><y>531</y><w>63</w><h>12</h></coordinates><panel_attributes>FiniteGrid
+--
+--</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>372</x><y>504</y><w>62</w><h>32</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>57;9;57;18;9;27</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>420</x><y>504</y><w>65</w><h>32</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;18;60;27</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>423</x><y>435</y><w>14</w><h>53</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;48</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>471</x><y>387</y><w>110</w><h>29</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>9;24;105;9</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>603</x><y>384</y><w>86</w><h>14</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>81;9;9;9</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>285</x><y>249</y><w>63</w><h>27</h></coordinates><panel_attributes>Listener
+--
+--
+eventManager:Manager
+eventTypes:List(String)
+--
+notify(Event):None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>309</x><y>267</y><w>128</w><h>59</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;39;123;54</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>261</x><y>159</y><w>114</w><h>51</h></coordinates><panel_attributes>Manager
+--
+--
+debugger=Debugger
+listeners=Hashtable(Listener-&gt;None)
+eventTypeToListener=Hashtable(String:List(Listener))
+eventQueue:List(Events)
+eventTimer:EventTimer
+--
+post(Event):None
+registerListener(Listener):None
+unregisterListener(Listener):None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>453</x><y>162</y><w>63</w><h>33</h></coordinates><panel_attributes>Debugger
+--
+--
+symbolsEnabled:Boolean
+verboseMode:Boolean
+trackedEvents:List(List)
+--
+logMsg(Event):None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>306</x><y>201</y><w>14</w><h>53</h></coordinates><panel_attributes>lt=&lt;-&gt;</panel_attributes><additional_attributes>9;48;9;9</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>453</x><y>201</y><w>63</w><h>15</h></coordinates><panel_attributes>EventTimer
+--
+--
+getTime():None
+</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>366</x><y>165</y><w>92</w><h>20</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>9;15;87;9</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>366</x><y>189</y><w>92</w><h>23</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>9;9;87;18</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>237</x><y>384</y><w>63</w><h>24</h></coordinates><panel_attributes>Screen
+--
+--
+activate():None
+deactivate():None
+draw():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>237</x><y>444</y><w>72</w><h>30</h></coordinates><panel_attributes>MainScreen
+--
+--
+viewport:Viewport
+--
+draw():None
+processMouseEvent(Event):None
+processUpdateEvent(Event):None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>258</x><y>399</y><w>14</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;45</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>228</x><y>318</y><w>84</w><h>42</h></coordinates><panel_attributes>UserInterface
+--
+--
+activeOverlay:Screen
+activeScreen:Screen
+activeWorld:World
+--
+interfaceWithWorld(world:World):None
+createInterface():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Class</type><coordinates><x>240</x><y>507</y><w>69</w><h>90</h></coordinates><panel_attributes>Viewport
+--
+--
+world:World
+scrollLoc:Tuple(Int)
+loc:Tuple(Int)
+size:Tuple(Int)
+rect:Rectangle
+scrollSensitivity:Float
+deadZoneRect:Rectangle
+surface:Surface
+scrollSpeed:List(Float)
+--
+initDeadZone():None
+setScrollSpeed(mousePos):None
+scroll():None
+drawEntities():None
+draw():None
+drawDebug():None
+absMousePosition():Tuple(Int)</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>258</x><y>351</y><w>14</w><h>38</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;33</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>303</x><y>333</y><w>86</w><h>92</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>81;87;9;9</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>264</x><y>267</y><w>59</w><h>56</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>54;9;54;39;9;51</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>261</x><y>465</y><w>14</w><h>47</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;42</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>300</x><y>417</y><w>89</w><h>140</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>84;9;9;135</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>135</x><y>318</y><w>84</w><h>87</h></coordinates><panel_attributes>Window
+--
+--
+maxFps:Int
+gameClock:Clock
+gameFrametime:Float
+resolution:Tuple(Int)
+fullscreenMode:Boolean
+active:Boolean
+pygameEvents:List(PygameEvents)
+controlMapping:List(String)
+--
+updateScreenMode():None
+run():None
+pygameEventPoster():None *threaded*
+notify(event:Event):None
+updateClock():None
+refresh():None
+deactivate():None</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>156</x><y>267</y><w>167</w><h>56</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>162;9;162;39;9;51</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>72</x><y>207</y><w>63</w><h>21</h></coordinates><panel_attributes>Event
+--
+--
+verboseInfo:String
+timeFired=Float</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>126</x><y>207</y><w>164</w><h>62</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>9;9;120;9;159;57</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>126</x><y>174</y><w>140</w><h>47</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>9;42;120;42;135;9</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>126</x><y>264</y><w>63</w><h>15</h></coordinates><panel_attributes>UpdateEvent
+--
+--
+elapsedTime:Float</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>96</x><y>219</y><w>71</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>9;9;9;27;66;45</additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>51</x><y>264</y><w>54</w><h>69</h></coordinates><panel_attributes>/OtherEventTypes/
+...
+GenericDebugEvent
+StartEvent
+WorldChangeEvent
+MouseEvent
+QuitEvent
+RefreshEvent
+RefreshCompleteEvent
+RenderEvent
+BuildStart
+BuildComplete
+...</panel_attributes><additional_attributes/></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>60</x><y>219</y><w>50</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>45;9;45;27;9;45</additional_attributes></element></umlet_diagram>

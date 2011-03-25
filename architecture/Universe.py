@@ -4,11 +4,16 @@ from Listener import Listener
 from World import World
 
 class Universe(Listener):
-    def __init__(self,manager):
+    def __init__(self,manager,world=None):
         eventTypes = [Event.UpdateEvent]
         Listener.__init__(self,manager,eventTypes)
         self.worldList=[]
-        self.activeWorld=World()
+        if world == None:
+            self.activeWorld=World()
+            self.worldList.append(self.activeWorld)
+        else:
+            self.activeWorld=world
+            self.worldList.append(world)
 
     def addWorld(self,world):
         pass#FIXME
