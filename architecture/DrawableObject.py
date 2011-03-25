@@ -10,35 +10,36 @@ class DrawableObject():
 
     # First loadImage method
     def loadImage(self, imagePath, colorkey=None):
+        return loadImage(imagePath,colorkey)
+
+def loadImage(imagePath, colorkey=None):
+    
+    # If there is a filepath given, load that file.
+    if isinstance(imagePath,str):
         
-        # If there is a filepath given, load that file.
-        if isinstance(imagePath,str):
-            
-            try:
-                image = pygame.image.load(imagePath)
-            except pygame.error, message:
-                print 'Cannot load image:', imagePath
-                raise SystemExit, message
-                
-            if colorkey == 'alpha':
-                image = image.convert_alpha()  
-            else:
-                image = image.convert()
-                
-                if colorkey is not None:
-                    if colorkey is -1:
-                        colorkey = image.get_at((0,0))
-                    image.set_colorkey(colorkey)
-                
-        # If there is a pygame.Surface given        
-        elif isinstance(imagePath,pygame.Surface):
-            
-                image = imagePath
-                
+        try:
+            image = pygame.image.load(imagePath)
+        except pygame.error, message:
+            print 'Cannot load image:', imagePath
+            raise SystemExit, message
+        
+        if colorkey == 'alpha':
+            image = image.convert_alpha()  
         else:
-            raise TypeError, 'please provide pygame.Surface or filepath.'
-        
-        return image, image.get_rect()
+            image = image.convert()
+            
+            if colorkey is not None:
+                
+                if colorkey is -1:
+                    colorkey = image.get_at((0,0))
+                image.set_colorkey(colorkey)
+            
+    # If there is a pygame.Surface given        
+    elif isinstance(imagePath, pygame.Surface):
+        image = imagePath
+    else:
+        raise TypeError, 'please provide pygame.Surface or filepath.'
+    return image, image.get_rect()
 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode(screenSize)
     screenZone = screen.get_rect()
-    
+
     a = DrawableObject('newGrass.png',(255,0,255))
     
     while RUNNING:

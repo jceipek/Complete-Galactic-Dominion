@@ -1,3 +1,5 @@
+from DrawableObject import loadImage
+
 class ImageBank():
     """
     Contains a dictionary which maps image names to 
@@ -6,9 +8,8 @@ class ImageBank():
     time.
     """
     def __init__(self):
-        
-        from DrawableObject import DrawableObject
-        images = dict()
+
+        self.images = dict()
         
     def hasImageKey(self, image):
         """
@@ -28,8 +29,7 @@ class ImageBank():
         """
         if isinstance(imageName,str) and not self.hasImageKey(imageName):
             
-            image, imageRect = DrawableObject.loadImage(imageName, colorkey)
-            
+            image, imageRect = loadImage(imageName, colorkey)
             self.images[imageName] = image
             
     def getImage(self, imageName):

@@ -27,7 +27,7 @@ from UserInterface import UserInterface
 from Universe import Universe
 from Entity import Entity,TestEntity
 
-from 
+from GameData import ImageBank
 
 def init():
     """
@@ -44,6 +44,7 @@ def init():
 
     debugger = Debugger()
     eventTimer = EventTimer()
+    imageBank = ImageBank()
     
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
@@ -73,12 +74,15 @@ def init():
     
     #===========================================
     
+    imageBank.loadImage('testBuilding.png', 'alpha')
+    
     w.TEST_createGrid()
     
     # Initialize 500 entities in World w
     for i in range(500):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
-        w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
+        #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
+        w.addEntity(TestEntity(imageBank.getImage('testBuilding.png'),i*50,i*50,w))
     
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
