@@ -22,7 +22,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
         
-        #self.mouse = mouse
+        #FIXME - SHOULD COME FROM A CONFIG FILE
         self.scrollSensitivity=.001
         
         self.initDeadZoneBasedOnSize()
@@ -127,4 +127,4 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         return (self.scrollLoc[0]+relX, self.scrollLoc[1]+relY)
 
 if __name__ == "__main__":
-	pass
+    pass

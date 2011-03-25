@@ -59,7 +59,8 @@ def init():
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
 
-    universe = Universe(eventManager)
+    firstWorld = World()
+    universe = Universe(eventManager,firstWorld)
     ui = UserInterface(eventManager,universe.activeWorld)
     ui.TEST_interface() #FIXME: Used while the interface is not set up properly
     gameWindow = Window(eventManager)

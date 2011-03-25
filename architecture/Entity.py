@@ -31,6 +31,7 @@ class Entity(MapObject):
 	@param options: dictionary mapping string keys to callbacks.
 	Intended to be used for displaying a popup menu.  When an
 	item is selected, its callback will execute.
+	@type options: dict
 	
 	@param vel: tuple of velocities (vx,vy)
 	
@@ -142,8 +143,8 @@ if __name__ == "__main__":
     w = World()
     print 'World initialized'
     
-    # Creates 500 entities to test with in world w
-    for i in range(500):
+    # Creates entities to test with in world w
+    for i in range(50):
 	w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
 	#print Entity.IDcounter
     

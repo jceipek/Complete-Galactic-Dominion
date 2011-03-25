@@ -4,17 +4,31 @@ from Listener import Listener
 from World import World
 
 class Universe(Listener):
-    def __init__(self,manager):
+    
+    def __init__(self,manager,world=None):
         eventTypes = [Event.UpdateEvent]
         Listener.__init__(self,manager,eventTypes)
         self.worldList=[]
-        self.activeWorld=World()
+        
+        if world is None:
+            world = World()
+        self.activeWorld = world
 
-    def addWorld(self,world):
-        pass#FIXME
+    def addWorld(self,world=None):
+        if world is None:
+            world = World()
+        self.worldList.append(world)
 
-    def changeWorld(self):
-        pass#FIXME
+    def changeWorld(self,newWorld):
+        """
+        Changes the active world to the given world.  If this world
+        already exists, it deletes it in worldList.  The previous
+        activeWorld is added to the worldList.
+        """
+        self.addWorld(self.activeWorld)
+        if newWorld in self.worldList:
+            del self.worldList[newWorld]
+        self.activeWorld = newWorld
     
     def update(self):
         self.activeWorld.update()
