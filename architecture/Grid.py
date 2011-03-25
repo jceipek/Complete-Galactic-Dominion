@@ -1,6 +1,7 @@
 import pygame
 import Event
 from Listener import Listener
+import Terrain
 
 class TMP_Terrain(object):
     def __init__(self,image = None,tile_height = 64, tile_width= 128, exists = True):
@@ -34,7 +35,7 @@ class Grid(object): #SHOULD ACTUALLY INHERIT FROM DRAWABLE OBJECT? SOME SUBCLASS
         for y in range(self.gridSize[1]):
             for x in range(self.gridSize[0]):                
                 self.grid[(x,y)] = TMP_Terrain(image = None,tile_height = 64, tile_width=128)
-    
+                #self.grid[(x,y)] = Terrain.Grass('newGrass.png','alpha')
     def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         #Overriden by Infinite and Finite Grids
         pass
@@ -64,7 +65,6 @@ class InfiniteGrid(Grid):
                 squareLoc=(x%self.gridSize[0],y%self.gridSize[1])
 
                 self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
-
 
 class FiniteGrid(Grid):
     """
@@ -102,3 +102,6 @@ class FiniteGrid(Grid):
                 else:
                     self.emptySquare.draw(surface,\
                     (left+offset[0],top+offset[1]))
+
+if __name__ == '__main__':
+    pass

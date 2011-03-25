@@ -105,7 +105,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         # Draws entities on screen from world in correct order
         for ypos,entity in self.world.getScreenEntities(curScreenRect):
             if entity.entityID == 1:
-                print entity.rect, curScreenRect
             entity.draw(self.surface,self.scrollLoc)
     
     def draw(self,displaySurface):
