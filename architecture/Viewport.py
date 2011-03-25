@@ -98,10 +98,19 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         Draws all elements contained in the current viewport to
         self.surface.
         """
-        
-        #absSecondCorner = self.scrollLoc[0]+self.size[0],self.scrollLoc[1]+self.size[1]
-        curScreenRect = pygame.Rect(self.scrollLoc,self.size)
 
+        ### FIXME!! Wrapping of objects does not currently work correctly!
+
+        #worldSize = self.world.grid.getGridDimensions()
+        worldX, worldY = self.scrollLoc
+
+        #if worldX < 0 or worldX > worldSize[0]:
+        #    worldX = worldX%worldSize[0]
+        #if worldY < 0 or worldY > worldSize[1]:
+        #    worldY = worldY%worldSize[1]
+        #worldPos = self.scrollLoc[0]%self.size[0],self.scrollLoc[1]%self.size[1]
+        curScreenRect = pygame.Rect(worldX,worldY,*self.size)
+        #print curScreenRect
         # Draws entities on screen from world in correct order
         for ypos,entity in self.world.getScreenEntities(curScreenRect):
             entity.draw(self.surface,self.scrollLoc)
