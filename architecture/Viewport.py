@@ -86,19 +86,16 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         Draws the map and all entities for the current world location.
         displaySurface is provided by the screen.
         """
-        self.world.grid.draw(self.surface,\
-                                  self.scrollLoc,\
-                                  self.size)
+        self.world.grid.draw(self.surface, self.scrollLoc, self.size)
         self.drawContainedEntities()
         self.drawDebugFrames(self.surface)
         displaySurface.blit(self.surface, (self.loc,self.size))
                                   
-    def drawDebugFrames(self,displaySurface):                  
+    def drawDebugFrames(self,displaySurface):  
+        """
+        Draws frames on viewport which are useful for debugging.
+        Defines the scrolling and non-scrolling regions.
+        """
         rect = ((0,0),self.size)
         pygame.draw.rect(displaySurface, (255,255,0), rect, 3)
         pygame.draw.rect(displaySurface, (255,0,255), self.deadZoneRect, 2)
-    
-    def absMousePosition(self):
-        """Returns absolute position of mouse in world."""
-        relX, relY = pygame.mouse.get_pos()
-        return (self.scrollLoc[0]+relX, self.scrollLoc[1]+relY)
