@@ -2,11 +2,17 @@ import pygame
 import Event
 from Listener import Listener
 import Terrain
+from GameData import ImageBank
 
 class Grid(object): #SHOULD ACTUALLY INHERIT FROM DRAWABLE OBJECT? SOME SUBCLASS?
+
     def __init__(self,gridSize = (100,100),\
                        tileHeight= 64, tileWidth=128,\
               terrainObjectDict = None):
+                  
+        self.terrainImageBank = ImageBank()
+        self.terrainImageBank.loadImage('newGrass.png',(255,0,255))          
+        
         self.gridSize = gridSize
         self.tileHeight = tileHeight
         self.tileWidth = tileWidth
@@ -16,7 +22,7 @@ class Grid(object): #SHOULD ACTUALLY INHERIT FROM DRAWABLE OBJECT? SOME SUBCLASS
     def populateGrid(self):
         for y in range(self.gridSize[1]):
             for x in range(self.gridSize[0]):
-                self.grid[(x,y)] = Terrain.Grass('newGrass.png',(255,0,255))
+                self.grid[(x,y)] = Terrain.Grass(self.terrainImageBank.getImage('newGrass.png'))
     def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         #Overriden by Infinite and Finite Grids
         pass
