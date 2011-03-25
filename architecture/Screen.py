@@ -58,4 +58,4 @@ class MainScreen(Screen):
 
     def processUpdateEvent(self,event):
         self.viewport.world.update()
-        self.viewport.scrollBasedOnElapsedTime(event.elapsedTime)
+        self.viewport.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
