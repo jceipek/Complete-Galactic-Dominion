@@ -9,9 +9,9 @@ class Grid(object): #SHOULD ACTUALLY INHERIT FROM DRAWABLE OBJECT? SOME SUBCLASS
     def __init__(self,gridSize = (100,100),\
                        tileHeight= 64, tileWidth=128,\
               terrainObjectDict = None):
-                  
+        
         self.terrainImageBank = ImageBank()
-        self.terrainImageBank.loadImage('newGrass.png',(255,0,255))          
+        self.terrainImageBank.loadImage('newGrass.png',(255,0,255))
         
         self.gridSize = gridSize
         self.tileHeight = tileHeight
@@ -92,5 +92,5 @@ class FiniteGrid(Grid):
                     self.emptySquare.draw(surface,\
                     (left+offset[0],top+offset[1]))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

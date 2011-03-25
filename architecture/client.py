@@ -20,7 +20,6 @@ from Manager import Manager
 from Window import Window
 from Grid import InfiniteGrid,FiniteGrid
 from Debugger import Debugger
-from Renderer import Renderer
 from Event import EventTimer
 from World import World
 from UserInterface import UserInterface
