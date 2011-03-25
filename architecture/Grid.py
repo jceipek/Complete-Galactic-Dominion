@@ -6,16 +6,19 @@ from GameData import ImageBank
 
 class Grid(object): #SHOULD ACTUALLY INHERIT FROM DRAWABLE OBJECT? SOME SUBCLASS?
 
-    def __init__(self,gridSize = (100,100),\
-                       tileHeight= 64, tileWidth=128,\
-              terrainObjectDict = None):
+    def __init__(self,gridSize = (100,100),tileSize=None):
         
         self.terrainImageBank = ImageBank()
         self.terrainImageBank.loadImage('newGrass.png',(255,0,255))
         
         self.gridSize = gridSize
-        self.tileHeight = tileHeight
-        self.tileWidth = tileWidth
+        
+        if tileSize is None:
+            self.tileWidth,self.tileHeight = self.terrainImageBank.getImage(\
+                                        'newGrass.png').get_rect().size
+        else:
+            self.tileWidth,self.tileHeight = tileSize
+            
         self.grid = dict()
         self.populateGrid()
         
@@ -35,8 +38,8 @@ class InfiniteGrid(Grid):
     A grid that functions like a torus - go off one end and come back on the 
     other side
     """
-    def __init__(self,size = (100,100),tileHeight= 64, tileWidth=128):
-        Grid.__init__(self,size,tileHeight,tileWidth)
+    def __init__(self,size = (100,100),tileSize=None):
+        Grid.__init__(self,size)
         
     def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         
@@ -62,8 +65,8 @@ class FiniteGrid(Grid):
     
     #FIXME FINITE GRIDS WILL NOT WORK NOW BECAUSE OF TMP_Terrain
     
-    def __init__(self,size = (100,100),tileHeight=64, tileWidth=128):
-        Grid.__init__(self,size,tileHeight=64, tileWidth=128)
+    def __init__(self,size = (100,100),tileSize=None):
+        Grid.__init__(self,size,tileSize)
         self.emptySquare = TMP_Terrain(exists = False)
         
     def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
