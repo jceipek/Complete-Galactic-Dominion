@@ -49,6 +49,7 @@ def init():
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
     #Note: Do we even need this anymore? - Julian
+    #Response: I don't think so.  - Jared
     
     #===========================================
     #Create and register the standard listeners
