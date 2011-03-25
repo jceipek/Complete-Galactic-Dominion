@@ -49,7 +49,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(screenSize)
     screenZone = screen.get_rect()
     
-    a = DrawableObject('testBuilding.png','alpha')
+    a = DrawableObject('newGrass.png',(255,0,255))
     
     while RUNNING:
         pygame.init()

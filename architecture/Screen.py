@@ -43,7 +43,8 @@ class MainScreen(Screen):
         self.hud = None
         
     def TEST_createViewport(self,world):
-        world.TEST_createGrid()
+        ###FIXME
+        #world.TEST_createGrid()
         scrollLoc = (0,0)
         viewportPos = (50,20)
         #viewportSize = (640,480)

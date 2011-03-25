@@ -2,13 +2,16 @@ from DrawableObject import DrawableObject
 import pygame
 
 class MapObject(DrawableObject, pygame.sprite.Sprite):
-    '''This class will define all of the objects in game play
-    that can be placed on the map'''
+    """
+    Represents any object which is located in the L{World}.
+    First class to implement position in the world.
+    """
     def __init__(self, imagePath, x, y, colorkey=None):
         # sets image and rect attributes
         # First class to inherit from Sprite
         DrawableObject.__init__(self, imagePath, colorkey)
         
+        # sets the topleft corner of the rectangle to (x,y)
         self.rect.topleft = self.pos = (x,y)
 
         # this is the first initialization of owner
@@ -22,3 +25,7 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
         # defaults to the image rectangle
         # NOTE: update methods need to move collRect with rect!
         self.collRect = self.rect
+        
+    def draw(self,surface):
+        # Override
+        pass
