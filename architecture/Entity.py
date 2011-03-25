@@ -3,14 +3,46 @@ import pygame
 from collections import deque
 
 class Entity(MapObject):
-    """A foreground MapObject with which one can interact."""
+    """A foreground L{MapObject} with which one can interact."""
     
     # Class variable which keeps track of id of all entities
     # updated with each initialization of Entity and child classes
     IDcounter = 0
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):    
+                 description = 'No information available.'):
+	"""
+	Set up an Entity with an image loaded from the filepath
+	specified by imagePath, an absolute x and y position in a given
+	world, and a default description.  The image is loaded with
+	an optional alpha colorkey.
+	
+	@param IDcounter: class counter which increments for every
+	entity which is created, giving each entity a unique id
+	
+	@param entityID: unique id given to each Entity when
+	instantiated
+	
+	@param world: L{World} object in which the Entity exists
+	@type world: L{World}
+	
+	@param description: string description of the entity
+	
+	@param options: dictionary mapping string keys to callbacks.
+	Intended to be used for displaying a popup menu.  When an
+	item is selected, its callback will execute.
+	
+	@param vel: tuple of velocities (vx,vy)
+	
+	@param maxHealth: maximum health of the Entity
+	@param curHealth: current health of the Entity
+	
+	@param size: radius of collision (not currently implemented)
+	@param status: current status of the Entity.  Found in Locals.
+	
+	
+	"""
+	
         MapObject.__init__(self, imagePath, x, y, colorkey)
 	
 	self.__class__.IDcounter += 1 # Increment class counter
@@ -50,6 +82,9 @@ class Entity(MapObject):
     def TEST_update(self):
 	from random import randint
 	self.rect.move_ip(randint(-4,4), randint(-4,4))
+
+    def draw(self,screen):
+	screen.blit(self.image,self.rect)
 
     def dtime(self):
 	"""returns time since last call, used in update, keeps track of time between frames"""
@@ -110,6 +145,7 @@ if __name__ == "__main__":
     # Creates 500 entities to test with in world w
     for i in range(500):
 	w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
+	#print Entity.IDcounter
     
     MAX_FPS = 60
     gameClock = pygame.time.Clock()
@@ -129,7 +165,7 @@ if __name__ == "__main__":
 	
 	for entID, ent in w.getScreenEntities(screenZone):
 	    
-	    screen.blit(ent.image,ent.rect)
+	    ent.draw(screen)
 	    
         pygame.display.flip()
 	
