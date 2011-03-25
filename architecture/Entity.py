@@ -81,11 +81,20 @@ class Entity(MapObject):
 	self.TEST_update()
 	
     def TEST_update(self):
+	"""Implements random movement to test with."""
 	from random import randint
 	self.rect.move_ip(randint(-4,4), randint(-4,4))
-
-    def draw(self,screen):
-	screen.blit(self.image,self.rect)
+	
+    def draw(self,screen,worldOffset=(0,0)):
+	"""
+	Draws the entity to the given surface.  The screen should be
+	the same which the world grid is drawn on.  The worldOffset is
+	the current location of the corner of the viewport in the 
+	activeworld.
+	"""
+	drawOffset = -worldOffset[0],-worldOffset[1]
+	drawRect = self.rect.move(drawOffset)
+	screen.blit(self.image,drawRect)
 
     def dtime(self):
 	"""returns time since last call, used in update, keeps track of time between frames"""

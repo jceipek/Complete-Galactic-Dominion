@@ -4,27 +4,15 @@ from Listener import Listener
 from World import World
 
 class Universe(Listener):
-<<<<<<< HEAD
-    
-=======
->>>>>>> 7dfb9167b5a4533f596933c0239981e996184adb
+
     def __init__(self,manager,world=None):
         eventTypes = [Event.UpdateEvent]
         Listener.__init__(self,manager,eventTypes)
-        self.worldList=[]
-<<<<<<< HEAD
+        self.worldList = []
         
         if world is None:
             world = World()
         self.activeWorld = world
-=======
-        if world == None:
-            self.activeWorld=World()
-            self.worldList.append(self.activeWorld)
-        else:
-            self.activeWorld=world
-            self.worldList.append(world)
->>>>>>> 7dfb9167b5a4533f596933c0239981e996184adb
 
     def addWorld(self,world=None):
         if world is None:

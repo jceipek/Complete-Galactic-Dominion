@@ -1,7 +1,8 @@
 from Entity import Entity
 
 class World(object):
-    """A World is an object that contains everything in the current environment
+    """
+    A World is an object that contains everything in the current environment
     that the player is able to see on the map by scrolling around. A World could
     thus be a planet, a spaceship, a building, etc... - Julian
     
@@ -68,4 +69,3 @@ class World(object):
         """Removes an entity from the World."""
         if entity.entityID in self.allEntities:
             del self.allEntities[entity.entityID]
-        

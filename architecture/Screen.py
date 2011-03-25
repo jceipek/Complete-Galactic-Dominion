@@ -49,12 +49,13 @@ class MainScreen(Screen):
         self.viewport = testViewport
         
     def draw(self,displaySurface,size):
-        #ONLY DRAWS THE VIEWPORT FOR NOW!
         self.viewport.draw(displaySurface)
+        #self.viewport.drawContainedEntities()
         
     def processMouseMovedEvent(self,event):
         #self.viewport.scrollBasedOnMousePos(event.pos)
         self.viewport.setScrollSpeed(event.pos)
 
     def processUpdateEvent(self,event):
+        self.viewport.world.update()
         self.viewport.scrollBasedOnElapsedTime(event.elapsedTime)

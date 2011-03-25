@@ -95,25 +95,29 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def drawContainedEntities(self):
         """
-        Draws all elements contained in the current viewport.
-        Currently finds all entities on the screen, but does not
-        draw them. FIXME please.
+        Draws all elements contained in the current viewport to
+        self.surface.
         """
         
-        absSecondCorner = scrollLoc[0]+size[0],scrollLoc[1]+size[1]
-        curScreenRect = pygame.Rect(scrollLoc,absSecondCorner)
-        
-        for entityID,entity in self.world.getScreenEntities():
-            #### entity can be used to draw any entity
-            #### someone needs to implement this!!!!!!
-            pass
+        #absSecondCorner = self.scrollLoc[0]+self.size[0],self.scrollLoc[1]+self.size[1]
+        curScreenRect = pygame.Rect(self.scrollLoc,self.size)
+
+        # Draws entities on screen from world in correct order
+        for ypos,entity in self.world.getScreenEntities(curScreenRect):
+            if entity.entityID == 1:
+                print entity.rect, curScreenRect
+            entity.draw(self.surface,self.scrollLoc)
     
     def draw(self,displaySurface):
-        
+        """
+        Draws the map and all entities for the current world location.
+        displaySurface is provided by the screen.
+        """
         self.world.grid.draw(self.surface,\
                                   self.scrollLoc,\
                                   self.size)
         self.drawDebugFrames(self.surface)
+        self.drawContainedEntities()
         displaySurface.blit(self.surface, (self.loc,self.size))
                                   
     def drawDebugFrames(self,displaySurface):                  
@@ -125,6 +129,3 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         """Returns absolute position of mouse in world."""
         relX, relY = pygame.mouse.get_pos()
         return (self.scrollLoc[0]+relX, self.scrollLoc[1]+relY)
-
-if __name__ == "__main__":
-    pass

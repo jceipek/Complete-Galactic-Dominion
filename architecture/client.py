@@ -26,6 +26,8 @@ from World import World
 from UserInterface import UserInterface
 from Universe import Universe
 
+from Entity import Entity
+
 def init():
     """
     Game initialization function.
@@ -59,13 +61,18 @@ def init():
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
 
-    firstWorld = World()
-    universe = Universe(eventManager,firstWorld)
+    w = World()
+
+    universe = Universe(eventManager,w)
     ui = UserInterface(eventManager,universe.activeWorld)
+    
     ui.TEST_interface() #FIXME: Used while the interface is not set up properly
     gameWindow = Window(eventManager)
     
     #===========================================
+    
+    for i in range(500):
+        w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
     
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
