@@ -33,8 +33,6 @@ class Entity(MapObject):
 	item is selected, its callback will execute.
 	@type options: dict
 	
-	@param vel: tuple of velocities (vx,vy)
-	
 	@param maxHealth: maximum health of the Entity
 	@param curHealth: current health of the Entity
 	
@@ -63,8 +61,6 @@ class Entity(MapObject):
         self.options = {'Description': self.showDescription}
 	#self.pos = (x,y) # defined by superclass
 	
-	self.vel = (0,0)
-	
 	self.maxHealth=100
 	self.curHealth=self.maxHealth
 	self.size=100 #radius of collision
@@ -76,13 +72,8 @@ class Entity(MapObject):
     # First initialization of update method
     def update(self):
         """All Sprite objects should have an update function."""
-        #pass
-	self.TEST_update()
-	
-    def TEST_update(self):
-	"""Implements random movement to test with."""
-	from random import randint
-	self.rect.move_ip(randint(-4,4), randint(-4,4))
+	# Override this
+        pass
 	
     def draw(self,screen,worldOffset=(0,0)):
 	"""
@@ -121,6 +112,27 @@ class Entity(MapObject):
 	if curHealth<=0:
 	    self.die()
 
+class TestEntity(Entity):
+    """
+    This should be deleted once subclasses are implemented.  This
+    is meant to clean up Entity.
+    """
+    
+    def __init__(self, imagePath, x, y, world, colorkey=None,
+                 description = 'No information available.'):
+	"""
+	@param vel: tuple of velocities (vx,vy)
+	"""
+	
+	Entity.__init__(self, imagePath, x, y, world, colorkey, description)
+	
+	self.vel = (0,0)
+    
+    def update(self):
+	"""Implements random movement to test with."""
+	from random import randint
+	self.rect.move_ip(randint(-4,4), randint(-4,4))
+
 class Locals:
     #Statuses
     IDLE = 0
@@ -153,7 +165,7 @@ if __name__ == "__main__":
     
     # Creates entities to test with in world w
     for i in range(50):
-	w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
+	w.addEntity(TestEntity('ball.png',i*50,i*50, w, (255,255,255)))
 	#print Entity.IDcounter
     
     MAX_FPS = 60

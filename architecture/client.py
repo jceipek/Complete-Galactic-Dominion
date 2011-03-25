@@ -26,7 +26,7 @@ from World import World
 from UserInterface import UserInterface
 from Universe import Universe
 
-from Entity import Entity
+from Entity import Entity,TestEntity
 
 def init():
     """
@@ -75,7 +75,7 @@ def init():
     # Initialize 500 entities in World w
     for i in range(500):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
-        w.addEntity(Entity('testBuilding.png', i*50, i*50, w, 'alpha'))
+        w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
 
     
     #Notify the manager that the window should start to accept input:
