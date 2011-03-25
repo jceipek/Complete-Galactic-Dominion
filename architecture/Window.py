@@ -202,7 +202,7 @@ class Window(Listener):
         """
         
         self.gameFrametime = self.gameClock.tick(self.maxFPS)
-        self.gameTime += gameFrametime
+        self.gameTime += self.gameFrametime
         self.manager.post(Event.GenericDebugEvent(str(self.gameFrametime)))
         
     def refresh(self):
