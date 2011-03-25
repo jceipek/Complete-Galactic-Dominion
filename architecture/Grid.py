@@ -1,7 +1,7 @@
 import pygame
 import Event
 from Listener import Listener
-        
+
 class TMP_Terrain(object):
     def __init__(self,image = None,tile_height = 64, tile_width= 128, exists = True):
         self.image=pygame.image.load('newGrass.png') #FIXME FINITE GRIDS WILL NOT WORK NOW

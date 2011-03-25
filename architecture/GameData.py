@@ -38,3 +38,16 @@ class ImageBank():
         not, None is returned.
         """
         return self.images.get(imageName,None)
+
+class Locals:
+    #Statuses
+    IDLE = 0
+    MOVING = 1
+    BUILDING = 2
+    GATHERING = 3
+    ATTACKING = 4
+    #Efficiency
+    MOVE=0
+    BUILD=1
+    GATHER=2
+    ATTACK=3
