@@ -1,6 +1,7 @@
 from MapObject import MapObject
 import pygame
 from collections import deque
+from GameData import Locals # includes statuses
 
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
@@ -132,19 +133,6 @@ class TestEntity(Entity):
 	"""Implements random movement to test with."""
 	from random import randint
 	self.rect.move_ip(randint(-4,4), randint(-4,4))
-
-class Locals:
-    #Statuses
-    IDLE = 0
-    MOVING = 1
-    BUILDING = 2
-    GATHERING = 3
-    ATTACKING = 4
-    #Efficiency
-    MOVE=0
-    BUILD=1
-    GATHER=2
-    ATTACK=3
 
 if __name__ == "__main__":
     
