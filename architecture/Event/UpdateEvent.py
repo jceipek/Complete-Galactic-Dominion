@@ -4,11 +4,14 @@ class UpdateEvent(Event):
     """
     Request to update objects.
     
-    #Attributes:
-    #   elapsedTime = time that has passed since the last frame. Used to sync 
-                      movement speed across different hardware
+    @param elapsedTimeSinceLastFrame: Time elapsed since last frame in ms.
+    @type elapsedTimeSinceLastFrame: int
+    
+    @param elapsedTotalTime: Time elapsed since L{Window} timer was started.
+    @type elapsedTotalTime: int
     """
 
-    def __init__(self,elapsedTime):
+    def __init__(self,elapsedTimeSinceLastFrame,totalTime):
         Event.__init__(self)
-        self.elapsedTime = elapsedTime
+        self.elapsedTimeSinceLastFrame = elapsedTimeSinceLastFrame
+        self.elapsedTotalTime = totalTime

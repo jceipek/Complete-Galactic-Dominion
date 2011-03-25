@@ -44,6 +44,9 @@ class Window(Listener):
     @param gameFrametime: ms elapsed since last frame
     @type gameFrametime: int
     
+    @param gameFrametime: ms elapsed since start
+    @type gameFrametime: int
+    
     @param pygameEvents: Keeps track of the pygame events that are fired during the run loop
     @type pygameEvents: list(*pygame.Event)
     
@@ -71,6 +74,7 @@ class Window(Listener):
         
         self.gameClock = pygame.time.Clock()
         self.gameFrametime = 0
+        self.gameTime = 0
         self.resolution = (width,height)
         self.fullscreenMode = fullscreenMode
         self.updateScreenMode()
@@ -113,7 +117,7 @@ class Window(Listener):
             self.pygameEvents = pygame.event.get()
 
             #Tell the objects on screen to update.
-            self.manager.post(Event.UpdateEvent(self.gameFrametime))
+            self.manager.post(Event.UpdateEvent(self.gameFrametime,self.gameTime))
             
             #Note: the renderer does not update or display anything.
             #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
@@ -198,6 +202,7 @@ class Window(Listener):
         """
         
         self.gameFrametime = self.gameClock.tick(self.maxFPS)
+        self.gameTime += gameFrametime
         self.manager.post(Event.GenericDebugEvent(str(self.gameFrametime)))
         
     def refresh(self):

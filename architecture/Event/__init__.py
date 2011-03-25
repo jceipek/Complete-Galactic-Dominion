@@ -9,3 +9,4 @@ from RenderEvent import *
 from StartEvent import *
 from UpdateEvent import *
 from WorldChangeEvent import *
+from DisplaySurfaceCreatedEvent import *
