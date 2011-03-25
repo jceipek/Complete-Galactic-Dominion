@@ -69,6 +69,7 @@ class Entity(MapObject):
 	self.time=pygame.time.get_ticks()
 	self.timePrev=0
 	self.timePassed=self.time-self.timePrev
+	self.selected=False
 
     # First initialization of update method
     def update(self):

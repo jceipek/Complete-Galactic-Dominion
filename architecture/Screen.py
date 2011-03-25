@@ -25,6 +25,9 @@ class Screen(object): #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def draw(self,displaySurface,screenSize):
         pass
 
+    def processMouseClickEvent(self,event):
+        pass
+
 class MainScreen(Screen):
     """
     The screen where all of the action takes place.
@@ -55,6 +58,9 @@ class MainScreen(Screen):
     def processMouseMovedEvent(self,event):
         #self.viewport.scrollBasedOnMousePos(event.pos)
         self.viewport.setScrollSpeed(event.pos)
+
+    def processMouseClickEvent(self,event):
+        pass
 
     def processUpdateEvent(self,event):
         self.viewport.world.update()
