@@ -46,15 +46,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if self.rect.collidepoint(mousePos) and not self.deadZoneRect.collidepoint(relMousePos):
             dx = (mousePos[0]-self.deadZoneRect.center[0]-self.loc[0])
             dy = (mousePos[1]-self.deadZoneRect.center[1]-self.loc[1])
-##            mag = self.calcDistance(dx,dy)
-##            direction = (dx/mag,dy/mag)
-##            speedCoeffX = abs(dx)-deadZoneHeight
-##            speedCoeffY = abs(dy)-deadZoneWidth
-##    
-##            self.scrollSpeed[0]=direction[0]*speedCoeffX*scrollSensitivity
-##            self.scrollSpeed[1]=direction[1]*speedCoeffY*scrollSensitivity
-            #self.scrollSpeed[0]=dx*self.mouse.scrollSensitivity
-            #self.scrollSpeed[1]=dy*self.mouse.scrollSensitivity
+
             self.scrollSpeed[0]=dx*self.scrollSensitivity
             self.scrollSpeed[1]=dy*self.scrollSensitivity
             
@@ -65,32 +57,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         newScrollLoc = list(self.scrollLoc)
         newScrollLoc[0] += self.scrollSpeed[0]*elapsedTime
         newScrollLoc[1] += self.scrollSpeed[1]*elapsedTime
-        self.scrollLoc = tuple(newScrollLoc)
-
-    def scrollBasedOnMousePos(self,mousePos):
-        #Add to the scrollLoc if the mouse position in the move event is outside 
-        #of the deadZone. Adapt Berit's algorithm from gridTest in internal
-        #to deal with scroll distances properly
-        #Right now, it always scrolls
-        
-        ms_elapsed = 1 # THIS SHOULD COME FROM THE GAME LOOP
-        
-        newScrollLoc = list(self.scrollLoc)
-        deadZoneSize = self.deadZoneRect.size
-        if self.rect.collidepoint(mousePos):
-            dx = (mousePos[0]-self.deadZoneRect.center[0])
-            dy = (mousePos[1]-self.deadZoneRect.center[1])
-            magnitude=self.calcDistance(dx, dy) #distance from center
-            dirx=dx/magnitude #x component of unit direction
-            diry=dy/magnitude #y component of unit direction
-    
-            dx=max([0, abs(dx)-deadZoneSize[0]/2.0])
-            dy=max([0, abs(dy)-deadZoneSize[1]/2.0])
-    
-            speedCoeff=self.calcDistance(dx,dy)/(self.rect.width-deadZoneSize[0])*2.0
-            newScrollLoc[0] += dirx*self.scrollSpeed[0]*speedCoeff*ms_elapsed
-            newScrollLoc[1] += diry*self.scrollSpeed[1]*speedCoeff*ms_elapsed
-            
         self.scrollLoc = tuple(newScrollLoc)
     
     def drawContainedEntities(self):
