@@ -13,8 +13,8 @@
    height="1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="New document 1">
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="ClassDiagram.svg">
   <defs
      id="defs4">
     <linearGradient
@@ -43,18 +43,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1726001"
-     inkscape:cx="319.55242"
-     inkscape:cy="835.42699"
+     inkscape:zoom="1.658307"
+     inkscape:cx="338.44047"
+     inkscape:cy="898.8786"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-width="1337"
-     inkscape:window-height="865"
-     inkscape:window-x="127"
-     inkscape:window-y="44"
+     inkscape:window-height="822"
+     inkscape:window-x="101"
+     inkscape:window-y="24"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -64,7 +64,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -126,7 +126,10 @@
        id="path3646"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3639"
-       inkscape:connection-end="#g3632" />
+       inkscape:connection-end="#g3632"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <g
        transform="matrix(0.24732108,0,0,0.24732108,72.103069,90.959369)"
        id="g3650">
@@ -157,7 +160,10 @@
        id="path3664"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3632"
-       inkscape:connection-end="#g3650" />
+       inkscape:connection-end="#g3650"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <g
        id="g3666"
        transform="matrix(0.19785686,0,0,0.19785686,36.595084,136.57657)">
@@ -236,21 +242,30 @@
        id="path3702"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3650"
-       inkscape:connection-end="#g3666" />
+       inkscape:connection-end="#g3666"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 96.901763,223.31674 0.129745,10.91695"
        id="path3704"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3650"
-       inkscape:connection-end="#g3678" />
+       inkscape:connection-end="#g3678"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 128.57825,234.51634 -21.29238,-11.1996"
        id="path3708"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3690"
-       inkscape:connection-end="#g3650" />
+       inkscape:connection-end="#g3650"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot3726"
@@ -421,21 +436,30 @@
        id="path3843"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3831"
-       inkscape:connection-end="#g3773" />
+       inkscape:connection-end="#g3773"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 261.85743,221.7658 -9.49691,12.38728"
        id="path3845"
        inkscape:connector-type="polyline"
        inkscape:connection-end="#g3785"
-       inkscape:connection-start="#g3773" />
+       inkscape:connection-start="#g3773"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 315.15214,190.59198 31.90138,7.25798"
        id="path3847"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3831"
-       inkscape:connection-end="#g3797" />
+       inkscape:connection-end="#g3797"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <g
        transform="matrix(0.24732108,0,0,0.24732108,351.14463,147.31385)"
        id="g3849">
@@ -514,21 +538,30 @@
        id="path3885"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3797"
-       inkscape:connection-end="#g3849" />
+       inkscape:connection-end="#g3849"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 371.87388,279.67122 -12.00006,16.47205"
        id="path3891"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3849"
-       inkscape:connection-end="#g3861" />
+       inkscape:connection-end="#g3861"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 386.15559,279.67122 29.13472,15.58082"
        id="path3893"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3849"
-       inkscape:connection-end="#g3873" />
+       inkscape:connection-end="#g3873"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <g
        transform="matrix(0.15828549,0,0,0.15828549,330.55733,235.56644)"
        id="g3895">
@@ -583,14 +616,20 @@
        id="path3919"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3861"
-       inkscape:connection-end="#g3895" />
+       inkscape:connection-end="#g3895"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 424.2038,304.04612 1.25323,7.96998"
        id="path3921"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3873"
-       inkscape:connection-end="#g3907" />
+       inkscape:connection-end="#g3907"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <g
        transform="matrix(0.24732108,0,0,0.24732108,466.32873,148.79923)"
        id="g3923">
@@ -645,21 +684,30 @@
        id="path3947"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3923"
-       inkscape:connection-end="#g3935" />
+       inkscape:connection-end="#g3935"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="M 482.13271,270.16399 386.12955,211.07121"
        id="path3949"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3923"
-       inkscape:connection-end="#g3797" />
+       inkscape:connection-end="#g3797"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="M 275.05792,177.37073 203.24216,136.86134"
        id="path3951"
        inkscape:connector-type="polyline"
        inkscape:connection-end="#g3639"
-       inkscape:connection-start="#g3831" />
+       inkscape:connection-start="#g3831"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <g
        transform="matrix(0.48304899,0,0,0.48304899,263.21838,-124.42007)"
        id="g3953">
@@ -690,9 +738,12 @@
        id="path3965"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3953"
-       inkscape:connection-end="#g3639" />
+       inkscape:connection-end="#g3639"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <g
-       transform="matrix(0.38643919,0,0,0.38643919,474.29589,1.3087951)"
+       transform="matrix(0.38643919,0,0,0.38643919,278.34312,-7.1335502)"
        id="g3967">
       <rect
          style="fill:#009d98;fill-opacity:1"
@@ -717,17 +768,106 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial">Player</flowPara></flowRoot>    </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="M 365.03147,54.554046 519.32289,127.31214"
+       d="m 342.17889,54.554046 -0.52671,64.315744"
        id="path3979"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3953"
-       inkscape:connection-end="#g3967" />
+       inkscape:connection-end="#g3967"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 188.31378,136.86134 1.24806,36.14565"
        id="path4033"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g3639"
-       inkscape:connection-end="#g4019" />
+       inkscape:connection-end="#g4019"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end-point="d4"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g3152"
+       transform="matrix(0.48304899,0,0,0.48304899,263.21838,-124.42007)">
+      <rect
+         ry="13.131983"
+         y="326.06253"
+         x="66.670074"
+         height="44.446712"
+         width="193.9493"
+         id="rect3154"
+         style="fill:#009d98;fill-opacity:1" />
+      <flowRoot
+         transform="matrix(0.59183136,0,0,0.59183136,36.922669,89.842058)"
+         style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         id="flowRoot3156"
+         xml:space="preserve"><flowRegion
+           id="flowRegion3158"><rect
+             y="407.88486"
+             x="62.629459"
+             height="54.548237"
+             width="299.00516"
+             id="rect3160" /></flowRegion><flowPara
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Arial;-inkscape-font-specification:Arial"
+           id="flowPara3162">object</flowPara></flowRoot>    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="53.06617"
+       y="94.759018"
+       id="text3186"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3188"
+         x="53.06617"
+         y="94.759018" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="70.553886"
+       y="65.210808"
+       id="text3190"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3192"
+         x="70.553886"
+         y="65.210808" /></text>
+    <g
+       id="g3204"
+       transform="translate(83.217403,-5.8393207)">
+      <rect
+         style="fill:#009d98;fill-opacity:1"
+         id="rect3955-6"
+         width="119.01405"
+         height="21.46994"
+         x="65.128159"
+         y="38.797195"
+         ry="6.3433909" />
+      <g
+         id="g3200">
+        <text
+           xml:space="preserve"
+           style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+           x="70.775055"
+           y="52.677723"
+           id="text3194"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan3196"
+             x="70.775055"
+             y="52.677723"
+             style="font-size:12px;font-family:Arial;-inkscape-font-specification:Arial">pygame.sprite.Sprite</tspan></text>
+      </g>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 213.91597,54.427815 283.35729,177.37073"
+       id="path3210"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="3"
+       inkscape:connection-start="#g3204"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3831"
+       inkscape:connection-end-point="d4" />
   </g>
 </svg>

@@ -1,28 +1,25 @@
-import MapObject
+from MapObject import MapObject
 import pygame
 from collections import deque
 
-class Entity(MapObject,pygame.sprite.Sprite):
+class Entity(MapObject):
     """A foreground MapObject with which one can interact."""
     
     # Class variable which keeps track of id of all entities
     # updated with each initialization of Entity and child classes
-    self.__class__.IDcounter = 0
+    IDcounter = 0
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):    
-        MapObject.__init__(self, imagePath, colorkey)
+        MapObject.__init__(self, imagePath, x, y, colorkey)
 	
 	self.__class__.IDcounter += 1 # Increment class counter
 	
-	# adds the entity to the provided world
-	world.addEntity(Entity)
-	
 	# sets entityID.  Unique for all Entities
-	self.entityID = self.__class__.count
-
-        # First class to inherit from Sprite
-        pygame.sprite.Sprite.__init__(self)
+	self.entityID = self.__class__.IDcounter
+	
+	# adds the entity to the provided world
+	world.addEntity(self)
 
         # First initialization of description
         self.description = description
@@ -31,23 +28,28 @@ class Entity(MapObject,pygame.sprite.Sprite):
         # Dictionary mapping strings for display in a menu shown
         # upon being clicked to a callback function to execute.
         # Menu options should be added to this dictionary.
-        self.options = {'Description': showDescription}
-	self.x=x #x position
-	self.y=y #y position
+        self.options = {'Description': self.showDescription}
+	#self.pos = (x,y) # defined by superclass
+	
+	self.vel = (0,0)
+	
 	self.maxHealth=100
 	self.curHealth=self.maxHealth
 	self.size=100 #radius of collision
-	self.status=Entity.Locals.IDLE
+	self.status=Locals.IDLE
 	self.time=pygame.time.get_ticks()
 	self.timePrev=0
 	self.timePassed=self.time-self.timePrev
 
-
     # First initialization of update method
     def update(self):
         """All Sprite objects should have an update function."""
-
-        pass
+        #pass
+	self.TEST_update()
+	
+    def TEST_update(self):
+	from random import randint
+	self.rect.move_ip(randint(-4,4), randint(-4,4))
 
     def dtime(self):
 	"""returns time since last call, used in update, keeps track of time between frames"""
@@ -75,7 +77,6 @@ class Entity(MapObject,pygame.sprite.Sprite):
 	if curHealth<=0:
 	    self.die()
 
-
 class Locals:
     #Statuses
     IDLE = 0
@@ -89,3 +90,48 @@ class Locals:
     GATHER=2
     ATTACK=3
 
+if __name__ == "__main__":
+    
+    # TESTS TO SHOW ENTITIES WORK
+    
+    screenSize = (width, height) = (1024, 768)
+    screenLoc = [0.0, 0.0]
+    
+    from World import World
+
+    RUNNING = True
+    pygame.init()
+    screen = pygame.display.set_mode(screenSize)
+    screenZone = screen.get_rect()
+
+    w = World()
+    print 'World initialized'
+    
+    # Creates 500 entities to test with in world w
+    for i in range(500):
+	w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
+    
+    MAX_FPS = 60
+    gameClock = pygame.time.Clock()
+    pygame.init()
+    
+    while RUNNING:
+	
+	# calls update function of all Entities in world
+	w.update()
+	
+	screen.fill((0,0,0))
+	
+	# Grabs all entities that are currently on the screen from the 
+	# world
+	curScreenEntities = w.getScreenEntities(screenZone)
+	print 'Currently %d entities on the screen'%len(curScreenEntities)
+	
+	for entID, ent in w.getScreenEntities(screenZone):
+	    
+	    screen.blit(ent.image,ent.rect)
+	    
+        pygame.display.flip()
+	
+	ms_elapsed = gameClock.tick(MAX_FPS)
+	print 'Current frames per second: %d'%int(1000.0/ms_elapsed)

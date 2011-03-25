@@ -1,11 +1,15 @@
-import DrawableObject
+from DrawableObject import DrawableObject
+import pygame
 
-class MapObject(DrawableObject):
+class MapObject(DrawableObject, pygame.sprite.Sprite):
     '''This class will define all of the objects in game play
     that can be placed on the map'''
-    def __init__(self, imagePath, colorkey=None, offset=(0,0)):
+    def __init__(self, imagePath, x, y, colorkey=None):
         # sets image and rect attributes
+        # First class to inherit from Sprite
         DrawableObject.__init__(self, imagePath, colorkey)
+        
+        self.rect.topleft = self.pos = (x,y)
 
         # this is the first initialization of owner
         self.owner=None # default to no owner

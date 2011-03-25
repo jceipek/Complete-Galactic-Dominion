@@ -1,3 +1,5 @@
+from Entity import Entity
+
 class World(object):
     """A World is an object that contains everything in the current environment
     that the player is able to see on the map by scrolling around. A World could
@@ -18,8 +20,8 @@ class World(object):
         # maps entityID of each entity to a pointer to the entity
         # may need to map tuple of entityID and ownerID later when
         # multiple players own units in a world
-        from weakref import WeakKeyDictionary
-        self.allEntities = WeakKeyDictionary()
+        
+        self.allEntities = dict()
         
         self.grid = grid #Needs to be linked to a grid object, default None
         
@@ -48,7 +50,7 @@ class World(object):
         # and appends them to a list
         for entity in self.allEntities.values():
             if entity.rect.colliderect(playerScreenRect):
-                playerScreenEntities.append((entity.bottom,entity))
+                playerScreenEntities.append((entity.rect.bottom,entity))
         
         # sorts in order in which to draw entities        
         playerScreenEntities.sort()
@@ -66,3 +68,4 @@ class World(object):
         """Removes an entity from the World."""
         if entity.entityID in self.allEntities:
             del self.allEntities[entity.entityID]
+        
