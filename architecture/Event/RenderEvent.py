@@ -4,7 +4,5 @@ class RenderEvent(Event):
     """
     Request to draw to the display surface
     """
-    def __init__(self,displaySurface,screenSize):
+    def __init__(self):
         Event.__init__(self)
-        self.displaySurface = displaySurface
-        self.screenSize = screenSize

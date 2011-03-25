@@ -31,8 +31,8 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         testScreen.TEST_createViewport(self.activeWorld)
         self.activeScreen = testScreen
 
-    def setDisplaySurface(display,res):
-        self.displaySurface=displaySurface
+    def setDisplaySurface(self,display,res):
+        self.displaySurface=display
         self.resolution=res
         
     def notify(self,event):
