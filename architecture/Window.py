@@ -89,6 +89,7 @@ class Window(Listener):
             self.displaySurface = pygame.display.set_mode(self.resolution,pygame.FULLSCREEN)
         else:
             self.displaySurface = pygame.display.set_mode(self.resolution)
+        self.manager.post(Event.DisplaySurfaceCreatedEvent(self.resolution,self.displaySurface))
 
     def run(self):
         """
