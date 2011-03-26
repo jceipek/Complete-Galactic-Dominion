@@ -12,45 +12,45 @@ class Entity(MapObject):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
-	"""
-	Set up an Entity with an image loaded from the filepath
-	specified by imagePath, an absolute x and y position in a given
-	world, and a default description.  The image is loaded with
-	an optional alpha colorkey.
-	
-	@param IDcounter: class counter which increments for every
-	entity which is created, giving each entity a unique id
-	
-	@param entityID: unique id given to each Entity when
-	instantiated
-	
-	@param world: L{World} object in which the Entity exists
-	@type world: L{World}
-	
-	@param description: string description of the entity
-	
-	@param options: dictionary mapping string keys to callbacks.
-	Intended to be used for displaying a popup menu.  When an
-	item is selected, its callback will execute.
-	@type options: dict
-	
-	@param maxHealth: maximum health of the Entity
-	@param curHealth: current health of the Entity
-	
-	@param size: radius of collision (not currently implemented)
-	@param status: current status of the Entity.  Found in Locals.
-	
-	"""
-	
+        """
+        Set up an Entity with an image loaded from the filepath
+        specified by imagePath, an absolute x and y position in a given
+        world, and a default description.  The image is loaded with
+        an optional alpha colorkey.
+        
+        @param IDcounter: class counter which increments for every
+        entity which is created, giving each entity a unique id
+        
+        @param entityID: unique id given to each Entity when
+        instantiated
+        
+        @param world: L{World} object in which the Entity exists
+        @type world: L{World}
+        
+        @param description: string description of the entity
+        
+        @param options: dictionary mapping string keys to callbacks.
+        Intended to be used for displaying a popup menu.  When an
+        item is selected, its callback will execute.
+        @type options: dict
+        
+        @param maxHealth: maximum health of the Entity
+        @param curHealth: current health of the Entity
+        
+        @param size: radius of collision (not currently implemented)
+        @param status: current status of the Entity.  Found in Locals.
+        
+        """
+        
         MapObject.__init__(self, imagePath, x, y, colorkey)
-	
-	self.__class__.IDcounter += 1 # Increment class counter
-	
-	# sets entityID.  Unique for all Entities
-	self.entityID = self.__class__.IDcounter
-	
-	# adds the entity to the provided world
-	world.addEntity(self)
+        
+        self.__class__.IDcounter += 1 # Increment class counter
+        
+        # sets entityID.  Unique for all Entities
+        self.entityID = self.__class__.IDcounter
+        
+        # adds the entity to the provided world
+        world.addEntity(self)
 
         # First initialization of description
         self.description = description
@@ -60,44 +60,44 @@ class Entity(MapObject):
         # upon being clicked to a callback function to execute.
         # Menu options should be added to this dictionary.
         self.options = {'Description': self.showDescription}
-	#self.pos = (x,y) # defined by superclass
-	
-	self.maxHealth=100
-	self.curHealth=self.maxHealth
-	self.size=100 #radius of collision
-	self.status=Locals.IDLE
-	self.time=pygame.time.get_ticks()
-	self.timePrev=0
-	self.timePassed=self.time-self.timePrev
-	self.selected=False
+        #self.pos = (x,y) # defined by superclass
+        
+        self.maxHealth=100
+        self.curHealth=self.maxHealth
+        self.size=100 #radius of collision
+        self.status=Locals.IDLE
+        self.time=pygame.time.get_ticks()
+        self.timePrev=0
+        self.timePassed=self.time-self.timePrev
+        self.selected=False
 
     # First initialization of update method
     def update(self):
         """All Sprite objects should have an update function."""
-	# Override this
+    # Override this
         pass
-	
+
     def draw(self,screen,worldOffset=(0,0)):
-	"""
-	Draws the entity to the given surface.  The screen should be
-	the same which the world grid is drawn on.  The worldOffset is
-	the current location of the corner of the viewport in the 
-	activeworld.
-	"""
-	drawOffset = -worldOffset[0],-worldOffset[1]
-	drawRect = self.rect.move(drawOffset)
-	screen.blit(self.image,drawRect)
+        """
+        Draws the entity to the given surface.  The screen should be
+        the same which the world grid is drawn on.  The worldOffset is
+        the current location of the corner of the viewport in the 
+        activeworld.
+        """
+        drawOffset = -worldOffset[0],-worldOffset[1]
+        drawRect = self.rect.move(drawOffset)
+        screen.blit(self.image,drawRect)
 
     def dtime(self):
-	"""returns time since last call, used in update, keeps track of time between frames"""
-	self.timePrev=self.time
-	self.time=pygame.time.get_ticks()
-	self.timePassed= self.time-self.timePrev
+        """returns time since last call, used in update, keeps track of time between frames"""
+        self.timePrev=self.time
+        self.time=pygame.time.get_ticks()
+        self.timePassed= self.time-self.timePrev
 
     def showUponClicked(self):
         """Shows a list of options which can be invoked on an object.
         This should pull up some sort of clickable menu."""
-        pass
+        pass #FIXME
 
     def showDescription(self):
         """Show the user the description of the entity.
@@ -105,14 +105,14 @@ class Entity(MapObject):
         return self.description
 
     def die(self):
-	"""removes entity from map"""
-	del self #not sure if this is right
+        """removes entity from map"""
+        del self #not sure if this is right
 
     def changeHealth(self, numHits):
-	"""changes current health by numHits, removes object if current health drops to 0"""
-	self.curHealth+=numHits
-	if curHealth<=0:
-	    self.die()
+        """changes current health by numHits, removes object if current health drops to 0"""
+        self.curHealth+=numHits
+        if curHealth<=0:
+            self.die()
 
 class TestEntity(Entity):
     """
@@ -122,18 +122,18 @@ class TestEntity(Entity):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
-	"""
-	@param vel: tuple of velocities (vx,vy)
-	"""
-	
-	Entity.__init__(self, imagePath, x, y, world, colorkey, description)
-	
-	self.vel = (0,0)
+        """
+        @param vel: tuple of velocities (vx,vy)
+        """
+        
+        Entity.__init__(self, imagePath, x, y, world, colorkey, description)
+        
+        self.vel = (0,0)
     
     def update(self):
-	"""Implements random movement to test with."""
-	from random import randint
-	self.rect.move_ip(randint(-4,4), randint(-4,4))
+        """Implements random movement to test with."""
+        from random import randint
+        self.rect.move_ip(randint(-4,4), randint(-4,4))
 
 if __name__ == "__main__":
     
@@ -154,30 +154,30 @@ if __name__ == "__main__":
     
     # Creates entities to test with in world w
     for i in range(50):
-	w.addEntity(TestEntity('ball.png',i*50,i*50, w, (255,255,255)))
-	#print Entity.IDcounter
+        w.addEntity(TestEntity('ball.png',i*50,i*50, w, (255,255,255)))
+        #print Entity.IDcounter
     
     MAX_FPS = 60
     gameClock = pygame.time.Clock()
     pygame.init()
     
     while RUNNING:
-	
-	# calls update function of all Entities in world
-	w.update()
-	
-	screen.fill((0,0,0))
-	
-	# Grabs all entities that are currently on the screen from the 
-	# world
-	curScreenEntities = w.getScreenEntities(screenZone)
-	print 'Currently %d entities on the screen'%len(curScreenEntities)
-	
-	for entID, ent in w.getScreenEntities(screenZone):
-	    
-	    ent.draw(screen)
-	    
+        
+        # calls update function of all Entities in world
+        w.update()
+        
+        screen.fill((0,0,0))
+        
+        # Grabs all entities that are currently on the screen from the 
+        # world
+        curScreenEntities = w.getScreenEntities(screenZone)
+        print 'Currently %d entities on the screen'%len(curScreenEntities)
+        
+        for entID, ent in w.getScreenEntities(screenZone):
+            
+            ent.draw(screen)
+            
         pygame.display.flip()
-	
-	ms_elapsed = gameClock.tick(MAX_FPS)
-	print 'Current frames per second: %d'%int(1000.0/ms_elapsed)
+        
+        ms_elapsed = gameClock.tick(MAX_FPS)
+        print 'Current frames per second: %d'%int(1000.0/ms_elapsed)

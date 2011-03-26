@@ -88,6 +88,9 @@ class Debugger(object):
             print("\tDebugging Disabled")
             
     def logMsg(self,event):
+        """
+        
+        """
         if self.SYMBOLS_ENABLED and type(event) in self.trackedEvents:
             print(str(event.timeFired)+" "+str(type(event)))
             if self.VERBOSE_MODE:

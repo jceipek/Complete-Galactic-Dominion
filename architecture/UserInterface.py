@@ -6,11 +6,19 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     Contains all of the functionality required to present information screens to 
     the user and interprets user input.
     
-    #Attributes:
-    #   activeScreen = visible screen (i.e. loading, main menu, intro, credits,
-                                                                          etc.)
-    #   activeOverlay = current screen to display over game content (i.e. pause 
-                                                                           menu)
+    @param activeOverlay: activeOverlay = current screen to display over game 
+    content (i.e. pause menu)
+    
+    @param activeWorld: The world that is currently enabled. It matches the 
+    active world in the L{Universe}
+    @type activeWorld: L{World}
+    
+    @param activeScreen: visible screen (i.e. loading, main menu, intro, 
+    credits, etc.)
+    @type activeScreen: L{Screen} or subclass thereof
+    
+    @param debugOverlay: An additional overlay disabled by default during real games. It displays the framerate and may eventually be used for 
+    cheatcodes/displaying debug events. Only fps is currently enabled.
     """
     
     def __init__(self,manager,world):
@@ -19,33 +27,38 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.activeOverlay = None
         self.activeWorld = world
         self.activeScreen = None
+        self.debugOverlay = None
         #DO MORE SETUP STUFF
-
-    def TEST_interfaceWithWorld(self,world):
-		# STUB ###############
-        self.loadWorld(world)
         
     def TEST_interface(self):
         from Screen import MainScreen
+        from Overlay import DebugOverlay
         testScreen = MainScreen()
         testScreen.TEST_createViewport(self.activeWorld)
         self.activeScreen = testScreen
+        self.debugOverlay = DebugOverlay()
 
     def setDisplaySurface(self,display,res):
         self.displaySurface=display
         self.resolution=res
         
     def notify(self,event):
-        if isinstance( event, Event.RenderEvent ):
-            self.activeScreen.draw(self.displaySurface,self.resolution)
-        elif isinstance( event, Event.MouseMovedEvent ):
+        if isinstance(event, Event.RenderEvent):
+            if self.activeScreen:
+                self.activeScreen.draw(self.displaySurface,self.resolution)
+            if self.debugOverlay:
+                self.debugOverlay.draw(self.displaySurface,self.resolution)
+        elif isinstance(event, Event.MouseMovedEvent):
             self.activeScreen.processMouseMovedEvent(event)
-        elif isinstance( event, Event.UpdateEvent ):
-            self.activeScreen.processUpdateEvent(event)
+        elif isinstance(event, Event.UpdateEvent):
+            if self.activeScreen:
+                self.activeScreen.processUpdateEvent(event)
+            if self.debugOverlay:
+                self.debugOverlay.processUpdateEvent(event)
             self.manager.post(Event.RefreshEvent())
-        elif isinstance( event, Event.WorldChangeEvent ):
+        elif isinstance(event, Event.WorldChangeEvent):
             self.activeWorld = event.world
             self.activeScreen.changeWorld(event.world)
-        elif isinstance( event,Event.DisplaySurfaceCreatedEvent ):
-            self.setDisplaySurface(event.displaySurface,event.resolution)
+        elif isinstance(event,Event.DisplaySurfaceCreatedEvent):
+            self.setDisplaySurface(event.displaySurface, event.resolution)
             

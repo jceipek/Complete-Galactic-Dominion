@@ -34,8 +34,12 @@ class MainScreen(Screen):
     It consists of a viewport and a HUD
     
     #Attributes:
-    #   viewport
-    #   hud
+    @param viewport: A window into the active world.
+    @type viewport: L{Viewport}
+    
+    @param hud: The HUD displays information to the player. It does not contain 
+    a debug menu, but does contain resource counts, menus, etc...
+    @type hud: L{HUD}
     """
     def __init__(self):
         Screen.__init__(self)
@@ -46,9 +50,9 @@ class MainScreen(Screen):
         ###FIXME
         #world.TEST_createGrid()
         scrollLoc = (0,0)
-        viewportPos = (50,20)
+        viewportPos = (0,0)
         #viewportSize = (640,480)
-        viewportSize = (500,300)
+        viewportSize = (1024,768-100)
         testViewport = Viewport(world,scrollLoc,viewportPos,viewportSize)
         self.viewport = testViewport
         
@@ -57,7 +61,6 @@ class MainScreen(Screen):
         #self.viewport.drawContainedEntities()
         
     def processMouseMovedEvent(self,event):
-        #self.viewport.scrollBasedOnMousePos(event.pos)
         self.viewport.setScrollSpeed(event.pos)
 
     def processMouseClickEvent(self,event):
