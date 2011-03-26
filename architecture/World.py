@@ -50,7 +50,7 @@ class World(object):
         # Determines entities in the world which collide with the screen
         # and appends them to a list
         for entity in self.allEntities.values():
-            if entity.rect.colliderect(playerScreenRect):
+            if entity.collRect.colliderect(playerScreenRect):
                 playerScreenEntities.append((entity.rect.bottom,entity))
         
         # sorts in order in which to draw entities        

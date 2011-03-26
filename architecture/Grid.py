@@ -4,7 +4,7 @@ from Listener import Listener
 import Terrain
 from GameData import ImageBank
 
-class Grid(object): #SHOULD ACTUALLY INHERIT FROM DRAWABLE OBJECT? SOME SUBCLASS?
+class Grid(object):
 
     def __init__(self,gridSize = (100,100),tileSize=None):
         

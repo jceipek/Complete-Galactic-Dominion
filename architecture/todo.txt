@@ -1,0 +1,18 @@
+Write your name next to something in parenthesis if you are working on it.
+__________________________________________________________________________
+
+High Priority:
+- Fix the issues of entities being able to go off of the world grid
+- Fix the fact that the collision detection between the viewport into the world and the units on the world does not occur.  This is tricky at the edges (where the world wraps)
+- We need to know when an entity has been selected
+
+Medium Priority:
+- make collision detection with screen more efficient
+- show places you have not explored as black
+
+Low Priority:
+- For of War
+- Convert large overlapping grid squares to non-overlapping (compute when world starts up)
+
+Super-Low Priority:
+- Collision detection between entities
