@@ -73,7 +73,7 @@ def init():
     
     #===========================================
     
-    imageBank.loadImage('testBuilding.png', 'alpha')
+    imageBank.loadImage('testCraft.png', 'alpha')
     
     w.TEST_createGrid()
     
@@ -81,7 +81,7 @@ def init():
     for i in range(500):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        w.addEntity(TestEntity(imageBank.getImage('testBuilding.png'),i*50,i*50,w))
+        w.addEntity(TestEntity(imageBank.getImage('testCraft.png'),i*50,i*50,w))
     
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())

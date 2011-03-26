@@ -90,7 +90,7 @@ class Window(Listener):
         """
         
         if self.fullscreenMode:
-            self.displaySurface = pygame.display.set_mode(self.resolution,pygame.FULLSCREEN)
+            self.displaySurface = pygame.display.set_mode(self.resolution,pygame.FULLSCREEN|pygame.HWSURFACE)
         else:
             self.displaySurface = pygame.display.set_mode(self.resolution)
         self.manager.post(Event.DisplaySurfaceCreatedEvent(self.resolution,self.displaySurface))
