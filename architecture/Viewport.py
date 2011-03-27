@@ -52,7 +52,25 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
         else:
             self.scrollSpeed = [0,0]
-            
+        
+    def clickAt(self,pos):
+        #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
+        def distBetween(p1,p2):
+            return pow(pow(p1[0]-p2[0],2)+pow(p1[1]-p2[1],2),0.5)
+    
+        worldX, worldY = self.scrollLoc
+        posX = pos[0] + worldX
+        posY = pos[1] + worldY
+        curScreenRect = pygame.Rect(worldX,worldY,*self.size)
+        clicked = []
+        for ypos,entity in self.world.getScreenEntities(curScreenRect):
+            if entity.rect.collidepoint((posX,posY)):
+                clicked.append((distBetween(entity.rect.center,pos),entity))
+        if len(clicked):
+            clicked.sort(reverse=True)
+            clicked[0][1].selected = True
+    
+    
     def scrollBasedOnElapsedTime(self,elapsedTime):
         newScrollLoc = list(self.scrollLoc)
         newScrollLoc[0] += self.scrollSpeed[0]*elapsedTime

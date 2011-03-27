@@ -22,7 +22,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     
     def __init__(self,manager,world):
-        eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, Event.UpdateEvent, Event.WorldChangeEvent, Event.DisplaySurfaceCreatedEvent]
+        eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, Event.MouseClickedEvent, Event.UpdateEvent, Event.WorldChangeEvent, Event.DisplaySurfaceCreatedEvent]
         Listener.__init__(self,manager,eventTypes)
         self.activeOverlay = None
         self.activeWorld = world
@@ -48,8 +48,12 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.activeScreen.draw(self.displaySurface,self.resolution)
             if self.debugOverlay:
                 self.debugOverlay.draw(self.displaySurface,self.resolution)
+        elif isinstance(event, Event.MouseClickedEvent):
+            if self.activeScreen:
+                self.activeScreen.processMouseClickEvent(event)
         elif isinstance(event, Event.MouseMovedEvent):
-            self.activeScreen.processMouseMovedEvent(event)
+            if self.activeScreen: 
+                self.activeScreen.processMouseMovedEvent(event)
         elif isinstance(event, Event.UpdateEvent):
             if self.activeScreen:
                 self.activeScreen.processUpdateEvent(event)
@@ -57,8 +61,10 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.debugOverlay.processUpdateEvent(event)
             self.manager.post(Event.RefreshEvent())
         elif isinstance(event, Event.WorldChangeEvent):
-            self.activeWorld = event.world
-            self.activeScreen.changeWorld(event.world)
+            if self.activeWorld:
+                self.activeWorld = event.world
+            if self.activeScreen:
+                self.activeScreen.changeWorld(event.world)
         elif isinstance(event,Event.DisplaySurfaceCreatedEvent):
             self.setDisplaySurface(event.displaySurface, event.resolution)
             

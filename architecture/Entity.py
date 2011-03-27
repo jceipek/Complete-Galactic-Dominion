@@ -62,14 +62,14 @@ class Entity(MapObject):
         self.options = {'Description': self.showDescription}
         #self.pos = (x,y) # defined by superclass
         
-        self.maxHealth=100
-        self.curHealth=self.maxHealth
-        self.size=100 #radius of collision
-        self.status=Locals.IDLE
-        self.time=pygame.time.get_ticks()
-        self.timePrev=0
-        self.timePassed=self.time-self.timePrev
-        self.selected=False
+        self.maxHealth = 100
+        self.curHealth = self.maxHealth
+        self.size = 100 #radius of collision
+        self.status = Locals.IDLE
+        self.time = pygame.time.get_ticks()
+        self.timePrev = 0
+        self.timePassed = self.time-self.timePrev
+        self.selected = False
 
     # First initialization of update method
     def update(self):
@@ -84,9 +84,17 @@ class Entity(MapObject):
         the current location of the corner of the viewport in the 
         activeworld.
         """
+        
         drawOffset = -worldOffset[0],-worldOffset[1]
         drawRect = self.rect.move(drawOffset)
+        
+        if self.selected:
+            self.drawSelectionRing(screen,drawRect)
+        
         screen.blit(self.image,drawRect)
+
+    def drawSelectionRing(self, screen, drawRect):
+        pygame.draw.circle(screen, (255,255,255), drawRect.center, 20, 1)
 
     def dtime(self):
         """returns time since last call, used in update, keeps track of time between frames"""
