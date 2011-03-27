@@ -8,6 +8,7 @@ class MouseLocals:
     SCROLL_UP = 4
     SCROLL_DOWN = 5
 
+'''
 class MouseClickedEvent(Event):
     """
     Basic mouse event.
@@ -27,6 +28,8 @@ class MouseClickedEvent(Event):
         "\tButton State: "+str(self.state)+"\n"+\
         "\tButton Pressed: "+str(self.buttonId)+"\n"
         
+'''
+        
 class MouseMovedEvent(Event):
     """
     Fired when the mouse moves; keeps track of position only.
@@ -40,3 +43,8 @@ class MouseMovedEvent(Event):
         self.pos = posxy
         self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"
     
+class SelectionEvent(Event):
+    def __init__(self,posxy):
+        Event.__init__(self)
+        self.pos = posxy
+        self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"

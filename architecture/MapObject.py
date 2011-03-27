@@ -10,6 +10,7 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
         # sets image and rect attributes
         # First class to inherit from Sprite
         DrawableObject.__init__(self, imagePath, colorkey)
+        pygame.sprite.Sprite.__init__(self)
         
         # sets the topleft corner of the rectangle to (x,y)
         self.rect.topleft = self.pos = (x,y)
