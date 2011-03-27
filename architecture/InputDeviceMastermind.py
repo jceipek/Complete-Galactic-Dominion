@@ -6,16 +6,16 @@ class InputDeviceMastermind(object):
         dictionary(String:Boolean)
     '''
     def __init__(self):
-        scrollPosition=cursorPosition=0\
-        state=dict()
+        scrollPosition=cursorPosition=0
+        self.state=dict()
 
-    def updateState(command,value=None)
+    def updateState(self,command,value=None):
         '''
         Takes a string and updates the state
         '''
         if value==None:
-            state[command]= not state.get(command,False)
+            self.state[command]= not self.state.get(command,False)
         elif isinstance(value,bool):
-            state[command]=value
-        else
-            state[command]=value
+            self.state[command]=value
+        else:
+            self.state[command]=value
