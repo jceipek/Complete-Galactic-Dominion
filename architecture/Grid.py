@@ -18,7 +18,7 @@ class Grid(object):
                                         'newGrass.png').get_rect().size
         else:
             self.tileWidth,self.tileHeight = tileSize
-            
+
         self.grid = dict()
         self.populateGrid()
         
@@ -43,8 +43,9 @@ class InfiniteGrid(Grid):
         
     def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         
-        tileHeight= self.grid[(0,0)].rect.height
-        tileWidth= self.grid[(0,0)].rect.width
+        tileHeight=self.tileHeight
+        tileWidth=self.tileWidth
+        
         miny = int(2*screenLoc[1]/tileHeight)-2
         maxy = int(2*(screenLoc[1]+screenSize[1])/tileHeight)+1
         minx = int(screenLoc[0]/tileWidth)-1

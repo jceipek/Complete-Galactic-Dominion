@@ -67,5 +67,4 @@ class MainScreen(Screen):
         self.viewport.clickAt(event.pos)
 
     def processUpdateEvent(self,event):
-        self.viewport.world.update()
-        self.viewport.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
+        self.viewport.processUpdateEvent(event)

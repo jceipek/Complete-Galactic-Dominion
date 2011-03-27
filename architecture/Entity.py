@@ -49,6 +49,8 @@ class Entity(MapObject):
         # sets entityID.  Unique for all Entities
         self.entityID = self.__class__.IDcounter
         
+        self.world = world
+        
         # adds the entity to the provided world
         world.addEntity(self)
 
@@ -121,7 +123,17 @@ class Entity(MapObject):
         self.curHealth+=numHits
         if curHealth<=0:
             self.die()
-
+            
+    def wrapRect(self):
+        """
+        Prevents entities from moving off of the grid.
+        """
+        #FIXME - make this work 
+        boundX,boundY = self.world.grid.getGridDimensions()
+        left,top = self.rect.topleft # Note: this 'reversal' is intentional...
+        self.rect.left = left%boundX
+        self.rect.top = top%boundY
+        
 class TestEntity(Entity):
     """
     This should be deleted once subclasses are implemented.  This
@@ -142,6 +154,7 @@ class TestEntity(Entity):
         """Implements random movement to test with."""
         from random import randint
         self.rect.move_ip(randint(-4,4), randint(-4,4))
+        self.wrapRect()
 
 if __name__ == "__main__":
     

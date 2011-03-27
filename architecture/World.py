@@ -35,28 +35,33 @@ class World(object):
         for entity in self.allEntities.values():
             entity.update()
     
-    def getScreenEntities(self,playerScreenRect):
+    def getScreenEntities(self,viewRect):
         """
         Receives the rectangle of the screen object (NOTE: MUST BE
         DEFINED IN THE SAME WAY AS THE RECT OBJECT OF ENTITIES ARE.
         EITHER MUST BE BOTH ABSOLUTE OR BOTH RELATIVE TO SCREEN!!!)
-        Creates a list of tuples containing y-coordinate and entity
-        reference to sort in the order of which the entities should be 
-        drawn for the provided playerScreenRect
+        Returns a list of references to entities which are visible
+        in the viewport.
         """
 
-        playerScreenEntities = []
+        # List of tuples - y position of rectangle (bottom) and entity
+        entitySortList = []
         
         # Determines entities in the world which collide with the screen
         # and appends them to a list
         for entity in self.allEntities.values():
-            if entity.collRect.colliderect(playerScreenRect):
-                playerScreenEntities.append((entity.rect.bottom,entity))
+            if entity.collRect.colliderect(viewRect):
+                entitySortList.append((entity.rect.bottom,entity))
         
         # sorts in order in which to draw entities        
-        playerScreenEntities.sort()
+        entitySortList.sort()
         
-        return playerScreenEntities
+        if len(entitySortList) > 0:
+            ypos, screenEntities = zip(*entitySortList)
+        else:
+            screenEntities = []
+            
+        return screenEntities
     
     def addEntity(self, entity):
         """

@@ -38,7 +38,6 @@ High-level steps for a non-blocking menu:
 # Home: http://code.google.com/p/simple-pygame-menu/
 # Source: See home.
 
-
 import os
 import sys
 

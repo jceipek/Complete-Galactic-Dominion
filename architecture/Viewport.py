@@ -35,6 +35,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         self.calcDistance = lambda a,b: (a**2 + b**2)**0.5
         
+        self.viewportEntities = []
+        
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
         offset = int(0.3*float(self.size[0]))
@@ -66,7 +68,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         posY = pos[1] + worldY
         curScreenRect = pygame.Rect(worldX,worldY,*self.size)
         clicked = []
-        for ypos,entity in self.world.getScreenEntities(curScreenRect):
+        for entity in self.viewportEntities:
             if entity.rect.collidepoint((posX,posY)) and not entity.selected:
                 clicked.append((distBetween(entity.rect.center,pos),entity))
         for e in self.selectedEntities:
@@ -92,17 +94,17 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         ### FIXME!! Wrapping of objects does not currently work correctly!
 
         #worldSize = self.world.grid.getGridDimensions()
-        worldX, worldY = self.scrollLoc
+        #worldX, worldY = self.scrollLoc
 
         #if worldX < 0 or worldX > worldSize[0]:
         #    worldX = worldX%worldSize[0]
         #if worldY < 0 or worldY > worldSize[1]:
         #    worldY = worldY%worldSize[1]
         #worldPos = self.scrollLoc[0]%self.size[0],self.scrollLoc[1]%self.size[1]
-        curScreenRect = pygame.Rect(worldX,worldY,*self.size)
+        #curScreenRect = pygame.Rect(worldX,worldY,*self.size)
         #print curScreenRect
         # Draws entities on screen from world in correct order
-        for ypos,entity in self.world.getScreenEntities(curScreenRect):
+        for entity in self.viewportEntities:
             entity.draw(self.surface,self.scrollLoc)
     
     def draw(self,displaySurface):
@@ -114,7 +116,16 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.drawContainedEntities()
         self.drawDebugFrames(self.surface)
         displaySurface.blit(self.surface, (self.loc,self.size))
-                                  
+    
+    def processUpdateEvent(self,event):
+        self.world.update()
+        self.setViewportEntities()
+        self.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
+        
+    def setViewportEntities(self):
+        curScreenRect = pygame.Rect(self.scrollLoc,self.size)
+        self.viewportEntities = self.world.getScreenEntities(curScreenRect)
+    
     def drawDebugFrames(self,displaySurface):  
         """
         Draws frames on viewport which are useful for debugging.

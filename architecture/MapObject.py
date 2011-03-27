@@ -13,7 +13,7 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # sets the topleft corner of the rectangle to (x,y)
-        self.rect.topleft = self.pos = (x,y)
+        self.rect.topleft = (x,y)
 
         # this is the first initialization of owner
         self.owner=None # default to no owner
