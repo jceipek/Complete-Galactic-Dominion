@@ -72,6 +72,7 @@ class Entity(MapObject):
         self.timePrev = 0
         self.timePassed = self.time-self.timePrev
         self.selected = False
+        self.blockable = False
 
     # First initialization of update method
     def update(self):
@@ -119,8 +120,12 @@ class Entity(MapObject):
         return self.description
 
     def die(self):
-        """removes entity from map"""
-        del self #not sure if this is right
+        """
+        Removes the current Sprite from all groups.  It will no longer
+        be associated with this class.
+        """
+        self.kill()
+        del self
 
     def changeHealth(self, numHits):
         """changes current health by numHits, removes object if current health drops to 0"""
@@ -193,7 +198,7 @@ if __name__ == "__main__":
         curScreenEntities = w.getScreenEntities(screenZone)
         print 'Currently %d entities on the screen'%len(curScreenEntities)
         
-        for entID, ent in w.getScreenEntities(screenZone):
+        for ent in w.getScreenEntities(screenZone):
             
             ent.draw(screen)
             
