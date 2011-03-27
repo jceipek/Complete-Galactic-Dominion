@@ -13,6 +13,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     #   size = (width,height) #Dimensions in screen coordinates
     #   mouse = the mouse controlling it
     #   deadZoneRect
+    #   selectedEntities
     """
     
     def __init__(self,world,scrollLoc,screenPos,size):
@@ -29,6 +30,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.surface = pygame.Surface(size)
         self.surface.set_clip(((0,0),size))
         self.scrollSpeed = [0,0]
+        
+        self.selectedEntities = []
         
         self.calcDistance = lambda a,b: (a**2 + b**2)**0.5
         
@@ -64,11 +67,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         curScreenRect = pygame.Rect(worldX,worldY,*self.size)
         clicked = []
         for ypos,entity in self.world.getScreenEntities(curScreenRect):
-            if entity.rect.collidepoint((posX,posY)):
+            if entity.rect.collidepoint((posX,posY)) and not entity.selected:
                 clicked.append((distBetween(entity.rect.center,pos),entity))
+        for e in self.selectedEntities:
+            e.selected = False
         if len(clicked):
             clicked.sort(reverse=True)
             clicked[0][1].selected = True
+            self.selectedEntities = [clicked[0][1]]
     
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
