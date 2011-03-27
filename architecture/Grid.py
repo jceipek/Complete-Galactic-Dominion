@@ -26,6 +26,7 @@ class Grid(object):
         for y in range(self.gridSize[1]):
             for x in range(self.gridSize[0]):
                 self.grid[(x,y)] = Terrain.Grass(self.terrainImageBank.getImage('newGrass.png'))
+                
     def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         #Overriden by Infinite and Finite Grids
         pass
@@ -51,13 +52,16 @@ class InfiniteGrid(Grid):
         minx = int(screenLoc[0]/tileWidth)-1
         maxx = int((screenLoc[0]+screenSize[0])/tileWidth)+2
 
+        surface.fill((0,0,0))
+        
         for y in range(miny,maxy):
             for x in range(minx,maxx):
+                
                 left = int((x-(y%2)/2.0)*tileWidth-screenLoc[0])
                 top = int(y*tileHeight/2.0-screenLoc[1])
                 squareLoc=(x%self.gridSize[0],y%self.gridSize[1])
-
-                self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
+                if not (x%self.gridSize[0]==0 and y%self.gridSize[1]==0):
+                    self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
 
 class FiniteGrid(Grid):
     """

@@ -25,10 +25,13 @@ class World(object):
         self.allEntities = dict()
         
         self.grid = grid #Needs to be linked to a grid object, default None
+        self.gridDim = (0,0)
         
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
-        self.grid = InfiniteGrid((100,100),64)
+        self.grid = InfiniteGrid((6,3),64)
+        self.gridDim = self.grid.getGridDimensions()
+
 
     def update(self):
         """Sends an update message to all entities."""
@@ -49,11 +52,30 @@ class World(object):
         
         # Determines entities in the world which collide with the screen
         # and appends them to a list
+        
+        #gridWidth,gridHeight = self.gridDim
+
+        
+        #vLeft,vTop = viewRect.topleft
+        #vRight,vBottom = viewRect.bottomright
+        
+        #miny = int(vTop%gridHeight)
+        #maxy = int(vBottom%gridHeight)
+        #minx = int(vLeft%gridWidth)
+        #maxx = int(vRight%gridWidth)
+        
+        #for entity in self.allEntities.values():
+        #    eLeft,eTop = entity.rect.topleft
+        #    eRight,eBottom = entity.rect.bottomright
+            
+        #    if eLeft%gridWidth > minx and eRight%gridWidth < maxx:
+        #        if eTop%gridHeight > miny and eBottom%gridHeight < maxy:
+        #            entitySortList.append((entity.rect.bottom,entity))
+                    
         for entity in self.allEntities.values():
             if entity.collRect.colliderect(viewRect):
                 entitySortList.append((entity.rect.bottom,entity))
-        
-        # sorts in order in which to draw entities        
+     
         entitySortList.sort()
         
         if len(entitySortList) > 0:

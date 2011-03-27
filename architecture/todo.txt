@@ -4,7 +4,9 @@ __________________________________________________________________________
 High Priority:
 - Fix the issues of entities being able to go off of the world grid
 - Fix the fact that the collision detection between the viewport into the world and the units on the world does not occur.  This is tricky at the edges (where the world wraps)
-- We need to know when an entity has been selected
+- Changing isometric view gridding system (Patrick)
+
+    DONE - We need to know when an entity has been selected (Julian)
 
 Medium Priority:
 - make collision detection with screen more efficient

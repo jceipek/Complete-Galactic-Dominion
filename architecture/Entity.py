@@ -87,8 +87,12 @@ class Entity(MapObject):
         activeworld.
         """
         
+        #gridWidth,gridHeight = self.world.gridDim
+        
         drawOffset = -worldOffset[0],-worldOffset[1]
         drawRect = self.rect.move(drawOffset)
+        #drawRect.top = drawRect.top%gridHeight
+        #drawRect.left = drawRect.left%gridWidth
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
@@ -124,15 +128,10 @@ class Entity(MapObject):
         if curHealth<=0:
             self.die()
             
-    def wrapRect(self):
-        """
-        Prevents entities from moving off of the grid.
-        """
-        #FIXME - make this work 
-        boundX,boundY = self.world.grid.getGridDimensions()
-        left,top = self.rect.topleft # Note: this 'reversal' is intentional...
-        self.rect.left = left%boundX
-        self.rect.top = top%boundY
+    def moveWrap(self):
+        gridWidth,gridHeight = self.world.gridDim
+        self.rect.top = self.rect.top%gridHeight
+        self.rect.left = self.rect.left%gridWidth
         
 class TestEntity(Entity):
     """
@@ -153,8 +152,8 @@ class TestEntity(Entity):
     def update(self):
         """Implements random movement to test with."""
         from random import randint
-        self.rect.move_ip(randint(-4,4), randint(-4,4))
-        self.wrapRect()
+        #self.rect.move_ip(randint(-4,4), randint(-4,4))
+        #self.moveWrap()
 
 if __name__ == "__main__":
     
