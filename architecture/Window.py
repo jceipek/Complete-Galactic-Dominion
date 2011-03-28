@@ -154,7 +154,9 @@ class Window(Listener):
         
         while self.active:
             #Waiting for the event significantly increases frame rate
+            print 'Waiting for pygame event'
             rawEvent=pygame.event.wait()
+            print 'Pygame event collected'
             inputState.updateState(pEventToStr(rawEvent))
         
             #FIXME - more events needed
