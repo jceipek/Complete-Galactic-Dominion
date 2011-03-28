@@ -29,7 +29,7 @@ class World(object):
         
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
-        self.grid = InfiniteGrid((6,3),64)
+        self.grid = InfiniteGrid((20,20),64)
         self.gridDim = self.grid.getGridDimensions()
 
     def update(self):
@@ -49,8 +49,8 @@ class World(object):
         # List of tuples - y position of rectangle (bottom) and entity
         entitySortList = []
         
-        #xmod,ymod = self.gridDim
-        
+        xmod,ymod = self.gridDim
+        #print self.gridDim
         #viewRect.top = viewRect.top%ymod
         #viewRect.left = viewRect.left%xmod
         
