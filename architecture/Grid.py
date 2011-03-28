@@ -101,6 +101,8 @@ class InfiniteGrid(Grid):
         #create the font that will draw the coordinates on the squares
         font=pygame.font.Font(pygame.font.get_default_font(),12)
         
+        surface.fill((0,0,0));
+        
         for y in range(miny,maxy):
             for x in range(minx,maxx):
                 
@@ -108,8 +110,17 @@ class InfiniteGrid(Grid):
                 left = int((y+x)/2.0*tileWidth-screenLoc[0])
                 top = int((y-x)/2.0*tileHeight-screenLoc[1])
                 
-                if pygame.Rect((left,top),(tileWidth,tileHeight)).colliderect((0,0),screenSize):
-                     self.grid[x%self.gridSize[0],y%self.gridSize[1]].draw(surface,(left,top))
+                if pygame.Rect((left,top),(tileWidth,tileHeight)).\
+                colliderect((0,0),screenSize):
+                    self.grid[x%self.gridSize[0],y%self.gridSize[1]].\
+                    draw(surface,(left,top))
+                
+                """ #Comment out this line to test grid wrapping
+                if pygame.Rect((left,top),(tileWidth,tileHeight)).\
+                colliderect((0,0),screenSize):
+                    if not(x%self.gridSize[0] == 2 and y%self.gridSize[1] == 2):
+                     self.grid[x%self.gridSize[0],y%self.gridSize[1]].\
+                     draw(surface,(left,top))#"""
 
                 #draw the text to the square
                 #txt=font.render('(%d, %d)'%(x,y),True,(255,0,0))
