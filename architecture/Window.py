@@ -141,9 +141,11 @@ class Window(Listener):
             e=str(event)
             s=''
             if 'Motion' in e:
+                print 'Motion collected'
                 s += 'Motion Event '
                 if hasattr(event,'pos'):
                     s+=str(event.pos)
+                print 'No problem here'
             elif 'Up' in e:
                 s += 'Release Event'
             elif 'Down' in e:
