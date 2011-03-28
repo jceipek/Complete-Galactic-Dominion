@@ -149,6 +149,8 @@ class Window(Listener):
             elif 'Down' in e:
                 s += 'Press Event'
             return s
+
+        pEventToStr=pEventToStr
         
         while self.active:
             #Waiting for the event significantly increases frame rate
