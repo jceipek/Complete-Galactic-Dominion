@@ -25,6 +25,7 @@ from World import World
 from UserInterface import UserInterface
 from Universe import Universe
 from Entity import Entity,TestEntity
+from Unit import Unit
 
 from GameData import ImageBank
 
@@ -78,7 +79,7 @@ def init():
     w.TEST_createGrid()
     
     # Initialize 500 entities in World w
-    for i in range(3):
+    for i in range(6):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
         w.addEntity(TestEntity(imageBank.getImage('testCraft.png'),i*50,i*50,w))

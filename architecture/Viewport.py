@@ -117,7 +117,23 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
         
     def setViewportEntities(self):
-        curScreenRect = pygame.Rect(self.scrollLoc,self.size)
+        """FIXME to work with new coordinates."""
+        l,t = self.scrollLoc
+        w,h = self.size
+        r,b = l+w,t+h
+        
+        cartTopLeft = self.world.grid.isoToCart((l,t))
+        cartTopRight = self.world.grid.isoToCart((r,t))
+        cartBottomRight = self.world.grid.isoToCart((r,b))
+        cartBottomLeft = self.world.grid.isoToCart((l,b))
+        
+        cartW = cartTopRight[0]-cartBottomLeft[0]
+        cartH = cartBottomRight[1]-cartTopLeft[1]
+        cartL = cartBottomLeft[0]
+        cartT = cartTopLeft[1]
+        
+        curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
+        #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
         self.viewportEntities = self.world.getScreenEntities(curScreenRect)
     
     def drawDebugFrames(self,displaySurface):  

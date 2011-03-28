@@ -41,6 +41,12 @@ class Entity(MapObject):
         @param status: current status of the Entity.  Found in Locals.
         
         """
+        self.world = world
+        
+        # Prevents entities from being initialized off of the grid
+        self.xmod,self.ymod = self.world.grid.getGridDimensions()
+        x = x%self.xmod
+        y = y%self.ymod
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
@@ -48,8 +54,6 @@ class Entity(MapObject):
         
         # sets entityID.  Unique for all Entities
         self.entityID = self.__class__.IDcounter
-        
-        self.world = world
         
         # adds the entity to the provided world
         world.addEntity(self)
@@ -142,9 +146,11 @@ class Entity(MapObject):
             self.die()
             
     def moveWrap(self):
-        gridWidth,gridHeight = self.world.gridDim
-        self.rect.top = self.rect.top%gridHeight
-        self.rect.left = self.rect.left%gridWidth
+        """
+        FIXME !!!
+        """
+        self.rect.top = self.rect.top%self.ymod
+        self.rect.left = self.rect.left%self.xmod
         
 class TestEntity(Entity):
     """
@@ -161,12 +167,13 @@ class TestEntity(Entity):
         Entity.__init__(self, imagePath, x, y, world, colorkey, description)
         
         self.vel = (0,0)
+        from random import randint
+        #self.vel = (randint(-2,2),randint(-2,2))
     
     def update(self):
         """Implements random movement to test with."""
-        from random import randint
-        #self.rect.move_ip(randint(-4,4), randint(-4,4))
-        #self.moveWrap()
+        self.rect.move_ip(self.vel)
+        self.moveWrap()
 
 if __name__ == "__main__":
     

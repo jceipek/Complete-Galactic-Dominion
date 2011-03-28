@@ -32,7 +32,6 @@ class World(object):
         self.grid = InfiniteGrid((6,3),64)
         self.gridDim = self.grid.getGridDimensions()
 
-
     def update(self):
         """Sends an update message to all entities."""
         for entity in self.allEntities.values():
@@ -50,31 +49,19 @@ class World(object):
         # List of tuples - y position of rectangle (bottom) and entity
         entitySortList = []
         
+        #xmod,ymod = self.gridDim
+        
+        #viewRect.top = viewRect.top%ymod
+        #viewRect.left = viewRect.left%xmod
+        
         # Determines entities in the world which collide with the screen
         # and appends them to a list
-        
-        #gridWidth,gridHeight = self.gridDim
-
-        
-        #vLeft,vTop = viewRect.topleft
-        #vRight,vBottom = viewRect.bottomright
-        
-        #miny = int(vTop%gridHeight)
-        #maxy = int(vBottom%gridHeight)
-        #minx = int(vLeft%gridWidth)
-        #maxx = int(vRight%gridWidth)
-        
-        #for entity in self.allEntities.values():
-        #    eLeft,eTop = entity.rect.topleft
-        #    eRight,eBottom = entity.rect.bottomright
-            
-        #    if eLeft%gridWidth > minx and eRight%gridWidth < maxx:
-        #        if eTop%gridHeight > miny and eBottom%gridHeight < maxy:
-        #            entitySortList.append((entity.rect.bottom,entity))
-                    
+        print 'Viewing rect: ',viewRect
         for entity in self.allEntities.values():
             if entity.collRect.colliderect(viewRect):
                 entitySortList.append((entity.rect.bottom,entity))
+            if entity.entityID == 1:
+                print 'Collision rect of 1st entity: ',entity.collRect
      
         entitySortList.sort()
         
