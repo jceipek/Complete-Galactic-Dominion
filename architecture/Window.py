@@ -183,7 +183,7 @@ class Window(Listener):
                 if realEvent:
                     self.manager.post(realEvent) #Warning: make sure that threading doesn't cause \
                                                  #problems here!
-            else time.sleep(.01)
+            #else time.sleep(.01)
 
     def setUpControlMapping(self):
         """
