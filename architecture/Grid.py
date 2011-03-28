@@ -94,9 +94,9 @@ class InfiniteGrid(Grid):
         
         print screenLeftTop[0],screenRightTop[0],screenRightBottom[0],screenLeftBottom[0]
         
-        minx = int(screenLeftBottom[0]/tileWidth)-1
-        maxx = int(screenRightTop[0]/tileWidth)+1
-        miny = int(screenLeftTop[1]/tileHeight)-1
+        minx = int(screenLeftBottom[0]/tileHeight)-2
+        maxx = int(screenRightTop[0]/tileHeight)+1
+        miny = int(screenLeftTop[1]/tileHeight)-2
         maxy = int(screenRightBottom[1]/tileHeight)+1
         
         #minx = int(screenLoc[1]/tileHeight)-1

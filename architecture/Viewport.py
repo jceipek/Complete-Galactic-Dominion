@@ -70,11 +70,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         clicked = []
         for entity in self.viewportEntities:
             if entity.rect.collidepoint((posX,posY)) and not entity.selected:
-                clicked.append((distBetween(entity.rect.center,pos),entity))
+                entityRectOnScreen=entity.rect.move(posX,posY)
+                print entity.rect.center,pos,distBetween(entity.rect.center,pos)
+                print entityRectOnScreen.center,pos,distBetween(entityRectOnScreen.center,pos)
+                clicked.append((distBetween(entityRectOnScreen.center,pos),entity))
         for e in self.selectedEntities:
             e.selected = False
         if len(clicked):
-            clicked.sort(reverse=False)
+            clicked.sort(reverse=True)
             clicked[0][1].selected = True
             self.selectedEntities = [clicked[0][1]]
     
