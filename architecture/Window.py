@@ -116,6 +116,7 @@ class Window(Listener):
             #I DON'T KNOW IF THIS WILL WORK PROPERLY FOR MULTIPLE EVENTS, YET - Julian
 
             #Tell the objects on screen to update.
+            self.pygameEvents+=pygame.event.get()
             self.manager.post(Event.UpdateEvent(self.gameFrametime,self.gameTime))
             
             #Note: the renderer does not update or display anything.
@@ -157,29 +158,32 @@ class Window(Listener):
         while self.active:
             #Waiting for the event significantly increases frame rate
             #print 'Waiting for pygame event'
-            rawEvent=pygame.event.wait()
+            #rawEvent=pygame.event.wait()
             #print 'Pygame event collected'
             #inputState.updateState(pEventToStr(rawEvent))
-        
-            #FIXME - more events needed
-            realEvent = None
-            if rawEvent.type == pygame.QUIT:
-                realEvent = Event.QuitEvent()
-                """elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
-                state = Event.MouseLocals.MOUSE_PRESSED
-                buttonId = rawEvent.button
-                realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)"""
-            elif rawEvent.type == pygame.MOUSEBUTTONUP:
-                state = Event.MouseLocals.MOUSE_RELEASED
-                buttonId = rawEvent.button
-                if buttonId == Event.MouseLocals.LEFT_CLICK:
-                    realEvent = Event.SelectionEvent(rawEvent.pos)
-            elif rawEvent.type == pygame.MOUSEMOTION:
-                realEvent = Event.MouseMovedEvent(rawEvent.pos)
+            if self.pygameEvents:
+                rawEvent=self.pygameEvents.pop()
+            
+                #FIXME - more events needed
+                realEvent = None
+                if rawEvent.type == pygame.QUIT:
+                    realEvent = Event.QuitEvent()
+                    """elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
+                    state = Event.MouseLocals.MOUSE_PRESSED
+                    buttonId = rawEvent.button
+                    realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)"""
+                elif rawEvent.type == pygame.MOUSEBUTTONUP:
+                    state = Event.MouseLocals.MOUSE_RELEASED
+                    buttonId = rawEvent.button
+                    if buttonId == Event.MouseLocals.LEFT_CLICK:
+                        realEvent = Event.SelectionEvent(rawEvent.pos)
+                elif rawEvent.type == pygame.MOUSEMOTION:
+                    realEvent = Event.MouseMovedEvent(rawEvent.pos)
 
-            if realEvent:
-                self.manager.post(realEvent) #Warning: make sure that threading doesn't cause \
-                                             #problems here!
+                if realEvent:
+                    self.manager.post(realEvent) #Warning: make sure that threading doesn't cause \
+                                                 #problems here!
+            else time.sleep(.01)
 
     def setUpControlMapping(self):
         """
