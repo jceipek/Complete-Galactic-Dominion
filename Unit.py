@@ -1,20 +1,21 @@
-import Builder
-import pygame
+from Builder import Builder
+from Entity import Entity,Locals
+
 from collections import deque
 
-class Unit(pygame.sprite.Sprite):
+class Unit(Builder):
     """A kind of Builder that can move around."""
 
     # Static class attribute--keeps track of all units initialized
     # by this computer (one particular player)
-    allUnits = pygame.sprite.Group()
+    #allUnits = pygame.sprite.Group()
     
     def __init__(self, imagePath, colorkey=None):
         # Will set the image and rect properties required by Sprite
         Builder.__init__(self, imagePath, colorkey)
         Unit.allUnits.add(self)
 
-        self.status=Entity.Locals.IDLE
+        self.status=Locals.IDLE
         self.efficiency=1
         self.path=[]#queue of future tuple destinations
         self.dest=None #current destination
@@ -22,18 +23,15 @@ class Unit(pygame.sprite.Sprite):
 
     def update(self):
         """Called by game each frame to update object."""
-        self.dtime()#updates time
-
-    def kill(self):
-        """Removes the current Sprite from all groups.  It will no longer
-        be associated with this class."""
-        pygame.sprite.Sprite.kill(self)
-
+        #FIXME !!!
+        #self.dtime()#updates time
+        pass
+        
     def move(self):
         """changes position of unit in direction of dest"""
         if (self.x,self.y)==self.dest: #may need to have room for error
             if len(self.path)<1:
-                self.status=Entity.Locals.IDLE
+                self.status=Locals.IDLE
                 return 
             else:
                 self.dest=self.path.popleft()
@@ -48,11 +46,51 @@ class Unit(pygame.sprite.Sprite):
         self.x+=dirx*self.speed*self.timePassed
         self.y+=diry*self.speed*self.timePassed
         
-        
-        
 
-    def die(self):
-        """removes Unit from map"""
-        self.kill()
-        del self #This is a guess and is probably wrong
+if __name__ == "__main__":
+    
+    # TESTS TO SHOW Builders WORK
+    
+    screenSize = (width, height) = (1024, 768)
+    screenLoc = [0.0, 0.0]
+    
+    import pygame
+    
+    from World import World
+
+    RUNNING = True
+    pygame.init()
+    screen = pygame.display.set_mode(screenSize)
+    screenZone = screen.get_rect()
+
+    w = World()
+    print 'World initialized'
+    
+    # Creates entities to test with in world w
+    for i in range(50):
+        w.addEntity(Unit('ball.png',i*50,i*50, w, (255,255,255)))
+        #print Entity.IDcounter
+    
+    MAX_FPS = 60
+    gameClock = pygame.time.Clock()
+    pygame.init()
+    
+    while RUNNING:
         
+        # calls update function of all Entities in world
+        w.update()
+        
+        screen.fill((0,0,0))
+        
+        # Grabs all entities that are currently on the screen from the 
+        # world
+        curScreenEntities = w.getScreenEntities(screenZone)
+        
+        for ent in w.getScreenEntities(screenZone):
+            
+            ent.draw(screen)
+            
+        pygame.display.flip()
+        
+        ms_elapsed = gameClock.tick(MAX_FPS)
+        #print 'Current frames per second: %d'%int(1000.0/ms_elapsed)
