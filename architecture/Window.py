@@ -136,16 +136,16 @@ class Window(Listener):
         """
 
         inputState=InputDeviceMastermind()
-
+        '''
         def pEventToStr(event):
             e=str(event)
             s=''
             if 'Motion' in e:
-                print 'Motion collected'
+                #print 'Motion collected'
                 s += 'Motion Event '
                 if hasattr(event,'pos'):
                     s+=str(event.pos)
-                print 'No problem here'
+                #print 'No problem here'
             elif 'Up' in e:
                 s += 'Release Event'
             elif 'Down' in e:
@@ -153,13 +153,13 @@ class Window(Listener):
             return s
 
         pEventToStr=pEventToStr
-        
+        '''
         while self.active:
             #Waiting for the event significantly increases frame rate
-            print 'Waiting for pygame event'
+            #print 'Waiting for pygame event'
             rawEvent=pygame.event.wait()
-            print 'Pygame event collected'
-            inputState.updateState(pEventToStr(rawEvent))
+            #print 'Pygame event collected'
+            #inputState.updateState(pEventToStr(rawEvent))
         
             #FIXME - more events needed
             realEvent = None
