@@ -92,6 +92,11 @@ class Entity(MapObject):
         
         drawOffset = -worldOffset[0],-worldOffset[1]
         drawRect = self.rect.move(drawOffset)
+        
+        left,top=self.world.grid.cartToIso(drawRect.topleft)
+        right,bottom=self.world.grid.cartToIso(drawRect.bottomright)
+        drawRect = pygame.Rect(left,top,right-left,bottom-top)
+        print drawRect
         #drawRect.top = drawRect.top%gridHeight
         #drawRect.left = drawRect.left%gridWidth
         
