@@ -11,7 +11,7 @@ Remember:
       envisioned in the final version.
 """
 
-import pygame, threading
+import pygame, threading, time
 
 import Event
 from InputDeviceMastermind import *
@@ -183,7 +183,7 @@ class Window(Listener):
                 if realEvent:
                     self.manager.post(realEvent) #Warning: make sure that threading doesn't cause \
                                                  #problems here!
-            #else time.sleep(.01)
+            else: time.sleep(.01)
 
     def setUpControlMapping(self):
         """

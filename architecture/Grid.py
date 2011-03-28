@@ -33,7 +33,7 @@ class Grid(object):
         
     def getGridDimensions(self):
         return self.gridSize[0]*self.tileWidth,self.gridSize[1]*self.tileHeight
-'''
+
 class InfiniteGrid(Grid):
     """
     A grid that functions like a torus - go off one end and come back on the 
@@ -75,15 +75,12 @@ class InfiniteGrid(Grid):
         
         tileHeight=self.tileHeight
         tileWidth=self.tileWidth
-
-        minx=miny=0
-        maxx=self.gridSize[0]
-        maxy=self.gridSize[1]
-        #minx = int(screenLoc[1]/tileHeight)+int(.5*screenLoc[0]/tileWidth)-1
-        #miny = minx-int(screenLoc[0]/tileWidth)
-        #maxx = minx+int(2.0*screenSize[0]/tileWidth)
-        #maxy = miny+int(screenSize[1]/tileHeight)
-        #print (minx,miny),(maxx,maxy)
+        
+        minx = int(screenLoc[1]/tileHeight)+int(.5*screenLoc[0]/tileWidth)-1
+        miny = minx-int(screenLoc[0]/tileWidth)
+        maxx = minx+int(2.0*screenSize[0]/tileWidth)
+        maxy = miny+int(screenSize[1]/tileHeight)
+        print (minx,miny),(maxx,maxy)
         #miny = int(2*screenLoc[1]/tileHeight)-2
         #maxy = int(2*(screenLoc[1]+screenSize[1])/tileHeight)+1
         #minx = int(screenLoc[0]/tileWidth)-1
@@ -107,7 +104,7 @@ class InfiniteGrid(Grid):
                 #squareLoc=(x%self.gridSize[0],y%self.gridSize[1])
                 #if not (x%self.gridSize[0]==0 and y%self.gridSize[1]==0):
                 #    self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
-
+'''
 
 class FiniteGrid(Grid):
     """
