@@ -62,6 +62,49 @@ class InfiniteGrid(Grid):
                 squareLoc=(x%self.gridSize[0],y%self.gridSize[1])
                 if not (x%self.gridSize[0]==0 and y%self.gridSize[1]==0):
                     self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
+'''
+class InfiniteGrid(Grid):
+    """
+    A grid that functions like a torus - go off one end and come back on the 
+    other side
+    """
+    def __init__(self,size = (100,100),tileSize=None):
+        Grid.__init__(self,size)
+        
+    def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
+        
+        tileHeight=self.tileHeight
+        tileWidth=self.tileWidth
+        
+        minx = int(screenLoc[1]/tileHeight)+int(.5*screenLoc[0]/tileWidth)-1
+        miny = minx-int(screenLoc[0]/tileWidth)
+        maxx = minx+int(2.0*screenSize[0]/tileWidth)
+        maxy = miny+int(screenSize[1]/tileHeight)
+        print (minx,miny),(maxx,maxy)
+        #miny = int(2*screenLoc[1]/tileHeight)-2
+        #maxy = int(2*(screenLoc[1]+screenSize[1])/tileHeight)+1
+        #minx = int(screenLoc[0]/tileWidth)-1
+        #maxx = int((screenLoc[0]+screenSize[0])/tileWidth)+2
+
+        surface.fill((0,0,0))
+        font=pygame.font.Font(pygame.font.get_default_font(),12)
+        
+        for y in range(miny,maxy):
+            for x in range(minx,maxx):
+                left = int((x-y)/2.0*tileWidth-screenLoc[0])
+                top = int((x/2.0+y/2.0)*tileHeight-screenLoc[1])
+                self.grid[x%self.gridSize[0],y%self.gridSize[1]].draw(surface,(left,top))
+
+                txt=font.render('(%d, %d)'%(x,y),True,(255,0,0))
+                txt.get_rect().center = (left+tileWidth/2,top+tileHeight/2)
+                surface.blit(txt,((left+tileWidth/3,top+tileHeight/3),(50,50)))
+                
+                #left = int((x-(y%2)/2.0)*tileWidth-screenLoc[0])
+                #top = int(y*tileHeight/2.0-screenLoc[1])
+                #squareLoc=(x%self.gridSize[0],y%self.gridSize[1])
+                #if not (x%self.gridSize[0]==0 and y%self.gridSize[1]==0):
+                #    self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
+'''
 
 class FiniteGrid(Grid):
     """
