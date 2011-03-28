@@ -92,14 +92,13 @@ class InfiniteGrid(Grid):
         screenRightBottom = self.isoToCart((right,bottom))
         screenLeftBottom = self.isoToCart((left,bottom))
         
-        #print screenLeftTop[0],screenRightTop[0],screenRightBottom[0],screenLeftBottom[0]
+        print screenLeftTop[0],screenRightTop[0],screenRightBottom[0],screenLeftBottom[0]
         
         minx = int(screenLeftBottom[0]/tileHeight)-2
         maxx = int(screenRightTop[0]/tileHeight)+2
         miny = int(screenLeftTop[1]/tileHeight)-2
         maxy = int(screenRightBottom[1]/tileHeight)+1
         
-        print minx,maxx,miny,maxy
         #minx = int(screenLoc[1]/tileHeight)-1
         #miny = minx-int(screenLoc[0]/tileWidth)
         #maxx = minx+int(2.0*screenSize[0]/tileWidth)
@@ -109,24 +108,29 @@ class InfiniteGrid(Grid):
 
         surface.fill((0,0,0))
         font=pygame.font.Font(pygame.font.get_default_font(),12)
+
+        print 'Location:',screenLoc
+        print 'Size: ', screenSize
         
         for y in range(miny,maxy):
             for x in range(minx,maxx):
                 #left = int((x-y)/2.0*tileWidth-screenLoc[0])
                 #top = int((x/2.0+y/2.0)*tileHeight-screenLoc[1])
+                #left,top = self.cartToIso((x*tileHeight,y*tileHeight))
                 left = int((y+x)/2.0*tileWidth-screenLoc[0])
-                top = int((y/2.0-x/2.0)*tileHeight-screenLoc[1])
-                self.grid[x%self.gridSize[0],y%self.gridSize[1]].draw(surface,(left,top))
+                top = int((y-x)/2.0*tileHeight-screenLoc[1])
+                if pygame.Rect((left,top),(tileWidth,tileHeight)).colliderect((0,0),screenSize):
+                    self.grid[x%self.gridSize[0],y%self.gridSize[1]].draw(surface,(left,top))
 
-                txt=font.render('(%d, %d)'%(x,y),True,(255,0,0))
-                txt.get_rect().center = (left+tileWidth/2,top+tileHeight/2)
-                surface.blit(txt,((left+tileWidth/3,top+tileHeight/3),(50,50)))
-                
-                #left = int((x-(y%2)/2.0)*tileWidth-screenLoc[0])
-                #top = int(y*tileHeight/2.0-screenLoc[1])
-                #squareLoc=(x%self.gridSize[0],y%self.gridSize[1])
-                #if not (x%self.gridSize[0]==0 and y%self.gridSize[1]==0):
-                #    self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
+                    txt=font.render('(%d, %d)'%(x,y),True,(255,0,0))
+                    txt.get_rect().center = (left+tileWidth/2,top+tileHeight/2)
+                    surface.blit(txt,((left+tileWidth/3,top+tileHeight/3),(50,50)))
+                    
+                    #left = int((x-(y%2)/2.0)*tileWidth-screenLoc[0])
+                    #top = int(y*tileHeight/2.0-screenLoc[1])
+                    #squareLoc=(x%self.gridSize[0],y%self.gridSize[1])
+                    #if not (x%self.gridSize[0]==0 and y%self.gridSize[1]==0):
+                    #   self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
 
 
 class FiniteGrid(Grid):
