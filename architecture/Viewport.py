@@ -66,13 +66,16 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         worldX, worldY = self.scrollLoc
         posX = pos[0] + worldX
         posY = pos[1] + worldY
-        curScreenRect = pygame.Rect(worldX,worldY,*self.size)
+        
+        cartPos = self.world.grid.isoToCart((posX,posY))
+        cartSize = self.world.grid.isoToCart(self.size)
+
+        curScreenRect = pygame.Rect(cartPos,cartSize)
+        
         clicked = []
         for entity in self.viewportEntities:
-            if entity.rect.collidepoint((posX,posY)) and not entity.selected:
+            if entity.rect.collidepoint(cartPos) and not entity.selected:
                 entityRectOnScreen=entity.rect.move(posX,posY)
-                print entity.rect.center,pos,distBetween(entity.rect.center,pos)
-                print entityRectOnScreen.center,pos,distBetween(entityRectOnScreen.center,pos)
                 clicked.append((distBetween(entityRectOnScreen.center,pos),entity))
         for e in self.selectedEntities:
             e.selected = False
@@ -80,7 +83,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             clicked.sort(reverse=True)
             clicked[0][1].selected = True
             self.selectedEntities = [clicked[0][1]]
-    
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
         newScrollLoc = list(self.scrollLoc)
