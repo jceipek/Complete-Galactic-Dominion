@@ -98,8 +98,8 @@ class InfiniteGrid(Grid):
         miny = int(screenLeftTop[1]/tileHeight)-2
         maxy = int(screenRightBottom[1]/tileHeight)+1
         
-        #create the font that will draw the coordinates on the squares
-        font=pygame.font.Font(pygame.font.get_default_font(),12)
+        """ #create the font that will draw the coordinates on the square. <fps
+        font=pygame.font.Font(pygame.font.get_default_font(),12)"""
         
         surface.fill((0,0,0));
         
