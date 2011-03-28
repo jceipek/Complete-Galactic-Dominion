@@ -83,7 +83,7 @@ class InfiniteGrid(Grid):
         #miny = minx-int(screenLoc[0]/tileWidth)
         #maxx = minx+int(2.0*screenSize[0]/tileWidth)
         #maxy = miny+int(screenSize[1]/tileHeight)
-        print (minx,miny),(maxx,maxy)
+        #print (minx,miny),(maxx,maxy)
         #miny = int(2*screenLoc[1]/tileHeight)-2
         #maxy = int(2*(screenLoc[1]+screenSize[1])/tileHeight)+1
         #minx = int(screenLoc[0]/tileWidth)-1
