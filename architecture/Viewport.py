@@ -61,7 +61,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def clickAt(self,pos):
         #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
         def distBetween(p1,p2):
-            return pow(pow(p1[0]-p2[0],2)+pow(p1[1]-p2[1],2),0.5)
+            return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
     
         worldX, worldY = self.scrollLoc
         posX = pos[0] + worldX
@@ -74,7 +74,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         for e in self.selectedEntities:
             e.selected = False
         if len(clicked):
-            clicked.sort(reverse=True)
+            clicked.sort(reverse=False)
             clicked[0][1].selected = True
             self.selectedEntities = [clicked[0][1]]
     
