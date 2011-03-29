@@ -52,6 +52,9 @@ class World(object):
         entitySortList = []
         
         xmod,ymod = self.gridDim
+        left,top=viewRect.topleft
+        right,bottom=viewRect.bottomright
+        
         #print self.gridDim
         #viewRect.top = viewRect.top%ymod
         #viewRect.left = viewRect.left%xmod
@@ -59,13 +62,15 @@ class World(object):
         # Determines entities in the world which collide with the screen
         # and appends them to a list
         #print 'Viewing rect: ',viewRect
+        
+        
         for entity in self.allEntities.values():
-            if entity.collRect.colliderect(viewRect) or entity.collRect.colliderect(viewRect.move()):
+            if entity.collRect.colliderect(viewRect):
                 entitySortList.append((entity.rect.bottom,entity))
-
+                entityCount+=1
             if entity.entityID == 1:
                 pass#print 'Collision rect of 1st entity: ',entity.collRect
-     
+        
         entitySortList.sort()
         
         if len(entitySortList) > 0:

@@ -112,6 +112,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             gridSizeX,gridSizeY = self.world.gridDim
             self.cartScrollLoc = newCartScrollLoc[0]%gridSizeX,newCartScrollLoc[1]%gridSizeY
             
+            newScrollLoc = self.world.grid.cartToIso(self.cartScrollLoc)
+            
             self.scrollLoc = tuple(newScrollLoc)
     
     def drawContainedEntities(self):
