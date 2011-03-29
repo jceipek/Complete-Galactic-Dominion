@@ -1,4 +1,5 @@
 import pygame
+import Event
 #from Mouse import Mouse
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
@@ -58,31 +59,47 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         else:
             self.scrollSpeed = [0,0]
         
-    def clickAt(self,pos):
+    def clickEvent(self,event):
+        """"
+        What works:
+        single - clicking on units
+        click on ground to deselect all (without a modifier)
+        click a unit while holding a modifier to add to the selection
+        click a selected unit while holding a modifier to remove from the selection
+        """
+        
+        pos = event.pos        
         #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
         def distBetween(p1,p2):
             return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
     
         worldX, worldY = self.scrollLoc
-        posX = pos[0] + worldX
-        posY = pos[1] + worldY
         
-        cartPos = self.world.grid.isoToCart((posX,posY))
-        cartSize = self.world.grid.isoToCart(self.size)
 
-        curScreenRect = pygame.Rect(cartPos,cartSize)
+        cartOffset = self.world.grid.isoToCart((-worldX,-worldY))
         
         clicked = []
         for entity in self.viewportEntities:
-            if entity.rect.collidepoint(cartPos) and not entity.selected:
-                entityRectOnScreen=entity.rect.move(posX,posY)
-                clicked.append((distBetween(entityRectOnScreen.center,pos),entity))
-        for e in self.selectedEntities:
-            e.selected = False
+        
+            drawRect = entity.rect.move(cartOffset)
+            drawRect.center = self.world.grid.cartToIso(drawRect.center)
+        
+            if drawRect.collidepoint(pos):
+                    clicked.append((distBetween(drawRect.center,pos),entity))
+        
+        if isinstance(event,Event.SelectionEvent):
+            for e in self.selectedEntities:
+                e.selected = False
+            self.selectedEntities = []
+
         if len(clicked):
-            clicked.sort(reverse=True)
-            clicked[0][1].selected = True
-            self.selectedEntities = [clicked[0][1]]
+            clicked.sort()
+            if clicked[0][1].selected:
+                clicked[0][1].selected = False
+                self.selectedEntities.remove(clicked[0][1])
+            else:
+                clicked[0][1].selected = True
+                self.selectedEntities.append(clicked[0][1])
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
         newScrollLoc = list(self.scrollLoc)
@@ -106,35 +123,36 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         Draws the map and all entities for the current world location.
         displaySurface is provided by the screen.
         """
-        self.world.grid.draw(self.surface, self.scrollLoc, self.size)
-        self.drawContainedEntities()
-        self.drawDebugFrames(self.surface)
-        displaySurface.blit(self.surface, (self.loc,self.size))
+        if not self.world == None:
+            self.world.grid.draw(self.surface, self.scrollLoc, self.size)
+            self.drawContainedEntities()
+            self.drawDebugFrames(self.surface)
+            displaySurface.blit(self.surface, (self.loc,self.size))
     
     def processUpdateEvent(self,event):
-        self.world.update()
         self.setViewportEntities()
         self.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
         
     def setViewportEntities(self):
-        """FIXME to work with new coordinates."""
-        l,t = self.scrollLoc
-        w,h = self.size
-        r,b = l+w,t+h
-        
-        cartTopLeft = self.world.grid.isoToCart((l,t))
-        cartTopRight = self.world.grid.isoToCart((r,t))
-        cartBottomRight = self.world.grid.isoToCart((r,b))
-        cartBottomLeft = self.world.grid.isoToCart((l,b))
-        
-        cartW = cartTopRight[0]-cartBottomLeft[0]
-        cartH = cartBottomRight[1]-cartTopLeft[1]
-        cartL = cartBottomLeft[0]
-        cartT = cartTopLeft[1]
-        
-        curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
-        #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
-        self.viewportEntities = self.world.getScreenEntities(curScreenRect)
+        if not self.world == None:
+            """FIXME to work with new coordinates."""
+            l,t = self.scrollLoc
+            w,h = self.size
+            r,b = l+w,t+h
+            
+            cartTopLeft = self.world.grid.isoToCart((l,t))
+            cartTopRight = self.world.grid.isoToCart((r,t))
+            cartBottomRight = self.world.grid.isoToCart((r,b))
+            cartBottomLeft = self.world.grid.isoToCart((l,b))
+            
+            cartW = cartTopRight[0]-cartBottomLeft[0]
+            cartH = cartBottomRight[1]-cartTopLeft[1]
+            cartL = cartBottomLeft[0]
+            cartT = cartTopLeft[1]
+            
+            curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
+            #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
+            self.viewportEntities = self.world.getScreenEntities(curScreenRect)
     
     def drawDebugFrames(self,displaySurface):  
         """
@@ -144,3 +162,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         rect = ((0,0),self.size)
         pygame.draw.rect(displaySurface, (255,255,0), rect, 3)
         pygame.draw.rect(displaySurface, (255,0,255), self.deadZoneRect, 2)
+        
+    def changeWorld(self,world):
+        self.world = world

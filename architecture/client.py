@@ -49,6 +49,7 @@ def init():
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
+                                                
     
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
@@ -63,14 +64,15 @@ def init():
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
 
-    w = World()
-
+    
     # World w is set to the activeWorld of the universe
-    universe = Universe(eventManager,w)
+    universe = Universe(eventManager)
     ui = UserInterface(eventManager,universe.activeWorld)
     
     ui.TEST_interface() #FIXME: Used while the interface is not set up properly
     gameWindow = Window(eventManager,width=1024,height=768)
+    w = World()
+    universe.changeWorld(w)
     
     #===========================================
     

@@ -64,7 +64,10 @@ class MainScreen(Screen):
         self.viewport.setScrollSpeed(event.pos)
 
     def processMouseClickEvent(self,event):
-        self.viewport.clickAt(event.pos)
+        self.viewport.clickEvent(event)
 
     def processUpdateEvent(self,event):
         self.viewport.processUpdateEvent(event)
+        
+    def changeWorld(self,world):
+        self.viewport.changeWorld(world)
