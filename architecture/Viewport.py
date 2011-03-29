@@ -7,14 +7,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     Acts as a "window" into the world it contains. Includes deadzone dimensions
     so that it can be scrolled with the mouse.
     
-    #Attributes:
-    #   world = the world the viewport can see
-    #   scrollLoc = (x,y) #World coordinates of the corner of the viewport
-    #   loc = (x,y) #Corner of the viewport in screen coordinates
-    #   size = (width,height) #Dimensions in screen coordinates
-    #   mouse = the mouse controlling it
-    #   deadZoneRect
-    #   selectedEntities
+    @param world: the world the viewport can see
+    @param scrollLoc: (x,y) #World coordinates of the corner of the viewport
+    @param loc: (x,y) #Corner of the viewport in screen coordinates
+    @param size: (width,height) #Dimensions in screen coordinates
+    @param mouse: the mouse controlling it
+    @param deadZoneRect:
+    @param selectedEntities:
+    @param selector: a selection rectangle that is activated and drawn when necessary #FIXME: NOT YET IMPLEMENTED
     """
     
     def __init__(self,world,scrollLoc,screenPos,size):
