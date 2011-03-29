@@ -42,13 +42,11 @@ def init():
 
     debugger = Debugger()
     eventTimer = EventTimer()
-    imageBank = ImageBank()
     
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
                                                 
-    
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
     #Note: Do we even need this anymore? - Julian
@@ -62,19 +60,16 @@ def init():
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
 
-    
     # World w is set to the activeWorld of the universe
     universe = Universe(eventManager)
     ui = UserInterface(eventManager,universe.activeWorld)
     
-    ui.TEST_interface() #FIXME: Used while the interface is not set up properly
     gameWindow = Window(eventManager,width=1024,height=768)
+    
     w = World()
     universe.changeWorld(w)
     
     #===========================================
-
-    w.TEST_createGrid()
     
     # Initialize 500 entities in World w
     for i in range(6):
