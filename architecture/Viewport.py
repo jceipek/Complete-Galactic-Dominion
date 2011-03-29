@@ -89,10 +89,17 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.selectedEntities.append(clicked[0][1])
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
-        newScrollLoc = list(self.scrollLoc)
-        newScrollLoc[0] += self.scrollSpeed[0]*elapsedTime
-        newScrollLoc[1] += self.scrollSpeed[1]*elapsedTime
-        self.scrollLoc = tuple(newScrollLoc)
+        if not self.world == None:
+            newScrollLoc = list(self.scrollLoc)
+            newScrollLoc[0] = (newScrollLoc[0]+self.scrollSpeed[0]*elapsedTime)
+            newScrollLoc[1] = (newScrollLoc[1]+self.scrollSpeed[1]*elapsedTime)
+            
+            #FIXME - used to calculate corner of scroll location in cartesian grid
+            newCartScrollLoc = self.world.grid.isoToCart(newScrollLoc)
+            gridSizeX,gridSizeY = self.world.gridDim
+            self.cartScrollLoc = newCartScrollLoc[0]%gridSizeX,newCartScrollLoc[1]%gridSizeY
+            
+            self.scrollLoc = tuple(newScrollLoc)
     
     def drawContainedEntities(self):
         """
