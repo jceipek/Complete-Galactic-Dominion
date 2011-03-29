@@ -168,7 +168,7 @@ class TestEntity(Entity):
         
         self.vel = (0,0)
         from random import randint
-        #self.vel = (randint(-2,2),randint(-2,2))
+        self.vel = (randint(-2,2),randint(-2,2))
     
     def update(self):
         """Implements random movement to test with."""
