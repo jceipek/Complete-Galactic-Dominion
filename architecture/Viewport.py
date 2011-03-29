@@ -60,6 +60,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.scrollSpeed = [0,0]
         
     def clickEvent(self,event):
+        """"
+        What works:
+        single - clicking on units
+        click on ground to deselect all (without a modifier)
+        click a unit while holding a modifier to add to the selection
+        click a selected unit while holding a modifier to remove from the selection
+        """
+        
         pos = event.pos        
         #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
         def distBetween(p1,p2):
@@ -76,17 +84,22 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             drawRect = entity.rect.move(cartOffset)
             drawRect.center = self.world.grid.cartToIso(drawRect.center)
         
-            if drawRect.collidepoint(pos) and not entity.selected:
-                clicked.append((distBetween(drawRect.center,pos),entity))
-
+            if drawRect.collidepoint(pos):
+                    clicked.append((distBetween(drawRect.center,pos),entity))
+        
         if isinstance(event,Event.SelectionEvent):
             for e in self.selectedEntities:
                 e.selected = False
             self.selectedEntities = []
+
         if len(clicked):
             clicked.sort()
-            clicked[0][1].selected = True
-            self.selectedEntities.append(clicked[0][1])
+            if clicked[0][1].selected:
+                clicked[0][1].selected = False
+                self.selectedEntities.remove(clicked[0][1])
+            else:
+                clicked[0][1].selected = True
+                self.selectedEntities.append(clicked[0][1])
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
         newScrollLoc = list(self.scrollLoc)
