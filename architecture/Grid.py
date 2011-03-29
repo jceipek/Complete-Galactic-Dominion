@@ -2,24 +2,13 @@ import pygame
 import Event
 from Listener import Listener
 import Terrain
-from GameData import ImageBank
 
 class Grid(object):
 
     def __init__(self,gridSize = (100,100),tileSize=None):
         
-        #self.terrainImageBank = ImageBank()
-        #self.terrainImageBank.loadImage('newGrass.png',(255,0,255))
-        
         self.gridSize = gridSize
         self.tileWidth, self.tileHeight = (0,0)
-        
-        #if tileSize is None:
-        #    self.tileWidth, self.tileHeight = self.__class__.imageBank
-        #    #self.tileWidth,self.tileHeight = self.terrainImageBank.getImage(\
-        #    #                            'newGrass.png').get_rect().size
-        #else:
-        #    self.tileWidth,self.tileHeight = tileSize
 
         self.grid = dict()
         self.populateGrid()

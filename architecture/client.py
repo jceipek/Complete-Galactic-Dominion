@@ -27,8 +27,6 @@ from Universe import Universe
 from Entity import Entity,TestEntity
 from Unit import Unit
 
-from GameData import ImageBank
-
 def init():
     """
     Game initialization function.
