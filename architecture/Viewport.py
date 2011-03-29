@@ -1,4 +1,5 @@
 import pygame
+import Event
 #from Mouse import Mouse
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
@@ -58,7 +59,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         else:
             self.scrollSpeed = [0,0]
         
-    def clickAt(self,pos):
+    def clickEvent(self,event):
+        pos = event.pos        
         #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
         def distBetween(p1,p2):
             return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
@@ -76,12 +78,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             if drawRect.collidepoint(pos) and not entity.selected:
                 clicked.append((distBetween(drawRect.center,pos),entity))
 
-        for e in self.selectedEntities:
-            e.selected = False
+        if isinstance(event,Event.SelectionEvent):
+            for e in self.selectedEntities:
+                e.selected = False
+            self.selectedEntities = []
         if len(clicked):
             clicked.sort()
             clicked[0][1].selected = True
-            self.selectedEntities = [clicked[0][1]]
+            self.selectedEntities.append(clicked[0][1])
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
         newScrollLoc = list(self.scrollLoc)

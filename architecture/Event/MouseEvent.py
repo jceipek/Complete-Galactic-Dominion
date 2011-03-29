@@ -42,8 +42,14 @@ class MouseMovedEvent(Event):
         Event.__init__(self)
         self.pos = posxy
         self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"
-    
+        
 class SelectionEvent(Event):
+    def __init__(self,posxy):
+        Event.__init__(self)
+        self.pos = posxy
+        self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"
+        
+class SingleAddSelectionEvent(Event):
     def __init__(self,posxy):
         Event.__init__(self)
         self.pos = posxy

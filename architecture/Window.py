@@ -155,6 +155,10 @@ class Window(Listener):
 
         pEventToStr=pEventToStr
         '''
+        
+        #FIXME: THIS IS A TEMPORARY MEASURE FOR MULTIPLE SELECTION
+        TMP_shiftHeld = False
+        
         while self.active:
             #Waiting for the event significantly increases frame rate
             #print 'Waiting for pygame event'
@@ -176,10 +180,18 @@ class Window(Listener):
                     state = Event.MouseLocals.MOUSE_RELEASED
                     buttonId = rawEvent.button
                     if buttonId == Event.MouseLocals.LEFT_CLICK:
-                        realEvent = Event.SelectionEvent(rawEvent.pos)
+                        if not TMP_shiftHeld:
+                            realEvent = Event.SelectionEvent(rawEvent.pos)
+                        else:
+                            realEvent = Event.SingleAddSelectionEvent(rawEvent.pos)
                 elif rawEvent.type == pygame.MOUSEMOTION:
                     realEvent = Event.MouseMovedEvent(rawEvent.pos)
-
+                elif rawEvent.type == pygame.KEYDOWN:
+                    if rawEvent.key == 303 or rawEvent.key == 304:
+                        TMP_shiftHeld = True
+                elif rawEvent.type == pygame.KEYUP:
+                    if rawEvent.key == 303 or rawEvent.key == 304:
+                        TMP_shiftHeld = False
                 if realEvent:
                     self.manager.post(realEvent) #Warning: make sure that threading doesn't cause \
                                                  #problems here!
