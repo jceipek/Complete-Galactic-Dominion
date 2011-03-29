@@ -1,4 +1,4 @@
-from DrawableObject import loadImage
+import pygame
 
 class ImageBank():
     """
@@ -38,6 +38,49 @@ class ImageBank():
         not, None is returned.
         """
         return self.images.get(imageName,None)
+        
+    def getImageAndRect(self, imageName):
+        """
+        Returns a tuple of 2 elements from the dictionary by key
+        if it exists.
+        [0] - a pygame.Surface image
+        [1] - the rectangle associated with said Surface
+        If not, None is returned.
+        """
+        image = self.images.get(imageName,None)
+        if image == None:
+            return None
+        else:
+            return (image,image.get_rect())
+
+def loadImage(imagePath, colorkey=None):
+    
+    # If there is a filepath given, load that file.
+    if isinstance(imagePath,str):
+        
+        try:
+            image = pygame.image.load(imagePath)
+        except pygame.error, message:
+            print 'Cannot load image:', imagePath
+            raise SystemExit, message
+        
+        if colorkey == 'alpha':
+            image = image.convert_alpha()  
+        else:
+            image = image.convert()
+            
+            if colorkey is not None:
+                
+                if colorkey is -1:
+                    colorkey = image.get_at((0,0))
+                image.set_colorkey(colorkey)
+            
+    # If there is a pygame.Surface given        
+    elif isinstance(imagePath, pygame.Surface):
+        image = imagePath
+    else:
+        raise TypeError, 'please provide pygame.Surface or filepath.'
+    return image, image.get_rect()
 
 class Locals:
     #Statuses

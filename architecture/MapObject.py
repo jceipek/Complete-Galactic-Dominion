@@ -30,3 +30,21 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
     def draw(self,surface):
         # Override
         pass
+
+if __name__ == "__main__":
+    screenSize = (width, height) = (1024, 768)
+    screenLoc = [0.0, 0.0]
+
+    RUNNING = True
+    pygame.init()
+    screen = pygame.display.set_mode(screenSize)
+    screenZone = screen.get_rect()
+
+    a = MapObject('newGrass.png',100,100,(255,0,255))
+    
+    pygame.init()
+    
+    while RUNNING:
+        
+        screen.blit(a.image,a.rect)
+        pygame.display.flip()

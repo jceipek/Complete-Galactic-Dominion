@@ -28,6 +28,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.activeWorld = world
         self.activeScreen = None
         self.debugOverlay = None
+        self.TEST_interface()
         #DO MORE SETUP STUFF
         
     def TEST_interface(self):

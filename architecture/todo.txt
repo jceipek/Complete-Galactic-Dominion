@@ -3,17 +3,17 @@ __________________________________________________________________________
 
 High Priority:
 
-- Fix the fact that the collision detection between the viewport into the world and the units on the world does not occur.  This is tricky at the edges (where the world wraps)
+- Fix the fact that the collision detection between the viewport into the world and the units on the world does not occur.  This is tricky at the edges (where the world wraps) (Patrick and Jared)
 
     DONE - Changing isometric view gridding system (Jared, Patrick)
     DONE - We need to know when an entity has been selected (Julian)
     DONE - Fix the issues of entities being able to go off of the world grid (JARED)
 
 Medium Priority:
-- make collision detection with screen more efficient
-- show places you have not explored as black
+- make collision detection with screen more efficient (Patrick and Jared)
 
 Low Priority:
+- show places you have not explored as black
 - For of War
 - Convert large overlapping grid squares to non-overlapping (compute when world starts up)
 

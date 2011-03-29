@@ -27,8 +27,6 @@ from Universe import Universe
 from Entity import Entity,TestEntity
 from Unit import Unit
 
-from GameData import ImageBank
-
 def init():
     """
     Game initialization function.
@@ -44,13 +42,11 @@ def init():
 
     debugger = Debugger()
     eventTimer = EventTimer()
-    imageBank = ImageBank()
     
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
                                                 
-    
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
     #Note: Do we even need this anymore? - Julian
@@ -64,28 +60,23 @@ def init():
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
 
-    
     # World w is set to the activeWorld of the universe
     universe = Universe(eventManager)
     ui = UserInterface(eventManager,universe.activeWorld)
     
-    ui.TEST_interface() #FIXME: Used while the interface is not set up properly
     gameWindow = Window(eventManager,width=1024,height=768)
+    
     w = World()
     universe.changeWorld(w)
     
     #===========================================
     
-    imageBank.loadImage('testCraft.png', 'alpha')
-    
-    w.TEST_createGrid()
-    
     # Initialize 500 entities in World w
     for i in range(6):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        w.addEntity(TestEntity(imageBank.getImage('testCraft.png'),i*50,i*50,w))
-    
+        w.addEntity(TestEntity('testCraft.png',i*50,i*50,w,'alpha'))
+
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
     

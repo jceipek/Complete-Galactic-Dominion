@@ -2,22 +2,13 @@ import pygame
 import Event
 from Listener import Listener
 import Terrain
-from GameData import ImageBank
 
 class Grid(object):
 
     def __init__(self,gridSize = (100,100),tileSize=None):
         
-        self.terrainImageBank = ImageBank()
-        self.terrainImageBank.loadImage('newGrass.png',(255,0,255))
-        
         self.gridSize = gridSize
-        
-        if tileSize is None:
-            self.tileWidth,self.tileHeight = self.terrainImageBank.getImage(\
-                                        'newGrass.png').get_rect().size
-        else:
-            self.tileWidth,self.tileHeight = tileSize
+        self.tileWidth, self.tileHeight = (0,0)
 
         self.grid = dict()
         self.populateGrid()
@@ -25,8 +16,9 @@ class Grid(object):
     def populateGrid(self):
         for y in range(self.gridSize[1]):
             for x in range(self.gridSize[0]):
-                self.grid[(x,y)] = Terrain.Grass(self.terrainImageBank.getImage('newGrass.png'))
-                
+                self.grid[(x,y)] = Terrain.Grass('newGrass.png',(255,0,255))
+        self.tileWidth, self.tileHeight = self.grid[(0,0)].rect.size
+        
     def draw(self,surface,screenLoc,screenSize,offset=(0,0)):
         #Overriden by Infinite and Finite Grids
         pass

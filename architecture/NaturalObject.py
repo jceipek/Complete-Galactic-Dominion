@@ -13,13 +13,13 @@ class NaturalObject(Entity):
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
         Entity.__init__(self,imagePath,x,y,world,colorkey,description)
-	self.blockable=True
+        self.blockable=True
 	
-	self.maxHealth = self.curHealth = 0
+        self.maxHealth = self.curHealth = 0
 	
     def update():
-	"""called each frame to update object"""
-	pass
+        """called each frame to update object"""
+        pass
 
 class Resource(NaturalObject):
     """
@@ -28,10 +28,11 @@ class Resource(NaturalObject):
     """
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
+                     
         NaturalObject.__init__(self,imagePath,x,y,world,colorkey,description)
 	
-	self.maxHealth = self.curHealth = 500
-	self.resourceName = "Nothin'."
+        self.maxHealth = self.curHealth = 500
+        self.resourceName = "Nothin'."
 	
     def changeHealth(self, numHits):
         """changes current health by numHits, removes object if current health drops to 0"""
@@ -40,10 +41,10 @@ class Resource(NaturalObject):
             self.die()
 	    
     def update(self):
-	pass
+        pass
 	
     def regenerate(self):
-	pass
+        pass
 	
 class Obstacle(NaturalObject):
     """
@@ -60,16 +61,15 @@ class Obstacle(NaturalObject):
         NaturalObject.__init__(self,imagePath,x,y,world,colorkey,description)
 	
     def update(self):
-	pass
+        pass
 
 if __name__ == "__main__":
     
-    # TESTS TO SHOW NaturalObjects WORK
+    import pygame
+    # TESTS TO SHOW ENTITIES WORK
     
     screenSize = (width, height) = (1024, 768)
     screenLoc = [0.0, 0.0]
-    
-    import pygame
     
     from World import World
 
@@ -82,8 +82,8 @@ if __name__ == "__main__":
     print 'World initialized'
     
     # Creates entities to test with in world w
-    for i in range(50):
-        w.addEntity(Resource('ball.png',i*50,i*50, w, (255,255,255)))
+    for i in range(10):
+        w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #print Entity.IDcounter
     
     MAX_FPS = 60
@@ -102,11 +102,11 @@ if __name__ == "__main__":
         curScreenEntities = w.getScreenEntities(screenZone)
         #print 'Currently %d entities on the screen'%len(curScreenEntities)
         
-        for entity in w.getScreenEntities(screenZone):
+        for ent in w.allEntities.values():
             
-            entity.draw(screen)
+            ent.draw(screen)
             
         pygame.display.flip()
         
         ms_elapsed = gameClock.tick(MAX_FPS)
-        #print 'Current frames per second: %d'%int(1000.0/ms_elapsed)
+        print 'Current frames per second: %d'%int(1000.0/ms_elapsed)
