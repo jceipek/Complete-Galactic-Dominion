@@ -193,8 +193,8 @@ if __name__ == "__main__":
     print 'World initialized'
     
     # Creates entities to test with in world w
-    for i in range(50):
-        w.addEntity(TestEntity('ball.png',i*50,i*50, w, (255,255,255)))
+    for i in range(10):
+        w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #print Entity.IDcounter
     
     MAX_FPS = 60
@@ -211,9 +211,9 @@ if __name__ == "__main__":
         # Grabs all entities that are currently on the screen from the 
         # world
         curScreenEntities = w.getScreenEntities(screenZone)
-        print 'Currently %d entities on the screen'%len(curScreenEntities)
+        #print 'Currently %d entities on the screen'%len(curScreenEntities)
         
-        for ent in w.getScreenEntities(screenZone):
+        for ent in w.allEntities.values():
             
             ent.draw(screen)
             

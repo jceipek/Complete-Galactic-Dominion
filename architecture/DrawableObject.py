@@ -40,4 +40,3 @@ if __name__ == "__main__":
         pygame.init()
         screen.blit(a.image,a.rect)
         pygame.display.flip()
-    

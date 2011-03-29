@@ -10,7 +10,6 @@ class ImageBank():
     def __init__(self):
 
         self.images = dict()
-        self.imagesAndRects = dict()
         
     def hasImageKey(self, image):
         """
@@ -31,9 +30,7 @@ class ImageBank():
         if isinstance(imageName,str) and not self.hasImageKey(imageName):
             
             image, imageRect = loadImage(imageName, colorkey)
-            
             self.images[imageName] = image
-            self.imagesAndRects[imageName] = (image,image.get_rect())
             
     def getImage(self, imageName):
         """
@@ -50,7 +47,11 @@ class ImageBank():
         [1] - the rectangle associated with said Surface
         If not, None is returned.
         """
-        return self.imagesAndRects.get(imageName,None)
+        image = self.images.get(imageName,None)
+        if image == None:
+            return None
+        else:
+            return (image,image.get_rect())
 
 def loadImage(imagePath, colorkey=None):
     

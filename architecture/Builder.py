@@ -21,7 +21,7 @@ class Builder(Entity):
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
 		     
-	Entity.__init__(self,imagePath,x,y,world,colorkey,description,)
+	Entity.__init__(self,imagePath,x,y,world,colorkey,description)
 	
 	self.blockable=True
 	
@@ -54,14 +54,14 @@ class Builder(Entity):
 	"""
 	return self.buildDict.get(choice,None)
 
+
 if __name__ == "__main__":
     
-    # TESTS TO SHOW Builders WORK
+    import pygame
+    # TESTS TO SHOW ENTITIES WORK
     
     screenSize = (width, height) = (1024, 768)
     screenLoc = [0.0, 0.0]
-    
-    import pygame
     
     from World import World
 
@@ -74,8 +74,8 @@ if __name__ == "__main__":
     print 'World initialized'
     
     # Creates entities to test with in world w
-    for i in range(50):
-        w.addEntity(Builder('ball.png',i*50,i*50, w, (255,255,255)))
+    for i in range(10):
+        w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #print Entity.IDcounter
     
     MAX_FPS = 60
@@ -92,13 +92,13 @@ if __name__ == "__main__":
         # Grabs all entities that are currently on the screen from the 
         # world
         curScreenEntities = w.getScreenEntities(screenZone)
+        #print 'Currently %d entities on the screen'%len(curScreenEntities)
         
-        for ent in w.getScreenEntities(screenZone):
+        for ent in w.allEntities.values():
             
             ent.draw(screen)
             
         pygame.display.flip()
         
         ms_elapsed = gameClock.tick(MAX_FPS)
-        #print 'Current frames per second: %d'%int(1000.0/ms_elapsed)
-
+        print 'Current frames per second: %d'%int(1000.0/ms_elapsed)
