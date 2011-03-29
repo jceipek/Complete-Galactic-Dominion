@@ -62,6 +62,7 @@ class World(object):
         for entity in self.allEntities.values():
             if entity.collRect.colliderect(viewRect) or entity.collRect.colliderect(viewRect.move()):
                 entitySortList.append((entity.rect.bottom,entity))
+
             if entity.entityID == 1:
                 pass#print 'Collision rect of 1st entity: ',entity.collRect
      
