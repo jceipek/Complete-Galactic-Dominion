@@ -1,4 +1,4 @@
-from DrawableObject import loadImage
+import pygame
 
 class ImageBank():
     """
@@ -10,6 +10,7 @@ class ImageBank():
     def __init__(self):
 
         self.images = dict()
+        self.imagesAndRects = dict()
         
     def hasImageKey(self, image):
         """
@@ -30,7 +31,9 @@ class ImageBank():
         if isinstance(imageName,str) and not self.hasImageKey(imageName):
             
             image, imageRect = loadImage(imageName, colorkey)
+            
             self.images[imageName] = image
+            self.imagesAndRects[imageName] = (image,image.get_rect())
             
     def getImage(self, imageName):
         """
@@ -38,6 +41,45 @@ class ImageBank():
         not, None is returned.
         """
         return self.images.get(imageName,None)
+        
+    def getImageAndRect(self, imageName):
+        """
+        Returns a tuple of 2 elements from the dictionary by key
+        if it exists.
+        [0] - a pygame.Surface image
+        [1] - the rectangle associated with said Surface
+        If not, None is returned.
+        """
+        return self.imagesAndRects.get(imageName,None)
+
+def loadImage(imagePath, colorkey=None):
+    
+    # If there is a filepath given, load that file.
+    if isinstance(imagePath,str):
+        
+        try:
+            image = pygame.image.load(imagePath)
+        except pygame.error, message:
+            print 'Cannot load image:', imagePath
+            raise SystemExit, message
+        
+        if colorkey == 'alpha':
+            image = image.convert_alpha()  
+        else:
+            image = image.convert()
+            
+            if colorkey is not None:
+                
+                if colorkey is -1:
+                    colorkey = image.get_at((0,0))
+                image.set_colorkey(colorkey)
+            
+    # If there is a pygame.Surface given        
+    elif isinstance(imagePath, pygame.Surface):
+        image = imagePath
+    else:
+        raise TypeError, 'please provide pygame.Surface or filepath.'
+    return image, image.get_rect()
 
 class Locals:
     #Statuses

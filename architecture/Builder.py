@@ -20,7 +20,9 @@ class Builder(Entity):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
-	Entity.__init__(self,imagePath,x,y,world,colorkey,description)
+		     
+	Entity.__init__(self,imagePath,x,y,world,colorkey,description,)
+	
 	self.blockable=True
 	
 	# Dictionary which maps from strings defining units which can

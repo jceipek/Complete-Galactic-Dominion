@@ -11,8 +11,9 @@ class NaturalObject(Entity):
     """
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
-        Entity.__init__(self,imagePath,x,y,world,colorkey,description)
+                 description = 'No information available.',
+                 imageRect=None):
+        Entity.__init__(self,imagePath,x,y,world,colorkey,description,imageRect)
 	self.blockable=True
 	
 	self.maxHealth = self.curHealth = 0
@@ -27,8 +28,11 @@ class Resource(NaturalObject):
     not regenerate over time.
     """
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
-        NaturalObject.__init__(self,imagePath,x,y,world,colorkey,description)
+                 description = 'No information available.',
+                 imageRect=None):
+                     
+        NaturalObject.__init__(self,imagePath,x,y,world,colorkey,\
+        description,imageRect)
 	
 	self.maxHealth = self.curHealth = 500
 	self.resourceName = "Nothin'."
@@ -40,10 +44,10 @@ class Resource(NaturalObject):
             self.die()
 	    
     def update(self):
-	pass
+        pass
 	
     def regenerate(self):
-	pass
+        pass
 	
 class Obstacle(NaturalObject):
     """
@@ -60,7 +64,7 @@ class Obstacle(NaturalObject):
         NaturalObject.__init__(self,imagePath,x,y,world,colorkey,description)
 	
     def update(self):
-	pass
+        pass
 
 if __name__ == "__main__":
     

@@ -75,17 +75,15 @@ def init():
     universe.changeWorld(w)
     
     #===========================================
-    
-    imageBank.loadImage('testCraft.png', 'alpha')
-    
+
     w.TEST_createGrid()
     
     # Initialize 500 entities in World w
     for i in range(6):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        w.addEntity(TestEntity(imageBank.getImage('testCraft.png'),i*50,i*50,w))
-    
+        w.addEntity(TestEntity('testCraft.png',i*50,i*50,w,'alpha'))
+
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
     

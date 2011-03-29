@@ -1,45 +1,29 @@
 #import useful modules here
 import pygame
+from GameData import loadImage, ImageBank
 
 class DrawableObject():
     """This is the super class of all object that can be drawn to the screen"""
+    
+    imageBank = ImageBank()
+    
     def __init__(self, imagePath, colorkey=None):
-
+        
         # First class to have image and rect objects
-        self.image, self.rect = self.loadImage(imagePath,colorkey)
+        
+        self.loadImage(imagePath,colorkey)
 
     # First loadImage method
     def loadImage(self, imagePath, colorkey=None):
-        return loadImage(imagePath,colorkey)
-
-def loadImage(imagePath, colorkey=None):
-    
-    # If there is a filepath given, load that file.
-    if isinstance(imagePath,str):
         
-        try:
-            image = pygame.image.load(imagePath)
-        except pygame.error, message:
-            print 'Cannot load image:', imagePath
-            raise SystemExit, message
+        objImageAndRect = self.__class__.imageBank.getImageAndRect(imagePath)
         
-        if colorkey == 'alpha':
-            image = image.convert_alpha()  
+        if objImageAndRect == None:
+            self.__class__.imageBank.loadImage(imagePath,colorkey)
+            self.image, self.rect = self.__class__.imageBank.getImageAndRect(imagePath)
         else:
-            image = image.convert()
-            
-            if colorkey is not None:
-                
-                if colorkey is -1:
-                    colorkey = image.get_at((0,0))
-                image.set_colorkey(colorkey)
-            
-    # If there is a pygame.Surface given        
-    elif isinstance(imagePath, pygame.Surface):
-        image = imagePath
-    else:
-        raise TypeError, 'please provide pygame.Surface or filepath.'
-    return image, image.get_rect()
+            self.image, self.rect = objImageAndRect
+        #return loadImage(imagePath,colorkey)
 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)
