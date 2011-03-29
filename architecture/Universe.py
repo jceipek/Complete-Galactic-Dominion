@@ -24,11 +24,14 @@ class Universe(Listener):
         already exists, it deletes it in worldList.  The previous
         activeWorld is added to the worldList.
         """
+        print 'Changing the world'
         self.addWorld(self.activeWorld)
         if newWorld in self.worldList:
             del self.worldList[newWorld]
         self.activeWorld = newWorld
-        self.manager.post(Event.WorldChangeEvent(newWorld))
+        a=Event.WorldChangeEvent(newWorld)
+        print a
+        self.manager.post(a)
     
     def update(self):
         if not self.activeWorld == None:

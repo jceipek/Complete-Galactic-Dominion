@@ -72,6 +72,7 @@ def init():
     ui.TEST_interface() #FIXME: Used while the interface is not set up properly
     gameWindow = Window(eventManager,width=1024,height=768)
     w = World()
+    universe.changeWorld(w)
     
     #===========================================
     
