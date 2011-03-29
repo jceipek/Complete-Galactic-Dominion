@@ -39,6 +39,7 @@ class Grid(object):
         
     def isoToCart(self,coord):
         return .5*coord[0]-coord[1],.5*coord[0]+coord[1]
+        
 '''
 class InfiniteGrid(Grid):
     """

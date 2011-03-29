@@ -148,12 +148,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             l,t = self.scrollLoc
             w,h = self.size
             r,b = l+w,t+h
+
             
             cartTopLeft = self.world.grid.isoToCart((l,t))
             cartTopRight = self.world.grid.isoToCart((r,t))
             cartBottomRight = self.world.grid.isoToCart((r,b))
             cartBottomLeft = self.world.grid.isoToCart((l,b))
-            
+            '''
             cartW = cartTopRight[0]-cartBottomLeft[0]
             cartH = cartBottomRight[1]-cartTopLeft[1]
             cartL = cartBottomLeft[0]
@@ -161,7 +162,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
             #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
+            
             self.viewportEntities = self.world.getScreenEntities(curScreenRect)
+            '''
+            screen1=(cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft)#FIXME
+            screen2=(cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft)#FIXME
+            screen3=screen4=screen1
+            
+            self.viewportEntities = self.world.getScreenEntities(screen1,screen2,screen3,screen4)
     
     def drawDebugFrames(self,displaySurface):  
         """

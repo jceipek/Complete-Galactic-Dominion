@@ -39,7 +39,7 @@ class World(object):
         for entity in self.allEntities.values():
             entity.update()
     
-    def getScreenEntities(self,viewRect):
+    def getScreenEntities(self,viewRect1,viewRect2,viewRect3,viewRect4):
         """
         Receives the rectangle of the screen object (NOTE: MUST BE
         DEFINED IN THE SAME WAY AS THE RECT OBJECT OF ENTITIES ARE.
@@ -51,9 +51,11 @@ class World(object):
         # List of tuples - y position of rectangle (bottom) and entity
         entitySortList = []
         
+        '''
         xmod,ymod = self.gridDim
         left,top=viewRect.topleft
         right,bottom=viewRect.bottomright
+        '''
         
         #print self.gridDim
         #viewRect.top = viewRect.top%ymod
@@ -63,11 +65,13 @@ class World(object):
         # and appends them to a list
         #print 'Viewing rect: ',viewRect
         
-        
         for entity in self.allEntities.values():
-            if entity.collRect.colliderect(viewRect):
+            #if entity.collRect.colliderect(viewRect):
+            if self.collideRectDiamond(entity.rect,viewRect1) \
+            or self.collideRectDiamond(entity.rect,viewRect2) \
+            or self.collideRectDiamond(entity.rect,viewRect3) \
+            or self.collideRectDiamond(entity.rect,viewRect4):
                 entitySortList.append((entity.rect.bottom,entity))
-                entityCount+=1
             if entity.entityID == 1:
                 pass#print 'Collision rect of 1st entity: ',entity.collRect
         
@@ -79,6 +83,38 @@ class World(object):
             screenEntities = []
             
         return screenEntities
+        
+    def collideRectDiamond(self,rect1,diamond):
+        left,top=rect1.topleft
+        right,bottom=rect1.bottomright
+        bottom,top=sorted((top,bottom))
+        left,right=sorted((left,right))
+        
+        pHigh,pLow,pLeft,pRight=diamond
+        
+        pRight=max(diamond)
+        pLeft=min(diamond)
+        pHigh=pLow=diamond[0]
+        for i in range(1,len(diamond)):
+            if diamond[i][1]>pHigh[1]:
+                pHigh=diamond[i]
+            if diamond[i][1]<pLow[1]:
+                pLow=diamond[i]
+        
+        def line(p1,p2,x):
+            slope=(p1[1]-p2[1])/(p1[0]-p2[0])
+            y=slope*(x-p1[0])+p1[1]
+            return y
+        
+        if line(pHigh,pLeft,right)<=bottom:
+            return False
+        if line(pLow,pRight,left)>=top:
+            return False
+        if line(pHigh,pRight,left)<=bottom:
+            return False
+        if line(pLow,pLeft,right)>=top:
+            return False
+        return True
     
     def addEntity(self, entity):
         """
