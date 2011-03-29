@@ -8,6 +8,6 @@ class WorldChangeEvent(Event):
     #    world = the destination world
     """
 
-    def __init___(self,world):
+    def __init__(self,world):
         Event.__init__(self)
         self.world = world

@@ -25,6 +25,8 @@ class World(object):
         self.allEntities = dict()
         
         self.grid = grid #Needs to be linked to a grid object, default None
+        if self.grid == None:
+            self.TEST_createGrid()
         self.gridDim = (0,0)
         
     def TEST_createGrid(self):

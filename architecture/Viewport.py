@@ -67,6 +67,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
         worldX, worldY = self.scrollLoc
         
+
         cartOffset = self.world.grid.isoToCart((-worldX,-worldY))
         
         clicked = []
@@ -109,35 +110,36 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         Draws the map and all entities for the current world location.
         displaySurface is provided by the screen.
         """
-        self.world.grid.draw(self.surface, self.scrollLoc, self.size)
-        self.drawContainedEntities()
-        self.drawDebugFrames(self.surface)
-        displaySurface.blit(self.surface, (self.loc,self.size))
+        if not self.world == None:
+            self.world.grid.draw(self.surface, self.scrollLoc, self.size)
+            self.drawContainedEntities()
+            self.drawDebugFrames(self.surface)
+            displaySurface.blit(self.surface, (self.loc,self.size))
     
     def processUpdateEvent(self,event):
-        self.world.update()
         self.setViewportEntities()
         self.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
         
     def setViewportEntities(self):
-        """FIXME to work with new coordinates."""
-        l,t = self.scrollLoc
-        w,h = self.size
-        r,b = l+w,t+h
-        
-        cartTopLeft = self.world.grid.isoToCart((l,t))
-        cartTopRight = self.world.grid.isoToCart((r,t))
-        cartBottomRight = self.world.grid.isoToCart((r,b))
-        cartBottomLeft = self.world.grid.isoToCart((l,b))
-        
-        cartW = cartTopRight[0]-cartBottomLeft[0]
-        cartH = cartBottomRight[1]-cartTopLeft[1]
-        cartL = cartBottomLeft[0]
-        cartT = cartTopLeft[1]
-        
-        curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
-        #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
-        self.viewportEntities = self.world.getScreenEntities(curScreenRect)
+        if not self.world == None:
+            """FIXME to work with new coordinates."""
+            l,t = self.scrollLoc
+            w,h = self.size
+            r,b = l+w,t+h
+            
+            cartTopLeft = self.world.grid.isoToCart((l,t))
+            cartTopRight = self.world.grid.isoToCart((r,t))
+            cartBottomRight = self.world.grid.isoToCart((r,b))
+            cartBottomLeft = self.world.grid.isoToCart((l,b))
+            
+            cartW = cartTopRight[0]-cartBottomLeft[0]
+            cartH = cartBottomRight[1]-cartTopLeft[1]
+            cartL = cartBottomLeft[0]
+            cartT = cartTopLeft[1]
+            
+            curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
+            #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
+            self.viewportEntities = self.world.getScreenEntities(curScreenRect)
     
     def drawDebugFrames(self,displaySurface):  
         """
@@ -147,3 +149,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         rect = ((0,0),self.size)
         pygame.draw.rect(displaySurface, (255,255,0), rect, 3)
         pygame.draw.rect(displaySurface, (255,0,255), self.deadZoneRect, 2)
+        
+    def changeWorld(self,world):
+        self.world = world
