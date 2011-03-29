@@ -64,11 +64,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
     
         worldX, worldY = self.scrollLoc
-        posX = pos[0] + worldX
-        posY = pos[1] + worldY
+        posX = (pos[0] + worldX)#FIXME clicking should wrap
+        posY = (pos[1] + worldY)#FIXME clicking should wrap
         
-        cartPos = self.world.grid.isoToCart((posX,posY))
-        cartSize = self.world.grid.isoToCart(self.size)
+        if not self.world == None:
+            cartPos = self.world.grid.isoToCart((posX,posY))
+            cartSize = self.world.grid.isoToCart(self.size)
 
         curScreenRect = pygame.Rect(cartPos,cartSize)
         
@@ -106,35 +107,36 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         Draws the map and all entities for the current world location.
         displaySurface is provided by the screen.
         """
-        self.world.grid.draw(self.surface, self.scrollLoc, self.size)
-        self.drawContainedEntities()
-        self.drawDebugFrames(self.surface)
-        displaySurface.blit(self.surface, (self.loc,self.size))
+        if not self.world == None:
+            self.world.grid.draw(self.surface, self.scrollLoc, self.size)
+            self.drawContainedEntities()
+            self.drawDebugFrames(self.surface)
+            displaySurface.blit(self.surface, (self.loc,self.size))
     
     def processUpdateEvent(self,event):
-        self.world.update()
         self.setViewportEntities()
         self.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
         
     def setViewportEntities(self):
-        """FIXME to work with new coordinates."""
-        l,t = self.scrollLoc
-        w,h = self.size
-        r,b = l+w,t+h
-        
-        cartTopLeft = self.world.grid.isoToCart((l,t))
-        cartTopRight = self.world.grid.isoToCart((r,t))
-        cartBottomRight = self.world.grid.isoToCart((r,b))
-        cartBottomLeft = self.world.grid.isoToCart((l,b))
-        
-        cartW = cartTopRight[0]-cartBottomLeft[0]
-        cartH = cartBottomRight[1]-cartTopLeft[1]
-        cartL = cartBottomLeft[0]
-        cartT = cartTopLeft[1]
-        
-        curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
-        #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
-        self.viewportEntities = self.world.getScreenEntities(curScreenRect)
+        if not self.world == None:
+            """FIXME to work with new coordinates."""
+            l,t = self.scrollLoc
+            w,h = self.size
+            r,b = l+w,t+h
+            
+            cartTopLeft = self.world.grid.isoToCart((l,t))
+            cartTopRight = self.world.grid.isoToCart((r,t))
+            cartBottomRight = self.world.grid.isoToCart((r,b))
+            cartBottomLeft = self.world.grid.isoToCart((l,b))
+            
+            cartW = cartTopRight[0]-cartBottomLeft[0]
+            cartH = cartBottomRight[1]-cartTopLeft[1]
+            cartL = cartBottomLeft[0]
+            cartT = cartTopLeft[1]
+            
+            curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
+            #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
+            self.viewportEntities = self.world.getScreenEntities(curScreenRect)
     
     def drawDebugFrames(self,displaySurface):  
         """
