@@ -64,24 +64,23 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
     
         worldX, worldY = self.scrollLoc
-        posX = (pos[0] + worldX)#FIXME clicking should wrap
-        posY = (pos[1] + worldY)#FIXME clicking should wrap
         
-        if not self.world == None:
-            cartPos = self.world.grid.isoToCart((posX,posY))
-            cartSize = self.world.grid.isoToCart(self.size)
 
-        curScreenRect = pygame.Rect(cartPos,cartSize)
+        cartOffset = self.world.grid.isoToCart((-worldX,-worldY))
         
         clicked = []
         for entity in self.viewportEntities:
-            if entity.rect.collidepoint(cartPos) and not entity.selected:
-                entityRectOnScreen=entity.rect.move(posX,posY)
-                clicked.append((distBetween(entityRectOnScreen.center,pos),entity))
+        
+            drawRect = entity.rect.move(cartOffset)
+            drawRect.center = self.world.grid.cartToIso(drawRect.center)
+        
+            if drawRect.collidepoint(pos) and not entity.selected:
+                clicked.append((distBetween(drawRect.center,pos),entity))
+
         for e in self.selectedEntities:
             e.selected = False
         if len(clicked):
-            clicked.sort(reverse=True)
+            clicked.sort()
             clicked[0][1].selected = True
             self.selectedEntities = [clicked[0][1]]
     
