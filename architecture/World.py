@@ -27,12 +27,11 @@ class World(object):
         self.grid = grid #Needs to be linked to a grid object, default None
         if self.grid == None:
             self.TEST_createGrid()
-        self.gridDim = (0,0)
+        self.gridDim = self.grid.getGridDimensions()
         
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
         self.grid = InfiniteGrid((20,20),64)
-        self.gridDim = self.grid.getGridDimensions()
 
     def update(self):
         """Sends an update message to all entities."""
