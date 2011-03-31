@@ -158,6 +158,10 @@ class Window(Listener):
         
         #FIXME: THIS IS A TEMPORARY MEASURE FOR MULTIPLE SELECTION
         TMP_shiftHeld = False
+        TMP_dragStartPos = (0,0)
+        TMP_mousePos = (0,0)
+        TMP_mouseState = 0
+        TMP_clickrange = 5
         
         while self.active:
             #Waiting for the event significantly increases frame rate
@@ -169,32 +173,60 @@ class Window(Listener):
                 rawEvent=self.pygameEvents.pop()
             
                 #FIXME - more events needed
-                realEvent = None
+                realEvent = []
                 if rawEvent.type == pygame.QUIT:
-                    realEvent = Event.QuitEvent()
+                    realEvent.append(Event.QuitEvent())
                     """elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
                     state = Event.MouseLocals.MOUSE_PRESSED
                     buttonId = rawEvent.button
                     realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)"""
-                elif rawEvent.type == pygame.MOUSEBUTTONUP:
-                    state = Event.MouseLocals.MOUSE_RELEASED
+
+                elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
+                    TMP_mouseState = 1
                     buttonId = rawEvent.button
                     if buttonId == Event.MouseLocals.LEFT_CLICK:
-                        if not TMP_shiftHeld:
-                            realEvent = Event.SelectionEvent(rawEvent.pos)
+                        TMP_dragStartPos = rawEvent.pos
+                        if distance(rawEvent.pos,TMP_dragStartPos) > TMP_clickrange:
+                            if not TMP_shiftHeld:
+                                realEvent.append(Event.DragBeganEvent(rawEvent.pos))
+                            else:
+                                realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
+                            
+                elif rawEvent.type == pygame.MOUSEBUTTONUP:
+                    TMP_mouseState = 0
+                    buttonId = rawEvent.button
+                    if buttonId == Event.MouseLocals.LEFT_CLICK:
+                        if distance(rawEvent.pos,TMP_dragStartPos) > TMP_clickrange:
+                            if not TMP_shiftHeld:
+                                realEvent.append(Event.DragCompletedEvent(TMP_dragStartPos,rawEvent.pos))
+                            else:
+                                realEvent.append(Event.AddDragCompletedEvent(TMP_dragStartPos,rawEvent.pos))
                         else:
-                            realEvent = Event.SingleAddSelectionEvent(rawEvent.pos)
+                            if buttonId == Event.MouseLocals.LEFT_CLICK:
+                                if not TMP_shiftHeld:
+                                    realEvent = Event.SelectionEvent(rawEvent.pos)
+                                else:
+                                    realEvent = Event.SingleAddSelectionEvent(rawEvent.pos)
+
                 elif rawEvent.type == pygame.MOUSEMOTION:
-                    realEvent = Event.MouseMovedEvent(rawEvent.pos)
+                    TMP_mousePos = rawEvent.pos
+                    realEvent.append(Event.MouseMovedEvent(rawEvent.pos))
+                    
+                    if TMP_mouseState == 1:
+                        realEvent.append(Event.DragEvent(TMP_dragStartPos,rawEvent.pos))
+                    
                 elif rawEvent.type == pygame.KEYDOWN:
                     if rawEvent.key == 303 or rawEvent.key == 304:
                         TMP_shiftHeld = True
+
                 elif rawEvent.type == pygame.KEYUP:
                     if rawEvent.key == 303 or rawEvent.key == 304:
                         TMP_shiftHeld = False
-                if realEvent:
-                    self.manager.post(realEvent) #Warning: make sure that threading doesn't cause \
+
+                for i in realEvent:
+                    self.manager.post(i) #Warning: make sure that threading doesn't cause \
                                                  #problems here!
+                                                     
             else: time.sleep(.01)
 
     def setUpControlMapping(self):
