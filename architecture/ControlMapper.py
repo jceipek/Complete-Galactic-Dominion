@@ -1,5 +1,3 @@
-
-
 class ControlMapper(object):
     """
     Reads from a configuration file in order to establish a control scheme.

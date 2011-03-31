@@ -58,6 +58,10 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance(event, Event.MouseMovedEvent):
             if self.activeScreen: 
                 self.activeScreen.processMouseMovedEvent(event)
+        #elif isinstance(event, Event.DragSelectionEvent):
+        #    self.activeScreen.processDragSelectionEvent(event)
+        #elif isinstance(event, Event.DragReleaseEvent):
+        #    self.activeScreen.processDragReleaseEvent(event)
         elif isinstance(event, Event.UpdateEvent):
             if self.activeScreen:
                 self.activeScreen.processUpdateEvent(event)
@@ -71,4 +75,3 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.activeScreen.changeWorld(event.world)
         elif isinstance(event,Event.DisplaySurfaceCreatedEvent):
             self.setDisplaySurface(event.displaySurface, event.resolution)
-            
