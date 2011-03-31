@@ -16,6 +16,7 @@ import pygame, threading, time
 import Event
 from InputDeviceMastermind import *
 from Listener import Listener
+from specialMath import *
 
 class Window(Listener):
     """
