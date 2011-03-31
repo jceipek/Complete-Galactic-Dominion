@@ -31,14 +31,14 @@ class World(object):
         
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
-        self.grid = InfiniteGrid((20,20),64)
+        self.grid = InfiniteGrid((5,5),64)
 
     def update(self):
         """Sends an update message to all entities."""
         for entity in self.allEntities.values():
             entity.update()
     
-    def getScreenEntities(self,viewRect1,viewRect2,viewRect3,viewRect4):
+    def getScreenEntities(self,viewRects):
         """
         Receives the rectangle of the screen object (NOTE: MUST BE
         DEFINED IN THE SAME WAY AS THE RECT OBJECT OF ENTITIES ARE.
@@ -64,16 +64,18 @@ class World(object):
         # and appends them to a list
         #print 'Viewing rect: ',viewRect
         
-        for entity in self.allEntities.values():
-            #if entity.collRect.colliderect(viewRect):
-            if self.collideRectDiamond(entity.rect,viewRect1) \
-            or self.collideRectDiamond(entity.rect,viewRect2) \
-            or self.collideRectDiamond(entity.rect,viewRect3) \
-            or self.collideRectDiamond(entity.rect,viewRect4):
-                entitySortList.append((entity.rect.bottom,entity))
-            if entity.entityID == 1:
-                pass#print 'Collision rect of 1st entity: ',entity.collRect
+        entCount=0
         
+        for entity in self.allEntities.values():
+            for view in viewRects:
+                #if entity.collRect.colliderect(viewRect):
+                if self.collideRectDiamond(entity.rect,view):
+                    entitySortList.append((entity.rect.bottom,entity))
+                    entCount+=1
+                    if entity.entityID == 1:
+                        pass#print 'Collision rect of 1st entity: ',entity.collRect
+        
+        print entCount
         entitySortList.sort()
         
         if len(entitySortList) > 0:
