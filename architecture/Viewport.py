@@ -179,11 +179,18 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             self.viewportEntities = self.world.getScreenEntities(curScreenRect)
             '''
-            screen1=(cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft)#FIXME
-            screen2=(cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft)#FIXME
-            screen3=screen4=screen1
+            worldWidth,worldHeight = self.world.grid.getGridDimensions()
+            screen=[]
+            for i in range(-1,1):
+                for j in range(-1,1):
+                    TL = cartTopLeft[0]+i*worldWidth,cartTopLeft[1]+j*worldHeight
+                    TR = cartTopRight[0]+i*worldWidth,cartTopRight[1]+j*worldHeight
+                    BR = cartBottomLeft[0]+i*worldWidth,cartBottomLeft[1]+j*worldHeight
+                    BL = cartBottomLeft[0]+i*worldWidth,cartBottomLeft[1]+j*worldHeight
+                    
+                    screen.append((cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft))
             
-            self.viewportEntities = self.world.getScreenEntities(screen1,screen2,screen3,screen4)
+            self.viewportEntities = self.world.getScreenEntities(screen)
     
     def drawDebugFrames(self,displaySurface):  
         """
