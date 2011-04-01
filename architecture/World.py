@@ -75,7 +75,6 @@ class World(object):
                     if entity.entityID == 1:
                         pass#print 'Collision rect of 1st entity: ',entity.collRect
         
-        print entCount
         entitySortList.sort()
         
         if len(entitySortList) > 0:

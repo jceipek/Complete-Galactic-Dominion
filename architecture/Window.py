@@ -205,9 +205,9 @@ class Window(Listener):
                         else:
                             if buttonId == Event.MouseLocals.LEFT_CLICK:
                                 if not TMP_shiftHeld:
-                                    realEvent = Event.SelectionEvent(rawEvent.pos)
+                                    realEvent.append(Event.SelectionEvent(rawEvent.pos))
                                 else:
-                                    realEvent = Event.SingleAddSelectionEvent(rawEvent.pos)
+                                    realEvent.append(Event.SingleAddSelectionEvent(rawEvent.pos))
 
                 elif rawEvent.type == pygame.MOUSEMOTION:
                     TMP_mousePos = rawEvent.pos
