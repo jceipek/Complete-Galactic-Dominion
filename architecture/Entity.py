@@ -2,6 +2,7 @@ from MapObject import MapObject
 import pygame
 from collections import deque
 from GameData import Locals # includes statuses
+import specialMath
 
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
@@ -95,7 +96,7 @@ class Entity(MapObject):
         #gridWidth,gridHeight = self.world.gridDim
         
         drawOffset = \
-        self.world.grid.isoToCart((-worldOffset[0],-worldOffset[1]))
+        specialMath.isoToCart((-worldOffset[0],-worldOffset[1]))
         drawRect = self.rect.move(drawOffset)
         
         #left,top=self.world.grid.cartToIso(drawRect.topleft)

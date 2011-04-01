@@ -92,6 +92,7 @@ class World(object):
         left,right=sorted((left,right))
         
         #pHigh,pLow,pLeft,pRight=diamond
+        #print diamond
         
         pRight=max(diamond)
         pLeft=min(diamond)
