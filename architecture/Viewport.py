@@ -59,6 +59,15 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         else:
             self.scrollSpeed = [0,0]
         
+    def dragEvent(self,event):
+        #pass
+        startPos = event.startPos
+        curPos = event.curPos
+        dragRect = BBoxToRect(startPos,curPos)
+        dragColor = (150,150,0)
+        dragBoxThickness = 3
+        pygame.draw.rect(self.screen,dragBoxColor,dragRect,dragBoxThickness)
+    
     def clickEvent(self,event):
         """"
         What works:
@@ -74,10 +83,11 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
     
         worldX, worldY = self.scrollLoc
-        
 
         cartOffset = self.world.grid.isoToCart((-worldX,-worldY))
         
+        # list of tuples containing distance between the center of the
+        # rectangle and the mouseclick position, and the entity itself
         clicked = []
         for entity in self.viewportEntities:
         
@@ -85,7 +95,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             drawRect.center = self.world.grid.cartToIso(drawRect.center)
         
             if drawRect.collidepoint(pos):
-                    clicked.append((distBetween(drawRect.center,pos),entity))
+                clicked.append((distBetween(drawRect.center,pos),entity))
         
         if isinstance(event,Event.SelectionEvent):
             for e in self.selectedEntities:
@@ -94,6 +104,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
         if len(clicked):
             clicked.sort()
+            # Determines if the closest entity is already selected.
+            # If it is, it makes it no longer selected.
             if clicked[0][1].selected:
                 clicked[0][1].selected = False
                 self.selectedEntities.remove(clicked[0][1])
@@ -138,6 +150,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.drawDebugFrames(self.surface)
             displaySurface.blit(self.surface, (self.loc,self.size))
     
+    def processDragSelectionEvent(self,event):
+        pass
+    
     def processUpdateEvent(self,event):
         self.setViewportEntities()
         self.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
@@ -149,7 +164,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             w,h = self.size
             r,b = l+w,t+h
 
-            
             cartTopLeft = self.world.grid.isoToCart((l,t))
             cartTopRight = self.world.grid.isoToCart((r,t))
             cartBottomRight = self.world.grid.isoToCart((r,b))
@@ -189,3 +203,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
     def changeWorld(self,world):
         self.world = world
+
+def BBoxToRect(p1,p2):
+    """
+    Takes two screen positions and returns the bounding box as a 
+    pygame.Rect object.
+    """
+    x1,y1 = p1
+    x2,y2 = p2
+    bboxRect = (pygame.Rect(p1,(x2-x1,y2-y1)))
+    bboxRect.normalize() # Normalizes to remove negative sizes.
+    return bboxRect
