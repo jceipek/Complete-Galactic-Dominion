@@ -72,8 +72,8 @@ class World(object):
                 if self.collideRectDiamond(entity.rect,view):
                     entitySortList.append((entity.rect.bottom,entity))
                     entCount+=1
-        print entCount
-        entitySortList.sort()
+		
+		entitySortList.sort()
         
         if len(entitySortList) > 0:
             ypos, screenEntities = zip(*entitySortList)
