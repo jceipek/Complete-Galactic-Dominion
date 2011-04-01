@@ -72,9 +72,6 @@ class World(object):
                 if self.collideRectDiamond(entity.rect,view):
                     entitySortList.append((entity.rect.bottom,entity))
                     entCount+=1
-                    if entity.entityID == 1:
-                        pass#print 'Collision rect of 1st entity: ',entity.collRect
-        
         print entCount
         entitySortList.sort()
         
@@ -93,9 +90,12 @@ class World(object):
         
         #pHigh,pLow,pLeft,pRight=diamond
         
+        # Point farthest to the right
         pRight=max(diamond)
+        # Point farthest to the left
         pLeft=min(diamond)
         pHigh=pLow=diamond[0]
+        # Finds lowest and highest point in diamond
         for i in range(1,len(diamond)):
             if diamond[i][1]>pHigh[1]:
                 pHigh=diamond[i]
@@ -103,9 +103,12 @@ class World(object):
                 pLow=diamond[i]
         
         def line(p1,p2,x):
-            slope=(p1[1]-p2[1])/(p1[0]-p2[0])
-            y=slope*(x-p1[0])+p1[1]
-            return y
+            run = p1[0]-p2[0]
+            if not run == 0:
+                slope=(p1[1]-p2[1])/run
+                return slope*(x-p1[0])+p1[1]
+            else:
+                pass
         
         if line(pHigh,pLeft,right)<=bottom:
             return False
