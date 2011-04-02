@@ -44,7 +44,7 @@ class Entity(MapObject):
         self.world = world
         
         # Prevents entities from being initialized off of the grid
-        self.xmod,self.ymod = self.world.grid.getGridDimensions()
+        self.xmod,self.ymod = self.world.grid.getCartGridDimensions()
         x = x%self.xmod
         y = y%self.ymod
         
@@ -174,6 +174,8 @@ class TestEntity(Entity):
         """Implements random movement to test with."""
         self.rect.move_ip(self.vel)
         self.moveWrap()
+        if self.selected==True:
+            print self.rect
 
 if __name__ == "__main__":
     

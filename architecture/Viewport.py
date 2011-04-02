@@ -197,7 +197,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             self.viewportEntities = self.world.getScreenEntities(curScreenRect)
             '''
-            worldWidth,worldHeight = self.world.grid.getGridDimensions()
+            worldWidth,worldHeight = self.world.grid.getCartGridDimensions()
             screen=[]
             
             for i in range(-1,1):

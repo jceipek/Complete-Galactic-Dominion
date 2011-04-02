@@ -23,8 +23,11 @@ class Grid(object):
         #Overriden by Infinite and Finite Grids
         pass
         
-    def getGridDimensions(self):
+    def getIsoGridDimensions(self):
         return self.gridSize[0]*self.tileWidth,self.gridSize[1]*self.tileHeight
+        
+    def getCartGridDimensions(self):
+        return self.gridSize[0]*self.tileWidth/2,self.gridSize[1]*self.tileHeight
         
     def cartToIso(self,coord):
         return coord[0]+coord[1],-.5*coord[0]+.5*coord[1]
@@ -62,6 +65,7 @@ class InfiniteGrid(Grid):
                 if not (x%self.gridSize[0]==0 and y%self.gridSize[1]==0):
                     self.grid[squareLoc].draw(surface, (left+offset[0], top+offset[1]))
 '''
+
 class InfiniteGrid(Grid):
     """
     A grid that functions like a torus - go off one end and come back on the 

@@ -27,11 +27,11 @@ class World(object):
         self.grid = grid #Needs to be linked to a grid object, default None
         if self.grid == None:
             self.TEST_createGrid()
-        self.gridDim = self.grid.getGridDimensions()
+        self.gridDim = self.grid.getCartGridDimensions()
         
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
-        self.grid = InfiniteGrid((5,5),64)
+        self.grid = InfiniteGrid((30,30),64)
 
     def update(self):
         """Sends an update message to all entities."""
@@ -65,6 +65,7 @@ class World(object):
         #print 'Viewing rect: ',viewRect
         
         entCount=0
+        collideFlag = False
         
         for entity in self.allEntities.values():
             for view in viewRects:
@@ -72,8 +73,11 @@ class World(object):
                 if self.collideRectDiamond(entity.rect,view):
                     entitySortList.append((entity.rect.bottom,entity))
                     entCount+=1
+                    break # if it collides, go to next loop
 		
 		entitySortList.sort()
+        if entCount > 0:
+            print entCount
         
         if len(entitySortList) > 0:
             ypos, screenEntities = zip(*entitySortList)
