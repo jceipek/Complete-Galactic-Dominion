@@ -143,7 +143,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         Draws all elements contained in the current viewport to
         self.surface.
         """
-        worldWidth,worldHeight = self.world.grid.getGridDimensions()
+        worldWidth,worldHeight = self.world.grid.getIsoGridDimensions()
         ### FIXME!! Wrapping of objects does not currently work correctly!
         sL=self.scrollLoc
         for i in range(-1,2):
@@ -188,10 +188,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             cartTopRight=l+cartWidthVector[0],t+cartWidthVector[1]
             cartBottomRight=l+cartWidthVector[0]+cartHeightVector[0],t+cartWidthVector[1]+cartHeightVector[1]
             cartBottomLeft=l+cartHeightVector[0],t+cartHeightVector[1]
-            print 'TL: ',cartTopLeft
-            print 'TR: ',cartTopRight
-            print 'BR: ',cartBottomRight
-            print 'BL: ',cartBottomLeft
             '''
             r=l+t
             b=t+h
@@ -223,7 +219,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             #print l,t,cartTopLeft
             #print cartTopRight,cartTopLeft,cartBottomRight,cartBottomLeft
-            
+            '''
             xRange = [0]
             yRange = [0]
             
@@ -236,7 +232,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 yRange.append(-1)
             if cartBottomRight[1] >= worldHeight:
                 yRange.append(1)
-            
+            '''
+            xRange=range(-1,2)
+            yRange=range(-1,2)
             for i in xRange:
                 for j in yRange:
                     TL = cartTopLeft[0]+i*worldWidth,cartTopLeft[1]+j*worldHeight
