@@ -125,7 +125,7 @@ class InfiniteGrid(Grid):
                 #txt=font.render('(%d, %d)'%(x,y),True,(255,0,0))
                 #txt.get_rect().center = (left+tileWidth/2,top+tileHeight/2)
                 #surface.blit(txt,((left+tileWidth/3,top+tileHeight/3),(50,50)))
-        pygame.draw.polygon(surface,(255,0,0),[(0,0),self.cartToIso((self.gridSize[0],0)),self.cartToIso((0,self.gridSize[1])),self.cartToIso(self.gridSize)])
+        #pygame.draw.polygon(surface,(255,0,0),[(0,0),self.cartToIso((self.gridSize[0],0)),self.cartToIso((0,self.gridSize[1])),self.cartToIso(self.gridSize)])
 
 class FiniteGrid(Grid):
     """
