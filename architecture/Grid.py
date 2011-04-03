@@ -96,7 +96,8 @@ class InfiniteGrid(Grid):
         maxy = int(screenRightBottom[1]/tileHeight)+1
         
         """ #create the font that will draw the coordinates on the square. <fps
-        font=pygame.font.Font(pygame.font.get_default_font(),12)"""
+        font=pygame.font.Font(py
+        game.font.get_default_font(),12)"""
         
         surface.fill((0,0,0));
         
@@ -108,7 +109,7 @@ class InfiniteGrid(Grid):
                 top = int((y-x)/2.0*tileHeight-screenLoc[1])
                 
                 if pygame.Rect((left,top),(tileWidth,tileHeight)).\
-                colliderect((0,0),screenSize):
+                colliderect((0,0),screenSize) and x != 0 and y != 0:
                     self.grid[x%self.gridSize[0],y%self.gridSize[1]].\
                     draw(surface,(left,top))
                 

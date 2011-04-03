@@ -136,7 +136,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.cartScrollLoc = newCartScrollLoc[0]%gridSizeX,newCartScrollLoc[1]%gridSizeY
             
             newScrollLoc = specialMath.cartToIso(self.cartScrollLoc)
-            
+
             self.scrollLoc = tuple(newScrollLoc)
     
     def drawContainedEntities(self):
@@ -186,6 +186,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             cartTopRight = specialMath.isoToCart((r,t))
             cartBottomRight = specialMath.isoToCart((r,b))
             cartBottomLeft = specialMath.isoToCart((l,b))
+            
             '''
             cartW = cartTopRight[0]-cartBottomLeft[0]
             cartH = cartBottomRight[1]-cartTopLeft[1]
@@ -200,14 +201,31 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             worldWidth,worldHeight = self.world.grid.getCartGridDimensions()
             screen=[]
             
-            for i in range(-1,1):
-                for j in range(-1,1):
+            #print l,t,cartTopLeft
+            #print cartTopRight,cartTopLeft,cartBottomRight,cartBottomLeft
+            
+            xRange = [0]
+            yRange = [0]
+            
+            if cartBottomLeft[0] <= 0:
+                xRange.append(-1)
+            if cartTopRight[0] >= worldWidth:
+                xRange.append(1)
+            
+            if cartTopLeft[1] <= 0:
+                yRange.append(-1)
+            if cartBottomRight[1] >= worldHeight:
+                yRange.append(1)
+            
+            for i in xRange:
+                for j in yRange:
                     TL = cartTopLeft[0]+i*worldWidth,cartTopLeft[1]+j*worldHeight
                     TR = cartTopRight[0]+i*worldWidth,cartTopRight[1]+j*worldHeight
-                    BR = cartBottomLeft[0]+i*worldWidth,cartBottomLeft[1]+j*worldHeight
+                    BR = cartBottomRight[0]+i*worldWidth,cartBottomRight[1]+j*worldHeight
                     BL = cartBottomLeft[0]+i*worldWidth,cartBottomLeft[1]+j*worldHeight
                     
-                    screen.append((cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft))
+                    screen.append((TL,TR,BR,BL))
+                    #screen.append((cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft))
             
             self.viewportEntities = self.world.getScreenEntities(screen)
     

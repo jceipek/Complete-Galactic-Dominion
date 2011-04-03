@@ -174,8 +174,8 @@ class TestEntity(Entity):
         """Implements random movement to test with."""
         self.rect.move_ip(self.vel)
         self.moveWrap()
-        if self.selected==True:
-            print self.rect
+        #if self.selected==True:
+        #    print self.rect
 
 if __name__ == "__main__":
     
