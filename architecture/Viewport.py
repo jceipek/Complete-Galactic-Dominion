@@ -92,16 +92,16 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         def distBetween(p1,p2):
             return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
     
-        worldX, worldY = self.scrollLoc
+        #worldX, worldY = self.scrollLoc
 
-        cartOffset = specialMath.isoToCart((-worldX,-worldY))
+        #cartOffset = specialMath.isoToCart((-worldX,-worldY))
         
         # list of tuples containing distance between the center of the
         # rectangle and the mouseclick position, and the entity itself
         clicked = []
         for entity in self.viewportEntities:
         
-            drawRect = entity.rect.move(cartOffset)
+            drawRect = entity.rect.move(entity.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
         
             if drawRect.collidepoint(pos):
