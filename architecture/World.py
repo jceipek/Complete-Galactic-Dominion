@@ -27,11 +27,11 @@ class World(object):
         self.grid = grid #Needs to be linked to a grid object, default None
         if self.grid == None:
             self.TEST_createGrid()
-        self.gridDim = self.grid.getGridDimensions()
+        self.gridDim = self.grid.getCartGridDimensions()
         
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
-        self.grid = InfiniteGrid((5,5),64)
+        self.grid = InfiniteGrid((30,30),64)
 
     def update(self):
         """Sends an update message to all entities."""
@@ -65,15 +65,17 @@ class World(object):
         #print 'Viewing rect: ',viewRect
         
         entCount=0
-        
-        for entity in self.allEntities.values():
+
+        for entity in self.allEntities.values():            
             for view in viewRects:
                 #if entity.collRect.colliderect(viewRect):
                 if self.collideRectDiamond(entity.rect,view):
                     entitySortList.append((entity.rect.bottom,entity))
                     entCount+=1
+                    break # if it collides, go to next loop
 		
-		entitySortList.sort()
+        print 'Number of entities on screen: %d'%entCount
+        entitySortList.sort()
         
         if len(entitySortList) > 0:
             ypos, screenEntities = zip(*entitySortList)
@@ -81,7 +83,15 @@ class World(object):
             screenEntities = []
             
         return screenEntities
-        
+    
+    def line(self,p1,p2,x):
+        run = p1[0]-p2[0]
+        if not run == 0:
+            slope=(p1[1]-p2[1])/run
+            return slope*(x-p1[0])+p1[1]
+        else:
+            raise ValueError, 'Check the coordinate system.'
+    
     def collideRectDiamond(self,rect1,diamond):
         left,top=rect1.topleft
         right,bottom=rect1.bottomright
@@ -96,6 +106,7 @@ class World(object):
         # Point farthest to the left
         pLeft=min(diamond)
         pHigh=pLow=diamond[0]
+        
         # Finds lowest and highest point in diamond
         for i in range(1,len(diamond)):
             if diamond[i][1]>pHigh[1]:
@@ -103,21 +114,17 @@ class World(object):
             if diamond[i][1]<pLow[1]:
                 pLow=diamond[i]
         
-        def line(p1,p2,x):
-            run = p1[0]-p2[0]
-            if not run == 0:
-                slope=(p1[1]-p2[1])/run
-                return slope*(x-p1[0])+p1[1]
-            else:
-                pass
-        
-        if line(pHigh,pLeft,right)<=bottom:
+        if self.line(pHigh,pLeft,right)<=bottom:
+            #print 'fail1'
             return False
-        if line(pLow,pRight,left)>=top:
+        if self.line(pLow,pRight,left)>=top:
+            #print 'fail2'
             return False
-        if line(pHigh,pRight,left)<=bottom:
+        if self.line(pHigh,pRight,left)<=bottom:
+            #print 'fail3'
             return False
-        if line(pLow,pLeft,right)>=top:
+        if self.line(pLow,pLeft,right)>=top:
+            #print 'fail4'
             return False
         return True
     

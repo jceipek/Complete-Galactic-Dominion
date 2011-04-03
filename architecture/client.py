@@ -72,7 +72,7 @@ def init():
     #===========================================
     
     # Initialize 500 entities in World w
-    for i in range(6):
+    for i in range(1):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
         w.addEntity(TestEntity('testCraft.png',i*50,i*50,w,'alpha'))
