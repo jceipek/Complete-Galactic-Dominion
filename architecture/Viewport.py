@@ -39,6 +39,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         self.viewportEntities = []
         
+        self.dragRect = None
+        
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
         offset = int(0.3*float(self.size[0]))
@@ -60,14 +62,21 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         else:
             self.scrollSpeed = [0,0]
         
-    def dragEvent(self,event):
-        #pass
+    def dragSelectionEvent(self,event):
+        """
+        Creates a drag rectangle from the start and current position of
+        the mouse given by an Event.DragSelectionEvent.  The rectangle
+        is set to the dragRect attribute.
+        """
         startPos = event.startPos
         curPos = event.curPos
-        dragRect = BBoxToRect(startPos,curPos)
-        dragColor = (150,150,0)
-        dragBoxThickness = 3
-        pygame.draw.rect(self.screen,dragBoxColor,dragRect,dragBoxThickness)
+        self.dragRect = BBoxToRect(startPos,curPos)
+    
+    def dragReleaseEvent(self,event):
+        
+        # Needs to be implemented to select
+        
+        self.dragRect = None
     
     def clickEvent(self,event):
         """"
@@ -85,7 +94,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
         worldX, worldY = self.scrollLoc
 
-        cartOffset = self.world.grid.isoToCart((-worldX,-worldY))
+        cartOffset = specialMath.isoToCart((-worldX,-worldY))
         
         # list of tuples containing distance between the center of the
         # rectangle and the mouseclick position, and the entity itself
@@ -93,7 +102,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         for entity in self.viewportEntities:
         
             drawRect = entity.rect.move(cartOffset)
-            drawRect.center = self.world.grid.cartToIso(drawRect.center)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
         
             if drawRect.collidepoint(pos):
                 clicked.append((distBetween(drawRect.center,pos),entity))
@@ -121,7 +130,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             newScrollLoc[1] = (newScrollLoc[1]+self.scrollSpeed[1]*elapsedTime)
             
             #FIXME - used to calculate corner of scroll location in cartesian grid
-            newCartScrollLoc = self.world.grid.isoToCart(newScrollLoc)
+            newCartScrollLoc = specialMath.isoToCart(newScrollLoc)
             gridSizeX,gridSizeY = self.world.gridDim
             self.cartScrollLoc = newCartScrollLoc[0]%gridSizeX,newCartScrollLoc[1]%gridSizeY
             
@@ -143,6 +152,15 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     s1=(sL[0]+i*worldWidth,sL[1]+j*worldHeight)
                     entity.draw(self.surface,s1)
     
+    def drawDragRect(self):   
+        """
+        Draws the drag rectangle from a mouse drag, if not None.
+        """
+        if not self.dragRect == None:
+            dragColor = (150,150,0)
+            dragBoxThickness = 3
+            pygame.draw.rect(self.surface,dragBoxColor,dragRect,dragBoxThickness)
+            
     def draw(self,displaySurface):
         """
         Draws the map and all entities for the current world location.
@@ -151,12 +169,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if not self.world == None:
             self.world.grid.draw(self.surface, self.scrollLoc, self.size)
             self.drawContainedEntities()
-            self.drawDebugFrames(self.surface)
+            self.drawDragRect()
+            self.drawDebugFrames()
             displaySurface.blit(self.surface, (self.loc,self.size))
-    
-    def processDragSelectionEvent(self,event):
-        pass
-    
+
     def processUpdateEvent(self,event):
         self.setViewportEntities()
         self.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)

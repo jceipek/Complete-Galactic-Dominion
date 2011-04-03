@@ -54,3 +54,49 @@ class SingleAddSelectionEvent(Event):
         Event.__init__(self)
         self.pos = posxy
         self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"
+
+class SingleAddSelectionEvent(Event):
+    def __init__(self,posxy):
+        Event.__init__(self)
+        self.pos = posxy
+        self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"
+        
+class DragBeganEvent(Event):
+    def __init__(self,posxy):
+        Event.__init__(self)
+        self.pos = posxy
+        self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"        
+        
+class AddDragBeganEvent(Event):
+    def __init__(self,posxy):
+        Event.__init__(self)
+        self.pos = posxy
+        self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"      
+        
+class DragEvent(Event):
+    def __init__(self,startxy,currxy):
+        Event.__init__(self)
+        self.start = startxy;
+        self.curr = currxy;
+        self.verboseInfo = "\tStartPos: "+str(self.start)+"\n"+\
+                           "\tCurrPos: "+str(self.curr)+"\n"
+
+class DragCompletedEvent(Event):
+    def __init__(self,startxy,endxy):
+        Event.__init__(self)
+        self.start = startxy
+        self.end = endxy
+        self.verboseInfo = "\tStartPos: "+str(self.start)+"\n"+\
+                           "\tEndPos: "+str(self.end)+"\n"
+        
+class AddDragCompletedEvent(Event):
+    def __init__(self,startxy,endxy):
+        Event.__init__(self)
+        self.start = startxy
+        self.end = endxy
+        self.verboseInfo = "\tStartPos: "+str(self.start)+"\n"+\
+                           "\tEndPos: "+str(self.end)+"\n"
+        
+    
+        
+        
