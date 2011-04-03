@@ -1,6 +1,5 @@
 import pygame
-import Event
-import specialMath
+import Event,specialMath
 #from Mouse import Mouse
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
@@ -144,11 +143,18 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         Draws all elements contained in the current viewport to
         self.surface.
         """
-
+        '''
+        worldWidth,worldHeight = self.world.grid.getIsoGridDimensions()
         ### FIXME!! Wrapping of objects does not currently work correctly!
-
-        for entity in self.viewportEntities:
-            entity.draw(self.surface,self.scrollLoc)
+        sL=self.scrollLoc
+        for i in range(-1,2):
+            for j in range(-1,2):
+                for entity in self.viewportEntities:
+                    s1=(sL[0]+i*worldWidth,sL[1]+j*worldHeight)
+                    entity.draw(self.surface,s1)
+        '''
+        for e in self.viewportEntities:
+            e.draw(self.surface,self.scrollLoc)
     
     def drawDragRect(self):   
         """
@@ -178,15 +184,29 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def setViewportEntities(self):
         if not self.world == None:
             """FIXME to work with new coordinates."""
-            l,t = self.scrollLoc
+            l,t = self.cartScrollLoc
             w,h = self.size
-            r,b = l+w,t+h
-
-            cartTopLeft = specialMath.isoToCart((l,t))
-            cartTopRight = specialMath.isoToCart((r,t))
-            cartBottomRight = specialMath.isoToCart((r,b))
-            cartBottomLeft = specialMath.isoToCart((l,b))
+            cartWidthVector=specialMath.isoToCart((w,0))
+            cartHeightVector=specialMath.isoToCart((0,h))
+            cartTopLeft=l,t
+            cartTopRight=l+cartWidthVector[0],t+cartWidthVector[1]
+            cartBottomRight=l+cartWidthVector[0]+cartHeightVector[0],t+cartWidthVector[1]+cartHeightVector[1]
+            cartBottomLeft=l+cartHeightVector[0],t+cartHeightVector[1]
+            '''
+            r=l+t
+            b=t+h
             
+            cartTopLeft = (l,t)
+            cartTopRight = (r,t)
+            cartBottomRight = (r,b)
+            cartBottomLeft = (l,b)
+            '''
+            '''
+            isoTopLeft = specialMath.cartToIso((l,t))
+            isoTopRight = specialMath.cartToIso((r,t))
+            isoBottomRight = specialMath.cartToIso((r,b))
+            isoBottomLeft = specialMath.cartToIso((l,b))
+            '''
             '''
             cartW = cartTopRight[0]-cartBottomLeft[0]
             cartH = cartBottomRight[1]-cartTopLeft[1]
@@ -203,7 +223,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             #print l,t,cartTopLeft
             #print cartTopRight,cartTopLeft,cartBottomRight,cartBottomLeft
-            
+            '''
             xRange = [0]
             yRange = [0]
             
@@ -216,7 +236,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 yRange.append(-1)
             if cartBottomRight[1] >= worldHeight:
                 yRange.append(1)
-            
+            '''
+            xRange=range(-1,2)
+            yRange=range(-1,2)
             for i in xRange:
                 for j in yRange:
                     TL = cartTopLeft[0]+i*worldWidth,cartTopLeft[1]+j*worldHeight

@@ -2,6 +2,7 @@ from MapObject import MapObject
 import pygame
 from collections import deque
 from GameData import Locals # includes statuses
+import specialMath
 
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
@@ -77,6 +78,7 @@ class Entity(MapObject):
         self.timePassed = self.time-self.timePrev
         self.selected = False
         self.blockable = False
+        self.drawOffset=(0,0)
 
     # First initialization of update method
     def update(self):
@@ -93,16 +95,18 @@ class Entity(MapObject):
         """
         
         #gridWidth,gridHeight = self.world.gridDim
-        
+        '''
         drawOffset = \
-        self.world.grid.isoToCart((-worldOffset[0],-worldOffset[1]))
+        specialMath.isoToCart((-worldOffset[0],-worldOffset[1]))
         drawRect = self.rect.move(drawOffset)
-        
+        '''
+        drawRect = self.rect.move(self.drawOffset)
         #left,top=self.world.grid.cartToIso(drawRect.topleft)
         #right,bottom=self.world.grid.cartToIso(drawRect.bottomright)
         #drawRect = pygame.Rect(left,top,right-left,bottom-top)
         
         drawRect.center = self.world.grid.cartToIso(drawRect.center)
+        print 'Center of Entity\'s Rectangle',drawRect.center
         
         #drawRect.top = drawRect.top%gridHeight
         #drawRect.left = drawRect.left%gridWidth
@@ -166,7 +170,7 @@ class TestEntity(Entity):
         
         Entity.__init__(self, imagePath, x, y, world, colorkey, description)
         
-        self.vel = (0,0)
+        #self.vel = (-1,1)
         from random import randint
         #self.vel = (randint(-2,2),randint(-2,2))
         self.vel = (2,1)

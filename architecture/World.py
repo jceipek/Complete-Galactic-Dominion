@@ -72,7 +72,7 @@ class World(object):
                 if self.collideRectDiamond(entity.rect,view):
                     entitySortList.append((entity.rect.bottom,entity))
                     entCount+=1
-                    print view[0]
+                    entity.drawOffset=-view[0][0],-view[0][1]
                     break # if it collides, go to next loop
 		
         print 'Number of entities on screen: %d'%entCount
@@ -100,6 +100,7 @@ class World(object):
         left,right=sorted((left,right))
         
         #pHigh,pLow,pLeft,pRight=diamond
+        #print diamond
         
         # Point farthest to the right
         pRight=max(diamond)
