@@ -107,9 +107,10 @@ class InfiniteGrid(Grid):
                 #find the left and top position of the image relative to the screen in iso
                 left = int((y+x)/2.0*tileWidth-screenLoc[0])
                 top = int((y-x)/2.0*tileHeight-screenLoc[1])
-                
+
                 if pygame.Rect((left,top),(tileWidth,tileHeight)).\
-                colliderect((0,0),screenSize) and x != 0 and y != 0:
+                colliderect((0,0),screenSize) \
+                and x%self.gridSize[0] != 0 and y%self.gridSize[1] != 0:
                     self.grid[x%self.gridSize[0],y%self.gridSize[1]].\
                     draw(surface,(left,top))
                 
