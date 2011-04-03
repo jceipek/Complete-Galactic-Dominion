@@ -143,6 +143,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         Draws all elements contained in the current viewport to
         self.surface.
         """
+        '''
         worldWidth,worldHeight = self.world.grid.getIsoGridDimensions()
         ### FIXME!! Wrapping of objects does not currently work correctly!
         sL=self.scrollLoc
@@ -151,6 +152,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 for entity in self.viewportEntities:
                     s1=(sL[0]+i*worldWidth,sL[1]+j*worldHeight)
                     entity.draw(self.surface,s1)
+        '''
+        for e in self.viewportEntities:
+            e.draw(self.surface,self.scrollLoc)
     
     def drawDragRect(self):   
         """
