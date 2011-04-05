@@ -179,7 +179,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
     def processUpdateEvent(self,event):
         self.setViewportEntities()
-        self.scrollBasedOnElapsedTime(event.elapsedTimeSinceLastFrame)
+        timeElapsed = event.elapsedTimeSinceLastFrame
+        self.scrollBasedOnElapsedTime(timeElapsed)
+        self.world.__class__.elapsedTimeSinceLastFrame = timeElapsed
         
     def setViewportEntities(self):
         if not self.world == None:

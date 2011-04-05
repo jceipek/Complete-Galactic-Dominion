@@ -96,7 +96,3 @@ class AddDragCompletedEvent(Event):
         self.end = endxy
         self.verboseInfo = "\tStartPos: "+str(self.start)+"\n"+\
                            "\tEndPos: "+str(self.end)+"\n"
-        
-    
-        
-        

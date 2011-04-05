@@ -45,9 +45,9 @@ class Entity(MapObject):
         self.world = world
         
         # Prevents entities from being initialized off of the grid
-        self.xmod,self.ymod = self.world.grid.getCartGridDimensions()
-        x = x%self.xmod
-        y = y%self.ymod
+        self.worldSize = self.world.grid.getCartGridDimensions()
+        x = x%self.worldSize[0]
+        y = y%self.worldSize[1]
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
@@ -153,8 +153,16 @@ class Entity(MapObject):
         """
         FIXME !!!
         """
-        self.rect.top = self.rect.top%self.ymod
-        self.rect.left = self.rect.left%self.xmod
+        self.rect.top = self.rect.top%self.worldSize[1]
+        self.rect.left = self.rect.left%self.worldSize[0]
+        
+    def getTimeElapsed(self):
+        """
+        Returns the amount of time since the last frame.
+        Stored in world which the entity belongs to.
+        Updated by viewport.
+        """
+        return self.world.__class__.elapsedTimeSinceLastFrame
         
 class TestEntity(Entity):
     """

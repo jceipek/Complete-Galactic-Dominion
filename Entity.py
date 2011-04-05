@@ -5,7 +5,6 @@ from collections import deque
 class Entity(MapObject,pygame.sprite.Sprite):
     """A foreground MapObject with which one can interact."""
 	
-    
     def __init__(self, imagePath, x, y, colorkey=None,
                  description = 'No information available.'):    
         MapObject.__init__(self, imagePath, colorkey)
