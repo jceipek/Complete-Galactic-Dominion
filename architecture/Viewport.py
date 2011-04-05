@@ -77,6 +77,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         # Needs to be implemented to select
         
         self.dragRect = None
+
+    def setDestinationEvent(self, event):
+        pass
     
     def clickEvent(self,event):
         """"
