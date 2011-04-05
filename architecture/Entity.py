@@ -106,7 +106,6 @@ class Entity(MapObject):
         #drawRect = pygame.Rect(left,top,right-left,bottom-top)
         
         drawRect.center = self.world.grid.cartToIso(drawRect.center)
-        print 'Center of Entity\'s Rectangle',drawRect.center
         
         #drawRect.top = drawRect.top%gridHeight
         #drawRect.left = drawRect.left%gridWidth
