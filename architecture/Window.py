@@ -208,6 +208,8 @@ class Window(Listener):
                                     realEvent.append(Event.SelectionEvent(rawEvent.pos))
                                 else:
                                     realEvent.append(Event.SingleAddSelectionEvent(rawEvent.pos))
+                        if buttonId == Event.MouseLocals.RIGHT_CLICK:
+                            Event.SetDestinationEvent(rawEvent.pos)
 
                 elif rawEvent.type == pygame.MOUSEMOTION:
                     TMP_mousePos = rawEvent.pos

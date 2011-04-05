@@ -77,6 +77,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         # Needs to be implemented to select
         
         self.dragRect = None
+
+    def setDestinationEvent(self, event):
+        pass
     
     def clickEvent(self,event):
         """"
@@ -223,24 +226,20 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             worldWidth,worldHeight = self.world.grid.getCartGridDimensions()
             screen=[]
             
-            #print l,t,cartTopLeft
-            #print cartTopRight,cartTopLeft,cartBottomRight,cartBottomLeft
-            '''
+            #determine which screens to check
             xRange = [0]
             yRange = [0]
             
-            if cartBottomLeft[0] <= 0:
+            if cartBottomLeft[0] >= 0:
                 xRange.append(-1)
-            if cartTopRight[0] >= worldWidth:
+            if cartTopRight[0] <= worldWidth:
                 xRange.append(1)
             
-            if cartTopLeft[1] <= 0:
+            if cartTopLeft[1] >= 0:
                 yRange.append(-1)
-            if cartBottomRight[1] >= worldHeight:
+            if cartBottomRight[1] <= worldHeight:
                 yRange.append(1)
-            '''
-            xRange=range(-1,2)
-            yRange=range(-1,2)
+                
             for i in xRange:
                 for j in yRange:
                     TL = cartTopLeft[0]+i*worldWidth,cartTopLeft[1]+j*worldHeight

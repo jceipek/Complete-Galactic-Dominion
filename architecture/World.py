@@ -78,8 +78,7 @@ class World(object):
                     entCount+=1
                     entity.drawOffset=-view[0][0],-view[0][1]
                     break # if it collides, go to next loop
-		
-        print 'Number of entities on screen: %d'%entCount
+
         entitySortList.sort()
         
         if len(entitySortList) > 0:

@@ -22,7 +22,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     
     def __init__(self,manager,world):
-        eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, Event.SelectionEvent, Event.SingleAddSelectionEvent, Event.UpdateEvent, Event.WorldChangeEvent, Event.DisplaySurfaceCreatedEvent]
+        eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, Event.SelectionEvent, Event.SingleAddSelectionEvent, Event.UpdateEvent, Event.WorldChangeEvent, Event.DisplaySurfaceCreatedEvent, Event.SetDestinationEvent]
         Listener.__init__(self,manager,eventTypes)
         self.activeOverlay = None
         self.activeWorld = world
