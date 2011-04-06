@@ -25,7 +25,7 @@ class Unit(Builder):
         self.efficiency=1
         self.path=[] #queue of future tuple destinations
         self.dest=self.rect.center #current destination
-        self.speed=1
+        self.speed=.1
 
     def update(self):
         """Called by game each frame to update object."""
@@ -56,13 +56,17 @@ class Unit(Builder):
             newX = curX + dirx*self.speed*self.getTimeElapsed()
             newY = curY + diry*self.speed*self.getTimeElapsed()
             
-            if specialMath.hypotenuse(newX-curX,newY-curX) > distLocToDest:
-                self.rect.center = self.dest
-            else:
-                self.rect.center = newX, newY
-    
+            print 'Dir info: ',curX,curY,newX,newY
+            print 'Dest info: ',self.dest
+            
+            #if specialMath.hypotenuse(newX-curX,newY-curX) > distLocToDest:
+            #    self.rect.center = self.dest
+            #else:
+            #    self.rect.center = newX, newY
+            self.rect.center=newX,newY
+            
     def _definePath(self):
-        if self.isAtDestination(): #may need to have room for error
+        if self._isAtDestination(): #may need to have room for error
             if self.path == []:
                 self.status = Locals.IDLE
                 self.dest = None
@@ -70,11 +74,11 @@ class Unit(Builder):
             else: # path not empty - change path
                 self.status = Locals.MOVING
                 self.dest = self._optimalDestination()
-                print self.dest
+                #print self.dest
         else: # Not at current destination
             pass
     
-    def isAtDestination(self, margin=2):
+    def _isAtDestination(self, margin=2):
         if self.status == Locals.IDLE:
             return True
         return specialMath.distance(self.rect.center,self.dest) <= margin
@@ -98,7 +102,7 @@ class Unit(Builder):
                 
                 testPoint = (destX+xShift*self.worldSize[0], \
                             destY+yShift*self.worldSize[1])
-                print testPoint            
+                print 'Test Point: ',xShift,yShift,testPoint            
                 if worldRect.collidepoint(testPoint):
                     return testPoint
         return None
