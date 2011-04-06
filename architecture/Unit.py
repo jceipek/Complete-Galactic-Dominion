@@ -1,8 +1,11 @@
 from Builder import Builder
-from Entity import Entity,Locals
+from Entity import Entity
+from GameData import Locals
 
 from collections import deque
 import specialMath
+
+import pygame
 
 class Unit(Builder):
     """A kind of Builder that can move around."""
@@ -21,17 +24,14 @@ class Unit(Builder):
         self.status=Locals.IDLE
         self.efficiency=1
         self.path=[] #queue of future tuple destinations
-        self.dest=(self.x,self.y) #current destination
+        self.dest=self.rect.center #current destination
         self.speed=1
 
     def update(self):
         """Called by game each frame to update object."""
         #FIXME !!!
         #self.dtime()#updates time
-        pass
-    
-    def move(self):
-        pass
+        self.move()
         
     def move(self):
         """changes position of unit in direction of dest"""
@@ -39,36 +39,46 @@ class Unit(Builder):
         # Decides what the current self.dest should be
         self._definePath()
         
-        # difference between destination and current location
-        dirx=self.dest[0]-self.x #unscaled x direction of movement
-        diry=self.dest[1]-self.y #unscaled y direction of movement
-        
-        # distance between destination and current location
-        distLocToDest = specialMath.distance(dirx,diry)
-        
-        # Unit vector of velocity
-        dirx/=distLocToDest #unit x direction of movement
-        diry/=distLocToDest #unit y direction of movement
-
-        newX = self.x + dirx*self.speed*self.getTimeElapsed()
-        newY = self.y + diry*self.speed*self.getTimeElapsed()
-        
-        if specialMath.distance(newX-self.x,newY-self.y) > distLocToDest:
-            self.x,self.y = self.dest
-        else:
-            self.x, self.y = newX, newY
+        if not self.status == Locals.IDLE:
+            curX,curY = self.rect.center
+            
+            # difference between destination and current location
+            dirx=self.dest[0]-curX #unscaled x direction of movement
+            diry=self.dest[1]-curY #unscaled y direction of movement
+            
+            # distance between destination and current location
+            distLocToDest = specialMath.hypotenuse(dirx,diry)
+            
+            # Unit vector of velocity
+            dirx/=distLocToDest #unit x direction of movement
+            diry/=distLocToDest #unit y direction of movement
+    
+            newX = curX + dirx*self.speed*self.getTimeElapsed()
+            newY = curY + diry*self.speed*self.getTimeElapsed()
+            
+            if specialMath.hypotenuse(newX-curX,newY-curX) > distLocToDest:
+                self.rect.center = self.dest
+            else:
+                self.rect.center = newX, newY
     
     def _definePath(self):
-        if (self.x,self.y)==self.dest: #may need to have room for error
+        if self.isAtDestination(): #may need to have room for error
             if self.path == []:
                 self.status = Locals.IDLE
                 self.dest = None
                 return
             else: # path not empty - change path
+                self.status = Locals.MOVING
                 self.dest = self._optimalDestination()
+                print self.dest
         else: # Not at current destination
             pass
-                
+    
+    def isAtDestination(self, margin=2):
+        if self.status == Locals.IDLE:
+            return True
+        return specialMath.distance(self.rect.center,self.dest) <= margin
+    
     def _optimalDestination(self):
         """
         Returns the optimal destination given the current location
@@ -80,16 +90,16 @@ class Unit(Builder):
         
         # Rectangle the size of the world which is centered
         # at the current location
-        worldRect = pygame.Rect((0,0),worldSize)
-        worldRect.center = (self.x,self.y)
+        worldRect = pygame.Rect((0,0),self.worldSize)
+        worldRect.center = self.rect.center
         
-        for xShift in [-1,0,1]:
-            for yShift in [-1,0,1]:
+        for xShift in [0,-1,1]:
+            for yShift in [0,-1,1]:
                 
                 testPoint = (destX+xShift*self.worldSize[0], \
                             destY+yShift*self.worldSize[1])
-                            
-                if worldRect.collidePoint(testPoint):
+                print testPoint            
+                if worldRect.collidepoint(testPoint):
                     return testPoint
         return None
     
@@ -111,6 +121,7 @@ class Unit(Builder):
         Takes an x,y coordinate tuple in the grid and adds this location
         to the path.
         """
+        print coord
         self.path.append(coord)
 
 if __name__ == "__main__":

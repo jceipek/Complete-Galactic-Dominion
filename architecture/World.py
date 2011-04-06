@@ -28,9 +28,10 @@ class World(object):
         
         self.allEntities = dict()
         
-        self.grid = grid #Needs to be linked to a grid object, default None
-        if self.grid == None:
+        if grid == None:
             self.TEST_createGrid()
+        else:
+            self.grid = grid #Needs to be linked to a grid object, default None
         self.gridDim = self.grid.getCartGridDimensions()
         
     def TEST_createGrid(self):

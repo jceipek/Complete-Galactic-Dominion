@@ -79,7 +79,15 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.dragRect = None
 
     def setDestinationEvent(self, event):
-        pass
+        
+        pos = event.pos
+        cartPos = specialMath.isoToCart(pos)
+        
+        destCart = self.cartScrollLoc[0] + cartPos[0], \
+                    self.cartScrollLoc[1] + cartPos[1]
+        
+        for entity in self.selectedEntities:
+            entity.addToPath(destCart)
     
     def clickEvent(self,event):
         """"
