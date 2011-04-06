@@ -148,7 +148,7 @@ class SocketThread(object):
             flag=False
             for nline in self.file:
                 flag=True
-                print 'Something to read: %s' % nline.strip()
+                #print 'Something to read: %s' % nline.strip()
                 if nline.strip() == self.parent.STOP_MESSAGE:
                     break
                 line+=nline 
