@@ -15,7 +15,7 @@ servers and clients as needed. For now, no servers have been created.
 import threading
 
 #Import necessary user defined classes required for the client
-import Event
+import Event, networking
 from Manager import Manager
 from Window import Window
 from Grid import InfiniteGrid,FiniteGrid
@@ -39,7 +39,8 @@ def init():
         3. We send the eventManager a message to start the game
             - This message is interpreted by the gameWindow
     """
-
+    client=networking.Client()
+    
     debugger = Debugger()
     eventTimer = EventTimer()
     
