@@ -75,7 +75,7 @@ def init():
     for i in range(100):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
+        w.addEntity(TestEntity('testCraft.png',i*50,i*50,w,'alpha'))
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())

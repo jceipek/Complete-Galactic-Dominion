@@ -192,7 +192,6 @@ class Window(Listener):
                                 realEvent.append(Event.DragBeganEvent(rawEvent.pos))
                             else:
                                 realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
-                            
                 elif rawEvent.type == pygame.MOUSEBUTTONUP:
                     TMP_mouseState = 0
                     buttonId = rawEvent.button
@@ -203,11 +202,12 @@ class Window(Listener):
                             else:
                                 realEvent.append(Event.AddDragCompletedEvent(TMP_dragStartPos,rawEvent.pos))
                         else:
-                            if buttonId == Event.MouseLocals.LEFT_CLICK:
-                                if not TMP_shiftHeld:
-                                    realEvent.append(Event.SelectionEvent(rawEvent.pos))
-                                else:
-                                    realEvent.append(Event.SingleAddSelectionEvent(rawEvent.pos))
+                            if not TMP_shiftHeld:
+                                realEvent.append(Event.SelectionEvent(rawEvent.pos))
+                            else:
+                                realEvent.append(Event.SingleAddSelectionEvent(rawEvent.pos))
+                    elif buttonId == Event.MouseLocals.RIGHT_CLICK:
+                        realEvent.append(Event.SetDestinationEvent(rawEvent.pos))
 
                 elif rawEvent.type == pygame.MOUSEMOTION:
                     TMP_mousePos = rawEvent.pos

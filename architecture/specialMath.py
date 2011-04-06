@@ -10,6 +10,9 @@ def cartToIso(coord):
 def isoToCart(coord):
     return .5*coord[0]-coord[1],.5*coord[0]+coord[1]
 
+def hypotenuse(x,y):
+    return pow(x**2+y**2,.5)
+
 if __name__ == "__main__":
     print isoToCart((-10,-10))
     print isoToCart((-10,10))

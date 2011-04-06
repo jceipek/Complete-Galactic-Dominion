@@ -45,9 +45,9 @@ class Entity(MapObject):
         self.world = world
         
         # Prevents entities from being initialized off of the grid
-        self.xmod,self.ymod = self.world.grid.getCartGridDimensions()
-        x = x%self.xmod
-        y = y%self.ymod
+        self.worldSize = self.world.grid.getCartGridDimensions()
+        x = x%self.worldSize[0]
+        y = y%self.worldSize[1]
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
@@ -77,7 +77,7 @@ class Entity(MapObject):
         self.timePrev = 0
         self.timePassed = self.time-self.timePrev
         self.selected = False
-        self.blockable = False
+        self.blocking = False
         self.drawOffset=(0,0)
 
     # First initialization of update method
@@ -106,7 +106,6 @@ class Entity(MapObject):
         #drawRect = pygame.Rect(left,top,right-left,bottom-top)
         
         drawRect.center = self.world.grid.cartToIso(drawRect.center)
-        print 'Center of Entity\'s Rectangle',drawRect.center
         
         #drawRect.top = drawRect.top%gridHeight
         #drawRect.left = drawRect.left%gridWidth
@@ -153,8 +152,16 @@ class Entity(MapObject):
         """
         FIXME !!!
         """
-        self.rect.top = self.rect.top%self.ymod
-        self.rect.left = self.rect.left%self.xmod
+        self.rect.top = self.rect.top%self.worldSize[1]
+        self.rect.left = self.rect.left%self.worldSize[0]
+        
+    def getTimeElapsed(self):
+        """
+        Returns the amount of time since the last frame.
+        Stored in world which the entity belongs to.
+        Updated by viewport.
+        """
+        return self.world.__class__.elapsedTimeSinceLastFrame
         
 class TestEntity(Entity):
     """
@@ -174,6 +181,35 @@ class TestEntity(Entity):
         from random import randint
         self.vel = (randint(-2,2),randint(-2,2))
         #self.vel = (2,1)
+    
+    def update(self):
+        """Implements random movement to test with."""
+        self.rect.move_ip(self.vel)
+        self.moveWrap()
+        #if self.selected==True:
+        #    print self.rect
+        
+class TestEntity2(Entity):
+    """
+    This should be deleted once subclasses are implemented.  This
+    is meant to clean up Entity.
+    """
+    
+    def __init__(self, imagePath, x, y, world, colorkey=None,
+                 description = 'No information available.'):
+        """
+        @param vel: tuple of velocities (vx,vy)
+        """
+        
+        Entity.__init__(self, imagePath, x, y, world, colorkey, description)
+        
+        #self.vel = (-1,1)
+        from random import randint
+        self.vel = (randint(-2,2),randint(-2,2))
+        #self.vel = (2,1)
+    
+        self.grid = world.grid
+        #worldSize = size of grid in pixels
     
     def update(self):
         """Implements random movement to test with."""
