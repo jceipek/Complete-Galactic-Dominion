@@ -16,6 +16,10 @@ class World(object):
                                dependent on sub-worlds
     """
     
+    # class variable which holds time elapsed since last frame
+    # updated every new frame by viewport with reference to this world
+    elapsedTimeSinceLastFrame = 0
+    
     def __init__(self, grid=None): #FIXME got rid of a comma, did we lose something?
         
         # maps entityID of each entity to a pointer to the entity
@@ -24,9 +28,10 @@ class World(object):
         
         self.allEntities = dict()
         
-        self.grid = grid #Needs to be linked to a grid object, default None
-        if self.grid == None:
+        if grid == None:
             self.TEST_createGrid()
+        else:
+            self.grid = grid #Needs to be linked to a grid object, default None
         self.gridDim = self.grid.getCartGridDimensions()
         
     def TEST_createGrid(self):
