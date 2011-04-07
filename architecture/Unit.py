@@ -52,12 +52,14 @@ class Unit(Builder):
             # Unit vector of velocity
             dirx/=distLocToDest #unit x direction of movement
             diry/=distLocToDest #unit y direction of movement
-    
+            
+            
             newX = curX + dirx*self.speed*self.getTimeElapsed()
             newY = curY + diry*self.speed*self.getTimeElapsed()
             
-            print 'Dir info: ',curX,curY,newX,newY
-            print 'Dest info: ',self.dest
+            print newX-curX,newY-curY
+            #print 'Dir info: ',curX,curY,newX,newY
+            #print 'Dest info: ',self.dest
             
             #if specialMath.hypotenuse(newX-curX,newY-curX) > distLocToDest:
             #    self.rect.center = self.dest
@@ -102,7 +104,7 @@ class Unit(Builder):
                 
                 testPoint = (destX+xShift*self.worldSize[0], \
                             destY+yShift*self.worldSize[1])
-                print 'Test Point: ',xShift,yShift,testPoint            
+                #print 'Test Point: ',xShift,yShift,testPoint            
                 if worldRect.collidepoint(testPoint):
                     return testPoint
         return None

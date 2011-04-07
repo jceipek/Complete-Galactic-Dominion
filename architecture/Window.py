@@ -71,6 +71,7 @@ class Window(Listener):
         Listener.__init__(self,manager,eventTypes)
         
         pygame.init()
+        pygame.display.set_caption('Complete Galactic Dominion')
         
         self.maxFPS = 60
         
@@ -187,11 +188,10 @@ class Window(Listener):
                     buttonId = rawEvent.button
                     if buttonId == Event.MouseLocals.LEFT_CLICK:
                         TMP_dragStartPos = rawEvent.pos
-                        if distance(rawEvent.pos,TMP_dragStartPos) > TMP_clickrange:
-                            if not TMP_shiftHeld:
-                                realEvent.append(Event.DragBeganEvent(rawEvent.pos))
-                            else:
-                                realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
+                        if not TMP_shiftHeld:
+                            realEvent.append(Event.DragBeganEvent(rawEvent.pos))
+                        else:
+                            realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
                 elif rawEvent.type == pygame.MOUSEBUTTONUP:
                     TMP_mouseState = 0
                     buttonId = rawEvent.button

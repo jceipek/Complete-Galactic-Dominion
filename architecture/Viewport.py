@@ -61,23 +61,30 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
         else:
             self.scrollSpeed = [0,0]
-        
-    def dragSelectionEvent(self,event):
-        """
-        Creates a drag rectangle from the start and current position of
-        the mouse given by an Event.DragSelectionEvent.  The rectangle
-        is set to the dragRect attribute.
-        """
-        startPos = event.startPos
-        curPos = event.curPos
-        self.dragRect = BBoxToRect(startPos,curPos)
     
-    def dragReleaseEvent(self,event):
+    def startDrag(self,event):
+        self.dragRect = DragBox(event.pos)
         
-        # Needs to be implemented to select
-        
+    def continueDrag(self,event):
+        if self.dragRect is not None:
+            self.dragRect.update(event.curr)
+            if self.dragRect.visible:
+                self.drawDragRect()
+    
+    def completeDrag(self,event):
+        if self.dragRect is not None:
+            self.dragRect.update(event.curr)
+            if self.dragRect.visible:
+                self.drawDragRect()
         self.dragRect = None
-
+    
+    def drawDragRect(self):   
+        """
+        Draws the drag rectangle from a mouse drag, if not None.
+        """
+        if not self.dragRect == None:
+            self.dragRect.draw(self.surface)
+           
     def setDestinationEvent(self, event):
         
         pos = event.pos
@@ -140,42 +147,31 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             newScrollLoc[0] = (newScrollLoc[0]+self.scrollSpeed[0]*elapsedTime)
             newScrollLoc[1] = (newScrollLoc[1]+self.scrollSpeed[1]*elapsedTime)
             
-            #FIXME - used to calculate corner of scroll location in cartesian grid
-            newCartScrollLoc = specialMath.isoToCart(newScrollLoc)
-            gridSizeX,gridSizeY = self.world.gridDim
-            self.cartScrollLoc = newCartScrollLoc[0]%gridSizeX,newCartScrollLoc[1]%gridSizeY
+            # used to calculate corner of scroll location in cartesian grid
+            self.cartScrollLoc = self.isoToWrappedCart(newScrollLoc)
             
             newScrollLoc = specialMath.cartToIso(self.cartScrollLoc)
-
             self.scrollLoc = tuple(newScrollLoc)
+    
+    def cartWrap(self,cartCoord):
+        gridSizeX,gridSizeY = self.world.gridDim
+        return cartCoord[0]%gridSizeX,cartCoord[1]%gridSizeY
+    
+    def isoToWrappedCart(self,isoCoord):
+        """
+        Returns a wrapped cartesian coordinate from an isometric
+        coordinate.
+        """
+        return self.cartWrap(specialMath.isoToCart(isoCoord))
     
     def drawContainedEntities(self):
         """
         Draws all elements contained in the current viewport to
         self.surface.
         """
-        '''
-        worldWidth,worldHeight = self.world.grid.getIsoGridDimensions()
-        ### FIXME!! Wrapping of objects does not currently work correctly!
-        sL=self.scrollLoc
-        for i in range(-1,2):
-            for j in range(-1,2):
-                for entity in self.viewportEntities:
-                    s1=(sL[0]+i*worldWidth,sL[1]+j*worldHeight)
-                    entity.draw(self.surface,s1)
-        '''
         for e in self.viewportEntities:
             e.draw(self.surface,self.scrollLoc)
-    
-    def drawDragRect(self):   
-        """
-        Draws the drag rectangle from a mouse drag, if not None.
-        """
-        if not self.dragRect == None:
-            dragColor = (150,150,0)
-            dragBoxThickness = 3
-            pygame.draw.rect(self.surface,dragBoxColor,dragRect,dragBoxThickness)
-            
+  
     def draw(self,displaySurface):
         """
         Draws the map and all entities for the current world location.
@@ -193,11 +189,17 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         timeElapsed = event.elapsedTimeSinceLastFrame
         self.scrollBasedOnElapsedTime(timeElapsed)
         self.world.__class__.elapsedTimeSinceLastFrame = timeElapsed
+    
+    def rectToCartWrappedRects(self,rect):
+        isoLeftTop = rect.topleft
+        cartLeftTop = self.isoToWrappedCart(isoLeftTop)
         
     def setViewportEntities(self):
         if not self.world == None:
             """FIXME to work with new coordinates."""
+            
             l,t = self.cartScrollLoc
+            
             w,h = self.size
             cartWidthVector=specialMath.isoToCart((w,0))
             cartHeightVector=specialMath.isoToCart((0,h))
@@ -205,32 +207,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             cartTopRight=l+cartWidthVector[0],t+cartWidthVector[1]
             cartBottomRight=l+cartWidthVector[0]+cartHeightVector[0],t+cartWidthVector[1]+cartHeightVector[1]
             cartBottomLeft=l+cartHeightVector[0],t+cartHeightVector[1]
-            '''
-            r=l+t
-            b=t+h
-            
-            cartTopLeft = (l,t)
-            cartTopRight = (r,t)
-            cartBottomRight = (r,b)
-            cartBottomLeft = (l,b)
-            '''
-            '''
-            isoTopLeft = specialMath.cartToIso((l,t))
-            isoTopRight = specialMath.cartToIso((r,t))
-            isoBottomRight = specialMath.cartToIso((r,b))
-            isoBottomLeft = specialMath.cartToIso((l,b))
-            '''
-            '''
-            cartW = cartTopRight[0]-cartBottomLeft[0]
-            cartH = cartBottomRight[1]-cartTopLeft[1]
-            cartL = cartBottomLeft[0]
-            cartT = cartTopLeft[1]
-            
-            curScreenRect = pygame.Rect(cartL,cartT,cartW,cartH)
-            #curScreenRect = pygame.Rect(self.scrollLoc,self.size)
-            
-            self.viewportEntities = self.world.getScreenEntities(curScreenRect)
-            '''
+
             worldWidth,worldHeight = self.world.grid.getCartGridDimensions()
             screen=[]
             
@@ -272,13 +249,33 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def changeWorld(self,world):
         self.world = world
 
-def BBoxToRect(p1,p2):
-    """
-    Takes two screen positions and returns the bounding box as a 
-    pygame.Rect object.
-    """
-    x1,y1 = p1
-    x2,y2 = p2
-    bboxRect = (pygame.Rect(p1,(x2-x1,y2-y1)))
-    bboxRect.normalize() # Normalizes to remove negative sizes.
-    return bboxRect
+class DragBox(object):
+    
+    def __init__(self,start):
+        self.start = start
+        self.visible = False
+        self.boundingBox = pygame.Rect(start,(0,0))
+    
+    def update(self,current):
+        self.current = current
+        if specialMath.distance(current,self.start) > 5:
+            self.visible = True
+            self.updateBoundingBox()
+        else:
+            self.visible = False
+    
+    def setCorner(self,current):
+        self.current = current
+    
+    def draw(self,surface):
+        dragBoxColor = (150,150,0)
+        dragBoxThickness = 3
+        pygame.draw.rect(surface,dragBoxColor,self.boundingBox,dragBoxThickness)
+    
+    def updateBoundingBox(self):
+        x1,y1 = self.start
+        x2,y2 = self.current
+        
+        bboxRect = (pygame.Rect(self.start,(x2-x1,y2-y1)))
+        bboxRect.normalize() # Normalizes to remove negative sizes.
+        self.boundingBox = bboxRect

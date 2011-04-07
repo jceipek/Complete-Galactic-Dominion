@@ -65,12 +65,21 @@ class MainScreen(Screen):
 
     def processMouseClickEvent(self,event):
         self.viewport.clickEvent(event)
+    
+    def processDragBeganEvent(self,event):
+        self.viewport.startDrag(event)
         
-    def processDragSelectionEvent(self,event):
-        self.viewport.dragSelectionEvent(event)
-        
-    def processDragReleaseEvent(self,event):
-        self.viewport.dragReleaseEvent(event)
+    def processDragEvent(self,event):
+        self.viewport.continueDrag(event)
+    
+    def processDragCompletedEvent(self,event):
+        self.viewport.completeDrag(event)
+    
+    #def processDragSelectionEvent(self,event):
+    #    self.viewport.dragSelectionEvent(event)
+    #    
+    #def processDragReleaseEvent(self,event):
+    #    self.viewport.dragReleaseEvent(event)
 
     def processSetDestinationEvent(self, event):
         self.viewport.setDestinationEvent(event)
