@@ -88,7 +88,7 @@ class DragCompletedEvent(Event):
         self.curr = endxy
         self.verboseInfo = "\tStartPos: "+str(self.start)+"\n"+\
                            "\tEndPos: "+str(self.curr)+"\n"
-
+ 
 class AddDragCompletedEvent(Event):
     def __init__(self,startxy,endxy):
         Event.__init__(self)
@@ -101,4 +101,4 @@ class SetDestinationEvent(Event):
     def __init__(self,posxy):
         Event.__init__(self)
         self.pos = posxy
-        self.verboseInfo = "\tPosition: %s\n"%str(self.pos)
+        self.verboseInfo = "\tPosition: "+str(self.pos)+"\n"
