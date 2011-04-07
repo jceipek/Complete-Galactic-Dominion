@@ -223,6 +223,8 @@ class Window(Listener):
                 elif rawEvent.type == pygame.KEYUP:
                     if rawEvent.key == 303 or rawEvent.key == 304:
                         TMP_shiftHeld = False
+                    if rawEvent.key == pygame.K_ESCAPE:
+                        realEvent.append(Event.QuitEvent())
 
                 for i in realEvent:
                     self.manager.post(i) #Warning: make sure that threading doesn't cause \
