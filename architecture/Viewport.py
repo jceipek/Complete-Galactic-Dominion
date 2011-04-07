@@ -268,10 +268,11 @@ class DragBox(object):
         self.current = current
     
     def draw(self,surface):
-        dragBoxColor = (150,150,0)
-        dragBoxThickness = 3
-        pygame.draw.rect(surface,dragBoxColor,self.boundingBox,dragBoxThickness)
-    
+        if self.visible:
+            dragBoxColor = (150,150,0)
+            dragBoxThickness = 3
+            pygame.draw.rect(surface,dragBoxColor,self.boundingBox,dragBoxThickness)
+        
     def updateBoundingBox(self):
         x1,y1 = self.start
         x2,y2 = self.current
