@@ -26,6 +26,7 @@ from UserInterface import UserInterface
 from Universe import Universe
 from Entity import Entity,TestEntity
 from Unit import Unit
+from gameClient import GameClient
 
 def init():
     """
@@ -39,7 +40,6 @@ def init():
         3. We send the eventManager a message to start the game
             - This message is interpreted by the gameWindow
     """
-    client=networking.Client()
     
     debugger = Debugger()
     eventTimer = EventTimer()
@@ -47,6 +47,8 @@ def init():
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
+                                                
+    client = GameClient(eventManager)
                                                 
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
@@ -78,9 +80,10 @@ def init():
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
         w.addEntity(TestEntity('testCraft.png',i*50,i*50,w,'alpha'))
 
+    eventManager.post(Event.WorldManipulationEvent())
+    
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
-    
     return eventManager.eventTypesToListeners
 
 if __name__ == '__main__':
