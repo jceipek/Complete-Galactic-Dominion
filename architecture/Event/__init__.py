@@ -10,3 +10,4 @@ from StartEvent import *
 from UpdateEvent import *
 from WorldChangeEvent import *
 from DisplaySurfaceCreatedEvent import *
+from WorldManipulationEvent import *
