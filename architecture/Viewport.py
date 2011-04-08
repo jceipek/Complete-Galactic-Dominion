@@ -103,39 +103,22 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         start = event.start
         end = event.curr
-
-        #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
-        def distBetween(p1,p2):
-            return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
         
-        # list of tuples containing distance between the center of the
-        # rectangle and the mouseclick position, and the entity itself
-        #clicked = []
+        if isinstance(event,Event.DragCompletedEvent):
+            for e in self.selectedEntities:
+                e.selected = False
+            self.selectedEntities = []
+        #else: pass # if it is an Event.AddDragCompletedEvent, do
+        # # not deselect
+        
         for entity in self.viewportEntities:
         
             drawRect = entity.rect.move(entity.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
         
             if drawRect.colliderect(MakeBoundingBox(start,end)):
-                #clicked.append(entity)
                 entity.selected = True
                 self.selectedEntities.append(entity)
-        
-        #if isinstance(event,Event.SelectionEvent):
-        #    for e in self.selectedEntities:
-        #        e.selected = False
-        #    self.selectedEntities = []
-
-        #if len(clicked):
-        #    clicked.sort()
-        #    # Determines if the closest entity is already selected.
-        #    # If it is, it makes it no longer selected.
-        #    if clicked[0][1].selected:
-        #        clicked[0][1].selected = False
-        #        self.selectedEntities.remove(clicked[0][1])
-        #    else:
-        #        clicked[0][1].selected = True
-        #        self.selectedEntities.append(clicked[0][1])
     
     def clickEvent(self,event):
         """
