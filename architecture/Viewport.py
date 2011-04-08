@@ -105,9 +105,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     attacking=True
                        
         if not attacking:
+            eCenter = specialMath.centerOfEntityList(self.selectedEntities)
             for entity in self.selectedEntities:
                 entity.status=Locals.MOVING
-                entity.addToPath(destCart)
+                dx = entity.rect.center[0] - eCenter[0]
+                dy = entity.rect.center[1] - eCenter[1]
+                newLoc = (dx+destCart[0],dy+destCart[1])
+                entity.addToPath(newLoc)
         
     def dragSelect(self,event):
         """

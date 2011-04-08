@@ -34,6 +34,23 @@ def isoToCart(coord):
 def hypotenuse(x,y):
     return pow(x**2+y**2,.5)
 
+def centerOfEntityList(entities):
+    """
+    Determines the average location of a list of entities.
+    This is useful for moving groups without losing integrity.
+    @param entities: List of entities
+    """
+    center = [0,0]
+    e = 0
+    for e in xrange(1,len(entities)+1):
+        c = entities[e-1].rect.center
+        center[0] += c[0]
+        center[1] += c[1]
+    if e > 0:
+        center[0] /= (e)
+        center[1] /= (e)
+    return tuple(center)
+
 if __name__ == "__main__":
     print isoToCart((-10,-10))
     print isoToCart((-10,10))
