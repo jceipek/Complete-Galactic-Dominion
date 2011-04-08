@@ -20,6 +20,7 @@ def centerOfEntityList(entities):
     @param entities: List of entities
     """
     center = [0,0]
+    e = 0
     for e in xrange(1,len(entities)+1):
         c = entities[e-1].rect.center
         center[0] += c[0]
