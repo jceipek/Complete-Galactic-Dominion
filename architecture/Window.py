@@ -188,10 +188,11 @@ class Window(Listener):
                     if buttonId == Event.MouseLocals.LEFT_CLICK:
                         TMP_mouseState = 1
                         TMP_dragStartPos = rawEvent.pos
-                        if not TMP_shiftHeld:
-                            realEvent.append(Event.DragBeganEvent(rawEvent.pos))
-                        else:
-                            realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
+                        realEvent.append(Event.DragBeganEvent(rawEvent.pos))
+                        #if not TMP_shiftHeld:
+                        #    realEvent.append(Event.DragBeganEvent(rawEvent.pos))
+                        #else:
+                        #    realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
                 
                 elif rawEvent.type == pygame.MOUSEBUTTONUP:
                     TMP_mouseState = 0
