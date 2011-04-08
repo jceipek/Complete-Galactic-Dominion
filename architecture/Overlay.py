@@ -28,7 +28,7 @@ class DebugOverlay(Overlay):
 class DragBox(object):
     
     def __init__(self,start):
-        self.start = start
+        self.start = self.current = start
         self.visible = False
         self.boundingBox = pygame.Rect(start,(0,0))
     
@@ -50,12 +50,21 @@ class DragBox(object):
             pygame.draw.rect(surface,dragBoxColor,self.boundingBox,dragBoxThickness)
         
     def updateBoundingBox(self):
-        x1,y1 = self.start
-        x2,y2 = self.current
+        self.boundingBox = MakeBoundingBox(self.start,self.current)
+        #x1,y1 = self.start
+        #x2,y2 = self.current
         
-        bboxRect = (pygame.Rect(self.start,(x2-x1,y2-y1)))
-        bboxRect.normalize() # Normalizes to remove negative sizes.
-        self.boundingBox = bboxRect
+        #bboxRect = (pygame.Rect(self.start,(x2-x1,y2-y1)))
+        #bboxRect.normalize() # Normalizes to remove negative sizes.
+        #self.boundingBox = bboxRect
+
+def MakeBoundingBox(p1,p2):
+    x1,y1 = p1
+    x2,y2 = p2
+    
+    bboxRect = (pygame.Rect(p1,(x2-x1,y2-y1)))
+    bboxRect.normalize() # Normalizes to remove negative sizes.
+    return bboxRect
 
 class HealthBar():
     
@@ -102,7 +111,7 @@ class HealthBar():
         self.maxHealth = self.owner.maxHealth
         self.curHealth = self.owner.curHealth
         
-        self.scaleHealth = round((self.curHealth/self.maxHealth)*self.hBarWidth)
+        self.scaleHealth = round((float(self.curHealth)/self.maxHealth)*self.hBarWidth)
     
     def draw(self,surface,midTop):
         """

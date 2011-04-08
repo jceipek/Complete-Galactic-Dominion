@@ -74,12 +74,6 @@ class MainScreen(Screen):
     
     def processDragCompletedEvent(self,event):
         self.viewport.completeDrag(event)
-    
-    #def processDragSelectionEvent(self,event):
-    #    self.viewport.dragSelectionEvent(event)
-    #    
-    #def processDragReleaseEvent(self,event):
-    #    self.viewport.dragReleaseEvent(event)
 
     def processSetDestinationEvent(self, event):
         self.viewport.setDestinationEvent(event)

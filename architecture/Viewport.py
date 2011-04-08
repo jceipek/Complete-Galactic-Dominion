@@ -1,6 +1,6 @@
 import pygame
 import Event,specialMath
-from Overlay import DragBox
+from Overlay import DragBox, MakeBoundingBox
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
@@ -58,7 +58,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
             self.scrollSpeed[0]=dx*self.scrollSensitivity
             self.scrollSpeed[1]=dy*self.scrollSensitivity
-            
         else:
             self.scrollSpeed = [0,0]
     
@@ -76,6 +75,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.dragRect.update(event.curr)
             if self.dragRect.visible:
                 self.drawDragRect()
+        self.dragSelect(event)
         self.dragRect = None
     
     def drawDragRect(self):   
@@ -96,8 +96,49 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         for entity in self.selectedEntities:
             entity.addToPath(destCart)
     
+    def dragSelect(self,event):
+        """
+        Fill this in.
+        """
+        
+        start = event.start
+        end = event.curr
+
+        #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
+        def distBetween(p1,p2):
+            return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
+        
+        # list of tuples containing distance between the center of the
+        # rectangle and the mouseclick position, and the entity itself
+        #clicked = []
+        for entity in self.viewportEntities:
+        
+            drawRect = entity.rect.move(entity.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+        
+            if drawRect.colliderect(MakeBoundingBox(start,end)):
+                #clicked.append(entity)
+                entity.selected = True
+                self.selectedEntities.append(entity)
+        
+        #if isinstance(event,Event.SelectionEvent):
+        #    for e in self.selectedEntities:
+        #        e.selected = False
+        #    self.selectedEntities = []
+
+        #if len(clicked):
+        #    clicked.sort()
+        #    # Determines if the closest entity is already selected.
+        #    # If it is, it makes it no longer selected.
+        #    if clicked[0][1].selected:
+        #        clicked[0][1].selected = False
+        #        self.selectedEntities.remove(clicked[0][1])
+        #    else:
+        #        clicked[0][1].selected = True
+        #        self.selectedEntities.append(clicked[0][1])
+    
     def clickEvent(self,event):
-        """"
+        """
         What works:
         single - clicking on units
         click on ground to deselect all (without a modifier)
@@ -105,7 +146,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         click a selected unit while holding a modifier to remove from the selection
         """
         
-        pos = event.pos        
+        pos = event.pos
         #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
         def distBetween(p1,p2):
             return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
@@ -142,7 +183,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.selectedEntities.append(clicked[0][1])
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
-        if not self.world == None:
+        
+        if not self.world == None:# FIXME and self.dragRect == None:
             newScrollLoc = list(self.scrollLoc)
             newScrollLoc[0] = (newScrollLoc[0]+self.scrollSpeed[0]*elapsedTime)
             newScrollLoc[1] = (newScrollLoc[1]+self.scrollSpeed[1]*elapsedTime)
