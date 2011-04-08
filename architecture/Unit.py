@@ -15,6 +15,7 @@ class Unit(Builder):
     # by this computer (one particular player)
     from pygame.sprite import Group
     allUnits = Group()
+
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
@@ -27,12 +28,38 @@ class Unit(Builder):
         self.path=[] #queue of future tuple destinations
         self.dest=self.rect.center #current destination
         self.speed=.1
+        self.attackRange=300
+        self.attackRechargeTime=500
+        self.timeSinceAttack=self.attackRechargeTime
+        self.objectOfAction=None
 
     def update(self):
         """Called by game each frame to update object."""
         #FIXME !!!
-        #self.dtime()#updates time
-        self.move()
+        if self.status==Locals.MOVING:
+            self.move()
+        else:
+            self.path=[]
+            self.dest=self.rect.center
+        if self.status==Locals.ATTACKING:
+            self.attack(self.objectOfAction)
+        self.timeSinceAttack+=self.getTimeElapsed()
+
+    def attack(self, enemy, strength=10):
+        """Moves unit such that enemy is within range and attacks it"""
+        if specialMath.distance(self.rect.center, enemy.rect.center) > self.attackRange: #FIXME for somereason it works, but I don't know why
+
+            self.dest=enemy.rect.center #FIXME pathfinding goes here
+            self.move() 
+        elif self.timeSinceAttack>=self.attackRechargeTime:
+            enemy.changeHealth(-1*strength)
+            self.timeSinceAttack=0
+
+    def initAttack(self, enemy):
+        print 'ATTACK'
+        self.status=Locals.ATTACKING
+        self.objectOfAction=enemy
+            
         
     def move(self):
         """changes position of unit in direction of dest"""
@@ -71,7 +98,7 @@ class Unit(Builder):
         if self._isAtDestination(): #may need to have room for error
             if self.path == []:
                 self.status = Locals.IDLE
-                self.dest = None
+                self.dest = self.rect.center
                 return
             else: # path not empty - change path
                 self.status = Locals.MOVING
@@ -91,7 +118,6 @@ class Unit(Builder):
         of the unit and the desired end point.  Returns None if none
         is found.
         """
-        
         destX,destY = self.path.pop(0)
         
         # Rectangle the size of the world which is centered
@@ -107,6 +133,7 @@ class Unit(Builder):
                 #print 'Test Point: ',xShift,yShift,testPoint            
                 if worldRect.collidepoint(testPoint):
                     return testPoint
+        
         return None
     
     def moveWrap(self):

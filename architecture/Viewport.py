@@ -1,5 +1,6 @@
 import pygame
 import Event,specialMath
+from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
@@ -86,16 +87,28 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.dragRect.draw(self.surface)
            
     def setDestinationEvent(self, event):
-        
+        attacking=False
         pos = event.pos
         cartPos = specialMath.isoToCart(pos)
         
         destCart = self.cartScrollLoc[0] + cartPos[0], \
                     self.cartScrollLoc[1] + cartPos[1]
+
+        for entity in self.viewportEntities:
         
-        for entity in self.selectedEntities:
-            entity.addToPath(destCart)
-    
+            drawRect = entity.rect.move(entity.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+        
+            if drawRect.collidepoint(pos):
+                for selected in self.selectedEntities:
+                    selected.initAttack(entity)
+                    attacking=True
+                       
+        if not attacking:
+            for entity in self.selectedEntities:
+                entity.status=Locals.MOVING
+                entity.addToPath(destCart)
+        
     def dragSelect(self,event):
         """
         Fill this in.
