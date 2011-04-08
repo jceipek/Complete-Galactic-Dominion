@@ -1,12 +1,13 @@
 import cPickle
+from Event import Event
 
 class WorldManipulationEvent(Event):
     """
-    Fired whenever the state of the world needs to change
+    Fired as a request to change the world
     """
-    def __init__(self):
+    def __init__(self,data=None):
         Event.__init__(self)
+        self.data = data
+        
     def toPacket(self):
-        return cPickle.dumps(self)
-    def fromPacket(str):
-        return cPickle.loads(str)
+        return cPickle.dumps(self.data)
