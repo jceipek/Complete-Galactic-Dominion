@@ -58,7 +58,6 @@ class Unit(Builder):
             newX = curX + dirx*self.speed*self.getTimeElapsed()
             newY = curY + diry*self.speed*self.getTimeElapsed()
             
-            print newX-curX,newY-curY
             #print 'Dir info: ',curX,curY,newX,newY
             #print 'Dest info: ',self.dest
             
@@ -128,7 +127,10 @@ class Unit(Builder):
         Takes an x,y coordinate tuple in the grid and adds this location
         to the path.
         """
-        print coord
+        
+        #DELETEME - FIXME
+        self.changeHealth(-10)
+        
         self.path.append(coord)
 
 if __name__ == "__main__":

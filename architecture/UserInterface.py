@@ -74,10 +74,6 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance(event,Event.DragCompletedEvent):
             if self.activeScreen:
                 self.activeScreen.processDragCompletedEvent(event)
-        #elif isinstance(event, Event.DragSelectionEvent):
-        #    self.activeScreen.processDragSelectionEvent(event)
-        #elif isinstance(event, Event.DragReleaseEvent):
-        #    self.activeScreen.processDragReleaseEvent(event)
         elif isinstance(event, Event.SetDestinationEvent):
             self.activeScreen.processSetDestinationEvent(event)
         elif isinstance(event, Event.UpdateEvent):

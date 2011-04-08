@@ -184,14 +184,15 @@ class Window(Listener):
                     realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)"""
 
                 elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
-                    TMP_mouseState = 1
                     buttonId = rawEvent.button
                     if buttonId == Event.MouseLocals.LEFT_CLICK:
+                        TMP_mouseState = 1
                         TMP_dragStartPos = rawEvent.pos
                         if not TMP_shiftHeld:
                             realEvent.append(Event.DragBeganEvent(rawEvent.pos))
                         else:
                             realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
+                
                 elif rawEvent.type == pygame.MOUSEBUTTONUP:
                     TMP_mouseState = 0
                     buttonId = rawEvent.button
@@ -228,7 +229,7 @@ class Window(Listener):
 
                 for i in realEvent:
                     self.manager.post(i) #Warning: make sure that threading doesn't cause \
-                                                 #problems here!
+                                                #problems here!
                                                      
             else: time.sleep(.01)
 
