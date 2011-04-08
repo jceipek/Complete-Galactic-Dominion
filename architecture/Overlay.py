@@ -1,4 +1,5 @@
 import pygame
+import specialMath
 
 class Overlay(object): #FIXME - should inherit from drawable object?
     def __init__(self):
