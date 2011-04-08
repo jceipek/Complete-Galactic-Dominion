@@ -24,6 +24,38 @@ class DebugOverlay(Overlay):
         fontSurf = self.font.render("FPS: "+str(self.fps), False, (255,255,255))
         displaySurface.blit(fontSurf,(0,0))
 
+class DragBox(object):
+    
+    def __init__(self,start):
+        self.start = start
+        self.visible = False
+        self.boundingBox = pygame.Rect(start,(0,0))
+    
+    def update(self,current):
+        self.current = current
+        if specialMath.distance(current,self.start) > 5:
+            self.visible = True
+            self.updateBoundingBox()
+        else:
+            self.visible = False
+    
+    def setCorner(self,current):
+        self.current = current
+    
+    def draw(self,surface):
+        if self.visible:
+            dragBoxColor = (150,150,0)
+            dragBoxThickness = 3
+            pygame.draw.rect(surface,dragBoxColor,self.boundingBox,dragBoxThickness)
+        
+    def updateBoundingBox(self):
+        x1,y1 = self.start
+        x2,y2 = self.current
+        
+        bboxRect = (pygame.Rect(self.start,(x2-x1,y2-y1)))
+        bboxRect.normalize() # Normalizes to remove negative sizes.
+        self.boundingBox = bboxRect
+
 class HealthBar():
     
     def __init__(self,owner,hBarHeight=10,padY=3,scaleX=1,capWidth=True):
