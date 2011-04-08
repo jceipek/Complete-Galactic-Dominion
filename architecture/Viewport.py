@@ -93,8 +93,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         destCart = self.cartScrollLoc[0] + cartPos[0], \
                     self.cartScrollLoc[1] + cartPos[1]
         
+        #Move a group of units while retaining their center
+        eCenter = specialMath.centerOfEntityList(self.selectedEntities)
         for entity in self.selectedEntities:
-            entity.addToPath(destCart)
+            dx = entity.rect.center[0] - eCenter[0]
+            dy = entity.rect.center[1] - eCenter[1]
+            newLoc = (dx+destCart[0],dy+destCart[1])
+            entity.addToPath(newLoc)
     
     def dragSelect(self,event):
         """

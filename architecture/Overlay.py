@@ -68,7 +68,7 @@ def MakeBoundingBox(p1,p2):
 
 class HealthBar():
     
-    def __init__(self,owner,hBarHeight=10,padY=3,scaleX=1,capWidth=True):
+    def __init__(self,owner,hBarHeight=5,padY=3,scaleX=1,capWidth=True):
         
         from pygame import Surface
         
