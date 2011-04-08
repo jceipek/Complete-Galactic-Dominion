@@ -3,6 +3,7 @@ import pygame
 from collections import deque
 from GameData import Locals # includes statuses
 import specialMath
+from Overlay import HealthBar
 
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
@@ -80,6 +81,8 @@ class Entity(MapObject):
         self.blocking = False
         self.drawOffset=(0,0)
 
+        self.healthBar = HealthBar(self)
+
     # First initialization of update method
     def update(self):
         """All Sprite objects should have an update function."""
@@ -112,11 +115,15 @@ class Entity(MapObject):
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
+            self.drawHealthBar(screen,drawRect)
         
         screen.blit(self.image,drawRect)
 
     def drawSelectionRing(self, screen, drawRect):
         pygame.draw.circle(screen, (255,255,255), drawRect.center, 20, 1)
+
+    def drawHealthBar(self, screen, drawRect):
+        self.healthBar.draw(screen,drawRect.midtop)
 
     def dtime(self):
         """returns time since last call, used in update, keeps track of time between frames"""
