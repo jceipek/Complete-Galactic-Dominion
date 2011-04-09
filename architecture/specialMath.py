@@ -36,7 +36,9 @@ def closestEntity(entities,loc):
     minDist = None
     closest = None
     for e in entities:
-        dist = distance(e.rect.center,loc)
+        drawRect = e.rect.move(e.drawOffset)
+        drawRect.center = cartToIso(drawRect.center)
+        dist = distance(drawRect.center,loc)
         if not minDist or dist < minDist:
             minDist = dist
             closest = e

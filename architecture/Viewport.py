@@ -135,16 +135,19 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         """
         
         pos = event.pos
-        def distBetween(p1,p2):
-            return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
 
         cartPos = specialMath.isoToCart(pos)
         destCart = self.cartScrollLoc[0] + cartPos[0], \
                        self.cartScrollLoc[1] + cartPos[1]
-        clicked = specialMath.closestEntity(self.viewportEntities,destCart)
+        clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
-        if not clicked.rect.collidepoint(destCart):
-           clicked = None 
+        #if not clicked.rect.collidepoint(destCart):
+        #   clicked = None
+        
+        drawRect = clicked.rect.move(clicked.drawOffset)
+        drawRect.center = specialMath.cartToIso(drawRect.center)
+        if not drawRect.collidepoint(pos):
+            clicked = None
         
         if isinstance(event,Event.SelectionEvent):
             for e in self.selectedEntities:
