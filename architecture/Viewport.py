@@ -138,37 +138,29 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         #FIXME - VERY INEFFICIENT/UGLY IMPLEMENTATION RIGHT NOW
         def distBetween(p1,p2):
             return ((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)**.5
-    
-        #worldX, worldY = self.scrollLoc
 
-        #cartOffset = specialMath.isoToCart((-worldX,-worldY))
+        cartPos = specialMath.isoToCart(pos)
+        destCart = self.cartScrollLoc[0] + cartPos[0], \
+                       self.cartScrollLoc[1] + cartPos[1]
+        clicked = specialMath.closestEntity(self.viewportEntities,destCart)
         
-        # list of tuples containing distance between the center of the
-        # rectangle and the mouseclick position, and the entity itself
-        clicked = []
-        for entity in self.viewportEntities:
-        
-            drawRect = entity.rect.move(entity.drawOffset)
-            drawRect.center = specialMath.cartToIso(drawRect.center)
-        
-            if drawRect.collidepoint(pos):
-                clicked.append((distBetween(drawRect.center,pos),entity))
+        if not clicked.rect.collidepoint(destCart):
+           clicked = None 
         
         if isinstance(event,Event.SelectionEvent):
             for e in self.selectedEntities:
                 e.selected = False
             self.selectedEntities = []
 
-        if len(clicked):
-            clicked.sort()
+        if clicked:
             # Determines if the closest entity is already selected.
             # If it is, it makes it no longer selected.
-            if clicked[0][1].selected:
-                clicked[0][1].selected = False
-                self.selectedEntities.remove(clicked[0][1])
+            if clicked.selected:
+                clicked.selected = False
+                self.selectedEntities.remove(clicked)
             else:
-                clicked[0][1].selected = True
-                self.selectedEntities.append(clicked[0][1])
+                clicked.selected = True
+                self.selectedEntities.append(clicked)
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
         
