@@ -155,9 +155,6 @@ class Unit(Builder):
         to the path.
         """
         
-        #DELETEME - FIXME
-        self.changeHealth(-10)
-        
         self.path.append(coord)
 
 if __name__ == "__main__":
