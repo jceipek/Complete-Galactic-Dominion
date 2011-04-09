@@ -94,15 +94,17 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         destCart = self.cartScrollLoc[0] + cartPos[0], \
                     self.cartScrollLoc[1] + cartPos[1]
 
-        for entity in self.viewportEntities:
+        clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
-            drawRect = entity.rect.move(entity.drawOffset)
-            drawRect.center = specialMath.cartToIso(drawRect.center)
+        drawRect = clicked.rect.move(clicked.drawOffset)
+        drawRect.center = specialMath.cartToIso(drawRect.center)
+        if not drawRect.collidepoint(pos):
+            clicked = None
         
-            if drawRect.collidepoint(pos):
-                for selected in self.selectedEntities:
-                    selected.initAttack(entity)
-                    attacking=True
+        if clicked:
+            for selected in self.selectedEntities:
+                selected.initAttack(clicked)
+                attacking=True
                        
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
@@ -152,9 +154,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         destCart = self.cartScrollLoc[0] + cartPos[0], \
                        self.cartScrollLoc[1] + cartPos[1]
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
-        
-        #if not clicked.rect.collidepoint(destCart):
-        #   clicked = None
         
         drawRect = clicked.rect.move(clicked.drawOffset)
         drawRect.center = specialMath.cartToIso(drawRect.center)
@@ -269,7 +268,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     BL = cartBottomLeft[0]+i*worldWidth,cartBottomLeft[1]+j*worldHeight
                     
                     screen.append((TL,TR,BR,BL))
-                    #screen.append((cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft))
             
             self.viewportEntities = self.world.getScreenEntities(screen)
     
