@@ -51,6 +51,18 @@ def centerOfEntityList(entities):
         center[1] /= (e)
     return tuple(center)
 
+def closestEntity(entities,loc):
+    #Note: using sort() seems like it would be really slow,
+    #which is why I am using this technique.
+    minDist = None
+    closest = None
+    for e in entities:
+        dist = distance(e.rect.center,loc)
+        if not minDist or dist < minDist:
+            minDist = dist
+            closest = e
+    return closest
+
 if __name__ == "__main__":
     print isoToCart((-10,-10))
     print isoToCart((-10,10))
