@@ -1,5 +1,6 @@
 import pygame
 import Event,specialMath
+from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
@@ -86,21 +87,32 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.dragRect.draw(self.surface)
            
     def setDestinationEvent(self, event):
-        
+        attacking=False
         pos = event.pos
         cartPos = specialMath.isoToCart(pos)
         
         destCart = self.cartScrollLoc[0] + cartPos[0], \
                     self.cartScrollLoc[1] + cartPos[1]
+
+        for entity in self.viewportEntities:
         
-        #Move a group of units while retaining their center
-        eCenter = specialMath.centerOfEntityList(self.selectedEntities)
-        for entity in self.selectedEntities:
-            dx = entity.rect.center[0] - eCenter[0]
-            dy = entity.rect.center[1] - eCenter[1]
-            newLoc = (dx+destCart[0],dy+destCart[1])
-            entity.addToPath(newLoc)
-    
+            drawRect = entity.rect.move(entity.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+        
+            if drawRect.collidepoint(pos):
+                for selected in self.selectedEntities:
+                    selected.initAttack(entity)
+                    attacking=True
+                       
+        if not attacking:
+            eCenter = specialMath.centerOfEntityList(self.selectedEntities)
+            for entity in self.selectedEntities:
+                entity.status=Locals.MOVING
+                dx = entity.rect.center[0] - eCenter[0]
+                dy = entity.rect.center[1] - eCenter[1]
+                newLoc = (dx+destCart[0],dy+destCart[1])
+                entity.addToPath(newLoc)
+        
     def dragSelect(self,event):
         """
         Fill this in.
