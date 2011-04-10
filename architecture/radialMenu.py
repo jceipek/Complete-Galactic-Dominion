@@ -76,8 +76,8 @@ class RMenu():
             offset = (self.mousePos[0] - self.loc[0], self.mousePos[1] - self.loc[1])
             from math import hypot
             dist = hypot(offset[0],offset[1])
+            count = len(self.root)
             if dist >= self.minDist:
-                count = len(self.root)
                 deg = degFromOffset(offset)
                 degOffset = (2.0*3.14159)/count
                 index = findIndex(deg,count,degOffset)
@@ -91,6 +91,11 @@ class RMenu():
                         if self.root[i].submenu:
                             if self.root[i].submenu.visible:
                                 self.root[i].submenu.close()
+            else:
+                for i in xrange(count):
+                    if self.root[i].submenu:
+                        if self.root[i].submenu.visible:
+                            self.root[i].submenu.close()              
 
     def draw(self,surf):
         if self.visible:
@@ -103,6 +108,7 @@ class RMenu():
                     childOffset = offsetFromDeg(i*degOffset,self.rad)
                     childLoc = (childOffset[0]+self.loc[0],childOffset[1]+self.loc[1])
                     self.root[i].draw(surf,childLoc)
+                    
                 offset = (self.mousePos[0] - self.loc[0], self.mousePos[1] - self.loc[1])
                 from math import hypot
                 dist = hypot(offset[0],offset[1])
@@ -166,20 +172,46 @@ if __name__ == "__main__":
     displaySurface = pygame.display.set_mode(resolution)
     RUNNING = True
     
-    #Set up the menu:
+    #Set up the test menu:
     menu = RMenu()
     menu2 = RMenu()
-    item1 = RMenuItem(menu,image = "orbRedBlack.png",col = (255,0,0),title = "Red")
+    menu3 = RMenu()
+    menu4 = RMenu()
+    
+    item1 = RMenuItem(menu,image = "orbQBlack.png",col = (255,0,0),title = "Red")
     item2 = RMenuItem(menu,image = "orbQBlack.png")
-    item5 = RMenuItem(menu,image = "orbPurpleBlack.png",col = (255,0,255),title = "Purple")
+    item3 = RMenuItem(menu,image = "orbPurpleBlack.png",col = (255,0,255),title = "Purple")
+    item1.addSubmenu(menu4)
     item2.addSubmenu(menu2)
-    item3 = RMenuItem(menu,image = "orbBlueBlack.png",col = (0,0,255),title = "Blue")
-    item4 = RMenuItem(menu,image = "orbWhiteBlack.png",col = (255,255,255),title = "White")
+    
     menu.addItem(item1)
     menu.addItem(item2)
-    menu.addItem(item5)
-    menu2.addItem(item3)
+    menu.addItem(item3)
+    
+    item4 = RMenuItem(menu,image = "orbBlueBlack.png",col = (0,0,255),title = "Blue")
+    item5 = RMenuItem(menu,image = "orbQBlack.png")
+    item5.addSubmenu(menu3)
+    
     menu2.addItem(item4)
+    menu2.addItem(item5)
+    
+    item6 = RMenuItem(menu,image = "orbWhiteBlack.png",col = (255,255,255),title = "White")
+    item7 = RMenuItem(menu,image = "orbRedBlack.png",col = (255,0,0),title = "Red#2")
+    item8 = RMenuItem(menu,image = "orbPurpleBlack.png",col = (255,0,255),title = "Purple#2") 
+    
+    menu3.addItem(item6)
+    menu3.addItem(item7)
+    menu3.addItem(item8)
+    
+    item9 = RMenuItem(menu,image = "orbRedBlack.png",col = (255,0,0),title = "Red#3")
+    item10 = RMenuItem(menu,image = "orbRedBlack.png",col = (255,0,0),title = "Red#4")
+    item11 = RMenuItem(menu,image = "orbRedBlack.png",col = (255,0,0),title = "Red#5")
+    item12 = RMenuItem(menu,image = "orbRedBlack.png",col = (255,0,0),title = "Red#6")
+
+    menu4.addItem(item9)
+    menu4.addItem(item10)
+    menu4.addItem(item11)
+    menu4.addItem(item12)
     
     while RUNNING:
     
