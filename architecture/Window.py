@@ -118,7 +118,7 @@ class Window(Listener):
             #I DON'T KNOW IF THIS WILL WORK PROPERLY FOR MULTIPLE EVENTS, YET - Julian
 
             #Tell the objects on screen to update.
-            self.pygameEvents+=pygame.event.get()
+            self.pygameEvents += pygame.event.get()
             self.manager.post(Event.UpdateEvent(self.gameFrametime,self.gameTime))
             
             #Note: the renderer does not update or display anything.
