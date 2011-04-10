@@ -30,7 +30,7 @@ class RMenu():
     @param visible: whether the menu can be seen (it is open)
     @param root: a list of the menu items contained in the menu
     """
-    def __init__(self,loc = (0,0),rad = 50,minDist=10,title=None):
+    def __init__(self,loc = (0,0),rad = 80,minDist=15,title=None):
         self.root = []
         self.loc = loc
         self.mousePos = loc
@@ -112,23 +112,24 @@ class RMenu():
                     #Draw highlight
                     childOffset = offsetFromDeg(index*degOffset,self.rad)
                     childLoc = (childOffset[0]+self.loc[0],childOffset[1]+self.loc[1])
-                    pygame.draw.line(surf, (255,255,255), self.loc, childLoc)
+                    pygame.draw.line(surf, (100,100,100), self.loc, childLoc,3)
                     
                     if self.root[index].submenu:
                         self.root[index].submenu.draw(surf)
+                    else:
+                        self.root[index].highlight(surf,childLoc)
       
 class RMenuItem(DrawableObject):
     """
     A menu item suitable for use in an RMenu
     @param menu: The menu that contains the item
     """
-    def __init__(self,menu,title = 'None',size = 20,col = (0,0,255)):
+    def __init__(self,menu,image = "orbBlack.png",imageKey = -1,title = 'None',size = 32,col = (0,0,255)):
 
-        DrawableObject.__init__(self,'orbBlack.png',-1)
+        DrawableObject.__init__(self,image,imageKey) #Should be different for each item
         
         self.title = title
-        
-        #self.size = size
+        self.size = size
         self.color = col
         self.menu = menu
         self.submenu = None
@@ -139,7 +140,6 @@ class RMenuItem(DrawableObject):
     def draw(self,surf,loc):
         self.rect.center=loc
         surf.blit(self.image,self.rect)
-        #pygame.draw.circle(surf, self.color, loc, self.size)
         if self.submenu:
             self.submenu.draw(surf)
         
@@ -152,7 +152,11 @@ class RMenuItem(DrawableObject):
                 self.submenu.open(loc)
             else:
                 self.submenu.update(mouseLoc)
-
+    
+    def highlight(self,surf,loc):
+        pygame.draw.circle(surf, self.color, loc, self.size,2)
+        
+        
 if __name__ == "__main__":
     """
     Usage example
@@ -165,12 +169,12 @@ if __name__ == "__main__":
     #Set up the menu:
     menu = RMenu()
     menu2 = RMenu()
-    item1 = RMenuItem(menu,col = (255,0,0),title = "Red")
-    item2 = RMenuItem(menu,col = (0,255,0),title = "Green")
-    item5 = RMenuItem(menu,col = (255,0,255),title = "Purple")
+    item1 = RMenuItem(menu,image = "orbRedBlack.png",col = (255,0,0),title = "Red")
+    item2 = RMenuItem(menu,image = "orbQBlack.png")
+    item5 = RMenuItem(menu,image = "orbPurpleBlack.png",col = (255,0,255),title = "Purple")
     item2.addSubmenu(menu2)
-    item3 = RMenuItem(menu,col = (0,0,255),title = "Blue")
-    item4 = RMenuItem(menu,col = (255,255,255),title = "White")
+    item3 = RMenuItem(menu,image = "orbBlueBlack.png",col = (0,0,255),title = "Blue")
+    item4 = RMenuItem(menu,image = "orbWhiteBlack.png",col = (255,255,255),title = "White")
     menu.addItem(item1)
     menu.addItem(item2)
     menu.addItem(item5)
