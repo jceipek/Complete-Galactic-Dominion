@@ -24,13 +24,14 @@ class Unit(Builder):
         self.__class__.allUnits.add(self)
 
         self.status=Locals.IDLE
-        self.efficiency=1
+        self.efficiency=[.1, 10, 10, 10] #move, build, gather, attack
         self.path=[] #queue of future tuple destinations
         self.dest=self.rect.center #current destination
         self.speed=.1
         self.attackRange=300
         self.attackRechargeTime=500
-        self.timeSinceAttack=self.attackRechargeTime
+        self.radius=[0,100,100,200]
+        self.timeSinceLast=[0,0,0,self.attackRechargeTime]
         self.objectOfAction=None
 
     def update(self):
@@ -42,18 +43,29 @@ class Unit(Builder):
             self.path=[]
             self.dest=self.rect.center
         if self.status==Locals.ATTACKING:
-            self.attack(self.objectOfAction)
-        self.timeSinceAttack+=self.getTimeElapsed()
+            self.attack()
+        self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
 
-    def attack(self, enemy, strength=10):
-        """Moves unit such that enemy is within range and attacks it"""
-        if specialMath.distance(self.rect.center, enemy.rect.center) > self.attackRange: #FIXME for somereason it works, but I don't know why
+    def genAttack(self,act=0, attackRad=200, rate=10, recharge=0):
+        """moves unit closer to objectOfAction and decreases its health"""
+        closest=specialMath.findClosest(self.rect.center, self.objectOfAction.rect.center, self.worldSize)
+        if specialMath.distance(self.rect.center, closest) > attackRad:
 
-            self.dest=enemy.rect.center #FIXME pathfinding goes here
+            self.dest=closest #FIXME pathfinding goes here
             self.move() 
-        elif self.timeSinceAttack>=self.attackRechargeTime:
-            enemy.changeHealth(-1*strength)
-            self.timeSinceAttack=0
+        elif self.timeSinceLast[act]>=recharge:
+            self.objectOfAction.changeHealth(-1*rate)
+            self.timeSinceLast[act]=0 
+
+    def attack(self):
+        """Moves unit such that enemy is within range and attacks it"""
+        self.genAttack(Locals.ATTACK, self.radius[Locals.ATTACK], self.efficiency[Locals.ATTACK], self.attackRechargeTime)
+
+    def gather(self, resource):
+        """moves unit close to resource, adds resource to containment"""
+        self.genAttack(GATHER, self.radius[GATHER], self.efficiency[GATHERING])
+        
+        
 
     def initAttack(self, enemy):
         self.status=Locals.ATTACKING
