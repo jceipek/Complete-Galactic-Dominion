@@ -12,7 +12,7 @@ class DrawableObject():
         # First class to have image and rect objects
         
         self.loadImage(imagePath,colorkey)
-        #self.setAverageColor(imagePath,colorkey)
+        self.setAverageColor(imagePath,colorkey)
         
     # First loadImage method
     def loadImage(self, imagePath, colorkey=None):
@@ -24,7 +24,7 @@ class DrawableObject():
             self.image, self.rect = self.__class__.imageBank.getImageAndRect(imagePath)
         else:
             self.image, self.rect = objImageAndRect
-    '''       
+    #'''       
     def setAverageColor(self,imagePath,colorkey=None):
         """
         Sets the averageColor attribute of something with an image.
@@ -36,7 +36,7 @@ class DrawableObject():
         Returns the average color of the image.
         """
         return self.averageColor
-    '''
+    #'''
 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     screenZone = screen.get_rect()
 
     a = DrawableObject('orbPurpleBlack.png',(255,255,255))
-    #print a.getAverageColor()
+    print a.getAverageColor()
     
     while RUNNING:
         pygame.init()

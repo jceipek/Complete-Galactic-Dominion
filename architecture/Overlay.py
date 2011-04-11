@@ -126,18 +126,62 @@ class HealthBar():
 
 class MiniMap():
     
-    def __init__(self, world, width=200,height=100):
+    def __init__(self, world, width=200, height=100):
         
         self.world = world
         self.grid = self.world.grid
-        self.gridDim = self.world.gridDim
+        self.gridSize = self.world.grid.gridSize
         
-        self.baseSurface = pygame.surface((width,height))
+        self.width = width
+        self.height = height
+        
+        self.scale = self.width//(2*self.gridSize[0])
+        
+        self.baseSurface = pygame.Surface((width,height))
         self.drawBaseSurface()
+        self.rect = self.baseSurface.get_rect()
         
     def drawBaseSurface(self):
-        
-        for y in range(self.gridDim[1]):
-            for x in range(self.gridDim[0]):
-                curAvgColor = (self.grid[(x,y)]).getAverageColor()
+
+        xoffset = 0
+        yoffset = self.height/2.0
+
+        for y in range(self.gridSize[1]):
+            for x in range(self.gridSize[0]):
+                curColor = (3*x%255,20,3*y%255)
+                #curColor = (self.grid[(x,y)]).getAverageColor()
                 
+                topleft = specialMath.cartToIso((x*self.scale,y*self.scale))
+                topright = specialMath.cartToIso(((x+1)*self.scale,y*self.scale))
+                bottomright = specialMath.cartToIso(((x+1)*self.scale,(y+1)*self.scale))
+                bottomleft = specialMath.cartToIso((x*self.scale,(y+1)*self.scale))
+
+                topleft = (topleft[0]+xoffset,topleft[1]+yoffset)
+                topright = (topright[0]+xoffset,topright[1]+yoffset)
+                bottomright = (bottomright[0]+xoffset,bottomright[1]+yoffset)
+                bottomleft = (bottomleft[0]+xoffset,bottomleft[1]+yoffset)
+
+                #print topleft
+                pygame.draw.polygon(self.baseSurface, curColor, \
+                [topleft,topright,bottomright,bottomleft])
+                
+if __name__ == "__main__":
+    screenSize = (width, height) = (1024, 768)
+    screenLoc = [0.0, 0.0]
+
+    RUNNING = True
+    pygame.init()
+    screen = pygame.display.set_mode(screenSize)
+    screenZone = screen.get_rect()
+
+    from World import World
+    
+    w = World()
+    m = MiniMap(w)
+    #a = DrawableObject('orbPurpleBlack.png',(255,255,255))
+    #print a.getAverageColor()
+    
+    while RUNNING:
+        pygame.init()
+        screen.blit(m.baseSurface,m.rect.move((200,200)))
+        pygame.display.flip()
