@@ -165,10 +165,11 @@ class MiniMap():
             
             entityPos = entity.rect.center
             
-            gridPos = entityPos[0]/self.tileSize[0],entityPos[1]/self.tileSize[1]
+            gridPos = entityPos[0]/self.tileSize[1],entityPos[1]/self.tileSize[1]
             
             rawPos = specialMath.cartToIso(gridPos)
-            drawPos = rawPos[0]+self.xOffset,rawPos[1]+self.yOffset
+            
+            drawPos = int(self.scale*rawPos[0]+self.xOffset),int(self.scale*rawPos[1]+self.yOffset)
             
             color = entity.getAverageColor()
             
@@ -225,8 +226,8 @@ if __name__ == "__main__":
     m = MiniMap(w)
     #a = DrawableObject('orbPurpleBlack.png',(255,255,255))
     #print a.getAverageColor()
-    for i in range(2):
-        w.addEntity(TestEntity('testCraft.png',i*50,i*50,w,'alpha'))
+    for i in range(10):
+        w.addEntity(TestEntity('orb.png',i*50,i*50,w,'alpha'))
     
     MAX_FPS = 60
     gameClock = pygame.time.Clock()
