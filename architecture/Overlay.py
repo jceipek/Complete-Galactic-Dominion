@@ -126,16 +126,18 @@ class HealthBar():
 
 class MiniMap():
     
-    def __init__(self, world, width=100,height=100):
+    def __init__(self, world, width=200,height=100):
         
         self.world = world
         self.grid = self.world.grid
         self.gridDim = self.world.gridDim
         
         self.baseSurface = pygame.surface((width,height))
+        self.drawBaseSurface()
         
     def drawBaseSurface(self):
-        #pass
+        
         for y in range(self.gridDim[1]):
             for x in range(self.gridDim[0]):
-                self.grid[(x,y)] = Terrain.Grass('newGrass.png',(255,0,255))
+                curAvgColor = (self.grid[(x,y)]).getAverageColor()
+                

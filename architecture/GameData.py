@@ -56,7 +56,7 @@ class ImageBank():
             return None
         else:
             return (image,image.get_rect())
-            
+    '''        
     def getAverageColor(self, imageName, colorkey=None):
         
         if imageName in self.imageColorKeys:
@@ -64,7 +64,8 @@ class ImageBank():
         else:
             self.imageColorKeys[imageName]=getAverageColor(imageName,colorkey)
             return self.imageColorKeys[imageName]
-
+    '''
+    
 def loadImage(imagePath, colorkey=None):
     
     # If there is a filepath given, load that file.
@@ -94,6 +95,7 @@ def loadImage(imagePath, colorkey=None):
         raise TypeError, 'please provide pygame.Surface or filepath.'
     return image, image.get_rect()
 
+'''
 def getAverageColor(imagePath, colorkey=None):
     """
     Returns the average color of an image given an image filepath.
@@ -124,6 +126,8 @@ def getAverageColor(imagePath, colorkey=None):
     # Counts number of pixels in an image
     # partial pixels for alpha transparency
     fullPixelCounter = 0
+    
+    # FIXME - NOT VERY PRETTY.  COULD BE REFACTORED.  LOW PRIORITY THOUGH.
     
     if len(testPixel) == 4:
         
@@ -162,6 +166,7 @@ def getAverageColor(imagePath, colorkey=None):
     return int((red/fullPixelCounter)), \
             int((green/fullPixelCounter)), \
             int((blue/fullPixelCounter))
+'''
 
 class Locals:
     #Statuses
