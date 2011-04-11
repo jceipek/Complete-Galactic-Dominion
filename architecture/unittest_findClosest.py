@@ -17,9 +17,11 @@ class testFindClosest(unittest.TestCase):
         """
         self.findClosest=findClosest
         self.worldSize = (10, 10)
-        self.x1= (0,0)
-		self.x2=(1,6)
-		self.x3=(9,6)
+		self.x1=(1,9)
+		self.x2=(9,9)
+        self.x3=(1,1)
+        self.x4=(9,1)
+        self.x5=(5,5)
         
     def tearDown(self):
         """
@@ -28,7 +30,21 @@ class testFindClosest(unittest.TestCase):
         """
 
     def testHorizontal(self):
-        self.assertEqual(self.findClosest(self.x1, self.x2, self.worldSize), (-2, 6))
+        self.assertEqual(self.findClosest(self.x1, self.x2, self.worldSize), (-1, 9))
+
+    def testVertical(self):
+        self.assertEqual(self.findClosest(self.x2, self.x4, self.worldSize), (9,-1))
+
+    def testDiagonal(self):
+        self.assertEqual(self.findClosest(self.x2, self.x3, self.worldSize), (11,11))
+
+    def testOtherDiag(self):
+        self.assertEqual(self.findClosest(self.x4, self.x1, self.worldSize), (11,-1))
+
+    def testSameGrid(self):
+        self.assertEqual(self.findClosest(self.x2, self.x5, self.worldSize), (5,5))
+
+    
 
 
 if __name__ == '__main__':
