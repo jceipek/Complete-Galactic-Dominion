@@ -50,11 +50,8 @@ class Manager(object):
     
         if self.debugger.SYMBOLS_ENABLED:
             self.debugger.logMsg(event)
-        ##IN THE ACTUAL CODE, THIS FUNCTION WILL MAKE SURE EVENTS ONLY GET SENT 
-        ##TO LISTENERS WHICH MIGHT CARE. SOME LISTENERS SHOULD START THEIR OWN 
-        ##THREADS
+        ##SOME LISTENERS SHOULD START THEIR OWN THREADS
         
-        #for listener in self.listeners: ### WAS WORKING
         for listener in self.eventTypesToListeners.get(type(event),[]):
 			listener.notify(event)
             #NOTE: If the weakref has died, it will be 
