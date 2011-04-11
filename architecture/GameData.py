@@ -56,6 +56,16 @@ class ImageBank():
             return None
         else:
             return (image,image.get_rect())
+            
+    def getAverageColor(self, imageName, colorkey=None):
+        
+        if imageName in self.imageColorKeys:
+            return self.imageColorKeys[imageName]
+        else:
+            if self.hasImageKey(imageName):
+                self.imageColorKeys[imageName] = \
+                    getAverageColor(self.getImage(imageName),colorkey)
+            return self.imageColorKeys[imageName]
     '''        
     def getAverageColor(self, imageName, colorkey=None):
         
@@ -95,8 +105,9 @@ def loadImage(imagePath, colorkey=None):
         raise TypeError, 'please provide pygame.Surface or filepath.'
     return image, image.get_rect()
 
-'''
-def getAverageColor(imagePath, colorkey=None):
+#get_at
+
+def getAverageColor(surface, colorkey=None):
     """
     Returns the average color of an image given an image filepath.
     The colorkey is used to determine which color should not be
@@ -108,13 +119,10 @@ def getAverageColor(imagePath, colorkey=None):
     Returned value is a tuple of r,g,b value on a 0-255 scale.
     """
     
-    from PIL import Image
-    
-    pic = Image.open(imagePath)
-    imgData = pic.load()
-    
-    testPixel = imgData[0,0]
-    picSize = pic.size
+    testPixel = surface.get_at((0,0))
+    imageRect = surface.get_rect()
+    imageWidth = imageRect.width
+    imageHeight = imageRect.height
 
     if colorkey == -1:
         backgroundColor = testPixel
@@ -126,16 +134,14 @@ def getAverageColor(imagePath, colorkey=None):
     # Counts number of pixels in an image
     # partial pixels for alpha transparency
     fullPixelCounter = 0
-    
-    # FIXME - NOT VERY PRETTY.  COULD BE REFACTORED.  LOW PRIORITY THOUGH.
-    
+
     if len(testPixel) == 4:
         
         red,green,blue,alpha = 0,0,0,0
             
-        for x in xrange(picSize[0]):
-            for y in xrange(picSize[1]):
-                rAdd,gAdd,bAdd,aAdd = imgData[x,y]
+        for x in xrange(imageWidth):
+            for y in xrange(imageHeight):
+                rAdd,gAdd,bAdd,aAdd = surface.get_at((x,y))
                 
                 if not backgroundColor == (rAdd,gAdd,bAdd,aAdd):
                     
@@ -147,26 +153,11 @@ def getAverageColor(imagePath, colorkey=None):
                     blue+=bAdd*pixelFrac
                     alpha+=aAdd
         
-    elif len(testPixel) == 3:
-        
-        red,green,blue = 0,0,0
-        
-        for x in xrange(pic.size[0]):
-            for y in xrange(pic.size[1]):
-                rAdd,gAdd,bAdd = imgData[x,y]
-                
-                if not backgroundColor == (rAdd,gAdd,bAdd):
-                    fullPixelCounter+=1
-                    red+=rAdd
-                    green+=gAdd
-                    blue+=bAdd
-        
     else: return None
     
     return int((red/fullPixelCounter)), \
             int((green/fullPixelCounter)), \
             int((blue/fullPixelCounter))
-'''
 
 class Locals:
     #Statuses

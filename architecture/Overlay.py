@@ -126,32 +126,36 @@ class HealthBar():
 
 class MiniMap():
     
-    def __init__(self, world, width=1000,height=1000):
+    def __init__(self, world, width=200, height=100):
         
         self.world = world
         self.grid = self.world.grid
         self.gridSize = self.world.grid.gridSize
+        
+        self.width = width
+        self.height = height
+        
+        self.scale = self.width//(2*self.gridSize[0])
         
         self.baseSurface = pygame.Surface((width,height))
         self.drawBaseSurface()
         self.rect = self.baseSurface.get_rect()
         
     def drawBaseSurface(self):
-        
+
+        xoffset = 0
+        yoffset = self.height/2.0
+
         for y in range(self.gridSize[1]):
             for x in range(self.gridSize[0]):
                 curColor = (3*x%255,20,3*y%255)
-                
-                mult = 5
-                
                 #curColor = (self.grid[(x,y)]).getAverageColor()
-                topleft = specialMath.cartToIso((x*mult,y*mult))
-                topright = specialMath.cartToIso(((x+1)*mult,y*mult))
-                bottomright = specialMath.cartToIso(((x+1)*mult,(y+1)*mult))
-                bottomleft = specialMath.cartToIso((x*mult,(y+1)*mult))
                 
-                xoffset = 100
-                yoffset = 100
+                topleft = specialMath.cartToIso((x*self.scale,y*self.scale))
+                topright = specialMath.cartToIso(((x+1)*self.scale,y*self.scale))
+                bottomright = specialMath.cartToIso(((x+1)*self.scale,(y+1)*self.scale))
+                bottomleft = specialMath.cartToIso((x*self.scale,(y+1)*self.scale))
+
                 topleft = (topleft[0]+xoffset,topleft[1]+yoffset)
                 topright = (topright[0]+xoffset,topright[1]+yoffset)
                 bottomright = (bottomright[0]+xoffset,bottomright[1]+yoffset)
