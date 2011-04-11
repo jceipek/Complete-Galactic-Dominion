@@ -56,7 +56,6 @@ class Unit(Builder):
             self.timeSinceAttack=0
 
     def initAttack(self, enemy):
-        print 'ATTACK'
         self.status=Locals.ATTACKING
         self.objectOfAction=enemy
             
@@ -80,6 +79,7 @@ class Unit(Builder):
             # Unit vector of velocity
             dirx/=distLocToDest #unit x direction of movement
             diry/=distLocToDest #unit y direction of movement
+            print dirx, diry, (dirx**2+diry**2)
             
             
             newX = curX + dirx*self.speed*self.getTimeElapsed()
@@ -93,6 +93,7 @@ class Unit(Builder):
             #else:
             #    self.rect.center = newX, newY
             self.rect.center=newX,newY
+            self.moveWrap()
             
     def _definePath(self):
         if self._isAtDestination(): #may need to have room for error
@@ -103,6 +104,7 @@ class Unit(Builder):
             else: # path not empty - change path
                 self.status = Locals.MOVING
                 self.dest = self._optimalDestination()
+                print self.dest
                 #print self.dest
         else: # Not at current destination
             pass

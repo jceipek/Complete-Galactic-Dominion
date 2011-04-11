@@ -1,6 +1,6 @@
 def distance(x1,x2):
     sqSum=0
-    print x1, x2
+    #print x1, x2
     for x,y in zip(x1,x2):
         sqSum+=(x-y)**2
     return sqSum**.5
@@ -17,10 +17,8 @@ def findClosest(x1, x2, worldSize):
         for yShift in [0,-1,1]:
             test = (x2[0]+xShift*worldSize[0], \
                         x2[1]+yShift*worldSize[1])
-            if minx<=test[0] and test[0]>=maxx and \
-                miny<=test[1] and test[1]>=maxy:
-                    print worldSize
-                    print test
+            if minx<=test[0] and test[0]<=maxx and \
+                miny<=test[1] and test[1]<=maxy:
                     return test
     return None
                     
@@ -70,3 +68,4 @@ if __name__ == "__main__":
     print isoToCart((-10,10))
     print isoToCart((10,10))
     print isoToCart((1024,768))
+    
