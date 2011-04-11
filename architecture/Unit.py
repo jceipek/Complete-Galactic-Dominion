@@ -65,13 +65,10 @@ class Unit(Builder):
         """moves unit close to resource, adds resource to containment"""
         self.genAttack(GATHER, self.radius[GATHER], self.efficiency[GATHERING])
         
-        
-
     def initAttack(self, enemy):
         self.status=Locals.ATTACKING
         self.objectOfAction=enemy
             
-        
     def move(self):
         """changes position of unit in direction of dest"""
         

@@ -1,7 +1,7 @@
 import pygame
 import Event,specialMath
 from GameData import Locals
-from Overlay import DragBox, MakeBoundingBox
+from Overlay import DragBox, MakeBoundingBox, MiniMap
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
@@ -20,11 +20,17 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def __init__(self,world,scrollLoc,screenPos,size):
         self.world = world
+
         self.scrollLoc = scrollLoc
         self.cartScrollLoc = specialMath.isoToCart(scrollLoc)
         self.loc = screenPos
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
+        
+        if world is not None:
+            self.minimap = MiniMap(self.world)
+        else:
+            self.minimap = None
         
         #FIXME - SHOULD COME FROM A CONFIG FILE
         self.scrollSensitivity=.001
@@ -78,6 +84,11 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.drawDragRect()
         self.dragSelect(event)
         self.dragRect = None
+    
+    def drawMiniMap(self):
+        if self.minimap is not None:
+            self.minimap.update()
+            self.minimap.draw(self.surface)
     
     def drawDragRect(self):   
         """
@@ -220,6 +231,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.world.grid.draw(self.surface, self.scrollLoc, self.size)
             self.drawContainedEntities()
             self.drawDragRect()
+            self.drawMiniMap()
             self.drawDebugFrames()
             displaySurface.blit(self.surface, (self.loc,self.size))
 
@@ -286,3 +298,4 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
     def changeWorld(self,world):
         self.world = world
+        self.minimap = MiniMap(self.world)

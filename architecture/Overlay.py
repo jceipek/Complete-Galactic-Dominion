@@ -124,31 +124,33 @@ class HealthBar():
         hBarTop = top - self.padY - self.hBarHeight
         surface.blit(self.healthBar,(centerX-self.hBarWidth//2,hBarTop))
 
-class MiniMap():
+class MiniMap(object):
     
     def __init__(self, world, width=400, height=200):
         
         self.world = world
-        self.gridDict = self.world.grid.grid
-        self.gridSize = self.world.grid.gridSize
-        self.tileSize = self.world.grid.tileWidth,self.world.grid.tileHeight
         
         self.width = width
         self.height = height
-        
+
+        self.gridDict = self.world.grid.grid
+        self.gridSize = self.world.grid.gridSize
+        self.tileSize = self.world.grid.tileWidth,self.world.grid.tileHeight
         self.scale = self.width//(2*self.gridSize[0])
         
         # Offsets for drawing minimap data
         self.xOffset = self.width//2 - self.gridSize[0]*self.scale
         self.yOffset = self.height//2
         
-        self.baseSurface = pygame.Surface((width,height))        
+        self.baseSurface = pygame.Surface((width,height)) 
+        self.baseSurface.convert()
+        self.baseSurface.set_colorkey((0,0,0)) 
         self.rect = self.baseSurface.get_rect()
         self._updateBaseSurface()
         
         self.dynamicSurface = pygame.Surface((width,height))
         self._updateDynamicSurface()
-    
+        
     def update(self):
         self._updateDynamicSurface()
     
@@ -157,22 +159,21 @@ class MiniMap():
         surf.blit(self.dynamicSurface,self.rect)
     
     def _updateDynamicSurface(self):
-        
-        newSurface = pygame.Surface((width,height))
-        newSurface.blit(self.baseSurface,self.rect)
+
+        from copy import copy
+
+        newSurface = copy(self.baseSurface)#pygame.Surface((self.width,self.height))
+        #newSurface.blit(self.baseSurface,self.rect)
         
         for entity in self.world.allEntities.values():
             
             entityPos = entity.rect.center
             
             gridPos = entityPos[0]/self.tileSize[1],entityPos[1]/self.tileSize[1]
-            
             rawPos = specialMath.cartToIso(gridPos)
-            
             drawPos = int(self.scale*rawPos[0]+self.xOffset),int(self.scale*rawPos[1]+self.yOffset)
             
             color = entity.getAverageColor()
-            
             pygame.draw.circle(newSurface, color, drawPos, 3)
             
         self.dynamicSurface = newSurface
@@ -182,6 +183,8 @@ class MiniMap():
         Initializes the self.baseSurface attribute.  This stores
         the image of the map.
         """
+
+        #pygame.draw.rect(self.baseSurface,(50,50,100),self.rect,0)
 
         for y in range(self.gridSize[1]):
             for x in range(self.gridSize[0]):
@@ -205,9 +208,21 @@ class MiniMap():
                 pygame.draw.polygon(self.baseSurface, curColor, \
                     [topleft,topright,bottomright,bottomleft])
         
+        tl = specialMath.cartToIso((0,0))
+        tr = specialMath.cartToIso((self.gridSize[0]*self.scale,0))
+        br = specialMath.cartToIso((self.gridSize[0]*self.scale,self.gridSize[1]*self.scale))
+        bl = specialMath.cartToIso((0,self.gridSize[1]*self.scale))
+        
+        tl = (tl[0]+self.xOffset,tl[1]+self.yOffset)
+        tr = (tr[0]+self.xOffset,tr[1]+self.yOffset)
+        br = (br[0]+self.xOffset,br[1]+self.yOffset)
+        bl = (bl[0]+self.xOffset,bl[1]+self.yOffset)
+        
+        pygame.draw.polygon(self.baseSurface,(1,1,1),[tl,tr,br,bl],5)
+        
         # For debugging purposes
-        pygame.draw.rect(self.baseSurface,(150,150,150),\
-                self.baseSurface.get_rect(),5)
+        #pygame.draw.rect(self.baseSurface,(150,150,150),\
+        #        self.baseSurface.get_rect(),5)
                 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)
