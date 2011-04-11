@@ -179,8 +179,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         if not self.world == None:# FIXME and self.dragRect == None:
             newScrollLoc = list(self.scrollLoc)
-            newScrollLoc[0] = (newScrollLoc[0]+self.scrollSpeed[0]*elapsedTime)
-            newScrollLoc[1] = (newScrollLoc[1]+self.scrollSpeed[1]*elapsedTime)
+            scrollAddX = self.scrollSpeed[0]*elapsedTime
+            scrollAddY = self.scrollSpeed[1]*elapsedTime
+            if not self.dragRect == None:
+                self.dragRect.scroll((scrollAddX,scrollAddY)) 
+            newScrollLoc[0] = (newScrollLoc[0]+scrollAddX)
+            newScrollLoc[1] = (newScrollLoc[1]+scrollAddY)
             
             # used to calculate corner of scroll location in cartesian grid
             self.cartScrollLoc = self.isoToWrappedCart(newScrollLoc)

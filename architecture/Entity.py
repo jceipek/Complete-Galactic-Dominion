@@ -155,6 +155,8 @@ class Entity(MapObject):
         self.healthBar.updateHealthBar()
         if self.curHealth<=0:
             self.die()
+        elif self.curHealth > self.maxHealth:
+            self.curHealth = self.maxHealth
             
     def moveWrap(self):
         """

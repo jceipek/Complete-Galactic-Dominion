@@ -17,8 +17,8 @@ class testFindClosest(unittest.TestCase):
         """
         self.findClosest=findClosest
         self.worldSize = (10, 10)
-		self.x1=(1,9)
-		self.x2=(9,9)
+        self.x1=(1,9)
+        self.x2=(9,9)
         self.x3=(1,1)
         self.x4=(9,1)
         self.x5=(5,5)

@@ -33,8 +33,8 @@ class DragBox(object):
         self.boundingBox = pygame.Rect(start,(0,0))
     
     def update(self,current):
-        self.current = current
-        if specialMath.distance(current,self.start) > 5:
+        self.setCorner(current)
+        if specialMath.distance(self.current,self.start) > 5:
             self.visible = True
             self.updateBoundingBox()
         else:
@@ -51,12 +51,13 @@ class DragBox(object):
         
     def updateBoundingBox(self):
         self.boundingBox = MakeBoundingBox(self.start,self.current)
-        #x1,y1 = self.start
-        #x2,y2 = self.current
-        
-        #bboxRect = (pygame.Rect(self.start,(x2-x1,y2-y1)))
-        #bboxRect.normalize() # Normalizes to remove negative sizes.
-        #self.boundingBox = bboxRect
+
+    def scroll(self,scrollChange):
+        #self.start = self.start
+        self.start=self.start[0]-scrollChange[0],self.start[1]-scrollChange[1]
+        self.updateBoundingBox()
+        #if scrollOffset[0] == 0:
+        #    print self.start
 
 def MakeBoundingBox(p1,p2):
     x1,y1 = p1
@@ -122,3 +123,19 @@ class HealthBar():
         centerX, top = midTop
         hBarTop = top - self.padY - self.hBarHeight
         surface.blit(self.healthBar,(centerX-self.hBarWidth//2,hBarTop))
+
+class MiniMap():
+    
+    def __init__(self, world, width=100,height=100):
+        
+        self.world = world
+        self.grid = self.world.grid
+        self.gridDim = self.world.gridDim
+        
+        self.baseSurface = pygame.surface((width,height))
+        
+    def drawBaseSurface(self):
+        #pass
+        for y in range(self.gridDim[1]):
+            for x in range(self.gridDim[0]):
+                self.grid[(x,y)] = Terrain.Grass('newGrass.png',(255,0,255))
