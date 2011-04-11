@@ -36,7 +36,7 @@ class testFindClosest(unittest.TestCase):
         self.assertEqual(self.findClosest(self.x2, self.x4, self.worldSize), (9,11))
 
     def testDiagonal(self):
-        self.assertEqual(self.findClosest(self.x2, self.x3, self.worldSize), (11,11))
+        self.assertEqual(self.findClosest(self.x2, self.x3, self.worldSize), (1,11))
 
     def testOtherDiag(self):
         self.assertEqual(self.findClosest(self.x4, self.x1, self.worldSize), (11,-1))
