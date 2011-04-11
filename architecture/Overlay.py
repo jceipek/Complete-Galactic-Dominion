@@ -126,44 +126,87 @@ class HealthBar():
 
 class MiniMap():
     
-    def __init__(self, world, width=200, height=100):
+    def __init__(self, world, width=400, height=200):
         
         self.world = world
-        self.grid = self.world.grid
+        self.gridDict = self.world.grid.grid
         self.gridSize = self.world.grid.gridSize
+        self.tileSize = self.world.grid.tileWidth,self.world.grid.tileHeight
         
         self.width = width
         self.height = height
         
         self.scale = self.width//(2*self.gridSize[0])
         
-        self.baseSurface = pygame.Surface((width,height))
-        self.drawBaseSurface()
-        self.rect = self.baseSurface.get_rect()
+        # Offsets for drawing minimap data
+        self.xOffset = self.width//2 - self.gridSize[0]*self.scale
+        self.yOffset = self.height//2
         
-    def drawBaseSurface(self):
-
-        xoffset = 0
-        yoffset = self.height/2.0
+        self.baseSurface = pygame.Surface((width,height))        
+        self.rect = self.baseSurface.get_rect()
+        self._updateBaseSurface()
+        
+        self.dynamicSurface = pygame.Surface((width,height))
+        self._updateDynamicSurface()
+    
+    def update(self):
+        self._updateDynamicSurface()
+    
+    def draw(self,surf):
+        surf.blit(self.baseSurface,self.rect)
+        surf.blit(self.dynamicSurface,self.rect)
+    
+    def _updateDynamicSurface(self):
+        
+        newSurface = pygame.Surface((width,height))
+        newSurface.blit(self.baseSurface,self.rect)
+        
+        for entity in self.world.allEntities.values():
+            
+            entityPos = entity.rect.center
+            
+            gridPos = entityPos[0]/self.tileSize[0],entityPos[1]/self.tileSize[1]
+            
+            rawPos = specialMath.cartToIso(gridPos)
+            drawPos = rawPos[0]+self.xOffset,rawPos[1]+self.yOffset
+            
+            color = entity.getAverageColor()
+            
+            pygame.draw.circle(newSurface, color, drawPos, 3)
+            
+        self.dynamicSurface = newSurface
+    
+    def _updateBaseSurface(self):
+        """
+        Initializes the self.baseSurface attribute.  This stores
+        the image of the map.
+        """
 
         for y in range(self.gridSize[1]):
             for x in range(self.gridSize[0]):
-                curColor = (3*x%255,20,3*y%255)
-                #curColor = (self.grid[(x,y)]).getAverageColor()
                 
+                # Grab average color value of the grid at loc x,y
+                curColor = (self.gridDict[(x,y)]).getAverageColor()
+                
+                # Calculate corners of polygons
                 topleft = specialMath.cartToIso((x*self.scale,y*self.scale))
                 topright = specialMath.cartToIso(((x+1)*self.scale,y*self.scale))
                 bottomright = specialMath.cartToIso(((x+1)*self.scale,(y+1)*self.scale))
                 bottomleft = specialMath.cartToIso((x*self.scale,(y+1)*self.scale))
-
-                topleft = (topleft[0]+xoffset,topleft[1]+yoffset)
-                topright = (topright[0]+xoffset,topright[1]+yoffset)
-                bottomright = (bottomright[0]+xoffset,bottomright[1]+yoffset)
-                bottomleft = (bottomleft[0]+xoffset,bottomleft[1]+yoffset)
-
-                #print topleft
+                
+                # Apply offsets
+                topleft = (topleft[0]+self.xOffset,topleft[1]+self.yOffset)
+                topright = (topright[0]+self.xOffset,topright[1]+self.yOffset)
+                bottomright = (bottomright[0]+self.xOffset,bottomright[1]+self.yOffset)
+                bottomleft = (bottomleft[0]+self.xOffset,bottomleft[1]+self.yOffset)
+                
+                # Draws minimap to baseSurface
                 pygame.draw.polygon(self.baseSurface, curColor, \
-                [topleft,topright,bottomright,bottomleft])
+                    [topleft,topright,bottomright,bottomleft])
+        
+        # For debugging purposes
+        pygame.draw.rect(self.baseSurface,(150,150,150),\
+                self.baseSurface.get_rect(),5)
                 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)
@@ -175,13 +218,29 @@ if __name__ == "__main__":
     screenZone = screen.get_rect()
 
     from World import World
+    from Unit import Unit
+    from Entity import TestEntity
     
     w = World()
     m = MiniMap(w)
     #a = DrawableObject('orbPurpleBlack.png',(255,255,255))
     #print a.getAverageColor()
+    for i in range(2):
+        w.addEntity(TestEntity('testCraft.png',i*50,i*50,w,'alpha'))
+    
+    MAX_FPS = 60
+    gameClock = pygame.time.Clock()
+    pygame.init()
     
     while RUNNING:
+        
         pygame.init()
-        screen.blit(m.baseSurface,m.rect.move((200,200)))
+        m.update()
+        m.draw(screen)
         pygame.display.flip()
+        
+        ms_elapsed = gameClock.tick(MAX_FPS)
+        
+        for entity in w.allEntities.values():
+            entity.update()
+        #print 'Current frames per second: %d'%int(1000.0/ms_elapsed)

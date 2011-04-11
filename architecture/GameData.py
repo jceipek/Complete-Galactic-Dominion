@@ -105,8 +105,6 @@ def loadImage(imagePath, colorkey=None):
         raise TypeError, 'please provide pygame.Surface or filepath.'
     return image, image.get_rect()
 
-#get_at
-
 def getAverageColor(surface, colorkey=None):
     """
     Returns the average color of an image given an image filepath.

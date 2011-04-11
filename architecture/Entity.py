@@ -215,8 +215,8 @@ class TestEntity2(Entity):
         
         #self.vel = (-1,1)
         from random import randint
-        self.vel = (randint(-2,2),randint(-2,2))
-        #self.vel = (2,1)
+        #self.vel = (randint(-2,2),randint(-2,2))
+        self.vel = (10,10)
     
         self.grid = world.grid
         #worldSize = size of grid in pixels
