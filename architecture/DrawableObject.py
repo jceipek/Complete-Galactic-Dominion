@@ -12,7 +12,7 @@ class DrawableObject():
         # First class to have image and rect objects
         
         self.loadImage(imagePath,colorkey)
-        self.setAverageColor(imagePath,colorkey)
+        #self.setAverageColor(imagePath,colorkey)
         
     # First loadImage method
     def loadImage(self, imagePath, colorkey=None):
