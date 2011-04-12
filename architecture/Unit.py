@@ -74,7 +74,6 @@ class Unit(Builder):
         
         # Decides what the current self.dest should be
         self._definePath()
-        
         if not self.status == Locals.IDLE:
             curX,curY = self.rect.center
             
@@ -113,8 +112,6 @@ class Unit(Builder):
             else: # path not empty - change path
                 self.status = Locals.MOVING
                 self.dest = self._optimalDestination()
-                print self.dest
-                #print self.dest
         else: # Not at current destination
             pass
     
@@ -129,23 +126,12 @@ class Unit(Builder):
         of the unit and the desired end point.  Returns None if none
         is found.
         """
-        destX,destY = self.path.pop(0)
+        destX,destY = self.path.pop(0) 
+        self.dest=destX, destY
         
         # Rectangle the size of the world which is centered
         # at the current location
-        worldRect = pygame.Rect((0,0),self.worldSize)
-        worldRect.center = self.rect.center
-        
-        for xShift in [0,-1,1]:
-            for yShift in [0,-1,1]:
-                
-                testPoint = (destX+xShift*self.worldSize[0], \
-                            destY+yShift*self.worldSize[1])
-                #print 'Test Point: ',xShift,yShift,testPoint            
-                if worldRect.collidepoint(testPoint):
-                    return testPoint
-        
-        return None
+        return specialMath.findClosest(self.rect.center, (destX, destY), self.worldSize)
     
     def moveWrap(self):
         """
@@ -167,8 +153,8 @@ class Unit(Builder):
         Takes an x,y coordinate tuple in the grid and adds this location
         to the path.
         """
-        
         self.path.append(coord)
+
 
 if __name__ == "__main__":
     
