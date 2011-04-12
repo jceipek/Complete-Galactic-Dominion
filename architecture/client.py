@@ -27,6 +27,7 @@ from Universe import Universe
 from Entity import Entity,TestEntity
 from Unit import Unit
 from gameClient import GameClient
+from WorldManipulator import WorldManipulator
 
 def init():
     """
@@ -47,10 +48,11 @@ def init():
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
+    networked = True
     try:                                            
         client = GameClient(eventManager,host='10.41.24.79',port=1567)
     except:
-        pass
+        networked = False
                                                     
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
@@ -74,6 +76,7 @@ def init():
     gameWindow.updateScreenMode()
     
     w = World()
+    wManipulator = WorldManipulator(eventManager,w,networked)
     universe.changeWorld(w)
     
     #===========================================
@@ -82,7 +85,8 @@ def init():
     for i in range(25):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
+        eventManager.post(Event.WorldManipulationEvent(Unit('testCraft.png',i*50,i*50,w,'alpha')))
+        #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
