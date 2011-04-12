@@ -50,7 +50,7 @@ def init():
                                                 #classes will be needed later?
     networked = True
     try:                                            
-        client = GameClient(eventManager,host='10.41.25.14',port=1567)
+        client = GameClient(eventManager,host='localhost',port=1567)
     except:
         networked = False
                                                     
@@ -85,7 +85,8 @@ def init():
     for i in range(25):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        eventManager.post(Event.WorldManipulationEvent(Unit('testCraft.png',i*50,i*50,w,'alpha')))
+        a=['Unit','testCraft.png',i*50,i*50,'world','alpha']
+        eventManager.post(Event.WorldManipulationEvent(a))
         #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
 
     #Notify the manager that the window should start to accept input:

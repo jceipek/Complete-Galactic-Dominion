@@ -14,9 +14,11 @@ class GameClient(networking.Client,Listener):
         Listener.__init__(self,manager,eventTypes)
         
     def processInput(self,sockThrd,data):
+        print 'EVENT EXECUTION EVENT!!!!!!?'
         event = Event.EventExecutionEvent(data)
         self.manager.post(event)
         
     def notify(self,evt):
+        print 'I\'m a notify event'
         evtString = evt.toPacket()
         self.sendRequest(evtString)
