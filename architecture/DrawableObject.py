@@ -31,6 +31,12 @@ class DrawableObject():
         """
         self.averageColor = self.__class__.imageBank.getAverageColor(imagePath,colorkey)
 
+    def getMiniMapColor(self):
+        """
+        By default, returns the average color.  Override.
+        """
+        return self.getAverageColor()
+
     def getAverageColor(self):
         """
         Returns the average color of the image.

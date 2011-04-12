@@ -165,6 +165,9 @@ class Unit(Builder):
         to the path.
         """
         self.path.append(coord)
+        
+    def getMiniMapColor(self):
+        return (20,20,255)
 
 
 if __name__ == "__main__":
