@@ -180,7 +180,7 @@ class MiniMap(object):
             
             entityPos = entity.rect.center
             
-            gridPos = entityPos[0]/self.tileSize[1],entityPos[1]/self.tileSize[1]
+            gridPos = float(entityPos[0])/self.tileSize[1],float(entityPos[1])/self.tileSize[1]
             rawPos = specialMath.cartToIso(gridPos)
             drawPos = int(self.scale*rawPos[0]+self.xOffset),int(self.scale*rawPos[1]+self.yOffset)
             
@@ -202,7 +202,7 @@ class MiniMap(object):
             for x in range(self.gridSize[0]):
                 
                 # Grab average color value of the grid at loc x,y
-                curColor = (self.gridDict[(x,y)]).getAverageColor()
+                curColor = (self.gridDict[(x,y)]).getMiniMapColor()
                 
                 # Calculate corners of polygons
                 topleft = specialMath.cartToIso((x*self.scale,y*self.scale))
@@ -211,10 +211,10 @@ class MiniMap(object):
                 bottomleft = specialMath.cartToIso((x*self.scale,(y+1)*self.scale))
                 
                 # Apply offsets
-                topleft = (topleft[0]+self.xOffset,topleft[1]+self.yOffset)
-                topright = (topright[0]+self.xOffset,topright[1]+self.yOffset)
-                bottomright = (bottomright[0]+self.xOffset,bottomright[1]+self.yOffset)
-                bottomleft = (bottomleft[0]+self.xOffset,bottomleft[1]+self.yOffset)
+                topleft = self.offsetToDraw(topleft)
+                topright = self.offsetToDraw(topright)
+                bottomright = self.offsetToDraw(bottomright)
+                bottomleft = self.offsetToDraw(bottomleft)
                 
                 # Draws minimap to baseSurface
                 pygame.draw.polygon(self.baseSurface, curColor, \
@@ -226,13 +226,15 @@ class MiniMap(object):
         bl = specialMath.cartToIso((0,self.gridSize[1]*self.scale))
         
         tl = (tl[0]+self.xOffset-self.borderWidth,tl[1]+self.yOffset)
-        tr = (tr[0]+self.xOffset,tr[1]+self.yOffset-self.borderWidth)
+        tr = (tr[0]+self.xOffset,tr[1]+self.yOffset)#-self.borderWidth)
         br = (br[0]+self.xOffset+self.borderWidth,br[1]+self.yOffset)
-        bl = (bl[0]+self.xOffset,bl[1]+self.yOffset+self.borderWidth)
+        bl = (bl[0]+self.xOffset,bl[1]+self.yOffset)#+self.borderWidth)
         
         pygame.draw.polygon(self.baseSurface,self.borderColor, \
             [tl,tr,br,bl],self.borderWidth)
-        
+    
+    def offsetToDraw(self,point):
+        return (point[0] + self.xOffset, point[1] + self.yOffset)
         # For debugging purposes
         #pygame.draw.rect(self.baseSurface,(150,150,150),\
         #        self.baseSurface.get_rect(),5)
