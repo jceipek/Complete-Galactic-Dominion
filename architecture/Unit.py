@@ -79,16 +79,16 @@ class Unit(Builder):
             curX,curY = self.rect.center
             
             # difference between destination and current location
-            dirx=self.dest[0]-curX #unscaled x direction of movement
-            diry=self.dest[1]-curY #unscaled y direction of movement
+            dirx = self.dest[0] - curX #unscaled x direction of movement
+            diry = self.dest[1] - curY #unscaled y direction of movement
             
             # distance between destination and current location
             distLocToDest = specialMath.hypotenuse(dirx,diry)
             
             # Unit vector of velocity
-            dirx/=distLocToDest #unit x direction of movement
-            diry/=distLocToDest #unit y direction of movement
-            print dirx, diry, (dirx**2+diry**2)
+            dirx /= distLocToDest #unit x direction of movement
+            diry /= distLocToDest #unit y direction of movement
+            #print dirx, diry, (dirx**2 + diry**2)
             
             
             newX = curX + dirx*self.speed*self.getTimeElapsed()
