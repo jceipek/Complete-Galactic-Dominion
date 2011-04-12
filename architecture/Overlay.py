@@ -162,14 +162,25 @@ class MiniMap(object):
         self.dynamicSurface = pygame.Surface((width,height))
         self._updateDynamicSurface()
         
-    def update(self):
-        self._updateDynamicSurface()
+    def update(self,screenPoints=None):
+        self._updateDynamicSurface(screenPoints)
     
     def draw(self,surf):
         surf.blit(self.baseSurface,self.rect)
         surf.blit(self.dynamicSurface,self.rect)
     
-    def _updateDynamicSurface(self):
+    def _gridPosToDrawPos(self,point):
+        """
+        Takes a cartesian position on the internal state grid and
+        converts it to a drawing position on the minimap.
+        """
+        gridPos = float(point[0])/self.tileSize[1],float(point[1])/self.tileSize[1]
+        rawPos = specialMath.cartToIso(gridPos)
+        return self.offsetToDraw( \
+                ( int(self.scale*rawPos[0]),int(self.scale*rawPos[1]) ) \
+                )
+    
+    def _updateDynamicSurface(self,screenPoints=None):
 
         from copy import copy
 
@@ -180,13 +191,25 @@ class MiniMap(object):
             
             entityPos = entity.rect.center
             
-            gridPos = float(entityPos[0])/self.tileSize[1],float(entityPos[1])/self.tileSize[1]
-            rawPos = specialMath.cartToIso(gridPos)
-            drawPos = int(self.scale*rawPos[0]+self.xOffset),int(self.scale*rawPos[1]+self.yOffset)
+            drawPos = self._gridPosToDrawPos(entityPos)
+            #gridPos = float(entityPos[0])/self.tileSize[1],float(entityPos[1])/self.tileSize[1]
+            #rawPos = specialMath.cartToIso(gridPos)
+            #drawPos = int(self.scale*rawPos[0]+self.xOffset),int(self.scale*rawPos[1]+self.yOffset)
             
             color = entity.getAverageColor()
             pygame.draw.circle(newSurface, color, drawPos, 3)
+        
+        if screenPoints is not None:
+            tl = self._gridPosToDrawPos(screenPoints[0])
+            tr = self._gridPosToDrawPos(screenPoints[1])
+            br = self._gridPosToDrawPos(screenPoints[2])
+            bl = self._gridPosToDrawPos(screenPoints[3])
             
+            # NOTE - TOP LEFT CORNER IS ALWAYS CORRECT
+            pygame.draw.polygon(newSurface,(255,255,255),[tl,tr,br,bl],1)
+
+        #pygame.draw.polygon(self.baseSurface, curColor, \
+        #            [topleft,topright,bottomright,bottomleft])
         self.dynamicSurface = newSurface
     
     def _updateBaseSurface(self):

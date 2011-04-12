@@ -26,7 +26,7 @@ class Unit(Builder):
         self.status=Locals.IDLE
         self.efficiency=[.1, 10, 10, 10] #move, build, gather, attack
         self.path=[] #queue of future tuple destinations
-        self.dest=self.rect.center #current destination
+        self.dest=self.realCenter=self.rect.center #current destination
         self.speed=.1
         self.attackRange=300
         self.attackRechargeTime=500
@@ -75,7 +75,7 @@ class Unit(Builder):
         # Decides what the current self.dest should be
         self._definePath()
         if not self.status == Locals.IDLE:
-            curX,curY = self.rect.center
+            curX,curY = self.realCenter
             
             # difference between destination and current location
             dirx = self.dest[0] - curX #unscaled x direction of movement
@@ -100,7 +100,8 @@ class Unit(Builder):
             #    self.rect.center = self.dest
             #else:
             #    self.rect.center = newX, newY
-            self.rect.center=newX,newY
+            self.realCenter = newX,newY
+            self.rect.center = self.realCenter
             self.moveWrap()
             
     def _definePath(self):

@@ -42,7 +42,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         self.selectedEntities = []
         
-        self.calcDistance = lambda a,b: (a**2 + b**2)**0.5
+        #self.calcDistance = lambda a,b: (a**2 + b**2)**0.5
         
         self.viewportEntities = []
         
@@ -87,7 +87,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def drawMiniMap(self):
         if self.minimap is not None:
-            self.minimap.update()
+            self.minimap.update(self.cartPointTupleOfScreen())
             self.minimap.draw(self.surface)
     
     def drawDragRect(self):   
@@ -248,21 +248,32 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def rectToCartWrappedRects(self,rect):
         isoLeftTop = rect.topleft
         cartLeftTop = self.isoToWrappedCart(isoLeftTop)
+    
+    def cartPointTupleOfScreen(self):
+        """
+        Returns a tuple of the Cartesian points of the current view
+        into the world.  Order: topleft,topright,bottomright,bottomleft
+        """
+        l,t = self.cartScrollLoc
+            
+        w,h = self.size
+        cartWidthVector=specialMath.isoToCart((w,0))
+        cartHeightVector=specialMath.isoToCart((0,h))
+        
+        cartTopLeft=l,t
+        cartTopRight=l+cartWidthVector[0],t+cartWidthVector[1]
+        cartBottomRight=l+cartWidthVector[0]+cartHeightVector[0],t+cartWidthVector[1]+cartHeightVector[1]
+        cartBottomLeft=l+cartHeightVector[0],t+cartHeightVector[1]
+        
+        return cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft
         
     def setViewportEntities(self):
         if not self.world == None:
             """FIXME to work with new coordinates."""
             
-            l,t = self.cartScrollLoc
+            cartTopLeft,cartTopRight,cartBottomRight,cartBottomLeft = \
+                self.cartPointTupleOfScreen()
             
-            w,h = self.size
-            cartWidthVector=specialMath.isoToCart((w,0))
-            cartHeightVector=specialMath.isoToCart((0,h))
-            cartTopLeft=l,t
-            cartTopRight=l+cartWidthVector[0],t+cartWidthVector[1]
-            cartBottomRight=l+cartWidthVector[0]+cartHeightVector[0],t+cartWidthVector[1]+cartHeightVector[1]
-            cartBottomLeft=l+cartHeightVector[0],t+cartHeightVector[1]
-
             worldWidth,worldHeight = self.world.grid.getCartGridDimensions()
             screen=[]
             
