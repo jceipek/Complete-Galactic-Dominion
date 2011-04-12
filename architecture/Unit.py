@@ -48,7 +48,7 @@ class Unit(Builder):
 
     def genAttack(self,act=0, attackRad=200, rate=10, recharge=0):
         """moves unit closer to objectOfAction and decreases its health"""
-        closest=specialMath.findClosest(self.rect.center, self.objectOfAction.rect.center, self.worldSize)
+        closest=specialMath.findClosest(self.rect.realCenter, self.objectOfAction.rect.center, self.worldSize)
         if specialMath.distance(self.rect.center, closest) > attackRad:
 
             self.dest=closest #FIXME pathfinding goes here
@@ -122,7 +122,7 @@ class Unit(Builder):
     def _isAtDestination(self, margin=2):
         if self.status == Locals.IDLE:
             return True
-        return specialMath.distance(self.rect.center,self.dest) <= margin
+        return specialMath.distance(self.realCenter,self.dest) <= margin
     
     def _optimalDestination(self):
         """
@@ -135,7 +135,7 @@ class Unit(Builder):
         
         # Rectangle the size of the world which is centered
         # at the current location
-        return specialMath.findClosest(self.rect.center, (destX, destY), self.worldSize)
+        return specialMath.findClosest(self.realCenter, (destX, destY), self.worldSize)
     
     def moveWrap(self):
         """
@@ -144,22 +144,24 @@ class Unit(Builder):
         destination point wrap if the grid boundary is crossed.
         """
         if self.entityID == 1:
-            print self.rect.center, self.dest
-        if not 0<self.rect.center[0] < self.worldSize[0]:
+            print self.realCenter, self.dest
+        if not 0<self.realCenter[0] < self.worldSize[0]:
         #if self.rect.left > self.worldSize[0]:
-            newx=self.rect.center[0]%self.worldSize[0]
-            dx = self.dest[0]-self.rect.center[0]+newx
-            self.rect.center = (newx, self.rect.center[1])
+            newx=self.realCenter[0]%self.worldSize[0]
+            dx = self.dest[0]-self.realCenter[0]+newx
+            self.realCenter = (newx, self.realCenter[1])
             self.dest = (dx, self.dest[1])
         #else:
         #    self.rect.center = (self.rect.center[0]%self.worldSize[0], self.rect.center[1])
             
-        if not 0< self.rect.center[1]< self.worldSize[1]:
+        if not 0< self.realCenter[1]< self.worldSize[1]:
         #if self.rect.top > self.worldSize[1]:
-            newy=self.rect.center[1]%self.worldSize[1]
-            dy = self.dest[1]-self.rect.center[1]+newy
-            self.rect.center= (self.rect.center[0], newy)
+            newy=self.realCenter[1]%self.worldSize[1]
+            dy = self.dest[1]-self.realCenter[1]+newy
+            self.rect.center = (self.realCenter[0], newy)
             self.dest = (self.dest[0], dy)
+            
+        self.rect.center = self.realCenter
         #else:
         #    self.rect.center= (self.rect.center[0], self.rect.center[1]%self.worldSize[1])
         #self.rect.left = self.rect.left%self.worldSize[0]
