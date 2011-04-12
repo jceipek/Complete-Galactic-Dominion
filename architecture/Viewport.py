@@ -107,10 +107,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
-        drawRect = clicked.rect.move(clicked.drawOffset)
-        drawRect.center = specialMath.cartToIso(drawRect.center)
-        if not drawRect.collidepoint(pos):
-            clicked = None
+        if clicked:
+            drawRect = clicked.rect.move(clicked.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+        
+            if not drawRect.collidepoint(pos):
+                clicked = None
         
         if clicked:
             for selected in self.selectedEntities:
@@ -166,10 +168,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                        self.cartScrollLoc[1] + cartPos[1]
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
-        drawRect = clicked.rect.move(clicked.drawOffset)
-        drawRect.center = specialMath.cartToIso(drawRect.center)
-        if not drawRect.collidepoint(pos):
-            clicked = None
+        if clicked:
+            drawRect = clicked.rect.move(clicked.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+            
+            if not drawRect.collidepoint(pos):
+                clicked = None
         
         if isinstance(event,Event.SelectionEvent):
             for e in self.selectedEntities:

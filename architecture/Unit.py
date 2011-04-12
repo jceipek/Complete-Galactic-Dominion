@@ -155,10 +155,12 @@ class Unit(Builder):
         """
         if self.rect.left > self.worldSize[0]:
             self.rect.left = self.rect.left%self.worldSize[0]
-            self.dest[0] = self.dest[0]%self.worldSize[0]
+            dx = self.dest[0]%self.worldSize[0]
+            self.dest = (dx, self.dest[1])
         if self.rect.top > self.worldSize[1]:
             self.rect.top = self.rect.top%self.worldSize[1]
-            self.dest[1] = self.dest[1]%self.worldSize[1]
+            dy = self.dest[1]%self.worldSize[1]
+            self.dest = (self.dest[0], dy)
     
     def addToPath(self,coord):
         """
