@@ -189,7 +189,7 @@ class TestEntity(Entity):
         
         #self.vel = (-1,1)
         from random import randint
-        self.vel = (10,10)
+        self.vel = (10,-5)
         #self.vel = (randint(-2,2),randint(-2,2))
         #self.vel = (2,1)
     

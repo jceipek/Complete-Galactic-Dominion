@@ -58,6 +58,12 @@ class DragBox(object):
         self.updateBoundingBox()
         #if scrollOffset[0] == 0:
         #    print self.start
+        
+    def findContainedEntities(self):
+        
+        t,l = self.boundingBox.topleft
+        if top < 0 or l < 0:
+            pass
 
 def MakeBoundingBox(p1,p2):
     x1,y1 = p1
@@ -126,7 +132,8 @@ class HealthBar():
 
 class MiniMap(object):
     
-    def __init__(self, world, width=400, height=200):
+    def __init__(self, world, width=400, height=200, \
+        borderColor=(0,0,0), borderWidth=5):
         
         self.world = world
         
@@ -142,9 +149,13 @@ class MiniMap(object):
         self.xOffset = self.width//2 - self.gridSize[0]*self.scale
         self.yOffset = self.height//2
         
+        self.borderColor=borderColor
+        self.borderWidth=borderWidth
+        
+        self.alphaColor = (255,0,255)
         self.baseSurface = pygame.Surface((width,height)) 
         self.baseSurface.convert()
-        self.baseSurface.set_colorkey((0,0,0)) 
+        self.baseSurface.set_colorkey(self.alphaColor) 
         self.rect = self.baseSurface.get_rect()
         self._updateBaseSurface()
         
@@ -184,7 +195,8 @@ class MiniMap(object):
         the image of the map.
         """
 
-        #pygame.draw.rect(self.baseSurface,(50,50,100),self.rect,0)
+        #fill base surface with alphaColor -> transparent
+        pygame.draw.rect(self.baseSurface,self.alphaColor,self.rect,0)
 
         for y in range(self.gridSize[1]):
             for x in range(self.gridSize[0]):
@@ -213,12 +225,13 @@ class MiniMap(object):
         br = specialMath.cartToIso((self.gridSize[0]*self.scale,self.gridSize[1]*self.scale))
         bl = specialMath.cartToIso((0,self.gridSize[1]*self.scale))
         
-        tl = (tl[0]+self.xOffset,tl[1]+self.yOffset)
-        tr = (tr[0]+self.xOffset,tr[1]+self.yOffset)
-        br = (br[0]+self.xOffset,br[1]+self.yOffset)
-        bl = (bl[0]+self.xOffset,bl[1]+self.yOffset)
+        tl = (tl[0]+self.xOffset-self.borderWidth,tl[1]+self.yOffset)
+        tr = (tr[0]+self.xOffset,tr[1]+self.yOffset-self.borderWidth)
+        br = (br[0]+self.xOffset+self.borderWidth,br[1]+self.yOffset)
+        bl = (bl[0]+self.xOffset,bl[1]+self.yOffset+self.borderWidth)
         
-        pygame.draw.polygon(self.baseSurface,(1,1,1),[tl,tr,br,bl],5)
+        pygame.draw.polygon(self.baseSurface,self.borderColor, \
+            [tl,tr,br,bl],self.borderWidth)
         
         # For debugging purposes
         #pygame.draw.rect(self.baseSurface,(150,150,150),\
