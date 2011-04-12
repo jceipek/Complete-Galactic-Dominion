@@ -15,7 +15,7 @@ servers and clients as needed. For now, no servers have been created.
 import threading
 
 #Import necessary user defined classes required for the client
-import Event
+import Event, networking
 from Manager import Manager
 from Window import Window
 from Grid import InfiniteGrid,FiniteGrid
@@ -26,6 +26,7 @@ from UserInterface import UserInterface
 from Universe import Universe
 from Entity import Entity,TestEntity
 from Unit import Unit
+from gameClient import GameClient
 
 def init():
     """
@@ -46,7 +47,11 @@ def init():
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
-                                                
+    try:                                            
+        client = GameClient(eventManager,host='10.41.24.79',port=1567)
+    except:
+        pass
+                                                    
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
     #Note: Do we even need this anymore? - Julian

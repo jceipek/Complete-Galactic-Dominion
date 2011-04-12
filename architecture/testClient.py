@@ -47,8 +47,10 @@ def init():
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
-                                                
-    client = GameClient(eventManager,host='10.41.24.79',port=1567)
+    try:                                            
+        client = GameClient(eventManager,host='10.41.24.79',port=1567)
+    except:
+        pass
     
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
