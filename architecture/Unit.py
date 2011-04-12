@@ -65,9 +65,12 @@ class Unit(Builder):
         """moves unit close to resource, adds resource to containment"""
         self.genAttack(GATHER, self.radius[GATHER], self.efficiency[GATHERING])
         
-    def initAttack(self, enemy):
-        self.status=Locals.ATTACKING
-        self.objectOfAction=enemy
+    def initAction(self, obj):
+        self.objectOfAction=obj
+        if isinstance(obj, Unit):
+            self.status=Locals.ATTACKING
+        elif isinstance(obj, Resource):
+            self.status=Locals.GATHERING
             
     def move(self):
         """changes position of unit in direction of dest"""
@@ -143,17 +146,18 @@ class Unit(Builder):
             print self.rect.center, self.dest
         if not 0<self.rect.center[0] < self.worldSize[0]:
         #if self.rect.left > self.worldSize[0]:
-        
-            self.rect.center = (self.rect.center[0]%self.worldSize[0], self.rect.center[1])
-            dx = self.dest[0]%self.worldSize[0]
+            newx=self.rect.center[0]%self.worldSize[0]
+            dx = self.dest[0]-self.rect.center[0]+newx
+            self.rect.center = (newx, self.rect.center[1])
             self.dest = (dx, self.dest[1])
         #else:
         #    self.rect.center = (self.rect.center[0]%self.worldSize[0], self.rect.center[1])
             
         if not 0< self.rect.center[1]< self.worldSize[1]:
         #if self.rect.top > self.worldSize[1]:
-            self.rect.center= (self.rect.center[0], self.rect.center[1]%self.worldSize[1])
-            dy = self.dest[1]%self.worldSize[1]
+            newy=self.rect.center[1]%self.worldSize[1]
+            dy = self.dest[1]-self.rect.center[1]+newy
+            self.rect.center= (self.rect.center[0], newy)
             self.dest = (self.dest[0], dy)
         #else:
         #    self.rect.center= (self.rect.center[0], self.rect.center[1]%self.worldSize[1])

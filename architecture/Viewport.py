@@ -117,10 +117,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if clicked:
             for selected in self.selectedEntities:
                 attacking=True
-                if isinstance(clicked, Unit):
-                    selected.initAttack(clicked)
-                elif isinstance(clicked, Resource):
-                    selected.initGather(clicked)
+                selected.initAction(clicked)
                        
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
