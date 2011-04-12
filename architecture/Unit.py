@@ -141,21 +141,22 @@ class Unit(Builder):
         """
         if self.entityID == 1:
             print self.rect.center, self.dest
-        if not 0 < self.rect.left < self.worldSize[0]:
+        if not 0<self.rect.center[0] < self.worldSize[0]:
         #if self.rect.left > self.worldSize[0]:
-            self.rect.left = self.rect.left%self.worldSize[0]
+        
+            self.rect.center = (self.rect.center[0]%self.worldSize[0], self.rect.center[1])
             dx = self.dest[0]%self.worldSize[0]
             self.dest = (dx, self.dest[1])
-        else:
-            self.rect.left = self.rect.left%self.worldSize[0]
+        #else:
+        #    self.rect.center = (self.rect.center[0]%self.worldSize[0], self.rect.center[1])
             
-        if not 0 < self.rect.top < self.worldSize[1]:
+        if not 0< self.rect.center[1]< self.worldSize[1]:
         #if self.rect.top > self.worldSize[1]:
-            self.rect.top = self.rect.top%self.worldSize[1]
+            self.rect.center= (self.rect.center[0], self.rect.center[1]%self.worldSize[1])
             dy = self.dest[1]%self.worldSize[1]
             self.dest = (self.dest[0], dy)
-        else:
-            self.rect.top = self.rect.top%self.worldSize[1]
+        #else:
+        #    self.rect.center= (self.rect.center[0], self.rect.center[1]%self.worldSize[1])
         #self.rect.left = self.rect.left%self.worldSize[0]
         #self.rect.top = self.rect.top%self.worldSize[1]
     
