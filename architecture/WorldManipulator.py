@@ -21,7 +21,6 @@ class WorldManipulator(Listener):
                  for i in xrange(len(data)):
                      if data[i] == 'world':
                          data[i]=self.world
-                 print 'adding unit'
                  self.world.addEntity(Unit(*data[1:]))
                 
             
