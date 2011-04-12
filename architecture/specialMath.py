@@ -20,6 +20,7 @@ def findClosest(x1, x2, worldSize):
             if minx<=test[0] and test[0]<=maxx and \
                 miny<=test[1] and test[1]<=maxy:
                     return test
+    print 'Something has gone wrong!- specialMath.findClosest'
     return x2 #returns original point if optimal not found
                     
     
