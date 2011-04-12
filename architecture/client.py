@@ -50,7 +50,7 @@ def init():
                                                 #classes will be needed later?
     networked = True
     try:                                            
-        client = GameClient(eventManager,host='10.41.24.79',port=1567)
+        client = GameClient(eventManager,host='10.41.25.14',port=1567)
     except:
         networked = False
                                                     
