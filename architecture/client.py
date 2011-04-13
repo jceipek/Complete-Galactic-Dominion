@@ -29,7 +29,7 @@ from Unit import Unit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
 
-def init():
+def init(host='localhost'):
     """
     Game initialization function.
         1. Creates a L{Debugger} (debugger) and L{EventTimer} (eventTimer) and 
@@ -50,7 +50,7 @@ def init():
                                                 #classes will be needed later?
     networked = True
     try:                                            
-        client = GameClient(eventManager,host='10.41.24.223',port=1567)
+        client = GameClient(eventManager,host=host,port=1567)
     except:
         networked = False
                                                
