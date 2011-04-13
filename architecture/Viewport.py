@@ -59,7 +59,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def setScrollSpeed(self,mousePos):
         deadZoneHeight,deadZoneWidth = self.deadZoneRect.size
         relMousePos = (mousePos[0]-self.loc[0],mousePos[1]-self.loc[1])
-        if self.rect.collidepoint(mousePos) and not self.deadZoneRect.collidepoint(relMousePos):
+        if self.rect.collidepoint(mousePos) and \
+            not self.deadZoneRect.collidepoint(relMousePos) and \
+            not self.minimap.hasFocus(mousePos):
             dx = (mousePos[0]-self.deadZoneRect.center[0]-self.loc[0])
             dy = (mousePos[1]-self.deadZoneRect.center[1]-self.loc[1])
 
@@ -174,6 +176,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         """
         
         pos = event.pos
+        
+        if self.minimap.rect.collidepoint(pos):
+            mapClickPoint = self.minimap.clickToGridPos(pos)
+            if mapClickPoint is not None:
+                self._setCartScrollLocation(mapClickPoint)
+                return
 
         cartPos = specialMath.isoToCart(pos)
         destCart = self.cartScrollLoc[0] + cartPos[0], \
@@ -201,6 +209,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             else:
                 clicked.selected = True
                 self.selectedEntities.append(clicked)
+    
+    def _setCartScrollLocation(self,newCartLoc):
+        self.cartScrollLoc = tuple(newCartLoc)
+        self.scrollLoc = specialMath.cartToIso(self.cartScrollLoc)
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
         

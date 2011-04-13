@@ -392,6 +392,9 @@ class MiniMap(object):
     def clickToGridPos(self,point):
         return self._drawPosToGridPos(point)
         
+    def hasFocus(self,point):
+        return self._drawPosToGridPos(point) != None
+        
         
                 
 if __name__ == "__main__":
