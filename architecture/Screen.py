@@ -78,6 +78,13 @@ class MainScreen(Screen):
     def processAddDragCompletedEvent(self,event):
         self.viewport.completeDrag(event)
 
+    def processKeyPressEvent(self,event):
+        if event.state == Event.KeyLocals.UP:
+            if event.comboKeys['ctrl']:
+                self.viewport.setQuickSelect(event)
+            else:
+                self.viewport.getQuickSelect(event)
+                
     def processSetDestinationEvent(self, event):
         self.viewport.setDestinationEvent(event)
         

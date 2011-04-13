@@ -53,7 +53,7 @@ def init():
         client = GameClient(eventManager,host='10.41.24.223',port=1567)
     except:
         networked = False
-                                                    
+                                               
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
     #Note: Do we even need this anymore? - Julian

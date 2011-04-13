@@ -46,6 +46,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         self.viewportEntities = []
         
+        self.quickSelect = {}
+        for i in xrange(pygame.K_0,pygame.K_9+1):
+            self.quickSelect[i] = pygame.sprite.Group()
+        
         self.dragRect = None
         
     def initDeadZoneBasedOnSize(self):
@@ -334,7 +338,18 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         rect = ((0,0),self.size)
         pygame.draw.rect(self.surface, (255,255,0), rect, 3)
         pygame.draw.rect(self.surface, (255,0,255), self.deadZoneRect, 2)
+    
+    def setQuickSelect(self,event):
+        self.quickSelect[event.key].empty()
+        for entity in self.selectedEntities:
+            self.quickSelect[event.key].add(entity)
+        print self.quickSelect[event.key].sprites()
         
+    def getQuickSelect(self,event):
+        for entity in self.quickSelect[event.key].sprites():
+            entity.selected = True
+            self.selectedEntities.append(entity)
+    
     def changeWorld(self,world):
         self.world = world
         self.minimap = MiniMap(self.world)

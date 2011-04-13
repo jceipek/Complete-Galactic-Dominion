@@ -27,7 +27,8 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             Event.UpdateEvent, Event.WorldChangeEvent, \
             Event.DisplaySurfaceCreatedEvent, Event.SetDestinationEvent, \
             Event.DragBeganEvent, Event.DragEvent, \
-            Event.DragCompletedEvent, Event.AddDragCompletedEvent]
+            Event.DragCompletedEvent, Event.AddDragCompletedEvent, \
+            Event.KeyPressEvent ]
         Listener.__init__(self,manager,eventTypes)
         self.activeOverlay = None
         self.activeWorld = world
@@ -86,6 +87,9 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             if self.debugOverlay:
                 self.debugOverlay.processUpdateEvent(event)
             self.manager.post(Event.RefreshEvent())
+        elif isinstance(event, Event.KeyPressEvent):
+            if self.activeScreen:
+                self.activeScreen.processKeyPressEvent(event)
         elif isinstance(event, Event.WorldChangeEvent):
             if self.activeWorld:
                 self.activeWorld = event.world
