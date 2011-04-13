@@ -59,7 +59,7 @@ class DragBox(object):
         self.updateBoundingBox()
         #if scrollOffset[0] == 0:
         #    print self.start
-        
+
     def isOffScreen(self,size):
         
         l,t = self.boundingBox.topleft
@@ -360,6 +360,39 @@ class MiniMap(object):
         # For debugging purposes
         #pygame.draw.rect(self.baseSurface,(150,150,150),\
         #        self.baseSurface.get_rect(),5)
+    
+
+    def _drawPosToGridPos(self,point):
+        """
+        Takes a click on the screen, and returns the point on the 
+        Cartesian internal space which has been clicked, or None
+        if the minimap was not clicked.
+        """
+        unOffsetPoint = (point[0] - self.xOffset, point[1] - self.yOffset)
+        unscaledPoint = unOffsetPoint[0]/self.scale, unOffsetPoint[1]/self.scale
+        cartPoint = specialMath.isoToCart(unscaledPoint)
+        gridPos = int(cartPoint[0]*self.tileSize[1]),int(cartPoint[1]*self.tileSize[1])
+        
+        if 0 <= gridPos[0] <= self.gridDim[0] and 0 <= gridPos[1] <= self.gridDim[1]:
+            return gridPos
+        return None
+        
+    '''
+    def _gridPosToDrawPos(self,point):
+        """
+        Takes a cartesian position on the internal state grid and
+        converts it to a drawing position on the minimap.
+        """
+        gridPos = float(point[0])/self.tileSize[1],float(point[1])/self.tileSize[1]
+        rawPos = specialMath.cartToIso(gridPos)
+        return self.offsetToDraw( \
+                ( int(self.scale*rawPos[0]),int(self.scale*rawPos[1]) ) \
+                )
+    '''
+    def clickToGridPos(self,point):
+        return self._drawPosToGridPos(point)
+        
+        
                 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)

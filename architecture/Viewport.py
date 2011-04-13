@@ -100,10 +100,16 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def setDestinationEvent(self, event):
         attacking=False
         pos = event.pos
-        cartPos = specialMath.isoToCart(pos)
         
-        destCart = self.cartScrollLoc[0] + cartPos[0], \
-                    self.cartScrollLoc[1] + cartPos[1]
+        if self.minimap.rect.collidepoint(pos):
+            mapClickPoint = self.minimap.clickToGridPos(pos)
+            if mapClickPoint is not None:
+                destCart = mapClickPoint
+        else:            
+            cartPos = specialMath.isoToCart(pos)
+            
+            destCart = self.cartScrollLoc[0] + cartPos[0], \
+                        self.cartScrollLoc[1] + cartPos[1]
 
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
@@ -132,31 +138,31 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         """
         Fill this in.
         """
-        
-        start = event.start
-        end = event.curr
-        
-        if isinstance(event,Event.DragCompletedEvent):
-            for e in self.selectedEntities:
-                e.selected = False
-            self.selectedEntities = []
-        #else: pass # if it is an Event.AddDragCompletedEvent, do
-        # # not deselect
-        
-        print self.dragRect.isOffScreen(self.size)
-        if self.dragRect.isOffScreen(self.size):
-            searchList = self.world.allEntities.values()
-        else:
-            searchList = self.viewportEntities
-        
-        for entity in searchList:
-        
-            drawRect = entity.rect.move(entity.drawOffset)
-            drawRect.center = specialMath.cartToIso(drawRect.center)
-        
-            if drawRect.colliderect(MakeBoundingBox(start,end)):
-                entity.selected = True
-                self.selectedEntities.append(entity)
+        if self.dragRect is not None:
+            start = event.start
+            end = event.curr
+            
+            if isinstance(event,Event.DragCompletedEvent):
+                for e in self.selectedEntities:
+                    e.selected = False
+                self.selectedEntities = []
+            #else: pass # if it is an Event.AddDragCompletedEvent, do
+            # # not deselect
+            
+            print self.dragRect.isOffScreen(self.size)
+            if self.dragRect.isOffScreen(self.size):
+                searchList = self.world.allEntities.values()
+            else:
+                searchList = self.viewportEntities
+            
+            for entity in searchList:
+            
+                drawRect = entity.rect.move(entity.drawOffset)
+                drawRect.center = specialMath.cartToIso(drawRect.center)
+            
+                if drawRect.colliderect(MakeBoundingBox(start,end)):
+                    entity.selected = True
+                    self.selectedEntities.append(entity)
     
     def clickEvent(self,event):
         """
