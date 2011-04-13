@@ -143,7 +143,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         #else: pass # if it is an Event.AddDragCompletedEvent, do
         # # not deselect
         
-        for entity in self.viewportEntities:
+        print self.dragRect.isOffScreen(self.size)
+        if self.dragRect.isOffScreen(self.size):
+            searchList = self.world.allEntities.values()
+        else:
+            searchList = self.viewportEntities
+        
+        for entity in searchList:
         
             drawRect = entity.rect.move(entity.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)

@@ -48,11 +48,12 @@ def init():
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
-    networked = True
-    try:                                            
-        client = GameClient(eventManager,host='10.41.25.14',port=1567)
-    except:
-        networked = False
+    #networked = True
+    #try:                                            
+        #client = GameClient(eventManager,host='10.41.25.14',port=1567)
+    #except:
+    #    networked = False
+    networked = False
                                                     
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED

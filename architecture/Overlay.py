@@ -1,5 +1,6 @@
 import pygame
 import specialMath
+from copy import copy
 
 class Overlay(object): #FIXME - should inherit from drawable object?
     def __init__(self):
@@ -59,11 +60,16 @@ class DragBox(object):
         #if scrollOffset[0] == 0:
         #    print self.start
         
-    def findContainedEntities(self):
+    def isOffScreen(self,size):
         
-        t,l = self.boundingBox.topleft
-        if top < 0 or l < 0:
-            pass
+        l,t = self.boundingBox.topleft
+        if t < 0 or l < 0:
+            return True
+        r,b = self.boundingBox.bottomright
+        w,h = size
+        if b > h or r > w:
+            return True
+        return False
 
 def MakeBoundingBox(p1,p2):
     x1,y1 = p1
@@ -142,6 +148,7 @@ class MiniMap(object):
 
         self.gridDict = self.world.grid.grid
         self.gridSize = self.world.grid.gridSize
+        self.gridDim = self.world.grid.getCartGridDimensions()
         self.tileSize = self.world.grid.tileWidth,self.world.grid.tileHeight
         self.scale = self.width//(2*self.gridSize[0])
         
@@ -180,9 +187,57 @@ class MiniMap(object):
                 ( int(self.scale*rawPos[0]),int(self.scale*rawPos[1]) ) \
                 )
     
-    def _updateDynamicSurface(self,screenPoints=None):
+    def _wrapPoint(self,point):
+        return point[0]%self.gridDim[0],point[1]%self.gridDim[1]
+    
+    def _findIntercept(self,point1,point2):
+        """
+        Given two points, this will return the point on the line between
+        the two points that intersects with the edge of the internal
+        state of the map, or will return the point closest to the edge.
+        """
+        
+        p1,p2 = point1,point2
+        
+        x1,y1=p1
+        x2,y2=p2
+        
+        m = float(y2-y1)/(x2-x1)
 
-        from copy import copy
+        newP2 = list(self.gridDim)
+        
+        change = False
+        if p2[0] > self.gridDim[0]:
+            change = True
+            p2 = (self.gridDim[0],m*(self.gridDim[0]-x1)+y1)
+        if p2[1] > self.gridDim[1]:
+            change = True
+            p2 = ((self.gridDim[1]-y1)/m+x1,self.gridDim[1])
+        
+        if change:
+            return p2
+        else:
+            return point2
+    '''
+    def _cutoffPoint(self,point):
+        test = [point[0],point[1]]
+        xadj=0
+        yadj=0
+        if point[0] > self.gridDim[0]:
+            test[0] = self.gridDim[0]
+            #xadj-=point[0]-self.gridDim[0]
+            #yadj+=point[0]-self.gridDim[0]
+        if point[1] > self.gridDim[1]:
+            test[1] = self.gridDim[1]
+            #xadj+=point[1]+self.gridDim[1]
+            #yadj-=point[1]-self.gridDim[1]
+        #pts = min(point[0],self.gridDim[0]),min(point[1],self.gridDim[1])
+        #diff = max(0,point[1]-pts[1])
+        #print min(point[0],self.gridDim[0]),min(point[1],self.gridDim[1])
+        return min(point[0],self.gridDim[0])+xadj,min(point[1],self.gridDim[1])+yadj
+    '''
+    
+    def _updateDynamicSurface(self,screenPoints=None):
 
         newSurface = copy(self.baseSurface)#pygame.Surface((self.width,self.height))
         #newSurface.blit(self.baseSurface,self.rect)
@@ -200,11 +255,55 @@ class MiniMap(object):
             pygame.draw.circle(newSurface, color, drawPos, 3)
         
         if screenPoints is not None:
-            tl = self._gridPosToDrawPos(screenPoints[0])
-            tr = self._gridPosToDrawPos(screenPoints[1])
-            br = self._gridPosToDrawPos(screenPoints[2])
-            bl = self._gridPosToDrawPos(screenPoints[3])
             
+            # TOPLEFT IS ALWAYS ON THE GRID
+            tl = self._gridPosToDrawPos(screenPoints[0])
+            wraptl = self._gridPosToDrawPos(self._wrapPoint(screenPoints[0]))
+            
+            tr = self._gridPosToDrawPos(screenPoints[1])
+            wraptr = self._gridPosToDrawPos(self._wrapPoint(screenPoints[1]))
+            
+            br = self._gridPosToDrawPos(screenPoints[2])
+            wrapbr = self._gridPosToDrawPos(self._wrapPoint(screenPoints[2]))
+            
+            bl = self._gridPosToDrawPos(screenPoints[3])
+            wrapbl = self._gridPosToDrawPos(self._wrapPoint(screenPoints[3]))
+            """
+            # Draw top lines
+            print screenPoints[0],trAdj
+            trAdj=self._findIntercept(screenPoints[0],screenPoints[1])
+            trAdjDraw=self._gridPosToDrawPos(trAdj)
+            pygame.draw.line(newSurface,(255,255,255),tl,trAdjDraw,1)
+            pygame.draw.line(newSurface,(255,255,255), \
+                self._gridPosToDrawPos(self._wrapPoint(trAdj)),wraptr)
+            '''
+            trAdj2=self._findIntercept(screenPoints[2],screenPoints[1])
+            trAdjDraw2=self._gridPosToDrawPos(trAdj2)
+            
+            brAdj=self._findIntercept(screenPoints[1],screenPoints[2])
+            brAdjDraw=self._gridPosToDrawPos(brAdj)
+            
+            print trAdj2,brAdj
+            #if brAdj[1] > tr[1]:
+            pygame.draw.line(newSurface,(255,255,255),trAdjDraw2,brAdjDraw,1)
+            #pygame.draw.line(newSurface,(255,255,255), \
+            #    self._gridPosToDrawPos(self._wrapPoint(brAdj)),wrapbr)
+            '''
+            
+            brAdj=self._findIntercept(screenPoints[1],screenPoints[2])
+            brAdjDraw=self._gridPosToDrawPos(brAdj)
+            
+            
+            
+            trAdj2=self._findIntercept(screenPoints[2],screenPoints[1])
+            trAdjDraw2=self._gridPosToDrawPos(trAdj2)
+            
+            #print trAdj2,brAdj
+            
+            #pygame.draw.line(newSurface,(255,255,255),brAdjDraw,trAdjDraw2,1)
+            #pygame.draw.line(newSurface,(255,255,255), \
+            #    self._gridPosToDrawPos(self._wrapPoint(brAdj)),wraptr)
+            """
             # NOTE - TOP LEFT CORNER IS ALWAYS CORRECT
             pygame.draw.polygon(newSurface,(255,255,255),[tl,tr,br,bl],1)
 
