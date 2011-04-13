@@ -48,8 +48,8 @@ class Unit(Builder):
 
     def genAttack(self,act=0, attackRad=200, rate=10, recharge=0):
         """moves unit closer to objectOfAction and decreases its health"""
-        closest=specialMath.findClosest(self.rect.realCenter, self.objectOfAction.rect.center, self.worldSize)
-        if specialMath.distance(self.rect.center, closest) > attackRad:
+        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+        if specialMath.distance(self.realCenter, closest) > attackRad:
 
             self.dest=closest #FIXME pathfinding goes here
             self.move() 
