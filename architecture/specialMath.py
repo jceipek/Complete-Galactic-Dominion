@@ -15,13 +15,13 @@ def findClosest(x1, x2, worldSize):
     miny, maxy= x1[1]-worldSize[1]/2.0, x1[1]+worldSize[1]/2.0
     for xShift in [0,-1,1]:
         for yShift in [0,-1,1]:
-            test = (x2[0]+xShift*worldSize[0], \
-                        x2[1]+yShift*worldSize[1])
+            test = [x2[0]+xShift*worldSize[0], \
+                        x2[1]+yShift*worldSize[1]]
             if minx<=test[0] and test[0]<=maxx and \
                 miny<=test[1] and test[1]<=maxy:
                     return test
     print 'Something has gone wrong!- specialMath.findClosest'
-    return x2 #returns original point if optimal not found
+    return list[x2] #returns original point if optimal not found
                     
     
 def cartToIso(coord):

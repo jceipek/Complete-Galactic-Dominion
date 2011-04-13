@@ -26,7 +26,7 @@ class Unit(Builder):
         self.status=Locals.IDLE
         self.efficiency=[.1, 10, 10, 10] #move, build, gather, attack
         self.path=[] #queue of future tuple destinations
-        self.dest=self.realCenter=self.rect.center #current destination
+        self.dest=self.realCenter=list(self.rect.center) #current destination
         self.speed=.1
         self.attackRange=300
         self.attackRechargeTime=500
@@ -41,7 +41,7 @@ class Unit(Builder):
             self.move()
         else:
             self.path=[]
-            self.dest=self.rect.center
+            self.dest=self.realCenter
         if self.status==Locals.ATTACKING:
             self.attack()
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
@@ -103,15 +103,15 @@ class Unit(Builder):
             #    self.rect.center = self.dest
             #else:
             #    self.rect.center = newX, newY
-            self.realCenter = newX,newY
-            self.rect.center = self.realCenter
+            self.realCenter = [newX,newY]
+            self.rect.center = tuple(self.realCenter)
             self.moveWrap()
             
     def _definePath(self):
         if self._isAtDestination(): #may need to have room for error
             if self.path == []:
                 self.status = Locals.IDLE
-                self.dest = self.rect.center
+                self.dest = self.realCenter
                 return
             else: # path not empty - change path
                 self.status = Locals.MOVING
@@ -131,7 +131,6 @@ class Unit(Builder):
         is found.
         """
         destX,destY = self.path.pop(0) 
-        self.dest=destX, destY
         
         # Rectangle the size of the world which is centered
         # at the current location
@@ -145,34 +144,22 @@ class Unit(Builder):
         """
         if self.entityID == 1:
             print self.realCenter, self.dest
-        if not 0<self.realCenter[0] < self.worldSize[0]:
-        #if self.rect.left > self.worldSize[0]:
-            newx=self.realCenter[0]%self.worldSize[0]
-            dx = self.dest[0]-self.realCenter[0]+newx
-            self.realCenter = (newx, self.realCenter[1])
-            self.dest = (dx, self.dest[1])
-        #else:
-        #    self.rect.center = (self.rect.center[0]%self.worldSize[0], self.rect.center[1])
+
+        for i in range(2):
+            if not 0<self.realCenter[i]<self.worldSize[i]:
+                newVal=self.realCenter[i]%self.worldSize[i]
+                di = self.dest[i]-self.realCenter[i]+newVal
+                self.realCenter[i]=newVal
+                self.dest[i]=di
             
-        if not 0< self.realCenter[1]< self.worldSize[1]:
-        #if self.rect.top > self.worldSize[1]:
-            newy=self.realCenter[1]%self.worldSize[1]
-            dy = self.dest[1]-self.realCenter[1]+newy
-            self.rect.center = (self.realCenter[0], newy)
-            self.dest = (self.dest[0], dy)
-            
-        self.rect.center = self.realCenter
-        #else:
-        #    self.rect.center= (self.rect.center[0], self.rect.center[1]%self.worldSize[1])
-        #self.rect.left = self.rect.left%self.worldSize[0]
-        #self.rect.top = self.rect.top%self.worldSize[1]
+        self.rect.center = tuple(self.realCenter)
     
     def addToPath(self,coord):
         """
         Takes an x,y coordinate tuple in the grid and adds this location
         to the path.
         """
-        self.path.append(coord)
+        self.path.append(list(coord))
         
     def getMiniMapColor(self):
         return (20,20,255)
