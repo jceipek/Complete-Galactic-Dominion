@@ -246,8 +246,11 @@ class Window(Listener):
                             keyHeldDict['alt'] = False
                         if pygame.K_0 <= rawEvent.key <= pygame.K_9:
                             realEvent.append( \
-                                Event.KeyPressEvent(rawEvent.key,Event.KeyLocals.UP,keyHeldDict) \
+                                Event.NumberKeyPressEvent(rawEvent.key,Event.KeyLocals.UP,keyHeldDict) \
                             )
+                        #if rawEvent.key == pygame.K_F11:
+                        #    self.fullscreenMode = not self.fullscreenMode
+                        #    self.updateScreenMode()
                         if rawEvent.key == pygame.K_ESCAPE:
                             realEvent.append(Event.QuitEvent())
     
@@ -256,7 +259,7 @@ class Window(Listener):
                                                     #problems here!
                 except:
                     import sys,traceback
-                    print 'An unexpected error occurred.'
+                    print 'An unexpected error occurred in the event thread.'
                     exc_type,exc_value,exc_traceback = sys.exc_info()
                     traceback.print_exc()
                     self.manager.post(Event.QuitEvent())

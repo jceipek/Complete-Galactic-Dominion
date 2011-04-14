@@ -13,7 +13,8 @@ class Entity(MapObject):
     IDcounter = 0
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
+                 description = 'No information available.',
+                 movable = False):
         """
         Set up an Entity with an image loaded from the filepath
         specified by imagePath, an absolute x and y position in a given
@@ -69,6 +70,8 @@ class Entity(MapObject):
         # Menu options should be added to this dictionary.
         self.options = {'Description': self.showDescription}
         #self.pos = (x,y) # defined by superclass
+        
+        self.movable = movable
         
         self.maxHealth = 100
         self.curHealth = self.maxHealth
@@ -172,6 +175,9 @@ class Entity(MapObject):
         Updated by viewport.
         """
         return self.world.__class__.elapsedTimeSinceLastFrame
+    
+    def addToPath(self,newLoc):
+        pass
         
 class TestEntity(Entity):
     """

@@ -4,7 +4,7 @@ class KeyLocals:
     DOWN = 0
     UP = 1
 
-class KeyPressEvent(Event):
+class NumberKeyPressEvent(Event):
     
     def __init__(self,key,state,comboKeys):
         Event.__init__(self)

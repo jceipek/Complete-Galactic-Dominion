@@ -1,5 +1,7 @@
 from Entity import Entity
 
+from NaturalObject import Gold
+
 class World(object):
     """
     A World is an object that contains everything in the current environment
@@ -33,7 +35,20 @@ class World(object):
         else:
             self.grid = grid #Needs to be linked to a grid object, default None
         self.gridDim = self.grid.getCartGridDimensions()
+    
+        self._generateResources()
+    
+    def _generateResources(self):
         
+        from random import randint,choice
+        
+        resourceType = [Gold]
+        
+        for i in xrange(randint(10,15)):
+            xpos = randint(0,self.gridDim[0])
+            ypos = randint(0,self.gridDim[1])
+            (choice(resourceType))(xpos, ypos, self)
+    
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
         self.grid = InfiniteGrid((30,30),64)
@@ -71,7 +86,8 @@ class World(object):
         
         entCount=0
 
-        for entity in self.allEntities.values():            
+        for entity in self.allEntities.values():
+                  
             for view in viewRects:
                 #if entity.collRect.colliderect(viewRect):
                 if self.collideRectDiamond(entity.rect,view):

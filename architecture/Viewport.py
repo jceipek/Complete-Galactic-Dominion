@@ -111,9 +111,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             mapClickPoint = self.minimap.clickToGridPos(pos)
             if mapClickPoint is not None:
                 destCart = mapClickPoint
-        else:            
+            else:            
+                cartPos = specialMath.isoToCart(pos)
+                destCart = self.cartScrollLoc[0] + cartPos[0], \
+                            self.cartScrollLoc[1] + cartPos[1]
+        else:
             cartPos = specialMath.isoToCart(pos)
-            
             destCart = self.cartScrollLoc[0] + cartPos[0], \
                         self.cartScrollLoc[1] + cartPos[1]
 

@@ -29,6 +29,8 @@ from Unit import Unit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
 
+from NaturalObject import Gold
+
 def init(host='localhost'):
     """
     Game initialization function.
@@ -72,7 +74,7 @@ def init(host='localhost'):
     ui = UserInterface(eventManager,universe.activeWorld)
     
     gameWindow = Window(eventManager,width=1024,height=768)
-    gameWindow.fullscreenMode = False
+    gameWindow.fullscreenMode = True
     gameWindow.updateScreenMode()
     
     w = World()
@@ -88,7 +90,7 @@ def init(host='localhost'):
         a=['Unit','testCraft.png',i*50,i*50,'world','alpha']
         eventManager.post(Event.WorldManipulationEvent(a))
         #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
-
+    
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
     

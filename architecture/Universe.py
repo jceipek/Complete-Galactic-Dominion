@@ -16,7 +16,6 @@ class Universe(Listener):
         if world is None:
             world = World()
         self.worldList.append(world)
-            
 
     def changeWorld(self,newWorld):
         """
