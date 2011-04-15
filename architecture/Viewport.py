@@ -46,6 +46,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         self.viewportEntities = []
         
+        self.quickSelect = {}
+        for i in xrange(pygame.K_0,pygame.K_9+1):
+            self.quickSelect[i] = pygame.sprite.Group()
+        
         self.dragRect = None
         
     def initDeadZoneBasedOnSize(self):
@@ -107,9 +111,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             mapClickPoint = self.minimap.clickToGridPos(pos)
             if mapClickPoint is not None:
                 destCart = mapClickPoint
-        else:            
+            else:            
+                cartPos = specialMath.isoToCart(pos)
+                destCart = self.cartScrollLoc[0] + cartPos[0], \
+                            self.cartScrollLoc[1] + cartPos[1]
+        else:
             cartPos = specialMath.isoToCart(pos)
-            
             destCart = self.cartScrollLoc[0] + cartPos[0], \
                         self.cartScrollLoc[1] + cartPos[1]
 
@@ -153,7 +160,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             print self.dragRect.isOffScreen(self.size)
             if self.dragRect.isOffScreen(self.size):
-                searchList = self.world.allEntities.values()
+                searchList = self.world.allEntities.itervalues()
             else:
                 searchList = self.viewportEntities
             
@@ -250,12 +257,27 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         for e in self.viewportEntities:
             e.draw(self.surface,self.scrollLoc)
   
+    def setFocusedEntities(self):
+        rawMouseLoc = pygame.mouse.get_pos()
+        viewportMouseLoc = rawMouseLoc[0]-self.loc[0],rawMouseLoc[1]-self.loc[1]
+        
+        for e in self.viewportEntities:
+            
+            drawRect = e.rect.move(e.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+            
+            if drawRect.collidepoint(viewportMouseLoc):
+                e.focused = True
+  
     def draw(self,displaySurface):
         """
         Draws the map and all entities for the current world location.
         displaySurface is provided by the screen.
         """
+
         if not self.world == None:
+            
+            #self.setFocusedEntities()
             self.world.grid.draw(self.surface, self.scrollLoc, self.size)
             self.drawContainedEntities()
             self.drawDragRect()
@@ -334,7 +356,18 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         rect = ((0,0),self.size)
         pygame.draw.rect(self.surface, (255,255,0), rect, 3)
         pygame.draw.rect(self.surface, (255,0,255), self.deadZoneRect, 2)
+    
+    def setQuickSelect(self,event):
+        self.quickSelect[event.key].empty()
+        for entity in self.selectedEntities:
+            self.quickSelect[event.key].add(entity)
+        print self.quickSelect[event.key].sprites()
         
+    def getQuickSelect(self,event):
+        for entity in self.quickSelect[event.key].sprites():
+            entity.selected = True
+            self.selectedEntities.append(entity)
+    
     def changeWorld(self,world):
         self.world = world
         self.minimap = MiniMap(self.world)

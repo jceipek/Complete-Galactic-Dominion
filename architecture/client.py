@@ -29,6 +29,8 @@ from Unit import Unit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
 
+from NaturalObject import makeGold
+
 def init(host='localhost'):
     """
     Game initialization function.
@@ -54,7 +56,7 @@ def init(host='localhost'):
         client.sendRequest('GetWorld')
     except:
         networked = False
-                                                    
+                                               
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
     #Note: Do we even need this anymore? - Julian
@@ -76,20 +78,21 @@ def init(host='localhost'):
     gameWindow.fullscreenMode = False
     gameWindow.updateScreenMode()
     
-    w = World()
+    w = World(universe)
     wManipulator = WorldManipulator(eventManager,w,networked)
-    universe.changeWorld(w)
+    #universe.changeWorld(w)
     
     #===========================================
     
     # Initialize 500 entities in World w
-    for i in range(25):
+    for i in xrange(25):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
         a=['Unit','testCraft.png',i*50,i*50,'world','alpha']
         eventManager.post(Event.WorldManipulationEvent(a))
         #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
-
+    print universe.creator.numberOfEntities
+    print universe.creator.releasedEntityIDs
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
     
