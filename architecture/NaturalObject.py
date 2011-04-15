@@ -34,12 +34,13 @@ class Resource(NaturalObject):
 	
         self.maxHealth = self.curHealth = 500
         self.resourceName = resourceName
-	
+	"""
     def changeHealth(self, numHits):
-        """changes current health by numHits, removes object if current health drops to 0"""
+        #changes current health by numHits, removes object if current #health drops to 0
         self.curHealth+=numHits
         if curHealth<=0:
             self.die()
+    """
     
     def update(self):
         pass
