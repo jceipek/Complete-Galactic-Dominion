@@ -145,7 +145,7 @@ class Unit(Builder):
         if self.entityID == 1:
             print self.realCenter, self.dest
 
-        for i in range(2):
+        for i in xrange(2):
             if not 0<self.realCenter[i]<self.worldSize[i]:
                 newVal=self.realCenter[i]%self.worldSize[i]
                 di = self.dest[i]-self.realCenter[i]+newVal
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     print 'World initialized'
     
     # Creates entities to test with in world w
-    for i in range(50):
+    for i in xrange(50):
         w.addEntity(Unit('ball.png',i*50,i*50, w, (255,255,255)))
         #print Entity.IDcounter
     

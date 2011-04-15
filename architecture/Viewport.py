@@ -160,7 +160,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             print self.dragRect.isOffScreen(self.size)
             if self.dragRect.isOffScreen(self.size):
-                searchList = self.world.allEntities.values()
+                searchList = self.world.allEntities.itervalues()
             else:
                 searchList = self.viewportEntities
             

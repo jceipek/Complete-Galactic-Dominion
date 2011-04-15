@@ -242,7 +242,7 @@ class MiniMap(object):
         newSurface = copy(self.baseSurface)#pygame.Surface((self.width,self.height))
         #newSurface.blit(self.baseSurface,self.rect)
         
-        for entity in self.world.allEntities.values():
+        for entity in self.world.allEntities.itervalues():
             
             entityPos = entity.rect.center
             
@@ -320,8 +320,8 @@ class MiniMap(object):
         #fill base surface with alphaColor -> transparent
         pygame.draw.rect(self.baseSurface,self.alphaColor,self.rect,0)
 
-        for y in range(self.gridSize[1]):
-            for x in range(self.gridSize[0]):
+        for y in xrange(self.gridSize[1]):
+            for x in xrange(self.gridSize[0]):
                 
                 # Grab average color value of the grid at loc x,y
                 curColor = (self.gridDict[(x,y)]).getMiniMapColor()
@@ -414,7 +414,7 @@ if __name__ == "__main__":
     m = MiniMap(w)
     #a = DrawableObject('orbPurpleBlack.png',(255,255,255))
     #print a.getAverageColor()
-    for i in range(10):
+    for i in xrange(10):
         w.addEntity(TestEntity('orb.png',i*50,i*50,w,'alpha'))
     
     MAX_FPS = 60
@@ -430,6 +430,6 @@ if __name__ == "__main__":
         
         ms_elapsed = gameClock.tick(MAX_FPS)
         
-        for entity in w.allEntities.values():
+        for entity in w.allEntities.itervalues():
             entity.update()
         #print 'Current frames per second: %d'%int(1000.0/ms_elapsed)

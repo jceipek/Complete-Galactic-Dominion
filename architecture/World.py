@@ -64,7 +64,7 @@ class World(object):
 
     def update(self):
         """Sends an update message to all entities."""
-        for entity in self.allEntities.values():
+        for entity in self.allEntities.itervalues():
             entity.update()
     
     def getScreenEntities(self,viewRects):
@@ -95,7 +95,7 @@ class World(object):
         
         entCount=0
 
-        for entity in self.allEntities.values():
+        for entity in self.allEntities.itervalues():
                   
             for view in viewRects:
                 #if entity.collRect.colliderect(viewRect):
@@ -138,7 +138,7 @@ class World(object):
         pHigh=pLow=diamond[0]
         
         # Finds lowest and highest point in diamond
-        for i in range(1,len(diamond)):
+        for i in xrange(1,len(diamond)):
             if diamond[i][1]>pHigh[1]:
                 pHigh=diamond[i]
             if diamond[i][1]<pLow[1]:

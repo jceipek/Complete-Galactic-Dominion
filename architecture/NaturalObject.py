@@ -89,7 +89,7 @@ if __name__ == "__main__":
     print 'World initialized'
     
     # Creates entities to test with in world w
-    for i in range(10):
+    for i in xrange(10):
         w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #print Entity.IDcounter
     
@@ -109,7 +109,7 @@ if __name__ == "__main__":
         curScreenEntities = w.getScreenEntities(screenZone)
         #print 'Currently %d entities on the screen'%len(curScreenEntities)
         
-        for ent in w.allEntities.values():
+        for ent in w.allEntities.itervalues():
             
             ent.draw(screen)
             

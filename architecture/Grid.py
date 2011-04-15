@@ -15,8 +15,8 @@ class Grid(object):
         self.populateGrid()
         
     def populateGrid(self):
-        for y in range(self.gridSize[1]):
-            for x in range(self.gridSize[0]):
+        for y in xrange(self.gridSize[1]):
+            for x in xrange(self.gridSize[0]):
                 self.grid[(x,y)] = Terrain.Grass('newGrass.png',(255,0,255))
         self.tileWidth, self.tileHeight = self.grid[(0,0)].rect.size
         
@@ -57,8 +57,8 @@ class InfiniteGrid(Grid):
 
         surface.fill((0,0,0))
         
-        for y in range(miny,maxy):
-            for x in range(minx,maxx):
+        for y in xrange(miny,maxy):
+            for x in xrange(minx,maxx):
                 
                 left = int((x-(y%2)/2.0)*tileWidth-screenLoc[0])
                 top = int(y*tileHeight/2.0-screenLoc[1])
@@ -102,8 +102,8 @@ class InfiniteGrid(Grid):
         
         surface.fill((0,0,0));
         
-        for y in range(miny,maxy):
-            for x in range(minx,maxx):
+        for y in xrange(miny,maxy):
+            for x in xrange(minx,maxx):
                 
                 #find the left and top position of the image relative to the screen in iso
                 left = int((y+x)/2.0*tileWidth-screenLoc[0])
@@ -153,8 +153,8 @@ class FiniteGrid(Grid):
                 top = int(y*squareSize-screenLoc[1])
                 rect = pygame.Rect((left, top), (squareSize,)*2)
         """
-        for y in range(miny,maxy):
-            for x in range(minx,maxx):
+        for y in xrange(miny,maxy):
+            for x in xrange(minx,maxx):
                 left = int((x-(y%2)/2.0)*tileWidth-screenLoc[0])
                 top = int(y*tileHeight/2.0-screenLoc[1])
                 squareLoc=(x,y)
@@ -176,8 +176,8 @@ class Grid2(object):
         self.populateGrid()
         
     def populateGrid(self):
-        for y in range(self.gridSize[1]):
-            for x in range(self.gridSize[0]):
+        for y in xrange(self.gridSize[1]):
+            for x in xrange(self.gridSize[0]):
                 self.grid[(x,y)] = GridSquare('newGrass.png',(255,0,255))
         self.tileWidth, self.tileHeight = self.grid[(0,0)].rect.size
         
@@ -201,8 +201,8 @@ class Grid2(object):
         
         indexList = []
         
-        for xIter in range(lIdx,rIdx+1):
-            for yIter in range(tIdx,bIdx+1):
+        for xIter in xrange(lIdx,rIdx+1):
+            for yIter in xrange(tIdx,bIdx+1):
                 indexList.append((xIter,yIter))
         return indexList
     
@@ -281,8 +281,8 @@ class InfiniteGrid2(Grid2):
         
         surface.fill((0,0,0));
         
-        for y in range(miny,maxy):
-            for x in range(minx,maxx):
+        for y in xrange(miny,maxy):
+            for x in xrange(minx,maxx):
                 
                 #find the left and top position of the image relative to the screen in iso
                 left = int((y+x)/2.0*tileWidth-screenLoc[0])

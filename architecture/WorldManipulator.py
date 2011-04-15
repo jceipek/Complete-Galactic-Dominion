@@ -23,5 +23,3 @@ class WorldManipulator(Listener):
                          data[i]=self.world
                  #self.world.addEntity(Unit(*data[1:]))
                  Unit(*data[1:])
-                
-            

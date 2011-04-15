@@ -57,7 +57,7 @@ class Universe(Listener):
         self.manager.post(Event.RenderEvent())
         #let the event manager know that the current world is updated
         #for world in self.worldList:
-        for world in self.worldIDToWorld.values():
+        for world in self.worldIDToWorld.itervalues():
             if not world is self.activeWorld:
                 world.update()
 
