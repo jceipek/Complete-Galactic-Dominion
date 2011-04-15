@@ -13,6 +13,7 @@ class DrawableObject():
         
         self.loadImage(imagePath,colorkey)
         self.setAverageColor(imagePath,colorkey)
+        self.realCenter = self.rect.center
         
     # First loadImage method
     def loadImage(self, imagePath, colorkey=None):

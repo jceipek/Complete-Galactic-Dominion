@@ -31,6 +31,9 @@ class Universe(Listener):
 
     def addEntity(self,entity):
         self.creator.registerEntity(entity)
+    
+    def removeEntity(self,entity):
+        self.creator.unregisterEntity(entity)
 
     def changeWorld(self,newWorld):
         """
@@ -57,7 +60,7 @@ class Universe(Listener):
         self.manager.post(Event.RenderEvent())
         #let the event manager know that the current world is updated
         #for world in self.worldList:
-        for world in self.worldIDToWorld.itervalues():
+        for world in self.worldIDToWorld.values():
             if not world is self.activeWorld:
                 world.update()
 
