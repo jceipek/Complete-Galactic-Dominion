@@ -64,7 +64,7 @@ class Window(Listener):
         """
         
         eventTypes = [Event.StartEvent, Event.QuitEvent, Event.RefreshEvent, \
-            Event.RefreshCompleteEvent]
+            Event.RefreshCompleteEvent]#, Event.DisplaySurfaceToggle]
         
         #Using this until someone can explain why super() is or is not the right way to do this
         #Waaaay too many disagreements/articles on this online
@@ -91,7 +91,6 @@ class Window(Listener):
         Used to initialize the display surface for the first time or to update it at a later time.
         Right now, it only allows fullscreen mode to be toggled.
         """
-        
         if self.fullscreenMode:
             self.displaySurface = pygame.display.set_mode(self.resolution,pygame.FULLSCREEN|pygame.HWSURFACE)
         else:
@@ -123,7 +122,6 @@ class Window(Listener):
             
             #Note: the renderer does not update or display anything.
             #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
-            
 
         pygame.quit()
         
@@ -159,7 +157,9 @@ class Window(Listener):
         '''
         
         #FIXME: THIS IS A TEMPORARY MEASURE FOR MULTIPLE SELECTION
-        TMP_shiftHeld = False
+        
+        keyHeldDict = {'shift':False, 'ctrl':False, 'alt':False}
+        
         TMP_dragStartPos = (0,0)
         TMP_mousePos = (0,0)
         TMP_mouseState = 0
@@ -172,66 +172,98 @@ class Window(Listener):
             #print 'Pygame event collected'
             #inputState.updateState(pEventToStr(rawEvent))
             if self.pygameEvents:
-                rawEvent=self.pygameEvents.pop()
-            
-                #FIXME - more events needed
-                realEvent = []
-                if rawEvent.type == pygame.QUIT:
-                    realEvent.append(Event.QuitEvent())
-                    """elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
-                    state = Event.MouseLocals.MOUSE_PRESSED
-                    buttonId = rawEvent.button
-                    realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)"""
-
-                elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
-                    buttonId = rawEvent.button
-                    if buttonId == Event.MouseLocals.LEFT_CLICK:
-                        TMP_mouseState = 1
-                        TMP_dragStartPos = rawEvent.pos
-                        realEvent.append(Event.DragBeganEvent(rawEvent.pos))
-                        #if not TMP_shiftHeld:
-                        #    realEvent.append(Event.DragBeganEvent(rawEvent.pos))
-                        #else:
-                        #    realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
                 
-                elif rawEvent.type == pygame.MOUSEBUTTONUP:
-                    TMP_mouseState = 0
-                    buttonId = rawEvent.button
-                    if buttonId == Event.MouseLocals.LEFT_CLICK:
-                        if distance(rawEvent.pos,TMP_dragStartPos) > TMP_clickrange:
-                            if not TMP_shiftHeld:
-                                realEvent.append(Event.DragCompletedEvent(TMP_dragStartPos,rawEvent.pos))
-                            else:
-                                realEvent.append(Event.AddDragCompletedEvent(TMP_dragStartPos,rawEvent.pos))
-                        else:
-                            if not TMP_shiftHeld:
-                                realEvent.append(Event.SelectionEvent(rawEvent.pos))
-                            else:
-                                realEvent.append(Event.SingleAddSelectionEvent(rawEvent.pos))
-                    elif buttonId == Event.MouseLocals.RIGHT_CLICK:
-                        realEvent.append(Event.SetDestinationEvent(rawEvent.pos))
-
-                elif rawEvent.type == pygame.MOUSEMOTION:
-                    TMP_mousePos = rawEvent.pos
-                    realEvent.append(Event.MouseMovedEvent(rawEvent.pos))
-                    
-                    if TMP_mouseState == 1:
-                        realEvent.append(Event.DragEvent(TMP_dragStartPos,rawEvent.pos))
-                    
-                elif rawEvent.type == pygame.KEYDOWN:
-                    if rawEvent.key == 303 or rawEvent.key == 304:
-                        TMP_shiftHeld = True
-
-                elif rawEvent.type == pygame.KEYUP:
-                    if rawEvent.key == 303 or rawEvent.key == 304:
-                        TMP_shiftHeld = False
-                    if rawEvent.key == pygame.K_ESCAPE:
+                try:
+                    rawEvent=self.pygameEvents.pop()
+                
+                    #FIXME - more events needed
+                    realEvent = []
+                    if rawEvent.type == pygame.QUIT:
                         realEvent.append(Event.QuitEvent())
-
-                for i in realEvent:
-                    self.manager.post(i) #Warning: make sure that threading doesn't cause \
-                                                #problems here!
-                                                     
+                        """elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
+                        state = Event.MouseLocals.MOUSE_PRESSED
+                        buttonId = rawEvent.button
+                        realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)"""
+    
+                    elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
+                        buttonId = rawEvent.button
+                        if buttonId == Event.MouseLocals.LEFT_CLICK:
+                            TMP_mouseState = 1
+                            TMP_dragStartPos = rawEvent.pos
+                            realEvent.append(Event.DragBeganEvent(rawEvent.pos))
+                            #if not TMP_shiftHeld:
+                            #    realEvent.append(Event.DragBeganEvent(rawEvent.pos))
+                            #else:
+                            #    realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
+                    
+                    elif rawEvent.type == pygame.MOUSEBUTTONUP:
+                        TMP_mouseState = 0
+                        buttonId = rawEvent.button
+                        if buttonId == Event.MouseLocals.LEFT_CLICK:
+                            if distance(rawEvent.pos,TMP_dragStartPos) > TMP_clickrange:
+                                if not keyHeldDict['shift']:
+                                    realEvent.append(Event.DragCompletedEvent(TMP_dragStartPos,rawEvent.pos))
+                                else:
+                                    realEvent.append(Event.AddDragCompletedEvent(TMP_dragStartPos,rawEvent.pos))
+                            else:
+                                if not keyHeldDict['shift']:
+                                    realEvent.append(Event.SelectionEvent(rawEvent.pos))
+                                else:
+                                    realEvent.append(Event.SingleAddSelectionEvent(rawEvent.pos))
+                        elif buttonId == Event.MouseLocals.RIGHT_CLICK:
+                            realEvent.append(Event.SetDestinationEvent(rawEvent.pos))
+    
+                    elif rawEvent.type == pygame.MOUSEMOTION:
+                        TMP_mousePos = rawEvent.pos
+                        realEvent.append(Event.MouseMovedEvent(rawEvent.pos))
+                        
+                        if TMP_mouseState == 1:
+                            realEvent.append(Event.DragEvent(TMP_dragStartPos,rawEvent.pos))
+                        
+                    elif rawEvent.type == pygame.KEYDOWN:
+                        if rawEvent.key == pygame.K_RSHIFT or \
+                            rawEvent.key == pygame.K_LSHIFT:
+                            keyHeldDict['shift'] = True
+                        if rawEvent.key == pygame.K_RCTRL or \
+                            rawEvent.key == pygame.K_LCTRL:
+                            keyHeldDict['ctrl'] = True
+                        if rawEvent.key == pygame.K_RALT or \
+                            rawEvent.key == pygame.K_LALT:
+                            keyHeldDict['alt'] = True
+                        #if pygame.K_0 <= rawEvent.key <= pygame.K_9:
+                        #    pass
+    
+                    elif rawEvent.type == pygame.KEYUP:
+                        if rawEvent.key == pygame.K_RSHIFT or \
+                            rawEvent.key == pygame.K_LSHIFT:
+                            keyHeldDict['shift'] = False
+                        if rawEvent.key == pygame.K_RCTRL or \
+                            rawEvent.key == pygame.K_LCTRL:
+                            keyHeldDict['ctrl'] = False
+                        if rawEvent.key == pygame.K_RALT or \
+                            rawEvent.key == pygame.K_LALT:
+                            keyHeldDict['alt'] = False
+                        if pygame.K_0 <= rawEvent.key <= pygame.K_9:
+                            realEvent.append( \
+                                Event.NumberKeyPressEvent(rawEvent.key,Event.KeyLocals.UP,keyHeldDict) \
+                            )
+                        #if rawEvent.key == pygame.K_F11:
+                        #    realEvent.append( \
+                        #        Event.DisplaySurfaceToggle(not self.fullscreenMode) \
+                        #    )
+                        if rawEvent.key == pygame.K_ESCAPE:
+                            realEvent.append(Event.QuitEvent())
+    
+                    for i in realEvent:
+                        self.manager.post(i) #Warning: make sure that threading doesn't cause \
+                                                    #problems here!
+                except:
+                    import sys,traceback
+                    print 'An unexpected error occurred in the event thread.'
+                    exc_type,exc_value,exc_traceback = sys.exc_info()
+                    traceback.print_exc()
+                    self.manager.post(Event.QuitEvent())
+            
             else: time.sleep(.01)
 
     def setUpControlMapping(self):
@@ -268,6 +300,9 @@ class Window(Listener):
             self.refresh()
         elif isinstance( event, Event.RefreshCompleteEvent ):
             self.updateClock()
+        #elif isinstance( event, Event.DisplaySurfaceToggle ):
+        #    self.fullscreenMode = event.isFullScreen
+        #    self.updateScreenMode()
         
     def updateClock(self):
         """

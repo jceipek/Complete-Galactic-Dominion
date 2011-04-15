@@ -1,5 +1,7 @@
 from Entity import Entity
 
+from NaturalObject import Gold
+
 class World(object):
     """
     A World is an object that contains everything in the current environment
@@ -20,7 +22,7 @@ class World(object):
     # updated every new frame by viewport with reference to this world
     elapsedTimeSinceLastFrame = 0
     
-    def __init__(self, grid=None): #FIXME got rid of a comma, did we lose something?
+    def __init__(self, universe, grid=None): #FIXME got rid of a comma, did we lose something?
         
         # maps entityID of each entity to a pointer to the entity
         # may need to map tuple of entityID and ownerID later when
@@ -33,14 +35,36 @@ class World(object):
         else:
             self.grid = grid #Needs to be linked to a grid object, default None
         self.gridDim = self.grid.getCartGridDimensions()
+    
+        self.universe=universe
         
+        self.worldID = None
+        # Sets world ID
+        self.universe.addWorld(self)
+    
+        self._generateResources()
+    
+    def _setWorldID(self,ID):
+        self.worldID = ID
+    
+    def _generateResources(self):
+        
+        from random import randint,choice
+        
+        resourceType = [Gold]
+        
+        for i in xrange(randint(10,15)):
+            xpos = randint(0,self.gridDim[0])
+            ypos = randint(0,self.gridDim[1])
+            (choice(resourceType))(xpos, ypos, self)
+    
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
         self.grid = InfiniteGrid((30,30),64)
 
     def update(self):
         """Sends an update message to all entities."""
-        for entity in self.allEntities.values():
+        for entity in self.allEntities.itervalues():
             entity.update()
     
     def getScreenEntities(self,viewRects):
@@ -71,7 +95,8 @@ class World(object):
         
         entCount=0
 
-        for entity in self.allEntities.values():            
+        for entity in self.allEntities.itervalues():
+                  
             for view in viewRects:
                 #if entity.collRect.colliderect(viewRect):
                 if self.collideRectDiamond(entity.rect,view):
@@ -113,7 +138,7 @@ class World(object):
         pHigh=pLow=diamond[0]
         
         # Finds lowest and highest point in diamond
-        for i in range(1,len(diamond)):
+        for i in xrange(1,len(diamond)):
             if diamond[i][1]>pHigh[1]:
                 pHigh=diamond[i]
             if diamond[i][1]<pLow[1]:
@@ -138,9 +163,13 @@ class World(object):
         Adds an entity to a world in the allEntities dictionary.
         maps entityID to an entity.
         """
+        self.universe.addEntity(entity)
         self.allEntities[entity.entityID] = entity
+        
+        #return entityID
 
     def removeEntity(self, entity):
         """Removes an entity from the World."""
         if entity.entityID in self.allEntities:
+            self.universe.removeEntity(entity)
             del self.allEntities[entity.entityID]

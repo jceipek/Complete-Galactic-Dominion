@@ -130,7 +130,8 @@ class RMenuItem(DrawableObject):
     A menu item suitable for use in an RMenu
     @param menu: The menu that contains the item
     """
-    def __init__(self,menu,image = "orbBlack.png",imageKey = -1,title = 'None',size = 32,col = (0,0,255)):
+    def __init__(self, menu, image = "orbBlack.png",imageKey = -1, \
+        title = 'None',size = 32,col = (0,0,255),callback=lambda:None):
 
         DrawableObject.__init__(self,image,imageKey) #Should be different for each item
         
@@ -138,6 +139,7 @@ class RMenuItem(DrawableObject):
         self.size = size
         self.color = col
         self.menu = menu
+        self.callback = callback
         self.submenu = None
          
     def addSubmenu(self,menu):
@@ -151,6 +153,7 @@ class RMenuItem(DrawableObject):
         
     def select(self):
         print self.title
+        print self.callback()
         
     def update(self,loc,mouseLoc):
         if self.submenu:
@@ -188,7 +191,8 @@ if __name__ == "__main__":
     menu.addItem(item2)
     menu.addItem(item3)
     
-    item4 = RMenuItem(menu,image = "orbBlueBlack.png",col = (0,0,255),title = "Blue")
+    item4 = RMenuItem(menu,image = "orbBlueBlack.png",col = (0,0,255), \
+        title = "Blue", callback=lambda:'Testing blue callback')
     item5 = RMenuItem(menu,image = "orbQBlack.png")
     item5.addSubmenu(menu3)
     
@@ -232,4 +236,3 @@ if __name__ == "__main__":
                 menu.update(event.pos)
         menu.draw(displaySurface)    
         pygame.display.flip()
-                    

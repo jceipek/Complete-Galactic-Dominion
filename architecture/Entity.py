@@ -10,10 +10,11 @@ class Entity(MapObject):
     
     # Class variable which keeps track of id of all entities
     # updated with each initialization of Entity and child classes
-    IDcounter = 0
+    #IDcounter = 0
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
+                 description = 'No information available.',
+                 movable = False):
         """
         Set up an Entity with an image loaded from the filepath
         specified by imagePath, an absolute x and y position in a given
@@ -52,13 +53,15 @@ class Entity(MapObject):
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
-        self.__class__.IDcounter += 1 # Increment class counter
+        #self.__class__.IDcounter += 1 # Increment class counter
         
         # sets entityID.  Unique for all Entities
-        self.entityID = self.__class__.IDcounter
+        #self.entityID = self.__class__.IDcounter
         
         # adds the entity to the provided world
-        world.addEntity(self)
+        self.entityID = None
+        # sets entityID
+        self.world.addEntity(self)
 
         # First initialization of description
         self.description = description
@@ -70,6 +73,8 @@ class Entity(MapObject):
         self.options = {'Description': self.showDescription}
         #self.pos = (x,y) # defined by superclass
         
+        self.movable = movable
+        
         self.maxHealth = 100
         self.curHealth = self.maxHealth
         self.size = 100 #radius of collision
@@ -80,8 +85,14 @@ class Entity(MapObject):
         self.selected = False
         self.blocking = False
         self.drawOffset=(0,0)
+        
+        self.focused = False
 
         self.healthBar = HealthBar(self)
+        print self.entityID
+
+    def _setEntityID(self,ID):
+        self.entityID = ID
 
     # First initialization of update method
     def update(self):
@@ -115,7 +126,9 @@ class Entity(MapObject):
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
+        if self.selected or self.focused:
             self.drawHealthBar(screen,drawRect)
+            self.focused = False
         
         screen.blit(self.image,drawRect)
 
@@ -172,6 +185,9 @@ class Entity(MapObject):
         Updated by viewport.
         """
         return self.world.__class__.elapsedTimeSinceLastFrame
+    
+    def addToPath(self,newLoc):
+        pass
         
 class TestEntity(Entity):
     """
@@ -267,7 +283,7 @@ if __name__ == "__main__":
         curScreenEntities = w.getScreenEntities(screenZone)
         #print 'Currently %d entities on the screen'%len(curScreenEntities)
         
-        for ent in w.allEntities.values():
+        for ent in w.allEntities.itervalues():
             
             ent.draw(screen)
             

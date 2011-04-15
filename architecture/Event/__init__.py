@@ -1,6 +1,7 @@
 from Event import *
 from EventTimer import *
 from GenericDebugEvent import *
+from KeyEvent import *
 from MouseEvent import *
 from QuitEvent import *
 from RefreshCompleteEvent import *

@@ -14,12 +14,12 @@ class NaturalObject(Entity):
                  description = 'No information available.'):
         Entity.__init__(self,imagePath,x,y,world,colorkey,description)
         self.blockable=True
-	
+        self.collectable=False
         self.maxHealth = self.curHealth = 0
 	
-    def update():
-        """called each frame to update object"""
-        pass
+    def collect(self):
+        if not self.collectable:
+            pass
 
 class Resource(NaturalObject):
     """
@@ -27,12 +27,13 @@ class Resource(NaturalObject):
     not regenerate over time.
     """
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
+                 description = 'No information available.',
+                 resourceName='Null'):
                      
         NaturalObject.__init__(self,imagePath,x,y,world,colorkey,description)
 	
         self.maxHealth = self.curHealth = 500
-        self.resourceName = "Nothin'."
+        self.resourceName = resourceName
 	
     def changeHealth(self, numHits):
         """changes current health by numHits, removes object if current health drops to 0"""
@@ -45,7 +46,13 @@ class Resource(NaturalObject):
 	
     def regenerate(self):
         pass
-	
+
+class Gold(Resource):
+    """Wrapper for Gold."""
+    def __init__(self,x,y,world):
+        Resource.__init__(self,'Gold-ore.png',x,y,world,(255,255,255),\
+            'Gold ore.','Gold')
+
 class Obstacle(NaturalObject):
     """
     Object on the map which is only an obstacle.  Health may or may 
@@ -82,7 +89,7 @@ if __name__ == "__main__":
     print 'World initialized'
     
     # Creates entities to test with in world w
-    for i in range(10):
+    for i in xrange(10):
         w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #print Entity.IDcounter
     
@@ -102,7 +109,7 @@ if __name__ == "__main__":
         curScreenEntities = w.getScreenEntities(screenZone)
         #print 'Currently %d entities on the screen'%len(curScreenEntities)
         
-        for ent in w.allEntities.values():
+        for ent in w.allEntities.itervalues():
             
             ent.draw(screen)
             
