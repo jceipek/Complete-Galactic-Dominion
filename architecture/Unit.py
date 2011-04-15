@@ -167,6 +167,12 @@ class Unit(Builder):
         return (20,20,255)
     def __str__(self):
         return cPickle.dumps(['Unit', imagePath, x, y, 'world'])
+'''    def __getstate__(self):
+        d=dict()
+        pass#return a dict
+    def __setstate__(self,dict):
+        pass
+'''        
 
 
 if __name__ == "__main__":

@@ -32,9 +32,9 @@ from client import init
 
 class BroadcastServer(networking.Server):
     def processInput(self,sockThrd,data):
-        if 'GetWorld' in data and hasattr(self,'world'):
-            for 
-            sockThrd.write(self.world)
+        #if 'GetWorld' in data and hasattr(self,'world'):
+        #    for 
+        #    sockThrd.write(self.world)
         for sock in self.socketThreads.keys():
             sock.write(data)
             
@@ -60,7 +60,7 @@ def init(host='localhost'):
     networked = True
     try:                                            
         client = GameClient(eventManager,host=host,port=1567)
-        client.sendRequest('GetWorld')
+        #client.sendRequest('GetWorld')
     except:
         networked = False
                                                     
@@ -111,10 +111,10 @@ if __name__ == '__main__':
     #Connect to server
     s = BroadcastServer(port = 1567, host = 'localhost')
     s.listenAndConnect()
-    eTypestoListeners = init()
-    for key in eTypestoListeners:
-        print 'Event type: %s'%str(key)
-        print eTypestoListeners[key],'\n'
+    #eTypestoListeners = init()
+    #for key in eTypestoListeners:
+    #    print 'Event type: %s'%str(key)
+    #    print eTypestoListeners[key],'\n'
 
     
     
