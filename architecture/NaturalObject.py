@@ -40,7 +40,7 @@ class Resource(NaturalObject):
         self.curHealth+=numHits
         if curHealth<=0:
             self.die()
-	    
+    
     def update(self):
         pass
 	
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         curScreenEntities = w.getScreenEntities(screenZone)
         #print 'Currently %d entities on the screen'%len(curScreenEntities)
         
-        for ent in w.allEntities.itervalues():
+        for ent in w.allEntities.values():
             
             ent.draw(screen)
             

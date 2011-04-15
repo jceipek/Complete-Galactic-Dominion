@@ -17,7 +17,6 @@ class Unit(Builder):
     # by this computer (one particular player)
     from pygame.sprite import Group
     allUnits = Group()
-
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
