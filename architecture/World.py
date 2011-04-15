@@ -37,9 +37,15 @@ class World(object):
         self.gridDim = self.grid.getCartGridDimensions()
     
         self.universe=universe
-        self.worldID = self.universe.addWorld(self)
+        
+        self.worldID = None
+        # Sets world ID
+        self.universe.addWorld(self)
     
         self._generateResources()
+    
+    def _setWorldID(self,ID):
+        self.worldID = ID
     
     def _generateResources(self):
         
@@ -157,10 +163,10 @@ class World(object):
         Adds an entity to a world in the allEntities dictionary.
         maps entityID to an entity.
         """
-        entityID = self.universe.addEntity(entity)
-        self.allEntities[entityID] = entity
+        self.universe.addEntity(entity)
+        self.allEntities[entity.entityID] = entity
         
-        return entityID
+        #return entityID
 
     def removeEntity(self, entity):
         """Removes an entity from the World."""

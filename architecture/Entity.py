@@ -59,7 +59,9 @@ class Entity(MapObject):
         #self.entityID = self.__class__.IDcounter
         
         # adds the entity to the provided world
-        self.entityID = world.addEntity(self)
+        self.entityID = None
+        # sets entityID
+        self.world.addEntity(self)
 
         # First initialization of description
         self.description = description
@@ -87,6 +89,10 @@ class Entity(MapObject):
         self.focused = False
 
         self.healthBar = HealthBar(self)
+        print self.entityID
+
+    def _setEntityID(self,ID):
+        self.entityID = ID
 
     # First initialization of update method
     def update(self):

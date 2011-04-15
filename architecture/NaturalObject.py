@@ -50,7 +50,6 @@ class Resource(NaturalObject):
 class Gold(Resource):
     """Wrapper for Gold."""
     def __init__(self,x,y,world):
-        print x,y
         Resource.__init__(self,'Gold-ore.png',x,y,world,(255,255,255),\
             'Gold ore.','Gold')
 
