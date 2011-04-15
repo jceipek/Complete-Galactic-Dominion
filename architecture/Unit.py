@@ -48,8 +48,7 @@ class Unit(Builder):
 
     def genAttack(self,act=0, attackRad=200, rate=10, recharge=0):
         """moves unit closer to objectOfAction and decreases its health"""
-        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
-        if specialMath.distance(self.realCenter, closest) > attackRad:
+        if specialMath.distance(self.realCenter, self.dest) > attackRad:
 
             self.dest=closest #FIXME pathfinding goes here
             self.move() 
@@ -67,9 +66,11 @@ class Unit(Builder):
         
     def initAction(self, obj):
         self.objectOfAction=obj
+        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+        self.dest=closest
         if isinstance(obj, Unit):
             self.status=Locals.ATTACKING
-        elif isinstance(obj, Resource):
+        elif isinstance(obj, Resource): #FIXME I'm pretty sure shouldn't work, but I don't know what the best way to do this is
             self.status=Locals.GATHERING
             
     def move(self):
