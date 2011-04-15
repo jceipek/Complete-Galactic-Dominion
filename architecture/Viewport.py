@@ -158,9 +158,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             #else: pass # if it is an Event.AddDragCompletedEvent, do
             # # not deselect
             
-            print self.dragRect.isOffScreen(self.size)
+            #print self.dragRect.isOffScreen(self.size)
             if self.dragRect.isOffScreen(self.size):
-                searchList = self.world.allEntities.itervalues()
+                searchList = self.world.allEntities.values()
             else:
                 searchList = self.viewportEntities
             

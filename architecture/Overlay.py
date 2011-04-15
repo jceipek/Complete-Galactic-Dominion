@@ -242,7 +242,7 @@ class MiniMap(object):
         newSurface = copy(self.baseSurface)#pygame.Surface((self.width,self.height))
         #newSurface.blit(self.baseSurface,self.rect)
         
-        for entity in self.world.allEntities.itervalues():
+        for entity in self.world.allEntities.values():
             
             entityPos = entity.rect.center
             
@@ -430,6 +430,6 @@ if __name__ == "__main__":
         
         ms_elapsed = gameClock.tick(MAX_FPS)
         
-        for entity in w.allEntities.itervalues():
+        for entity in w.allEntities.values():
             entity.update()
         #print 'Current frames per second: %d'%int(1000.0/ms_elapsed)

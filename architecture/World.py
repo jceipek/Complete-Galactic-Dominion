@@ -64,7 +64,7 @@ class World(object):
 
     def update(self):
         """Sends an update message to all entities."""
-        for entity in self.allEntities.itervalues():
+        for entity in self.allEntities.values():
             entity.update()
     
     def getScreenEntities(self,viewRects):
@@ -95,7 +95,7 @@ class World(object):
         
         entCount=0
 
-        for entity in self.allEntities.itervalues():
+        for entity in self.allEntities.values():
                   
             for view in viewRects:
                 #if entity.collRect.colliderect(viewRect):
