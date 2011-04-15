@@ -2,6 +2,7 @@ from Builder import Builder
 from Entity import Entity
 from GameData import Locals
 from Overlay import HealthBar
+import cPickle
 
 from collections import deque
 import specialMath
@@ -22,7 +23,7 @@ class Unit(Builder):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description)
 	
         self.__class__.allUnits.add(self)
-
+        self.imagePath=imagePath
         self.status=Locals.IDLE
         self.efficiency=[.1, 10, 10, 10] #move, build, gather, attack
         self.path=[] #queue of future tuple destinations
@@ -163,6 +164,8 @@ class Unit(Builder):
         
     def getMiniMapColor(self):
         return (20,20,255)
+    def __str__(self):
+        return cPickle.dumps(['Unit', imagePath, x, y, 'world'])
 
 
 if __name__ == "__main__":
