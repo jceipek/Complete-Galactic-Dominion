@@ -83,6 +83,8 @@ class Entity(MapObject):
         self.selected = False
         self.blocking = False
         self.drawOffset=(0,0)
+        
+        self.focused = False
 
         self.healthBar = HealthBar(self)
 
@@ -118,7 +120,9 @@ class Entity(MapObject):
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
+        if self.selected or self.focused:
             self.drawHealthBar(screen,drawRect)
+            self.focused = False
         
         screen.blit(self.image,drawRect)
 

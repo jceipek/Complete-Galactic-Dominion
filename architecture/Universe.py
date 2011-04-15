@@ -60,6 +60,10 @@ class Universe(Listener):
             if not world is self.activeWorld:
                 world.update()
 
+    def copy(self):
+        print 'Universe copy method not yet implemented.'
+        pass
+
     def notify(self,event):
         if isinstance(event,Event.UpdateEvent):
             self.update()#this may become a thread

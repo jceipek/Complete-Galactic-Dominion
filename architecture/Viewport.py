@@ -257,12 +257,27 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         for e in self.viewportEntities:
             e.draw(self.surface,self.scrollLoc)
   
+    def setFocusedEntities(self):
+        rawMouseLoc = pygame.mouse.get_pos()
+        viewportMouseLoc = rawMouseLoc[0]-self.loc[0],rawMouseLoc[1]-self.loc[1]
+        
+        for e in self.viewportEntities:
+            
+            drawRect = e.rect.move(e.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+            
+            if drawRect.collidepoint(viewportMouseLoc):
+                e.focused = True
+  
     def draw(self,displaySurface):
         """
         Draws the map and all entities for the current world location.
         displaySurface is provided by the screen.
         """
+
         if not self.world == None:
+            
+            #self.setFocusedEntities()
             self.world.grid.draw(self.surface, self.scrollLoc, self.size)
             self.drawContainedEntities()
             self.drawDragRect()
