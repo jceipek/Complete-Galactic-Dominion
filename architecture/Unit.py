@@ -19,7 +19,7 @@ class Unit(Builder):
     allUnits = Group()
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
+                 description = 'No information available.',loadList=None):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description)
 	
         self.__class__.allUnits.add(self)
@@ -34,6 +34,20 @@ class Unit(Builder):
         self.radius=[0,100,100,200]
         self.timeSinceLast=[0,0,0,self.attackRechargeTime]
         self.objectOfAction=None
+        if not loadList == None:
+            #loadList = [status,efficiency,path,dest,speed,
+            #attackRange,attackRechargeTime,radius,timeSinceLast
+            #objectOfAction]
+            self.status = loadList['status']
+            self.efficiency = loadList['efficiency']
+            self.path = loadList['path']
+            self.dest = loadList['dest']
+            self.speed = loadList['speed']
+            self.attackRange = loadList['attackRange']
+            self.attackRechargeTime = loadList['attackRechargeTime']
+            self.radius = loadList['radius']
+            self.timeSinceLast = loadList['timeSinceLast']
+            self.objectOfAction = loadList['objectOfAction']
 
     def update(self):
         """Called by game each frame to update object."""
@@ -166,12 +180,13 @@ class Unit(Builder):
         return (20,20,255)
     def __str__(self):
         return cPickle.dumps(['Unit', imagePath, x, y, 'world'])
-'''    def __getstate__(self):
+    def __getstate__(self):
         d=dict()
+        d['imagePath']=self.imagePath
+        d[positio]
         pass#return a dict
     def __setstate__(self,dict):
-        pass
-'''        
+        pass        
 
 
 if __name__ == "__main__":
