@@ -15,3 +15,12 @@ class DisplaySurfaceCreatedEvent(Event):
         Event.__init__(self)
 	self.resolution = resolution
 	self.displaySurface = displaySurface	
+
+class DisplaySurfaceToggle(Event):
+    """
+
+    """
+
+    def __init__(self,isFullScreen):
+        Event.__init__(self)
+	self.isFullScreen = isFullScreen

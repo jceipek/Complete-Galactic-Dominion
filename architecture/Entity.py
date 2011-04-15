@@ -10,7 +10,7 @@ class Entity(MapObject):
     
     # Class variable which keeps track of id of all entities
     # updated with each initialization of Entity and child classes
-    IDcounter = 0
+    #IDcounter = 0
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
@@ -53,13 +53,13 @@ class Entity(MapObject):
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
-        self.__class__.IDcounter += 1 # Increment class counter
+        #self.__class__.IDcounter += 1 # Increment class counter
         
         # sets entityID.  Unique for all Entities
-        self.entityID = self.__class__.IDcounter
+        #self.entityID = self.__class__.IDcounter
         
         # adds the entity to the provided world
-        world.addEntity(self)
+        self.entityID = world.addEntity(self)
 
         # First initialization of description
         self.description = description

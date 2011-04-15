@@ -64,7 +64,7 @@ class Window(Listener):
         """
         
         eventTypes = [Event.StartEvent, Event.QuitEvent, Event.RefreshEvent, \
-            Event.RefreshCompleteEvent]
+            Event.RefreshCompleteEvent]#, Event.DisplaySurfaceToggle]
         
         #Using this until someone can explain why super() is or is not the right way to do this
         #Waaaay too many disagreements/articles on this online
@@ -91,7 +91,6 @@ class Window(Listener):
         Used to initialize the display surface for the first time or to update it at a later time.
         Right now, it only allows fullscreen mode to be toggled.
         """
-        
         if self.fullscreenMode:
             self.displaySurface = pygame.display.set_mode(self.resolution,pygame.FULLSCREEN|pygame.HWSURFACE)
         else:
@@ -249,8 +248,9 @@ class Window(Listener):
                                 Event.NumberKeyPressEvent(rawEvent.key,Event.KeyLocals.UP,keyHeldDict) \
                             )
                         #if rawEvent.key == pygame.K_F11:
-                        #    self.fullscreenMode = not self.fullscreenMode
-                        #    self.updateScreenMode()
+                        #    realEvent.append( \
+                        #        Event.DisplaySurfaceToggle(not self.fullscreenMode) \
+                        #    )
                         if rawEvent.key == pygame.K_ESCAPE:
                             realEvent.append(Event.QuitEvent())
     
@@ -300,6 +300,9 @@ class Window(Listener):
             self.refresh()
         elif isinstance( event, Event.RefreshCompleteEvent ):
             self.updateClock()
+        #elif isinstance( event, Event.DisplaySurfaceToggle ):
+        #    self.fullscreenMode = event.isFullScreen
+        #    self.updateScreenMode()
         
     def updateClock(self):
         """

@@ -22,7 +22,7 @@ class World(object):
     # updated every new frame by viewport with reference to this world
     elapsedTimeSinceLastFrame = 0
     
-    def __init__(self, grid=None): #FIXME got rid of a comma, did we lose something?
+    def __init__(self, universe, grid=None): #FIXME got rid of a comma, did we lose something?
         
         # maps entityID of each entity to a pointer to the entity
         # may need to map tuple of entityID and ownerID later when
@@ -35,6 +35,9 @@ class World(object):
         else:
             self.grid = grid #Needs to be linked to a grid object, default None
         self.gridDim = self.grid.getCartGridDimensions()
+    
+        self.universe=universe
+        self.worldID = self.universe.addWorld(self)
     
         self._generateResources()
     
@@ -154,9 +157,13 @@ class World(object):
         Adds an entity to a world in the allEntities dictionary.
         maps entityID to an entity.
         """
-        self.allEntities[entity.entityID] = entity
+        entityID = self.universe.addEntity(entity)
+        self.allEntities[entityID] = entity
+        
+        return entityID
 
     def removeEntity(self, entity):
         """Removes an entity from the World."""
         if entity.entityID in self.allEntities:
+            self.universe.removeEntity(entity)
             del self.allEntities[entity.entityID]
