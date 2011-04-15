@@ -1,6 +1,6 @@
 class Inventory(object):
 	"""
-	Acts as an inventory for a Unit. Holds things.
+	Acts as an inventory for a Unit. Holds resources, items for use.
 	"""
 
 	def __init__(self):

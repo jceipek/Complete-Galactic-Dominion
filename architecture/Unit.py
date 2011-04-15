@@ -3,6 +3,7 @@ from Entity import Entity
 from GameData import Locals
 from Overlay import HealthBar
 from NaturalObject import Resource
+from Inventory import Inventory
 
 from collections import deque
 import specialMath
@@ -34,6 +35,7 @@ class Unit(Builder):
         self.radius=[0,100,100,200]
         self.timeSinceLast=[0,0,0,self.attackRechargeTime]
         self.objectOfAction=None
+        self.inventory=Inventory()
 
     def update(self):
         """Called by game each frame to update object."""
@@ -72,6 +74,7 @@ class Unit(Builder):
         if isinstance(obj, Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): #FIXME I'm pretty sure shouldn't work, but I don't know what the best way to do this is
+            print 'Hi, I am here'
             self.status=Locals.GATHERING
             
     def move(self):
