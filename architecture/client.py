@@ -29,7 +29,7 @@ from Unit import Unit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
 
-from NaturalObject import Gold
+from NaturalObject import makeGold
 
 def init(host='localhost'):
     """
