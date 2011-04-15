@@ -2,6 +2,7 @@ from Builder import Builder
 from Entity import Entity
 from GameData import Locals
 from Overlay import HealthBar
+from NaturalObject import Resource
 
 from collections import deque
 import specialMath
