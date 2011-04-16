@@ -1,5 +1,6 @@
 import pygame
 import Event,specialMath
+from Unit import Unit
 from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox, MiniMap
 
@@ -132,7 +133,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if clicked:
             for selected in self.selectedEntities:
                 attacking=True
-                selected.initAction(clicked)
+                if isinstance(selected,Unit):
+                    selected.initAction(clicked)
                        
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
@@ -277,7 +279,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
         if not self.world == None:
             
-            #self.setFocusedEntities()
+            self.setFocusedEntities()
             self.world.grid.draw(self.surface, self.scrollLoc, self.size)
             self.drawContainedEntities()
             self.drawDragRect()
