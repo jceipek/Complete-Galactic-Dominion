@@ -1,3 +1,4 @@
+from string import punctuation
 class Inventory(object):
 	"""
 	Acts as an inventory for a Unit. Holds resources, items for use.
@@ -15,7 +16,8 @@ class Inventory(object):
 	def __str__(self):
 		s='Inventory: \n'
 		for item in self.items:
-			s+= item +' : ' + str(self.items[item])+ '\n'
+			sitem=str(item).rsplit('.',1)[1].strip(punctuation)
+			s+= '%s : %d \n' % (sitem, self.items[item])
 		if not self.items:
 			s+='No items'
 		return s		
