@@ -71,14 +71,10 @@ class Unit(Builder):
         """moves unit closer to objectOfAction and decreases its health"""
         if specialMath.distance(self.realCenter, self.dest) > radius:
             self.move() 
-        elif self.timeSinceLast[act]>=recharge:
-            
-            if isinstance(self.objectOfAction,Resource):
-                rate = self.inventory.add(self.objectOfAction,rate)
-                if rate == 0: self.status=Locals.IDLE
+        elif self.timeSinceLast[Locals.ATTACK]>=recharge:
 
             self.objectOfAction.changeHealth(-1*rate)
-            self.timeSinceLast[act]=0 
+            self.timeSinceLast[Locals.ATTACK]=0 
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
@@ -93,14 +89,13 @@ class Unit(Builder):
         if specialMath.distance(self.realCenter, self.dest) > self.radius[Locals.GATHER]:
             self.move()
         else:
-            if self.objectOfAction.curHealth<=self.efficiency[Locals.GATHER]:
-                amount=self.objectOfAction.curHealth
-            else: amount= self.efficiency[Locals.GATHER]
+            amount = self.inventory.add(self.objectOfAction,self.efficiency[Locals.GATHER])
         
-            self.objectOfAction.changeHealth(-1*amount)
-            self.inventory.items[self.objectOfAction.resourceName]= \
-             self.inventory.items.get(self.objectOfAction.resourceName, 0) + amount
-        print self.inventory
+            if amount == 0:
+                self.status = Locals.IDLE
+            else:
+                self.objectOfAction.changeHealth(-1*amount)
+                self.timeSinceLast[Locals.ATTACK]=0 
         
     def initAction(self, obj):
         self.objectOfAction=obj

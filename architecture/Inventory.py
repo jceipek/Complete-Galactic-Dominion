@@ -11,7 +11,6 @@ class Inventory(object):
 		# Dictionary mapping classes to amounts
 		self.items = {}
 		self.itemCount = 0		
-		
 
 	def __str__(self):
 		s='Inventory: \n'
@@ -20,7 +19,6 @@ class Inventory(object):
 		if not self.items:
 			s+='No items'
 		return s		
-
 		
 	def add(self,item,amount=1):
 		"""
