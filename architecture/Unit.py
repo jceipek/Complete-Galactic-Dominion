@@ -68,10 +68,14 @@ class Unit(Builder):
     def genAttack(self,act=0, attackRad=200, rate=10, recharge=0):
         """moves unit closer to objectOfAction and decreases its health"""
         if specialMath.distance(self.realCenter, self.dest) > attackRad:
-
             self.dest=closest #FIXME pathfinding goes here
             self.move() 
         elif self.timeSinceLast[act]>=recharge:
+            
+            if isinstance(self.objectOfAction,Resource):
+                rate = self.inventory.add(self.objectOfAction,rate)
+                if rate == 0: self.status=Locals.IDLE
+
             self.objectOfAction.changeHealth(-1*rate)
             self.timeSinceLast[act]=0 
 
