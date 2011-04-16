@@ -26,14 +26,14 @@ class Unit(Builder):
         self.__class__.allUnits.add(self)
         self.imagePath=imagePath
         self.status=Locals.IDLE
-        self.efficiency=[.1, 10, 10, 10] #move, build, gather, attack
+        self.efficiency={Locals.MOVE:.1, Locals.GATHER: 10, Locals. ATTACK: 10} #move, build, gather, attack
         self.path=[] #queue of future tuple destinations
         self.dest=self.realCenter=list(self.rect.center) #current destination
         self.speed=.1
         self.attackRange=300
         self.attackRechargeTime=500
-        self.radius=[0,100,100,200]
-        self.timeSinceLast=[0,0,0,self.attackRechargeTime]
+        self.radius={Locals.GATHER: 100, Locals.ATTACK: 200}
+        self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
         self.objectOfAction=None
         if not loadList == None:
             #loadList = [status,efficiency,path,dest,speed,
@@ -60,19 +60,16 @@ class Unit(Builder):
             self.regenerate()
         if self.status==Locals.MOVING:
             self.move()
-        else:
-            self.path=[]
-            self.dest=self.realCenter
+        else: self.path=[]
         if self.status==Locals.ATTACKING:
             self.attack()
         elif self.status==Locals.GATHERING:
             self.gather()
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
 
-    def genAttack(self,act=0, attackRad=200, rate=10, recharge=0):
+    def genAttack(self, radius=200, rate=10, recharge=0, act=0):
         """moves unit closer to objectOfAction and decreases its health"""
-        if specialMath.distance(self.realCenter, self.dest) > attackRad:
-            self.dest=closest #FIXME pathfinding goes here
+        if specialMath.distance(self.realCenter, self.dest) > radius:
             self.move() 
         elif self.timeSinceLast[act]>=recharge:
             
@@ -85,19 +82,33 @@ class Unit(Builder):
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
-        self.genAttack(Locals.ATTACK, self.radius[Locals.ATTACK], self.efficiency[Locals.ATTACK], self.attackRechargeTime)
+        if specialMath.distance(self.realCenter, self.dest) > self.radius[Locals.ATTACK]:
+            self.move() 
+        elif self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
+            self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
+            self.timeSinceLast[Locals.ATTACK]=0 
 
     def gather(self):
         """moves unit close to resource, adds resource to containment"""
-        self.genAttack(Locals.GATHER, self.radius[Locals.GATHER], self.efficiency[Locals.GATHERING])
+        if specialMath.distance(self.realCenter, self.dest) > self.radius[Locals.GATHER]:
+            self.move()
+        else:
+            if self.objectOfAction.curHealth<=self.efficiency[Locals.GATHER]:
+                amount=self.objectOfAction.curHealth
+            else: amount= self.efficiency[Locals.GATHER]
+        
+            self.objectOfAction.changeHealth(-1*amount)
+            self.inventory.items[self.objectOfAction.resourceName]= \
+             self.inventory.items.get(self.objectOfAction.resourceName, 0) + amount
+        print self.inventory
         
     def initAction(self, obj):
         self.objectOfAction=obj
-        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.rect.center, self.worldSize)
         self.dest=closest
         if isinstance(obj, Unit):
             self.status=Locals.ATTACKING
-        elif isinstance(obj, Resource): #FIXME I'm pretty sure shouldn't work, but I don't know what the best way to do this is
+        elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
             
     def move(self):
