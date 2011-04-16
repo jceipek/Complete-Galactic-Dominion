@@ -56,9 +56,7 @@ class Unit(Builder):
         #FIXME !!!
         if self.status==Locals.MOVING:
             self.move()
-        else:
-            self.path=[]
-            self.dest=self.realCenter
+        else: self.path=[]
         if self.status==Locals.ATTACKING:
             self.attack()
         if self.status==Locals.GATHERING:
@@ -76,20 +74,34 @@ class Unit(Builder):
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
-        self.genAttack(self.radius[Locals.ATTACK], self.efficiency[Locals.ATTACK], self.attackRechargeTime)
+        if specialMath.distance(self.realCenter, self.dest) > self.radius[Locals.ATTACK]:
+            self.move() 
+        elif self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
+            self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
+            self.timeSinceLast[Locals.ATTACK]=0 
 
     def gather(self):
         """moves unit close to resource, adds resource to containment"""
-        self.genAttack(self.radius[Locals.GATHER], self.efficiency[Locals.GATHER])
+        if specialMath.distance(self.realCenter, self.dest) > self.radius[Locals.GATHER]:
+            self.move()
+        else:
+            if self.objectOfAction.curHealth<=self.efficiency[Locals.GATHER]:
+                amount=self.objectOfAction.curHealth
+            else: amount= self.efficiency[Locals.GATHER]
+        
+            self.objectOfAction.changeHealth(-1*amount)
+            self.inventory.items[self.objectOfAction.resourceName]= \
+             self.inventory.items.get(self.objectOfAction.resourceName, 0) + amount
+        print self.inventory
         
     def initAction(self, obj):
         self.objectOfAction=obj
-        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.rect.center, self.worldSize)
         self.dest=closest
-        print self.realCenter, self.dest
+        print 'DESTINATION: '+ str(self.dest)
         if isinstance(obj, Unit):
             self.status=Locals.ATTACKING
-        elif isinstance(obj, Resource): #FIXME I'm pretty sure shouldn't work, but I don't know what the best way to do this is
+        elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
             
     def move(self):
