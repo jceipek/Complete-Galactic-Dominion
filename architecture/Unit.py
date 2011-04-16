@@ -3,6 +3,7 @@ from Entity import Entity
 from GameData import Locals
 from Overlay import HealthBar
 from NaturalObject import Resource
+import cPickle
 from Inventory import Inventory
 
 from collections import deque
@@ -19,11 +20,11 @@ class Unit(Builder):
     allUnits = Group()
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
+                 description = 'No information available.',loadList=None):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description)
 	
         self.__class__.allUnits.add(self)
-
+        self.imagePath=imagePath
         self.status=Locals.IDLE
         self.efficiency=[.1, 10, 10, 10] #move, build, gather, attack
         self.path=[] #queue of future tuple destinations
@@ -34,6 +35,20 @@ class Unit(Builder):
         self.radius=[0,100,100,200]
         self.timeSinceLast=[0,0,0,self.attackRechargeTime]
         self.objectOfAction=None
+        if not loadList == None:
+            #loadList = [status,efficiency,path,dest,speed,
+            #attackRange,attackRechargeTime,radius,timeSinceLast
+            #objectOfAction]
+            self.status = loadList['status']
+            self.efficiency = loadList['efficiency']
+            self.path = loadList['path']
+            self.dest = loadList['dest']
+            self.speed = loadList['speed']
+            self.attackRange = loadList['attackRange']
+            self.attackRechargeTime = loadList['attackRechargeTime']
+            self.radius = loadList['radius']
+            self.timeSinceLast = loadList['timeSinceLast']
+            self.objectOfAction = loadList['objectOfAction']
         self.inventory=Inventory()
 
     def update(self):
@@ -167,6 +182,15 @@ class Unit(Builder):
         
     def getMiniMapColor(self):
         return (20,20,255)
+    def __str__(self):
+        return cPickle.dumps(['Unit', imagePath, x, y, 'world'])
+    def __getstate__(self):
+        d=dict()
+        d['imagePath']=self.imagePath
+        d[positio]
+        pass#return a dict
+    def __setstate__(self,dict):
+        pass        
 
 
 if __name__ == "__main__":

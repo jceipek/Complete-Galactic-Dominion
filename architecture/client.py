@@ -53,6 +53,7 @@ def init(host='localhost'):
     networked = True
     try:                                            
         client = GameClient(eventManager,host=host,port=1567)
+    #    client.sendRequest('GetWorld')
     except:
         networked = False
                                                
