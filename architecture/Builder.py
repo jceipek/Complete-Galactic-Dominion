@@ -41,7 +41,7 @@ class Builder(Entity):
 	
     def buildOptions(self):
 	"""
-	Returns list of string options from self.buildDict.
+	Returns list of class options from self.buildDict.
 	"""
 	return self.buildDict.keys()
 	

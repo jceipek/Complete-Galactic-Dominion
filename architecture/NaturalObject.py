@@ -34,18 +34,17 @@ class Resource(NaturalObject):
 	
         self.maxHealth = self.curHealth = 500
         self.resourceName = resourceName
-    
-    def update(self):
-        pass
-	
-    def regenerate(self):
-        pass
+        
+        self.regenRate = 0
+        self._regenHealth = 0
 
 class Gold(Resource):
     """Wrapper for Gold."""
     def __init__(self,x,y,world):
         Resource.__init__(self,'Gold-ore.png',x,y,world,(255,255,255),\
             'Gold ore.','Gold')
+            
+        self.regenRate = 1
 
 class Obstacle(NaturalObject):
     """
