@@ -1,6 +1,6 @@
 from Entity import Entity
 
-from NaturalObject import makeGold
+from NaturalObject import Gold
 
 class World(object):
     """
@@ -51,7 +51,7 @@ class World(object):
         
         from random import randint,choice
         
-        resourceType = [makeGold]
+        resourceType = [Gold]
         
         for i in xrange(randint(10,15)):
             xpos = randint(0,self.gridDim[0])

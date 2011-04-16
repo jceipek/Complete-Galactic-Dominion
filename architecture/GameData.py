@@ -58,7 +58,6 @@ class ImageBank():
             return (image,image.get_rect())
             
     def getAverageColor(self, imageName, colorkey=None):
-        
         if imageName in self.imageColorKeys:
             return self.imageColorKeys[imageName]
         else:
@@ -85,8 +84,12 @@ def loadImage(imagePath, colorkey=None):
             image = pygame.image.load(imagePath)
         except pygame.error, message:
             print 'Cannot load image:', imagePath
-            raise SystemExit, message
-        
+            #raise SystemExit, message
+            blank = pygame.Surface((64,64))
+            blank.fill((180,180,180))
+            print '#######: ',blank.get_at((0,0))
+            return blank, blank.get_rect()
+            
         if colorkey == 'alpha':
             image = image.convert_alpha()  
         else:

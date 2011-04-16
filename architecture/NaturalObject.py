@@ -47,14 +47,11 @@ class Resource(NaturalObject):
     def regenerate(self):
         pass
 
-def makeGold(x,y,world):
-    Resource('Gold-ore.png',x,y,world,(255,255,255),'Gold ore.','Gold')
-
-#class Gold(Resource):
-#    """Wrapper for Gold."""
-#    def __init__(self,x,y,world):
-#        Resource.__init__(self,'Gold-ore.png',x,y,world,(255,255,255),\
-#            'Gold ore.','Gold')
+class Gold(Resource):
+    """Wrapper for Gold."""
+    def __init__(self,x,y,world):
+        Resource.__init__(self,'Gold-ore.png',x,y,world,(255,255,255),\
+            'Gold ore.','Gold')
 
 class Obstacle(NaturalObject):
     """
