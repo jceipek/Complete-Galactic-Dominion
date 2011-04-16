@@ -59,16 +59,20 @@ class Unit(Builder):
         else: self.path=[]
         if self.status==Locals.ATTACKING:
             self.attack()
-        if self.status==Locals.GATHERING:
+        elif self.status==Locals.GATHERING:
             self.gather()
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
 
     def genAttack(self, radius=200, rate=10, recharge=0, act=0):
         """moves unit closer to objectOfAction and decreases its health"""
-        #ERROR MAY BE HERE
         if specialMath.distance(self.realCenter, self.dest) > radius:
             self.move() 
         elif self.timeSinceLast[act]>=recharge:
+            
+            if isinstance(self.objectOfAction,Resource):
+                rate = self.inventory.add(self.objectOfAction,rate)
+                if rate == 0: self.status=Locals.IDLE
+
             self.objectOfAction.changeHealth(-1*rate)
             self.timeSinceLast[act]=0 
 
@@ -98,7 +102,6 @@ class Unit(Builder):
         self.objectOfAction=obj
         closest=specialMath.findClosest(self.realCenter, self.objectOfAction.rect.center, self.worldSize)
         self.dest=closest
-        print 'DESTINATION: '+ str(self.dest)
         if isinstance(obj, Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 

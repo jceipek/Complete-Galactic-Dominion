@@ -25,7 +25,7 @@ class DrawableObject():
             self.image, self.rect = self.__class__.imageBank.getImageAndRect(imagePath)
         else:
             self.image, self.rect = objImageAndRect
-    #'''       
+          
     def setAverageColor(self,imagePath,colorkey=None):
         """
         Sets the averageColor attribute of something with an image.
@@ -43,7 +43,6 @@ class DrawableObject():
         Returns the average color of the image.
         """
         return self.averageColor
-    #'''
 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)
