@@ -62,6 +62,7 @@ class ImageBank():
             return self.imageColorKeys[imageName]
         else:
             if self.hasImageKey(imageName):
+                print self.getImage(imageName).get_at((0,0))
                 self.imageColorKeys[imageName] = \
                     getAverageColor(self.getImage(imageName),colorkey)
             return self.imageColorKeys[imageName]
@@ -85,9 +86,16 @@ def loadImage(imagePath, colorkey=None):
         except pygame.error, message:
             print 'Cannot load image:', imagePath
             #raise SystemExit, message
-            blank = pygame.Surface((64,64))
+            blank = pygame.Surface((100,80))
             blank.fill((180,180,180))
-            print '#######: ',blank.get_at((0,0))
+            
+            if not pygame.font.get_init():
+                pygame.font.init()
+            
+            font=pygame.font.Font(pygame.font.get_default_font(),12)
+            txt=font.render('Image not found.',False,(0,0,0))
+            blank.blit(txt,(5,30))
+            
             return blank, blank.get_rect()
             
         if colorkey == 'alpha':
@@ -128,14 +136,14 @@ def getAverageColor(surface, colorkey=None):
     if colorkey == -1:
         backgroundColor = testPixel
     elif isinstance(colorkey,tuple):
-        backgroundColor = testPixel
+        backgroundColor = colorkey
     else:
         backgroundColor = None
     
     # Counts number of pixels in an image
     # partial pixels for alpha transparency
     fullPixelCounter = 0
-
+    
     if len(testPixel) == 4:
         
         red,green,blue,alpha = 0,0,0,0
@@ -149,6 +157,7 @@ def getAverageColor(surface, colorkey=None):
                     pixelFrac = ((aAdd)/255.0)
                     
                     fullPixelCounter+=pixelFrac
+                    
                     red+=rAdd*pixelFrac
                     green+=gAdd*pixelFrac
                     blue+=bAdd*pixelFrac
@@ -156,9 +165,12 @@ def getAverageColor(surface, colorkey=None):
         
     else: return None
     
-    return int((red/fullPixelCounter)), \
-            int((green/fullPixelCounter)), \
-            int((blue/fullPixelCounter))
+    if fullPixelCounter == 0:
+        return backgroundColor
+    else:
+        return int((red/fullPixelCounter)), \
+                int((green/fullPixelCounter)), \
+                int((blue/fullPixelCounter))
 
 class Locals:
     #Statuses

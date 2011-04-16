@@ -91,8 +91,7 @@ def init(host='localhost'):
         a=['Unit','testCraft.png',i*50,i*50,'world','alpha']
         eventManager.post(Event.WorldManipulationEvent(a))
         #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
-    #print universe.creator.numberOfEntities
-    #print universe.creator.releasedEntityIDs
+
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
     

@@ -34,12 +34,6 @@ class Resource(NaturalObject):
 	
         self.maxHealth = self.curHealth = 500
         self.resourceName = resourceName
-	
-    def changeHealth(self, numHits):
-        """changes current health by numHits, removes object if current health drops to 0"""
-        self.curHealth+=numHits
-        if curHealth<=0:
-            self.die()
     
     def update(self):
         pass
@@ -50,7 +44,7 @@ class Resource(NaturalObject):
 class Gold(Resource):
     """Wrapper for Gold."""
     def __init__(self,x,y,world):
-        Resource.__init__(self,'Gold-ore.png',x,y,world,(255,255,255),\
+        Resource.__init__(self,'Golda-ore.png',x,y,world,(255,255,255),\
             'Gold ore.','Gold')
 
 class Obstacle(NaturalObject):

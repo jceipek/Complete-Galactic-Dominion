@@ -61,6 +61,8 @@ class Unit(Builder):
             self.dest=self.realCenter
         if self.status==Locals.ATTACKING:
             self.attack()
+        elif self.status==Locals.GATHERING:
+            self.gather()
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
 
     def genAttack(self,act=0, attackRad=200, rate=10, recharge=0):
@@ -77,9 +79,9 @@ class Unit(Builder):
         """Moves unit such that enemy is within range and attacks it"""
         self.genAttack(Locals.ATTACK, self.radius[Locals.ATTACK], self.efficiency[Locals.ATTACK], self.attackRechargeTime)
 
-    def gather(self, resource):
+    def gather(self):
         """moves unit close to resource, adds resource to containment"""
-        self.genAttack(GATHER, self.radius[GATHER], self.efficiency[GATHERING])
+        self.genAttack(Locals.GATHER, self.radius[Locals.GATHER], self.efficiency[Locals.GATHERING])
         
     def initAction(self, obj):
         self.objectOfAction=obj
@@ -88,7 +90,6 @@ class Unit(Builder):
         if isinstance(obj, Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): #FIXME I'm pretty sure shouldn't work, but I don't know what the best way to do this is
-            print 'Hi, I am here'
             self.status=Locals.GATHERING
             
     def move(self):
