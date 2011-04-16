@@ -26,7 +26,7 @@ class Unit(Builder):
         self.__class__.allUnits.add(self)
         self.imagePath=imagePath
         self.status=Locals.IDLE
-        self.efficiency={Locals.MOVE:.1, Locals.GATHER: 10, Locals. ATTACK: 10} #move, build, gather, attack
+        self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals. ATTACK: 10} #move, build, gather, attack
         self.path=[] #queue of future tuple destinations
         self.dest=self.realCenter=list(self.rect.center) #current destination
         self.speed=.1
@@ -60,21 +60,11 @@ class Unit(Builder):
         if self.status==Locals.ATTACKING:
             self.attack()
         elif self.status==Locals.GATHERING:
-            self.gather()
+            if not self.inventory.isFull():
+                self.gather()
+            else: self.status=Locals.IDLE
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
-
-    def genAttack(self, radius=200, rate=10, recharge=0, act=0):
-        """moves unit closer to objectOfAction and decreases its health"""
-        if specialMath.distance(self.realCenter, self.dest) > radius:
-            self.move() 
-        elif self.timeSinceLast[act]>=recharge:
-            
-            if isinstance(self.objectOfAction,Resource):
-                rate = self.inventory.add(self.objectOfAction,rate)
-                if rate == 0: self.status=Locals.IDLE
-
-            self.objectOfAction.changeHealth(-1*rate)
-            self.timeSinceLast[act]=0 
+        
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
@@ -93,12 +83,17 @@ class Unit(Builder):
                 amount=self.objectOfAction.curHealth
             else: amount= self.efficiency[Locals.GATHER]
         
-            self.objectOfAction.changeHealth(-1*amount)
-            self.inventory.items[self.objectOfAction.resourceName]= \
-             self.inventory.items.get(self.objectOfAction.resourceName, 0) + amount
-        print self.inventory
+            self.objectOfAction.changeHealth(-1*self.inventory.add(self.objectOfAction, amount))
+            print self.inventory
+        if self.inventory.isFull():
+            self.status=Locals.IDLE
+            self.objectOfAction=None
         
-    def initAction(self, obj):
+        
+    def initAction(self, obj): 
+        """
+        Initialized appropriate action by setting dest and status given the type of entity.
+        """
         self.objectOfAction=obj
         closest=specialMath.findClosest(self.realCenter, self.objectOfAction.rect.center, self.worldSize)
         self.dest=closest
