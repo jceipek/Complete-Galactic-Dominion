@@ -101,8 +101,6 @@ class Unit(Builder):
                 self.objectOfAction.changeHealth(-1*amount)
                 self.timeSinceLast[Locals.ATTACK]=0 
         
->>>>>>> 356385083b30b2bc368ed3af7ca085263a9f7b5d
-        
     def initAction(self, obj): 
         """
         Initialized appropriate action by setting dest and status given the type of entity.
