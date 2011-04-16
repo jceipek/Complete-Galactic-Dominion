@@ -16,26 +16,27 @@ class Unit(Builder):
 
     # Static class attribute--keeps track of all units initialized
     # by this computer (one particular player)
-    from pygame.sprite import Group
-    allUnits = Group()
+    #from pygame.sprite import Group
+    #allUnits = Group()
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',loadList=None):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description)
 	
-        self.__class__.allUnits.add(self)
+        #self.__class__.allUnits.add(self)
         self.imagePath=imagePath
-        self.status=Locals.IDLE
-        self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals. ATTACK: 10} #move, build, gather, attack
-        self.path=[] #queue of future tuple destinations
-        self.dest=self.realCenter=list(self.rect.center) #current destination
-        self.speed=.1
-        self.attackRange=300
-        self.attackRechargeTime=500
-        self.radius={Locals.GATHER: 100, Locals.ATTACK: 200}
-        self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
-        self.objectOfAction=None
-        if not loadList == None:
+        if loadList == None:
+            self.status=Locals.IDLE
+            self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals. ATTACK: 10} #move, build, gather, attack
+            self.path=[] #queue of future tuple destinations
+            self.dest=self.realCenter=list(self.rect.center) #current destination
+            self.speed=.1
+            self.attackRange=300
+            self.attackRechargeTime=500
+            self.radius={Locals.GATHER: 100, Locals.ATTACK: 200}
+            self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
+            self.objectOfAction=None
+        else:
             #loadList = [status,efficiency,path,dest,speed,
             #attackRange,attackRechargeTime,radius,timeSinceLast
             #objectOfAction]

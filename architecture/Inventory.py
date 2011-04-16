@@ -1,4 +1,5 @@
 from string import punctuation
+
 class Inventory(object):
 	"""
 	Acts as an inventory for a Unit. Holds resources, items for use.
