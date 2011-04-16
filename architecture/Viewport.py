@@ -289,7 +289,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.setViewportEntities()
         timeElapsed = event.elapsedTimeSinceLastFrame
         self.scrollBasedOnElapsedTime(timeElapsed)
-        self.world.__class__.elapsedTimeSinceLastFrame = timeElapsed
+        self.world.elapsedTimeSinceLastFrame = timeElapsed
     
     def rectToCartWrappedRects(self,rect):
         isoLeftTop = rect.topleft

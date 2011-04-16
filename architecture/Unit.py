@@ -50,10 +50,14 @@ class Unit(Builder):
             self.timeSinceLast = loadList['timeSinceLast']
             self.objectOfAction = loadList['objectOfAction']
         self.inventory=Inventory()
+        
+        self.regenRate = .5
 
     def update(self):
         """Called by game each frame to update object."""
         #FIXME !!!
+        if not self.hasFullHealth():
+            self.regenerate()
         if self.status==Locals.MOVING:
             self.move()
         else: self.path=[]

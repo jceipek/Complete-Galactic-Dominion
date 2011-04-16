@@ -89,16 +89,26 @@ class Entity(MapObject):
         self.focused = False
 
         self.healthBar = HealthBar(self)
-        print self.entityID
+        
+        self.regenRate = 0
+        self._regenHealth = 0
 
     def _setEntityID(self,ID):
         self.entityID = ID
 
+    def regenerate(self):
+        self._regenHealth+=(self.getTimeElapsed()/1000.0)*self.regenRate
+        
+        if self._regenHealth >= 1:
+            addHealth = int(self._regenHealth)
+            self.changeHealth(addHealth)
+            self._regenHealth-=addHealth
+            
     # First initialization of update method
     def update(self):
         """All Sprite objects should have an update function."""
-    # Override this
-        pass
+        if not self.hasFullHealth():
+            self.regenerate()
 
     def draw(self,screen,worldOffset=(0,0)):
         """
@@ -184,10 +194,13 @@ class Entity(MapObject):
         Stored in world which the entity belongs to.
         Updated by viewport.
         """
-        return self.world.__class__.elapsedTimeSinceLastFrame
+        return self.world.elapsedTimeSinceLastFrame
     
     def addToPath(self,newLoc):
         pass
+        
+    def hasFullHealth(self):
+        return self.maxHealth == self.curHealth
         
 class TestEntity(Entity):
     """
