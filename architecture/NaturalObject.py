@@ -43,7 +43,7 @@ class Gold(Resource):
     def __init__(self,x,y,world):
         Resource.__init__(self,'Gold-ore.png',x,y,world,(255,255,255),\
             'Gold ore.','Gold')
-            
+        
         self.regenRate = 1
 
 class Obstacle(NaturalObject):

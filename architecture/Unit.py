@@ -1,4 +1,3 @@
-from Builder import Builder
 from Entity import Entity
 from GameData import Locals
 from Overlay import HealthBar
@@ -10,6 +9,89 @@ from collections import deque
 import specialMath
 
 import pygame
+
+class Builder(Entity):
+    """
+    A kind of entity that can create things (units or structures).
+    Attributes:
+    description: description of behavior, abilities (inherited from Entity)
+    x: position (inherited from Entity)
+    y: position (inherited from Entity)
+    maxHealth: maximum/ default health points (inherited from Entity)
+    curHealth: current health (inherited from Entity)
+    size: radius of collision (inherited from Entity)
+    
+    ---------------------methods inherited from SuperClasses
+    die(self): entity is removed from map
+    changeHealth(self, numHits): decreases the health of the entity based 
+	on number of hits
+	
+    """
+    
+    def __init__(self, imagePath, x, y, world, colorkey=None,
+                 description = 'No information available.'):
+		     
+        Entity.__init__(self,imagePath,x,y,world,colorkey,description)
+        
+        self.blockable=True
+        
+        # Dictionary which maps from strings defining units which can
+        # be produced by a builder to callbacks
+        self.buildDict={}
+        
+        # Queue of entities to build
+        self.buildQueue = []
+        self.currentTask = None
+        self.currentBuildTime = 0
+
+    def addToBuildQueue(self,entityClass):
+        if entityClass in self.buildDict:
+            self.buildQueue.append(entityClass)
+
+    def update(self):
+        if not self.hasFullHealth():
+            self.regenerate()
+            
+        if self.currentTask == None:
+            self.nextBuildTask()
+        
+        if not self.currentTask == None:
+            self.Build()
+    
+    def hasBuildTask(self):
+        return len(self.buildQueue) > 0
+    
+    def nextBuildTask(self):
+        if self.hasBuildTask():
+            self.currentTask = self.buildQueue.pop(0)
+        else:
+            self.currentTask = None
+    
+    def Build(self):
+        """A particular builder creates builder1 after a certain timeToBuild"""
+        self.currentBuildTime += self.getTimeElapsed()/1000.0
+
+        if self.currentBuildTime > self.currentTask.timeToBuild:
+            self.buildDict[self.currentTask]()
+            self.currentBuildTime = 0
+            self.nextBuildTask()
+	
+    def buildOptions(self):
+        """
+        Returns list of class options from self.buildDict.
+        """
+        return self.buildDict.keys()
+	
+    def buildOptionChoice(self,choice):
+        """
+        Returns the callback of the Builder constructor called for by
+        choice.  This choice can be obtained from self.buildOptions().
+        
+        @param choice: string as key for self.buildDict
+        """
+        return self.buildDict.get(choice,None)
+
+
 
 class Unit(Builder):
     """A kind of Builder that can move around."""
@@ -109,7 +191,7 @@ class Unit(Builder):
         self.objectOfAction=obj
         closest=specialMath.findClosest(self.realCenter, self.objectOfAction.rect.center, self.worldSize)
         self.dest=closest
-        if isinstance(obj, Unit):
+        if isinstance(obj, Builder):#Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING

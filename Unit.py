@@ -1,5 +1,4 @@
-from Builder import Builder
-from Entity import Entity,Locals
+from Entity import Entity, Locals
 
 from collections import deque
 
