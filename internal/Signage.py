@@ -89,6 +89,5 @@ class Menu(Sign):
         for option, optionCallback in self.options:
             self.addtext(option)
             
-
         self.rendered = False
 

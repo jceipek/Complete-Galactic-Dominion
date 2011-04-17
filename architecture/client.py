@@ -102,6 +102,6 @@ if __name__ == '__main__':
     #Connect to server
     
     eTypestoListeners = init()
-    for key in eTypestoListeners:
-        print 'Event type: %s'%str(key)
-        print eTypestoListeners[key],'\n'
+    #for key in eTypestoListeners:
+    #    print 'Event type: %s'%str(key)
+    #    print eTypestoListeners[key],'\n'
