@@ -12,6 +12,9 @@ class Entity(MapObject):
     # an entity
     timeToBuild = 1
     
+    # List of tuples containing a subclass of Resource and a cost
+    costToBuild = []
+    
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
                  movable = False):
