@@ -18,7 +18,7 @@ class TestTownCenter(Structure):
     """Defines structues which are built by units"""
 
     def __init__(self, x, y, world):
-        Structure.__init__(self, 'testBuilding.png', x, y, world, 'alpha', 'Test building.')
+        Structure.__init__(self, 'TownCenter.png', x, y, world, 'alpha', 'Test building.')
 
         self.buildDict = {
             Unit: 
