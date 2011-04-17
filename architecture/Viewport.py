@@ -221,6 +221,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             else:
                 clicked.select()
                 self.selectedEntities.append(clicked)
+                clicked.printHealth()
+                if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
+                
     
     def _setCartScrollLocation(self,newCartLoc):
         self.cartScrollLoc = tuple(newCartLoc)

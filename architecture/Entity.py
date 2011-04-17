@@ -154,6 +154,9 @@ class Entity(MapObject):
     def drawHealthBar(self, screen, drawRect):
         self.healthBar.draw(screen,drawRect.midtop)
 
+    def printHealth(self):
+        print 'Health: \n' +str(self.curHealth) + ' / ' +str(self.maxHealth)
+
     def dtime(self):
         """returns time since last call, used in update, keeps track of time between frames"""
         self.timePrev=self.time
