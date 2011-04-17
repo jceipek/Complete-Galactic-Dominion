@@ -1,7 +1,7 @@
 from Entity import Entity
 from GameData import Locals
 from Overlay import HealthBar
-from NaturalObject import Resource
+from NaturalObject import Resource,Gold
 import cPickle
 from Inventory import Inventory
 
@@ -45,9 +45,20 @@ class Builder(Entity):
         self.currentBuildTime = 0
         self.inventory=Inventory()
 
+    def _hasResourcesToBuild(self,entityClass):
+        
+        for resourceClass, amount in entityClass.costToBuild:
+            if not self.world.hasResources(self.owner,resourceClass,amount):
+                return False
+        return True
+
     def addToBuildQueue(self,entityClass):
-        if entityClass in self.buildDict:
+        if entityClass in self.buildDict \
+        and self._hasResourcesToBuild(entityClass):
             self.buildQueue.append(entityClass)
+            
+            for resource,cost in entityClass.costToBuild:
+                self.world.removeResource(self.owner,resource,cost)
 
     def update(self):
         if not self.hasFullHealth():
@@ -100,6 +111,8 @@ class Unit(Builder):
     # by this computer (one particular player)
     #from pygame.sprite import Group
     #allUnits = Group()
+    
+    costToBuild = [(Gold,75)]
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',loadList=None):
@@ -187,7 +200,6 @@ class Unit(Builder):
         self.objectOfAction=obj
         closest=specialMath.findClosest(self.realCenter, self.objectOfAction.rect.center, self.worldSize)
         self.dest=closest
-        print self.objectOfAction.rect.center,self.dest
         if isinstance(obj, Builder):#Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 

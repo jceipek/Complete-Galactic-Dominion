@@ -85,9 +85,12 @@ class MainScreen(Screen):
                 self.viewport.setQuickSelect(event)
             else:
                 self.viewport.getQuickSelect(event)
-                
-    def processSetDestinationEvent(self, event):
-        self.viewport.setDestinationEvent(event)
+    
+    def processCompleteActionEvent(self,event):
+        self.viewport.completeActionEvent(event)
+    
+    #def processSetDestinationEvent(self, event):
+    #    self.viewport.setDestinationEvent(event)
         
     def processInitiateActionEvent(self,event):
         self.viewport.initiateActionEvent(event)

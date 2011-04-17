@@ -190,6 +190,9 @@ class World(object):
         
     def removeResource(self,playerID,resource,amount=1):
         return self.resourceContainer.removeResource(playerID,resource,amount)
+        
+    def hasResources(self,playerID,resource,amount=1):
+        return self.resourceContainer.hasResources(playerID,resource,amount)
 
 class WorldResourceContainer(object):
     """
@@ -218,6 +221,10 @@ class WorldResourceContainer(object):
     def getResources(self,playerID):
         
         return self.resources[playerID]
+        
+    def hasResources(self,playerID,resource,amount=1):
+        
+        return self.resources[playerID].hasResources(resource,amount)
         
 class PlayerResourceContainer(object):
     
@@ -251,3 +258,9 @@ class PlayerResourceContainer(object):
             else:
                 self.resources[resource]=0
                 return resourcesRemaining
+                
+    def hasResources(self,resource,amount):
+        
+        if resource in self.resources:
+            return self.resources[resource] >= amount
+        return False

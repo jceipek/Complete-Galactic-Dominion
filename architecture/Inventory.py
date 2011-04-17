@@ -44,9 +44,14 @@ class Inventory(object):
 			return space
 
 	def removeAll(self,item):
+		if isinstance(item,type): # class
+			itemClass = item
+		else:
+			#print item,itemClass
+			itemClass = item.__class__
 		
-		itemClass = item.__class__
 		removedItems,self.items[itemClass]=self.items[itemClass],0
+		self.itemCount-=removedItems
 		return removedItems
 
 	def remove(self,item,amount=1):
