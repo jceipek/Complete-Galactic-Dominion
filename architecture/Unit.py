@@ -43,6 +43,7 @@ class Builder(Entity):
         self.buildQueue = []
         self.currentTask = None
         self.currentBuildTime = 0
+        self.inventory=Inventory()
 
     def addToBuildQueue(self,entityClass):
         if entityClass in self.buildDict:
@@ -132,7 +133,6 @@ class Unit(Builder):
             self.radius = loadList['radius']
             self.timeSinceLast = loadList['timeSinceLast']
             self.objectOfAction = loadList['objectOfAction']
-        self.inventory=Inventory()
         
         self.regenRate = .5
 
@@ -154,22 +154,18 @@ class Unit(Builder):
 				self.objectOfAction=None
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
 
-    def genAttack(self, radius=200, rate=10, recharge=0, act=0):
-        """moves unit closer to objectOfAction and decreases its health"""
-        if specialMath.distance(self.realCenter, self.dest) > radius:
-            self.move() 
-        elif self.timeSinceLast[Locals.ATTACK]>=recharge:
-
-            self.objectOfAction.changeHealth(-1*rate)
-            self.timeSinceLast[Locals.ATTACK]=0 
-
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
+        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+        self.dest=closest
         if specialMath.distance(self.realCenter, self.dest) > self.radius[Locals.ATTACK]:
             self.move() 
         elif self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
             self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
-            self.timeSinceLast[Locals.ATTACK]=0 
+            self.timeSinceLast[Locals.ATTACK]=0
+        if self.objectOfAction.curHealth<=0:
+            self.status=Locals.IDLE
+            self.dest=self.realCenter
 
     def gather(self):
         """moves unit close to resource, adds resource to containment"""
@@ -180,6 +176,7 @@ class Unit(Builder):
         
             if amount == 0:
                 self.status = Locals.IDLE
+                self.dest=self.realCenter
             else:
                 self.objectOfAction.changeHealth(-1*amount)
                 self.timeSinceLast[Locals.ATTACK]=0 
