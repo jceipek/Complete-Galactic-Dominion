@@ -96,16 +96,17 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
+        if clicked and isinstance(clicked,TestTownCenter) and len(self.selectedEntities)==0:
+            self.currentMenu = clicked.getMenu()
+            self.currentMenu.open(event.pos)
+            return
+        
         if clicked:
             drawRect = clicked.rect.move(clicked.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
         
             if not drawRect.collidepoint(pos):
                 clicked = None
-        
-        if clicked and isinstance(clicked,TestTownCenter):
-            self.currentMenu = clicked.getMenu()
-            self.currentMenu.open(event.pos)
     
     def startDrag(self,event):
             self.dragRect = DragBox(event.pos)
@@ -223,8 +224,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         click a unit while holding a modifier to add to the selection
         click a selected unit while holding a modifier to remove from the selection
         """
-        
-        print "Click Event!!!!"
         
         pos = event.pos
         

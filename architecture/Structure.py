@@ -3,9 +3,12 @@ from Entity import Locals
 
 import radialMenu
 from Callback import Callback
+from NaturalObject import Gold
 
 class Structure(Builder):
     """Defines structues which are built by units"""
+
+    acceptableResources = []
 
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
@@ -16,12 +19,14 @@ class Structure(Builder):
         self.buildX,self.buildY = self.rect.center
 
         self.status = Locals.IDLE
-	self.maxHealth=9000
-	self.curHealth=self.maxHealth
+        self.maxHealth=9000
+        self.curHealth=self.maxHealth
             
 class TestTownCenter(Structure):
     """Defines structues which are built by units"""
 
+    acceptableResources = [Gold]
+    
     def __init__(self, x, y, world):
         Structure.__init__(self, 'TownCenter.png', x, y, world, 'alpha', 'Test building.')
 
@@ -32,6 +37,21 @@ class TestTownCenter(Structure):
             
         self.setupMenu()
     
+    #def depositResource(self,resource,amount):
+    #    
+    #    if resource in self.acceptableResources:
+    #        self.world.addResouce(self.owner,resource,amount)
+    
+    def depositResources(self,unit):
+        
+        inventory = self.unit.inventory
+        
+        for resource in inventory.items:
+            amountToDeposit = inventory.removeAll(resource)
+            amountDeposited = self.world.addResource(self.owner,resource,amountToDeposit)
+            if amountToDeposit != amountDeposited:
+                print 'Warning: did not deposit correct amount of resources.'
+            
     def setupMenu(self):
         #Set up the test menu:
         menu = radialMenu.RMenu()
@@ -60,11 +80,7 @@ class TestTownCenter(Structure):
                     #callback = self.buildDict[buildType])
                 buildMenu.addItem(curItem)
                 tmpcounter+=1
-        
-        buildMenu.addItem(radialMenu.RMenuItem(menu,
-                image = "orbPurpleBlack.png",
-                col = (255,0,255),
-                title = 'Build Options'))
+
         self.clickMenu = menu
     
     def getMenu(self):

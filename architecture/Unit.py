@@ -93,7 +93,6 @@ class Builder(Entity):
         return self.buildDict.get(choice,None)
 
 
-
 class Unit(Builder):
     """A kind of Builder that can move around."""
 
@@ -188,6 +187,7 @@ class Unit(Builder):
         self.objectOfAction=obj
         closest=specialMath.findClosest(self.realCenter, self.objectOfAction.rect.center, self.worldSize)
         self.dest=closest
+        print self.objectOfAction.rect.center,self.dest
         if isinstance(obj, Builder):#Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 

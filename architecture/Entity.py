@@ -4,7 +4,7 @@ from collections import deque
 from GameData import Locals # includes statuses
 import specialMath
 from Overlay import HealthBar
-from Sign import Sign
+#from Sign import Sign
 
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
@@ -49,6 +49,8 @@ class Entity(MapObject):
         
         """
         self.world = world
+        
+        self.owner = 'tmp'
         
         # Prevents entities from being initialized off of the grid
         self.worldSize = self.world.grid.getCartGridDimensions()
@@ -146,7 +148,7 @@ class Entity(MapObject):
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
-            self.drawInfo(screen)
+            #self.drawInfo(screen)
         if self.selected or self.focused:
             self.drawHealthBar(screen,drawRect)
             self.focused = False
