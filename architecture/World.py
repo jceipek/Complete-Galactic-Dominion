@@ -184,6 +184,12 @@ class World(object):
         if entity.entityID in self.allEntities:
             self.universe.removeEntity(entity)
             del self.allEntities[entity.entityID]
+            
+    def addResource(self,playerID,resource,amount=1):
+        return self.resourceContainer.addResource(playerID,resource,amount)
+        
+    def removeResource(self,playerID,resource,amount=1):
+        return self.resourceContainer.removeResource(playerID,resource,amount)
 
 class WorldResourceContainer(object):
     """

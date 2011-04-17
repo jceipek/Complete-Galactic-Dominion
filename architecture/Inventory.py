@@ -43,8 +43,30 @@ class Inventory(object):
 			self.itemCount+=space
 			return space
 
+	def removeAll(self,item):
+		
+		itemClass = item.__class__
+		removedItems,self.items[itemClass]=self.items[itemClass],0
+		return removedItems
+
+	def remove(self,item,amount=1):
+		
+		if self.isEmpty(): return 0
+		
+		itemClass = item.__class__
+		if itemClass not in self.items: return 0
+		
+		if (self.items[itemClass] - amount > 0):
+			self.items[itemClass]-=amount
+			return amount
+		else:
+			return self.removeAll(item)
+
 	def isFull(self):
 		return self.itemCount >= self.limit
+		
+	def isEmpty(self):
+		return self.itemCount <= 0
 		
 	def getItemCount(self):
 		return self.itemCount
