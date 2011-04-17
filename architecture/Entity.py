@@ -66,6 +66,7 @@ class Entity(MapObject):
 
         # First initialization of description
         self.description = description
+        self.realCenter=self.rect.center
 
         # First initialization of options---
         # Dictionary mapping strings for display in a menu shown

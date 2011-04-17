@@ -169,6 +169,7 @@ class RMenuItem(DrawableObject):
                 self.submenu.update(mouseLoc)
     
     def highlight(self,surf,loc):
+        loc = (int(loc[0]),int(loc[1]))
         pygame.draw.circle(surf, self.color, loc, self.size,2)
         
         

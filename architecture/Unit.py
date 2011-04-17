@@ -198,7 +198,7 @@ class Unit(Builder):
         Initialized appropriate action by setting dest and status given the type of entity.
         """
         self.objectOfAction=obj
-        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.rect.center, self.worldSize)
+        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
         self.dest=closest
         if isinstance(obj, Builder):#Unit):
             self.status=Locals.ATTACKING
