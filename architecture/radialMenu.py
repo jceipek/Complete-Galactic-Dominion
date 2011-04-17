@@ -1,6 +1,8 @@
 import pygame
 from DrawableObject import DrawableObject
 
+from Callback import Callback
+
 def offsetFromDeg(deg,rad):
     from math import cos
     from math import sin
@@ -37,6 +39,7 @@ class RMenu():
         self.rad = rad
         self.minDist = minDist
         self.visible = False
+        self.title=title
         
     def addItem(self,item):
         self.root.append(item)
@@ -45,6 +48,7 @@ class RMenu():
         self.loc = loc
         self.mousePos = loc
         self.visible = True
+        print 'Opening...',self.title
         
     def select(self,loc):
         if self.visible:
@@ -64,6 +68,7 @@ class RMenu():
                  
     def close(self):
         self.visible = False
+        print 'Closing...',self.title
         count = len(self.root)
         for i in xrange(count):
             if self.root[i].submenu:
@@ -76,6 +81,7 @@ class RMenu():
             offset = (self.mousePos[0] - self.loc[0], self.mousePos[1] - self.loc[1])
             from math import hypot
             dist = hypot(offset[0],offset[1])
+            
             count = len(self.root)
             if dist >= self.minDist:
                 deg = degFromOffset(offset)
@@ -131,7 +137,7 @@ class RMenuItem(DrawableObject):
     @param menu: The menu that contains the item
     """
     def __init__(self, menu, image = "orbBlack.png",imageKey = -1, \
-        title = 'None',size = 32,col = (0,0,255),callback=lambda:None):
+        title = 'None',size = 32,col = (0,0,255),callback=Callback(lambda:None)):
 
         DrawableObject.__init__(self,image,imageKey) #Should be different for each item
         
@@ -153,7 +159,7 @@ class RMenuItem(DrawableObject):
         
     def select(self):
         print self.title
-        print self.callback()
+        print self.callback.execute()
         
     def update(self,loc,mouseLoc):
         if self.submenu:
@@ -192,7 +198,7 @@ if __name__ == "__main__":
     menu.addItem(item3)
     
     item4 = RMenuItem(menu,image = "orbBlueBlack.png",col = (0,0,255), \
-        title = "Blue", callback=lambda:'Testing blue callback')
+        title = "Blue", callback=Callback(lambda:'Testing blue callback'))
     item5 = RMenuItem(menu,image = "orbQBlack.png")
     item5.addSubmenu(menu3)
     
