@@ -80,3 +80,9 @@ class SetDestinationEvent(Event):
         Event.__init__(self)
         self.pos = posxy
         self.verboseInfo = "\tPosition: " + str(self.pos) + "\n"
+        
+class InitiateActionEvent(Event):
+    def __init__(self,posxy):
+        Event.__init__(self)
+        self.pos = posxy
+        self.verboseInfo = "\tPosition: " + str(self.pos) + "\n"

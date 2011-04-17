@@ -24,6 +24,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def __init__(self,manager,world):
         eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, \
             Event.SelectionEvent, Event.SingleAddSelectionEvent, \
+            Event.InitiateActionEvent, \
             Event.UpdateEvent, Event.WorldChangeEvent, \
             Event.DisplaySurfaceCreatedEvent, Event.SetDestinationEvent, \
             Event.DragBeganEvent, Event.DragEvent, \
@@ -81,6 +82,8 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.activeScreen.processAddDragCompletedEvent(event)
         elif isinstance(event, Event.SetDestinationEvent):
             self.activeScreen.processSetDestinationEvent(event)
+        elif isinstance(event, Event.InitiateActionEvent):
+            self.activeScreen.processInitiateActionEvent(event)
         elif isinstance(event, Event.UpdateEvent):
             if self.activeScreen:
                 self.activeScreen.processUpdateEvent(event)

@@ -195,6 +195,9 @@ class Window(Listener):
                             #    realEvent.append(Event.DragBeganEvent(rawEvent.pos))
                             #else:
                             #    realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
+                        elif buttonId == Event.MouseLocals.RIGHT_CLICK:
+                            TMP_mouseState = 2
+                            realEvent.append(Event.InitiateActionEvent(rawEvent.pos))
                     
                     elif rawEvent.type == pygame.MOUSEBUTTONUP:
                         TMP_mouseState = 0

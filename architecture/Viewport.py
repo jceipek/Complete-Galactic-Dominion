@@ -78,8 +78,37 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         else:
             self.scrollSpeed = [0,0]
     
+    def initiateActionEvent(self,event):
+        pos = event.pos
+        
+        if self.minimap.rect.collidepoint(pos):
+            mapClickPoint = self.minimap.clickToGridPos(pos)
+            if mapClickPoint is not None:
+                destCart = mapClickPoint
+            else:            
+                cartPos = specialMath.isoToCart(pos)
+                destCart = self.cartScrollLoc[0] + cartPos[0], \
+                            self.cartScrollLoc[1] + cartPos[1]
+        else:
+            cartPos = specialMath.isoToCart(pos)
+            destCart = self.cartScrollLoc[0] + cartPos[0], \
+                        self.cartScrollLoc[1] + cartPos[1]
+
+        clicked = specialMath.closestEntity(self.viewportEntities,pos)
+        
+        if clicked:
+            drawRect = clicked.rect.move(clicked.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+        
+            if not drawRect.collidepoint(pos):
+                clicked = None
+        
+        if clicked and isinstance(clicked,TestTownCenter):
+            self.currentMenu = clicked.getMenu()
+            self.currentMenu.open(event.pos)
+    
     def startDrag(self,event):
-        self.dragRect = DragBox(event.pos)
+            self.dragRect = DragBox(event.pos)
         
     def continueDrag(self,event):
         if self.dragRect is not None:
@@ -140,10 +169,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     selected.initAction(clicked)
             #if isinstance(clicked,Structure):
             #    clicked.addToBuildQueue(Unit)
-            if isinstance(clicked,TestTownCenter):
-                #clicked.showMenu(event)
-                self.currentMenu = clicked.getMenu()
-                self.currentMenu.open(event.pos)
+            if self.selectMenu is not None:
+                self.selectMenu(pos)
                        
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
@@ -195,10 +222,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         click a selected unit while holding a modifier to remove from the selection
         """
         
-        pos = event.pos
+        print "Click Event!!!!"
         
-        if self.selectMenu is not None:
-            self.selectMenu(pos)
+        pos = event.pos
         
         if self.minimap.rect.collidepoint(pos):
             mapClickPoint = self.minimap.clickToGridPos(pos)

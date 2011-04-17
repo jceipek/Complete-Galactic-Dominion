@@ -89,6 +89,9 @@ class MainScreen(Screen):
     def processSetDestinationEvent(self, event):
         self.viewport.setDestinationEvent(event)
         
+    def processInitiateActionEvent(self,event):
+        self.viewport.initiateActionEvent(event)
+        
     def processUpdateEvent(self,event):
         self.viewport.processUpdateEvent(event)
         
