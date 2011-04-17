@@ -258,7 +258,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             else:
                 clicked.select()
                 self.selectedEntities.append(clicked)
-                clicked.printHealth()
+                print clicked.healthStr()
                 if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
     
     def updateMenu(self,eventPos):

@@ -4,6 +4,7 @@ from collections import deque
 from GameData import Locals # includes statuses
 import specialMath
 from Overlay import HealthBar
+from Sign import Sign
 
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
@@ -158,11 +159,17 @@ class Entity(MapObject):
     def drawHealthBar(self, screen, drawRect):
         self.healthBar.draw(screen,drawRect.midtop)
 
-    def drawInfo(self, screen):
-        text=self.description
+    def drawInfo(self, screen): #FIXME I am shitty.
+        """Displays health and description"""
+        text = '%s \n Description: \n %s' % (self.healthStr(), self.description)
+        textBox=Sign(150, (0,600))
+        textBox.addtext(text)
+        textBox.render()
+        textBox.draw(screen)
+        
 
-    def printHealth(self):
-        print 'Health: \n' +str(self.curHealth) + ' / ' +str(self.maxHealth)
+    def healthStr(self):
+        return 'Health: \n' +str(self.curHealth) + ' / ' +str(self.maxHealth)
 
     def dtime(self):
         """returns time since last call, used in update, keeps track of time between frames"""
