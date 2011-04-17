@@ -1,7 +1,7 @@
 import pygame
 import Event,specialMath
 from Unit import Unit
-from Structure import Structure
+from Structure import Structure,TestTownCenter
 from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox, MiniMap
 
@@ -53,6 +53,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.quickSelect[i] = pygame.sprite.Group()
         
         self.dragRect = None
+        
+        self.currentMenu = None
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
@@ -136,8 +138,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 attacking=True
                 if isinstance(selected,Unit):
                     selected.initAction(clicked)
-                if isinstance(selected,Structure):
-                    selected.addToBuildQueue(Unit)
+            #if isinstance(clicked,Structure):
+            #    clicked.addToBuildQueue(Unit)
+            if isinstance(clicked,TestTownCenter):
+                #clicked.showMenu(event)
+                self.currentMenu = clicked.getMenu()
+                self.currentMenu.open(event.pos)
                        
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
@@ -189,6 +195,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         pos = event.pos
         
+        if self.selectMenu is not None:
+            self.selectMenu(event.pos)
+        
         if self.minimap.rect.collidepoint(pos):
             mapClickPoint = self.minimap.clickToGridPos(pos)
             if mapClickPoint is not None:
@@ -223,7 +232,25 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.selectedEntities.append(clicked)
                 clicked.printHealth()
                 if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
-                
+    
+    def updateMenu(self,eventPos):
+        if self.currentMenu is not None:
+            print 'I MOVED YALL: ',eventPos
+            self.currentMenu.update(eventPos)
+    
+    def selectMenu(self,eventPos):
+        if self.currentMenu is not None:
+            print 'MOUSE BUTTON UP'
+            self.currentMenu.select(eventPos)
+        self.currentMenu = None
+    
+    def drawMenu(self):
+        if self.currentMenu is not None:
+            self.currentMenu.draw(self.surface)
+    
+    def mouseMoved(self,event):
+        self.setScrollSpeed(event.pos)
+        self.updateMenu(event.pos)
     
     def _setCartScrollLocation(self,newCartLoc):
         self.cartScrollLoc = tuple(newCartLoc)
@@ -231,7 +258,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def scrollBasedOnElapsedTime(self,elapsedTime):
         
-        if not self.world == None:# FIXME and self.dragRect == None:
+        if not self.world == None and self.currentMenu == None:# FIXME and self.dragRect == None:
             newScrollLoc = list(self.scrollLoc)
             scrollAddX = self.scrollSpeed[0]*elapsedTime
             scrollAddY = self.scrollSpeed[1]*elapsedTime
@@ -291,6 +318,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.drawDragRect()
             self.drawMiniMap()
             self.drawDebugFrames()
+            self.drawMenu()
             displaySurface.blit(self.surface, (self.loc,self.size))
 
     def processUpdateEvent(self,event):

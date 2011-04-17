@@ -288,7 +288,7 @@ class Unit(Builder):
     def getMiniMapColor(self):
         return (20,20,255)
     def __str__(self):
-        return cPickle.dumps(['Unit', imagePath, x, y, 'world'])
+        return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])
     def __getstate__(self):
         d=dict()
         d['imagePath']=self.imagePath
