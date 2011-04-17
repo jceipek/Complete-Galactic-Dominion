@@ -1,5 +1,5 @@
 from Entity import Entity
-from Structure import Structure
+from Structure import TestTownCenter
 
 from NaturalObject import Gold
 
@@ -53,7 +53,7 @@ class World(object):
         from random import randint,choice
         xpos = randint(0,self.gridDim[0])
         ypos = randint(0,self.gridDim[1])
-        Structure('testBuilding.png',xpos,ypos,self,'alpha','Test Building')
+        TestTownCenter(xpos,ypos,self)
     
     def _generateResources(self):
         
