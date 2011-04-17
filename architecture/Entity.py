@@ -142,6 +142,7 @@ class Entity(MapObject):
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
+            self.drawInfo(screen)
         if self.selected or self.focused:
             self.drawHealthBar(screen,drawRect)
             self.focused = False
@@ -153,6 +154,9 @@ class Entity(MapObject):
 
     def drawHealthBar(self, screen, drawRect):
         self.healthBar.draw(screen,drawRect.midtop)
+
+    def drawInfo(self, screen):
+        text=self.description
 
     def printHealth(self):
         print 'Health: \n' +str(self.curHealth) + ' / ' +str(self.maxHealth)
