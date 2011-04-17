@@ -142,6 +142,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
             for entity in self.selectedEntities:
+                if not entity.status ==Locals.MOVING:
+                    entity.dest=entity.realCenter
                 entity.status=Locals.MOVING
                 dx = entity.rect.center[0] - eCenter[0]
                 dy = entity.rect.center[1] - eCenter[1]
