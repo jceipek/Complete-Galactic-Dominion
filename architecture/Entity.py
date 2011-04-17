@@ -8,9 +8,9 @@ from Overlay import HealthBar
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
     
-    # Class variable which keeps track of id of all entities
-    # updated with each initialization of Entity and child classes
-    #IDcounter = 0
+    # Class variable which determines how long it takes to build
+    # an entity
+    timeToBuild = 1
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
@@ -95,6 +95,12 @@ class Entity(MapObject):
 
     def _setEntityID(self,ID):
         self.entityID = ID
+
+    def select(self):
+        self.selected = True
+        
+    def deselect(self):
+        self.selected = False
 
     def regenerate(self):
         self._regenHealth+=(self.getTimeElapsed()/1000.0)*self.regenRate
