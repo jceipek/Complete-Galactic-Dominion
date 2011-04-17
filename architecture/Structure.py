@@ -16,6 +16,8 @@ class Structure(Builder):
         self.buildX,self.buildY = self.rect.center
 
         self.status = Locals.IDLE
+	self.maxHealth=9000
+	self.curHealth=self.maxHealth
             
 class TestTownCenter(Structure):
     """Defines structues which are built by units"""
