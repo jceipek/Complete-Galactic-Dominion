@@ -110,8 +110,7 @@ class InfiniteGrid(Grid):
                 top = int((y-x)/2.0*tileHeight-screenLoc[1])
 
                 if pygame.Rect((left,top),(tileWidth,tileHeight)).\
-                colliderect((0,0),screenSize) \
-                and x%self.gridSize[0] != 0 and y%self.gridSize[1] != 0:
+                colliderect((0,0),screenSize):
                     self.grid[x%self.gridSize[0],y%self.gridSize[1]].\
                     draw(surface,(left,top))
                 

@@ -45,6 +45,8 @@ class World(object):
     
         self._generateResources()
         self._TMPmakeBuilding()
+        
+        self.resourceContainer = WorldResourceContainer(self)
     
     def _setWorldID(self,ID):
         self.worldID = ID
@@ -62,8 +64,9 @@ class World(object):
         resourceType = [Gold]
         
         for i in xrange(randint(10,15)):
-            xpos = randint(0,self.gridDim[0])
-            ypos = randint(0,self.gridDim[1])
+            # FIXME
+            xpos = randint(100,self.gridDim[0]-100)
+            ypos = randint(100,self.gridDim[1]-100)
             (choice(resourceType))(xpos, ypos, self)
     
     def TEST_createGrid(self):
@@ -181,3 +184,64 @@ class World(object):
         if entity.entityID in self.allEntities:
             self.universe.removeEntity(entity)
             del self.allEntities[entity.entityID]
+
+class WorldResourceContainer(object):
+    """
+    Maps from player ids to resouces.
+    """
+    def __init__(self,world):
+        
+        self.world = world
+        self.resources = {}
+        
+        # TMP - FIXME!
+        self.addPlayer('tmp')
+        
+    def addPlayer(self,playerID):
+        
+        self.resources[playerID] = PlayerResourceContainer(self.world)
+        
+    def addResource(self,playerID,resource,amount=1):
+        
+        return self.resources[playerID].addResource(resource,amount)
+        
+    def removeResource(self,playerID,resource,amount=1):
+        
+        return self.resources[playerID].removeResouce(resource,amount)
+        
+    def getResources(self,playerID):
+        
+        return self.resources[playerID]
+        
+class PlayerResourceContainer(object):
+    
+    def __init__(self,world):
+        
+        self.world = world
+        self.resources = {}
+        
+        self._setupResourceDict()
+        
+    def _setupResourceDict(self):
+        
+        self.resources[Gold] = 0
+        
+    def addResource(self,resource,amount=1):
+        
+        if resource in self.resources:
+            self.resources[resource]+=amount
+            return amount
+        else:
+            return 0
+            
+    def removeResouce(self,resource,amount=1):
+        
+        if resource in self.resources:
+            resourcesRemaining = self.resources[resource]
+            
+            if resourcesRemaining >= amount:
+                self.resources[resource]-=amount
+                return amount
+            else:
+                self.resources[resource]=0
+                return resourcesRemaining

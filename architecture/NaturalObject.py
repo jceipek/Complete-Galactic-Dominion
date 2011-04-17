@@ -39,7 +39,7 @@ class Resource(NaturalObject):
         self._regenHealth = 0
 
 class Gold(Resource):
-    """Wrapper for Gold."""
+    """Gold."""
     def __init__(self,x,y,world):
         Resource.__init__(self,'Gold-ore.png',x,y,world,'alpha',\
             'Gold ore.','Gold')
