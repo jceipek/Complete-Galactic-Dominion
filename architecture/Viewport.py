@@ -140,6 +140,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         attacking=False
         pos = event.pos
         
+        if self.selectMenu is not None:
+            self.selectMenu(pos)
+        
         if self.minimap.rect.collidepoint(pos):
             mapClickPoint = self.minimap.clickToGridPos(pos)
             if mapClickPoint is not None:
@@ -169,8 +172,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     selected.initAction(clicked)
             #if isinstance(clicked,Structure):
             #    clicked.addToBuildQueue(Unit)
-            if self.selectMenu is not None:
-                self.selectMenu(pos)
+
                        
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
