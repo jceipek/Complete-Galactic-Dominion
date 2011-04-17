@@ -196,7 +196,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         pos = event.pos
         
         if self.selectMenu is not None:
-            self.selectMenu(event.pos)
+            self.selectMenu(pos)
         
         if self.minimap.rect.collidepoint(pos):
             mapClickPoint = self.minimap.clickToGridPos(pos)
@@ -235,12 +235,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def updateMenu(self,eventPos):
         if self.currentMenu is not None:
-            print 'I MOVED YALL: ',eventPos
+            #print 'I MOVED YALL: ',eventPos
             self.currentMenu.update(eventPos)
     
     def selectMenu(self,eventPos):
         if self.currentMenu is not None:
-            print 'MOUSE BUTTON UP'
+            #print 'MOUSE BUTTON UP'
             self.currentMenu.select(eventPos)
         self.currentMenu = None
     

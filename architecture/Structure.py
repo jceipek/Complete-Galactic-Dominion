@@ -2,6 +2,7 @@ from Unit import Builder, Unit
 from Entity import Locals
 
 import radialMenu
+from Callback import Callback
 
 class Structure(Builder):
     """Defines structues which are built by units"""
@@ -48,11 +49,13 @@ class TestTownCenter(Structure):
             
             tmpcounter = 0
             for buildType in self.buildDict:
+                curCallback = Callback(self.addToBuildQueue,Unit)
                 curItem = radialMenu.RMenuItem(menu,
                     image = "orbQBlack.png",
                     col = (255,0,0),
                     title = 'Item#'+str(tmpcounter),
-                    callback = self.buildDict[buildType])
+                    callback = curCallback)
+                    #callback = self.buildDict[buildType])
                 buildMenu.addItem(curItem)
                 tmpcounter+=1
         
@@ -61,9 +64,6 @@ class TestTownCenter(Structure):
                 col = (255,0,255),
                 title = 'Build Options'))
         self.clickMenu = menu
-    
-    def showMenu(self,event):
-        self.clickMenu.open(event.pos)
     
     def getMenu(self):
         return self.clickMenu
