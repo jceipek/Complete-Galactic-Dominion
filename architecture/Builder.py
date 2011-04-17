@@ -1,4 +1,8 @@
+# FIXME - File up for possible deletion.
+# Code added to Unit.py
+'''
 from Entity import Entity
+from Unit import Unit
 
 class Builder(Entity):
     """
@@ -27,17 +31,42 @@ class Builder(Entity):
 	
 	# Dictionary which maps from strings defining units which can
 	# be produced by a builder to callbacks
-	self.buildDict={}
+	self.buildDict={
+	    Unit: 
+		lambda : Unit('testCraft.png',self.x,self.y,self.world,-1,'A Unit.')
+	}
 	
 	# Queue of entities to build
-	self.buildQueue=[]
+	self.buildQueue = []
+	self.currentTask = None
+	self.currentBuildTime = 0
 
+    def addToBuildQueue(self,entityClass):
+	if entityClass in self.buildDict:
+	    self.buildQueue.append(entityClass)
+
+    def update(self):
+	Entity.update() # regenerates, if necessary
+	
+	if not self.currentTask == None:
+	    self.Build()
+    
+    def hasBuildTask(self):
+	return len(self.buildQueue) > 0
+    
+    def nextBuildTask(self):
+	if self.hasBuildTask():
+	    self.currentTask = self.buildQueue.pop(0)
+	else:
+	    self.currentTask = None
+    
     def Build(self):
 	"""A particular builder creates builder1 after a certain timeToBuild"""
-	buildQueue = self.buildQueue
-	if len(buildQueue) > 0:
-	    entityToBuild = buildQueue.pop(0)
-	# CURRENTLY A STUB
+	self.currentBuildTime += self.getTimeElapsed()
+	if self.currentBuildTime > self.currentTask.timeToBuild:
+	    self.buildDict[currentTask]()
+	    self.currentBuildTime = 0
+	    self.nextBuildTask()
 	
     def buildOptions(self):
 	"""
@@ -102,3 +131,4 @@ if __name__ == "__main__":
         
         ms_elapsed = gameClock.tick(MAX_FPS)
         print 'Current frames per second: %d'%int(1000.0/ms_elapsed)
+'''

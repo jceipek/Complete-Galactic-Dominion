@@ -1,6 +1,7 @@
 import pygame
 import Event,specialMath
 from Unit import Unit
+from Structure import Structure
 from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox, MiniMap
 
@@ -135,6 +136,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 attacking=True
                 if isinstance(selected,Unit):
                     selected.initAction(clicked)
+                if isinstance(selected,Structure):
+                    selected.addToBuildQueue(Unit)
                        
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
@@ -155,7 +158,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             if isinstance(event,Event.DragCompletedEvent):
                 for e in self.selectedEntities:
-                    e.selected = False
+                    e.deselect()
                 self.selectedEntities = []
             #else: pass # if it is an Event.AddDragCompletedEvent, do
             # # not deselect
@@ -172,7 +175,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 drawRect.center = specialMath.cartToIso(drawRect.center)
             
                 if drawRect.colliderect(MakeBoundingBox(start,end)):
-                    entity.selected = True
+                    entity.select()
                     self.selectedEntities.append(entity)
     
     def clickEvent(self,event):
@@ -206,17 +209,17 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         if isinstance(event,Event.SelectionEvent):
             for e in self.selectedEntities:
-                e.selected = False
+                e.deselect()
             self.selectedEntities = []
 
         if clicked:
             # Determines if the closest entity is already selected.
             # If it is, it makes it no longer selected.
             if clicked.selected:
-                clicked.selected = False
+                clicked.deselect()
                 self.selectedEntities.remove(clicked)
             else:
-                clicked.selected = True
+                clicked.select()
                 self.selectedEntities.append(clicked)
                 clicked.printHealth()
                 if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)

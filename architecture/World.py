@@ -1,4 +1,5 @@
 from Entity import Entity
+from Structure import Structure
 
 from NaturalObject import Gold
 
@@ -43,9 +44,16 @@ class World(object):
         self.elapsedTimeSinceLastFrame = 0
     
         self._generateResources()
+        self._TMPmakeBuilding()
     
     def _setWorldID(self,ID):
         self.worldID = ID
+        
+    def _TMPmakeBuilding(self):
+        from random import randint,choice
+        xpos = randint(0,self.gridDim[0])
+        ypos = randint(0,self.gridDim[1])
+        Structure('testBuilding.png',xpos,ypos,self,'alpha','Test Building')
     
     def _generateResources(self):
         
