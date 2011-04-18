@@ -46,18 +46,19 @@ class MainScreen(Screen):
         self.viewport = None
         self.hud = None
         
-    def TEST_createViewport(self,world):
+    def TEST_createViewport(self,world,manager):
         ###FIXME
         #world.TEST_createGrid()
         scrollLoc = (0,0)
         viewportPos = (0,0)
         #viewportSize = (640,480)
         viewportSize = (1024,768-100)
-        testViewport = Viewport(world,scrollLoc,viewportPos,viewportSize)
+        testViewport = Viewport(world,manager,scrollLoc,viewportPos,viewportSize)
         self.viewport = testViewport
         
     def draw(self,displaySurface,size):
         self.viewport.draw(displaySurface)
+        
         #self.viewport.drawContainedEntities()
         
     def processMouseMovedEvent(self,event):
@@ -88,9 +89,6 @@ class MainScreen(Screen):
     
     def processCompleteActionEvent(self,event):
         self.viewport.completeActionEvent(event)
-    
-    #def processSetDestinationEvent(self, event):
-    #    self.viewport.setDestinationEvent(event)
         
     def processInitiateActionEvent(self,event):
         self.viewport.initiateActionEvent(event)

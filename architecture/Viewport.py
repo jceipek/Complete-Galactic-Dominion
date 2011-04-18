@@ -5,6 +5,8 @@ from Structure import Structure,TestTownCenter
 from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox, MiniMap
 
+from Callback import Callback
+
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     Acts as a "window" into the world it contains. Includes deadzone dimensions
@@ -20,9 +22,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     @param selector: a selection rectangle that is activated and drawn when necessary #FIXME: NOT YET IMPLEMENTED
     """
     
-    def __init__(self,world,scrollLoc,screenPos,size):
+    def __init__(self,world,manager,scrollLoc,screenPos,size):
         self.world = world
 
+        self.manager = manager
         self.scrollLoc = scrollLoc
         self.cartScrollLoc = specialMath.isoToCart(scrollLoc)
         self.loc = screenPos
@@ -55,6 +58,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.dragRect = None
         
         self.currentMenu = None
+        
+        from ContextualMenu import getCGDcontextualMenu
+        self.contextualMenu = getCGDcontextualMenu()
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
@@ -96,6 +102,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
+        TMPmenu = self.contextualMenu.getMenu(self.selectedEntities,clicked)
+        
         if clicked and isinstance(clicked,TestTownCenter):# and len(self.selectedEntities)==0:
             #self.currentMenu = clicked.getMenu()
             self.currentMenu = clicked.getMenu2(self.selectedEntities)
@@ -115,11 +123,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         attacking = False
         pos = event.pos
         
-        if self.currentMenu is not None:
-            self.selectMenu(pos) # ADD TO THIS
-            #self.selectMenu2(pos)
-            print 'Menu exists!'
+        # Performs action indicated by menu if menu is visible
+        # and exists.  Otherwise, the menu reference is destroyed.
+        if self.currentMenu is not None and self.currentMenu.visible:
+            self.selectMenu(pos)
             return # Do not do anything else if the menu is selected
+        else:
+            self.currentMenu = None
         
         # Sets destination in cartesian coordinates
         # Handles minimap clicks
@@ -360,6 +370,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def processUpdateEvent(self,event):
         self.setViewportEntities()
         timeElapsed = event.elapsedTimeSinceLastFrame
+        
+        if self.currentMenu is not None and not self.currentMenu.visible:
+            self.currentMenu._delayedOpen(timeElapsed)
+        
         self.scrollBasedOnElapsedTime(timeElapsed)
         self.world.elapsedTimeSinceLastFrame = timeElapsed
     

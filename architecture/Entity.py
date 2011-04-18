@@ -157,6 +157,13 @@ class Entity(MapObject):
     def drawHealthBar(self, screen, drawRect):
         self.healthBar.draw(screen,drawRect.midtop)
 
+    def getInfo(self):
+        text = '%s \n Description: \n %s' % (self.healthStr(), self.description)
+        textBox=Sign(150, (0,0))
+        textBox.addtext(text)
+        textBox.render()
+        return textBox
+
     def drawInfo(self, screen): #FIXME I am shitty.
         """Displays health and description"""
         text = '%s \n Description: \n %s' % (self.healthStr(), self.description)
@@ -164,7 +171,6 @@ class Entity(MapObject):
         textBox.addtext(text)
         textBox.render()
         textBox.draw(screen)
-        
 
     def healthStr(self):
         return 'Health: \n' +str(self.curHealth) + ' / ' +str(self.maxHealth)

@@ -42,7 +42,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         from Screen import MainScreen
         from Overlay import DebugOverlay
         testScreen = MainScreen()
-        testScreen.TEST_createViewport(self.activeWorld)
+        testScreen.TEST_createViewport(self.activeWorld,self.manager)
         self.activeScreen = testScreen
         self.debugOverlay = DebugOverlay()
 

@@ -264,3 +264,10 @@ class PlayerResourceContainer(object):
         if resource in self.resources:
             return self.resources[resource] >= amount
         return False
+        
+    def __str__(self):
+		s='Player Resources: \n'
+		for resource in self.resources:
+			sitem=str(resources).rsplit('.',1)[1].strip(punctuation)
+			s+= '%s : %d \n' % (sitem, self.resources[resources])
+		return s	

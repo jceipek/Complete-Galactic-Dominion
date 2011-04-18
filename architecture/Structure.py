@@ -45,8 +45,7 @@ class Structure(Builder):
         stateDict['buildX'] = self.buildX
         return stateDict
     
-    
-            
+
 class TestTownCenter(Structure):
     """Defines structues which are built by units"""
 
@@ -64,37 +63,7 @@ class TestTownCenter(Structure):
         self.menus = {}
         
         self.setupMenus()
-    '''        
-    def setupMenu(self):
-        #Set up the test menu:
-        menu = radialMenu.RMenu()
-        
-        #print 'BuildDictLength ',len(self.buildDict)
-        if len(self.buildDict) > 0:
-            
-            buildItem = radialMenu.RMenuItem(menu,
-                image = "orbQBlack.png",
-                col = (255,0,255),
-                title = 'Build Options')
-            
-            menu.addItem(buildItem)
-            
-            buildMenu = radialMenu.RMenu()
-            buildItem.addSubmenu(buildMenu)
-            
-            tmpcounter = 0
-            for buildType in self.buildDict:
-                curItem = radialMenu.RMenuItem(menu,
-                    image = "orbQBlack.png",
-                    col = (255,0,0),
-                    title = 'Build Option #'+str(tmpcounter),
-                    callback = Callback(self.addToBuildQueue,Unit))
-                    #callback = self.buildDict[buildType])
-                buildMenu.addItem(curItem)
-                tmpcounter+=1
-        
-        self.clickMenu = menu
-    '''
+
     def setupMenus(self):
         self._setupNoneMenu()
         self._setupSelfMenu()
@@ -102,12 +71,12 @@ class TestTownCenter(Structure):
 
     def _setupNoneMenu(self):
         #Set up the None menu:
-        menu = radialMenu.RMenu()
+        menu = radialMenu.RMenu(openDelay=.5)
         
         if len(self.buildDict) > 0:
             
             buildItem = radialMenu.RMenuItem(menu,
-                image = "orbQBlack.png",
+                image = "BuildOrb.png",
                 col = (255,0,255),
                 title = 'Build Options')
             
@@ -119,13 +88,20 @@ class TestTownCenter(Structure):
             tmpcounter = 0
             for buildType in self.buildDict:
                 curItem = radialMenu.RMenuItem(menu,
-                    image = "orbQBlack.png",
+                    image = "orb.png",
                     col = (255,0,0),
                     title = 'Build Option #'+str(tmpcounter),
                     callback = Callback(self.addToBuildQueue,Unit))
                     #callback = self.buildDict[buildType])
                 buildMenu.addItem(curItem)
                 tmpcounter+=1
+
+        showDesc = radialMenu.RMenuItem(menu,
+            image = "orbQBlack.png",
+            col = (255,0,255),
+            title = 'Description',
+            callback = Callback(self.showDescription))
+        menu.addItem(showDesc)
 
         self.menus[None] = menu
     
@@ -134,10 +110,10 @@ class TestTownCenter(Structure):
     
     def _setupSelfMenu(self):
         #Set up the Self menu
-        menu = radialMenu.RMenu()
+        menu = radialMenu.RMenu(openDelay=.5)
         
         depositItem = radialMenu.RMenuItem(menu,
-            image = "orbQBlack.png",
+            image = "DepositOrb.png",
             col = (255,0,255),
             title = 'Deposit Resources',
             callback = Callback(self.depositResources,self.menuActors))
@@ -145,7 +121,7 @@ class TestTownCenter(Structure):
         
         self.menus['self'] = menu
     
-    '''    
+    '''
     def _setupOtherMenu(self):
         #Set up the Other menu
         menu = radialMenu.RMenu()
@@ -204,12 +180,3 @@ class TestTownCenter(Structure):
         screen.blit(self.image,drawRect)
         
         #self.clickMenu.draw(screen)  
-
-'''
-class TownCenter(Structure):
-	"""defines Town Center structure """
-	resourcesRequired=None
-	timeToBuild=0
-	def __init__(self, imagePath, colorkey=None):
-		Structure.__init__(self, imagePath, colorkey)
-'''
