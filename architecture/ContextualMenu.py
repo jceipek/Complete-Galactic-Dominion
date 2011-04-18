@@ -7,26 +7,32 @@ from Entity import Entity
 from Unit import Unit
 
 class ContextualMenuMaster(object):
+    """
+    Allows for access to context-specific menus.
+    """
     
     def __init__(self):
+        """
+        Creates a ContextualMenuMaster with a dictionary self.menus.
+        This dictionary maps tuples of length two to menus.
+        The first element in the tuple is the class which 
+        are to perform the action, and the second element in the tuple
+        is the class which is to be acted upon.
+        """
         object.__init__(self)
         
         self.menus = {}
-        self.setupMenus()
-        
-    def setupMenus(self):
-        """
-        Adds menus using addMenu method
-        """
-        pass
         
     def addMenu(self,obj1Class,obj2Class,menu):
-
+        """
+        Makes a given menu specific to the interaction of obj1Class
+        acting on obj2Class.
+        """
         self.menus[(obj1Class,obj2Class)] = menu
         
     def getMenu(self,obj1,obj2):
         """
-        Returns context specific menu
+        Returns context specific menu for obj1 acting on obj2.
         """
         # Obj1 is a list
         if type(obj1) == list:
@@ -67,11 +73,18 @@ class ContextualMenuMaster(object):
 class ContextualMenu(object):
     
     def __init__(self,menuMakerFunction = lambda obj1,obj2: None):
+        """
+        Wrapper for a radialMenu maker.  menuMakerFunction takes
+        a list of objects acting on an object to produce a menu.
+        """
         object.__init__(self)
         
         self._menuMakerFunction = menuMakerFunction
         
     def getMenu(self,obj1,obj2):
+        """
+        Returns a radial menu as specified by the maker function.
+        """
         return self._menuMakerFunction(obj1,obj2)
 
 #### ENTER CUSTOM DEFINED MENU FUNCTIONS HERE ####
