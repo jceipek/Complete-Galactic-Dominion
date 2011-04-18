@@ -35,6 +35,17 @@ class Structure(Builder):
                         amountDeposited = self.world.addResource(self.owner,resource,amountToDeposit)
                         if amountToDeposit != amountDeposited:
                             print 'Warning: did not deposit correct amount of resources.'
+                            
+    '''Pickle functions for network transfer:'''
+    def __getState__(self):
+        stateDict = Builder.__getState__(self)
+        stateDict['buildX'] = self.buildX
+        stateDict['buildY'] = self.buildY
+        stateDict['status'] = self.status
+        stateDict['buildX'] = self.buildX
+        return stateDict
+    
+    
             
 class TestTownCenter(Structure):
     """Defines structues which are built by units"""
