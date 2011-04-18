@@ -1,5 +1,11 @@
 import radialMenu
 
+from Callback import Callback, GroupCallback
+
+from Structure import Structure,TestTownCenter
+from Entity import Entity
+from Unit import Unit
+
 class ContextualMenuMaster(object):
     
     def __init__(self):
@@ -15,6 +21,7 @@ class ContextualMenuMaster(object):
         pass
         
     def addMenu(self,obj1Class,obj2Class,menu):
+
         self.menus[(obj1Class,obj2Class)] = menu
         
     def getMenu(self,obj1,obj2):
@@ -22,13 +29,16 @@ class ContextualMenuMaster(object):
         Returns context specific menu
         """
         # Obj1 is a list
-        if isinstance(obj1,list) and not obj1 == []:
+        if type(obj1) == list:
             obj1 = self._sortByClass(obj1)
-            obj1Class = obj1[0].__class__
+            if len(obj1) > 0:
+                obj1Class = obj1[0].__class__
+            else:
+                obj1Class = None
         else:
             obj1Class = obj1.__class__
         obj2Class = obj2.__class__
-            
+        
         menu = self.menus.get((obj1Class,obj2Class),None)
         if menu is not None:
             return menu.getMenu(obj1,obj2)
@@ -70,7 +80,7 @@ def None_TestTownCenter(obj1,obj2):
     
     menu = radialMenu.RMenu(openDelay=.5)
 
-    if len(self.buildDict) > 0:
+    if len(obj2.buildDict) > 0:
         
         buildItem = radialMenu.RMenuItem(menu,
             image = "BuildOrb.png",
@@ -141,17 +151,15 @@ def Unit_TestTownCenter(obj1,obj2):
     
 def getCGDcontextualMenu():
     
-    from Structure import Structure,TestTownCenter
-    from Entity import Entity
-    from Unit import Unit
-    
     menuMaster = ContextualMenuMaster()
     
     Unit_TestTownCenter_Menu = ContextualMenu(Unit_TestTownCenter)
-    menuMaster.addMenu(None,TestTownCenter,Unit_TestTownCenter_Menu)
+    menuMaster.addMenu(Unit,TestTownCenter,Unit_TestTownCenter_Menu)
     
     None_TestTownCenter_Menu = ContextualMenu(None_TestTownCenter)
     menuMaster.addMenu(None,TestTownCenter,None_TestTownCenter_Menu)
+    
+    print menuMaster.menus
     
     return menuMaster
 

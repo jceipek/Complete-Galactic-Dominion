@@ -58,6 +58,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.dragRect = None
         
         self.currentMenu = None
+        self.currentMenu2 = None
         
         from ContextualMenu import getCGDcontextualMenu
         self.contextualMenu = getCGDcontextualMenu()
@@ -102,16 +103,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
-        TMPmenu = self.contextualMenu.getMenu(self.selectedEntities,clicked)
+        self.currentMenu = self.contextualMenu.getMenu(self.selectedEntities,clicked)
         
-        if clicked and isinstance(clicked,TestTownCenter):# and len(self.selectedEntities)==0:
-            #self.currentMenu = clicked.getMenu()
-            self.currentMenu = clicked.getMenu2(self.selectedEntities)
-            #print self.currentMenu
-            if self.currentMenu is not None:
-                self.currentMenu.open(event.pos)
-                return
-        
+        if self.currentMenu is not None:
+            print self.currentMenu
+            self.currentMenu.open(event.pos)
+
         if clicked:
             drawRect = clicked.rect.move(clicked.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
