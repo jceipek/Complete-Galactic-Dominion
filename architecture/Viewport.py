@@ -58,7 +58,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.dragRect = None
         
         self.currentMenu = None
-        self.currentMenu2 = None
         
         from ContextualMenu import getCGDcontextualMenu
         self.contextualMenu = getCGDcontextualMenu()
