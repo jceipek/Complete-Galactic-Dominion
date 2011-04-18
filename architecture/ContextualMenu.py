@@ -137,13 +137,13 @@ def Unit_TestTownCenter(obj1,obj2):
         # tell all units to attack
         attackCallbacks = []
         for unit in obj1:
-            attackCallbacks.append(unit.initAction(obj2))
+            attackCallbacks.append(unit.initAction)
     
         attackBuilding = radialMenu.RMenuItem(menu,
             image = "AttackOrb.png",
             col = (255,0,0),
             title = 'Attack!',
-            callback = GroupCallback(attackCallbacks))
+            callback = GroupCallback(attackCallbacks,obj2))
         
         menu.addItem(attackBuilding)
         

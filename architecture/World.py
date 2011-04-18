@@ -209,22 +209,38 @@ class WorldResourceContainer(object):
     def addPlayer(self,playerID):
         
         self.resources[playerID] = PlayerResourceContainer(self.world)
+    
+    def hasPlayer(self,playerID):
         
+        return playerID in self.resources
+    
     def addResource(self,playerID,resource,amount=1):
-        
-        return self.resources[playerID].addResource(resource,amount)
+        if self.hasPlayer(playerID):
+            return self.resources[playerID].addResource(resource,amount)
+        else:
+            print 'Player %s not yet added'%playerID
+            return None
         
     def removeResource(self,playerID,resource,amount=1):
-        
-        return self.resources[playerID].removeResouce(resource,amount)
+        if self.hasPlayer(playerID):
+            return self.resources[playerID].removeResouce(resource,amount)
+        else:
+            print 'Player %s not yet added'%playerID
+            return None
         
     def getResources(self,playerID):
-        
-        return self.resources[playerID]
-        
+        if self.hasPlayer(playerID):
+            return self.resources[playerID]
+        else:
+            print 'Player %s not yet added'%playerID
+            return None
+            
     def hasResources(self,playerID,resource,amount=1):
-        
-        return self.resources[playerID].hasResources(resource,amount)
+        if self.hasPlayer(playerID):
+            return self.resources[playerID].hasResources(resource,amount)
+        else:
+            print 'Player %s not yet added'%playerID
+            return None
         
 class PlayerResourceContainer(object):
     

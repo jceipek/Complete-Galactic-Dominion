@@ -59,11 +59,12 @@ class TestTownCenter(Structure):
                 lambda : Unit('testCraft.png',self.buildX,self.buildY,self.world,'alpha','A Unit.')
             }
             
-        self.menuActors = []
-        self.menus = {}
+        #self.menuActors = []
+        #self.menus = {}
         
-        self.setupMenus()
-
+        #self.setupMenus()
+        self.owner = 'blah'
+    """
     def setupMenus(self):
         self._setupNoneMenu()
         self._setupSelfMenu()
@@ -145,15 +146,16 @@ class TestTownCenter(Structure):
             #    return self.menus['other']
             
         return None
-        
+    """
+    """    
     def draw(self,screen,worldOffset=(0,0)):
         
-        """
+        '''
         Draws the entity to the given surface.  The screen should be
         the same which the world grid is drawn on.  The worldOffset is
         the current location of the corner of the viewport in the 
         activeworld.
-        """
+        '''
         
         #gridWidth,gridHeight = self.world.gridDim
         '''
@@ -180,3 +182,4 @@ class TestTownCenter(Structure):
         screen.blit(self.image,drawRect)
         
         #self.clickMenu.draw(screen)  
+    """
