@@ -4,6 +4,7 @@ from Unit import Unit
 from Structure import Structure,TestTownCenter
 from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox, MiniMap
+from HUD import HUD
 
 from Callback import Callback
 from ContextualMenu import WayPoint
@@ -32,6 +33,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.loc = screenPos
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
+        self.hud=None
         
         if world is not None:
             self.minimap = MiniMap(self.world)

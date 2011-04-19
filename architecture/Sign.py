@@ -56,12 +56,14 @@ class Sign:
     self.rect = self.surf.get_rect()
     self.rect.topleft = self.offset
     self.surf.fill(self.color1)
+    """
     for d in (0,1):
       w, h = self.sx-1-d, self.sy-1-d
       pygame.draw.line(self.surf, self.color0, (d,d), (d,h))
       pygame.draw.line(self.surf, self.color0, (d,d), (w,d))
       pygame.draw.line(self.surf, self.color2, (w,h), (d,h))
       pygame.draw.line(self.surf, self.color2, (w,h), (w,d))
+    """
     y = self.margin
     for t in self.text:
       s = self.font.render(t, self.aa, self.tcolor)

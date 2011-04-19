@@ -1,5 +1,6 @@
 import Event
 from Viewport import Viewport
+from HUD import HUD
 from World import World
 
 class Screen(object): #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
@@ -56,8 +57,15 @@ class MainScreen(Screen):
         testViewport = Viewport(world,manager,scrollLoc,viewportPos,viewportSize)
         self.viewport = testViewport
         
+        hudPos=(0, viewportSize[1]-20)
+        hudSize=(viewportSize[0], 120)
+        self.hud=HUD(hudPos, hudSize)
+        self.viewport.hud=self.hud
+        self.hud.viewport=self.viewport
+        
     def draw(self,displaySurface,size):
         self.viewport.draw(displaySurface)
+        self.hud.draw(displaySurface)
         
         #self.viewport.drawContainedEntities()
         

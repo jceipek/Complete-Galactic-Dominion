@@ -94,6 +94,7 @@ class Entity(MapObject):
         
         self.regenRate = 0
         self._regenHealth = 0
+        self.inventory=None
 
     def _setEntityID(self,ID):
         self.entityID = ID
@@ -144,7 +145,6 @@ class Entity(MapObject):
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
-            self.drawInfo(screen)
         if self.selected or self.focused:
             self.drawHealthBar(screen,drawRect)
             self.focused = False
