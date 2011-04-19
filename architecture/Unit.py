@@ -8,7 +8,33 @@ from Inventory import Inventory
 from collections import deque
 import specialMath
 
+from Callback import Callback
+
 import pygame
+
+class BuildTask(object):
+    """
+    Used by Builders in the self.buildQueue list to build things.
+    """
+    
+    def __init__(self, buildClass, callback):
+        """
+        BuildTask containing a class of entity to be built and a 
+        callback which will build the entity.
+        
+        Precondition: callback is of class Callback.
+        """
+        object.__init__(self)
+        
+        self.buildClass = buildClass
+        self.callback = callback
+        self.timeToBuild = self.buildClass.timeToBuild
+        
+    def execute(self):
+        """
+        Runs the contained Callback, and returns the result.
+        """
+        return self.callback.execute()
 
 class Builder(Entity):
     """
@@ -57,11 +83,23 @@ class Builder(Entity):
                 return False
         return True
 
-    def addToBuildQueue(self,entityClass):
+    def addToBuildQueue(self,entityClass,buildPos=None):
+        
+        if buildPos is None:
+            self.buildX,self.buildY = self.rect.center
+        else:
+            self.buildX,self.buildY = buildPos
 
         if entityClass in self.buildDict \
         and self._hasResourcesToBuild(entityClass):
-            self.buildQueue.append(entityClass)
+            
+            #self.buildQueue.append(
+            #    (entityClass,Callback(self.buildDict[entityClass],self.buildX,self.buildY))
+            #    )
+            self.buildQueue.append(
+                BuildTask(entityClass,
+                    Callback(self.buildDict[entityClass],self.buildX,self.buildY))
+                )
 
             for resource,cost in entityClass.costToBuild:
                 self.world.removeResource(self.owner,resource,cost)
@@ -89,8 +127,11 @@ class Builder(Entity):
         """A particular builder creates builder1 after a certain timeToBuild"""
         self.currentBuildTime += self.getTimeElapsed()/1000.0
         
+        #if self.currentBuildTime > self.currentTask[0].timeToBuild:
         if self.currentBuildTime > self.currentTask.timeToBuild:
-            self.buildDict[self.currentTask]()
+            #self.buildDict[self.currentTask]()
+            #self.currentTask[1].execute()
+            self.currentTask.execute()
             self.currentBuildTime = 0
             self.nextBuildTask()
 	
@@ -159,7 +200,8 @@ class Unit(Builder):
         from Structure import TestTownCenter
         self.buildDict = {
             TestTownCenter:
-                lambda : TestTownCenter(self.buildX, self.buildY, self.world, self.owner)
+                lambda x,y : 
+                    TestTownCenter(x, y, self.world, self.owner)
             }
 
     def update(self):

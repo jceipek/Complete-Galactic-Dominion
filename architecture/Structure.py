@@ -53,5 +53,6 @@ class TestTownCenter(Structure):
         
         self.buildDict = {
             Unit: 
-                lambda : Unit('testCraft.png',self.buildX,self.buildY,self.world,'alpha','A Unit.')
+                lambda x,y: 
+                    Unit('testCraft.png',x,y,self.world,'alpha','A Unit.')
             }

@@ -175,6 +175,8 @@ def Unit_TestTownCenter(obj1,obj2):
         
 def Unit_WayPoint(obj1,obj2):
     
+    # FIXME - DOES NOT CURRENTLY WORK WITH GROUPS
+    
     menu = radialMenu.RMenu(openDelay=.2)
     
     setDestCallbacks = []
@@ -188,6 +190,28 @@ def Unit_WayPoint(obj1,obj2):
         callback = GroupCallback(setDestCallbacks,obj2.getPoint()))
 
     menu.addItem(setDestItem)
+    
+    if len(obj1[0].buildDict) > 0:
+        
+        buildItem = radialMenu.RMenuItem(menu,
+            image = "BuildOrb.png",
+            col = (255,0,255),
+            title = 'Build Options')
+        
+        menu.addItem(buildItem)
+        
+        buildMenu = radialMenu.RMenu()
+        buildItem.addSubmenu(buildMenu)
+        
+        tmpcounter = 0
+        for buildType in obj1[0].buildDict:
+            curItem = radialMenu.RMenuItem(menu,
+                image = "orb.png",
+                col = (255,0,0),
+                title = 'Build Option #'+str(tmpcounter),
+                callback = Callback(obj1[0].addToBuildQueue,buildType,obj2.getPoint()))
+            buildMenu.addItem(curItem)
+            tmpcounter+=1
         
     return menu
     
@@ -231,7 +255,7 @@ def None_Unit(obj1,obj2):
                 image = "orb.png",
                 col = (255,0,0),
                 title = 'Build Option #'+str(tmpcounter),
-                callback = Callback(obj2.addToBuildQueue,buildType))
+                callback = Callback(obj2.addToBuildQueue,buildType,obj2.rect.center))
             buildMenu.addItem(curItem)
             tmpcounter+=1
 
