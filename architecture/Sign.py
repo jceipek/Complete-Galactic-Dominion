@@ -69,9 +69,12 @@ class Sign:
       if self.centered:
         r.midtop = (self.rect.centerx, y)
       else:
-        r.topleft = (self.margin, y)
+        r.topleft = (self.margin+self.imageSize, y)
       self.surf.blit(s, r)
       y += self.fsize
+    if not self.image==None:
+        thumb=pygame.transform.scale(self.image, (self.imageSize, self.imageSize))
+        self.surf.blit(thumb, (self.margin, self.margin))
     self.rendered = True
   def draw(self, surf, f = 1):
     if not self.rendered: self.render()

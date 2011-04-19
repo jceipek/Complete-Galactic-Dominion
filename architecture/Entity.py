@@ -167,7 +167,7 @@ class Entity(MapObject):
     def drawInfo(self, screen): #FIXME I am shitty.
         """Displays health and description"""
         text = '%s \n Description: \n %s' % (self.healthStr(), self.description)
-        textBox=Sign(150, image=self(0,600))
+        textBox=Sign(150, (0, 600), image=self.image)
         textBox.addtext(text)
         textBox.render()
         textBox.draw(screen)
