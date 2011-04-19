@@ -6,6 +6,7 @@ from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox, MiniMap
 
 from Callback import Callback
+from ContextualMenu import WayPoint
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
@@ -102,10 +103,19 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
-        self.currentMenu = self.contextualMenu.getMenu(self.selectedEntities,clicked)
+        if clicked:
+            drawRect = clicked.rect.move(clicked.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
         
+            if not drawRect.collidepoint(pos):
+                clicked = None
+        
+        if clicked is not None:
+            self.currentMenu = self.contextualMenu.getMenu(self.selectedEntities,clicked)
+        else:
+            self.currentMenu = self.contextualMenu.getMenu(self.selectedEntities,WayPoint(*destCart))
+            
         if self.currentMenu is not None:
-            print self.currentMenu
             self.currentMenu.open(event.pos)
 
         if clicked:
@@ -162,7 +172,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
             for entity in self.selectedEntities:
-                if not entity.status ==Locals.MOVING:
+                if not entity.status==Locals.MOVING:
                     entity.dest=entity.realCenter
                 entity.status=Locals.MOVING
                 dx = entity.rect.center[0] - eCenter[0]
@@ -272,8 +282,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             else:
                 clicked.select()
                 self.selectedEntities.append(clicked)
-                print clicked.healthStr()
-                if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
+                #print clicked.healthStr()
+                #if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
     
     def updateMenu(self,eventPos):
         if self.currentMenu is not None:

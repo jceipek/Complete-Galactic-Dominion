@@ -5,6 +5,7 @@ from Callback import Callback, GroupCallback
 from Structure import Structure,TestTownCenter
 from Entity import Entity
 from Unit import Unit
+from NaturalObject import Gold
 
 class ContextualMenuMaster(object):
     """
@@ -87,11 +88,21 @@ class ContextualMenu(object):
         """
         return self._menuMakerFunction(obj1,obj2)
 
+class WayPoint(object):
+    
+    def __init__(self,x,y):
+        object.__init__(self)
+        
+        self.x,self.y = x,y
+    
+    def getPoint(self):
+        return self.x,self.y
+
 #### ENTER CUSTOM DEFINED MENU FUNCTIONS HERE ####
 
 def None_TestTownCenter(obj1,obj2):
     
-    menu = radialMenu.RMenu(openDelay=.5)
+    menu = radialMenu.RMenu(openDelay=.2)
 
     if len(obj2.buildDict) > 0:
         
@@ -111,7 +122,7 @@ def None_TestTownCenter(obj1,obj2):
                 image = "orb.png",
                 col = (255,0,0),
                 title = 'Build Option #'+str(tmpcounter),
-                callback = Callback(obj2.addToBuildQueue,Unit))
+                callback = Callback(obj2.addToBuildQueue,buildType))
                 #callback = self.buildDict[buildType])
             buildMenu.addItem(curItem)
             tmpcounter+=1
@@ -127,7 +138,7 @@ def None_TestTownCenter(obj1,obj2):
     
 def Unit_TestTownCenter(obj1,obj2):
     
-    menu = radialMenu.RMenu(openDelay=.5)
+    menu = radialMenu.RMenu(openDelay=.2)
     
     if isinstance(obj1,list):
         hasSameOwner = (obj1[0].owner == obj2.owner)
@@ -161,6 +172,77 @@ def Unit_TestTownCenter(obj1,obj2):
         menu.addItem(attackBuilding)
         
         return menu
+        
+def Unit_WayPoint(obj1,obj2):
+    
+    menu = radialMenu.RMenu(openDelay=.2)
+    
+    setDestCallbacks = []
+    for unit in obj1:
+        setDestCallbacks.append(unit.addToPath)
+    
+    setDestItem = radialMenu.RMenuItem(menu,
+        image = "DestOrb.png",
+        col = (255,255,255),
+        title = 'Setting destination',
+        callback = GroupCallback(setDestCallbacks,obj2.getPoint()))
+
+    menu.addItem(setDestItem)
+        
+    return menu
+    
+def Unit_Resource(obj1,obj2):
+    
+    menu = radialMenu.RMenu(openDelay=.2)
+    
+    setGatherCallbacks = []
+    for unit in obj1:
+        setGatherCallbacks.append(unit.initAction)
+    
+    gatherItem = radialMenu.RMenuItem(menu,
+        image = "orbWhiteBlack.png",
+        col = (255,255,255),
+        title = 'Gathering',
+        callback = GroupCallback(setGatherCallbacks,obj2))
+
+    menu.addItem(gatherItem)
+        
+    return menu
+    
+def None_Unit(obj1,obj2):
+    
+    menu = radialMenu.RMenu(openDelay=.2)
+
+    if len(obj2.buildDict) > 0:
+        
+        buildItem = radialMenu.RMenuItem(menu,
+            image = "BuildOrb.png",
+            col = (255,0,255),
+            title = 'Build Options')
+        
+        menu.addItem(buildItem)
+        
+        buildMenu = radialMenu.RMenu()
+        buildItem.addSubmenu(buildMenu)
+        
+        tmpcounter = 0
+        for buildType in obj2.buildDict:
+            curItem = radialMenu.RMenuItem(menu,
+                image = "orb.png",
+                col = (255,0,0),
+                title = 'Build Option #'+str(tmpcounter),
+                callback = Callback(obj2.addToBuildQueue,buildType))
+            buildMenu.addItem(curItem)
+            tmpcounter+=1
+
+    showDesc = radialMenu.RMenuItem(menu,
+        image = "orbQBlack.png",
+        col = (255,0,255),
+        title = 'Description',
+        callback = Callback(obj2.showDescription))
+    menu.addItem(showDesc)
+
+    return menu
     
 def getCGDcontextualMenu():
     
@@ -171,6 +253,15 @@ def getCGDcontextualMenu():
     
     None_TestTownCenter_Menu = ContextualMenu(None_TestTownCenter)
     menuMaster.addMenu(None,TestTownCenter,None_TestTownCenter_Menu)
+    
+    Unit_WayPoint_Menu = ContextualMenu(Unit_WayPoint)
+    menuMaster.addMenu(Unit, WayPoint, Unit_WayPoint_Menu)
+    
+    Unit_Resource_Menu = ContextualMenu(Unit_Resource)
+    menuMaster.addMenu(Unit, Gold, Unit_Resource_Menu)
+    
+    None_Unit_Menu = ContextualMenu(None_Unit)
+    menuMaster.addMenu(None, Unit, None_Unit_Menu)
     
     print menuMaster.menus
     
@@ -198,4 +289,3 @@ if __name__=="__main__":
     print mtestmaster.getMenu(t3,t2)
     
     getCGDcontextualMenu()
-    

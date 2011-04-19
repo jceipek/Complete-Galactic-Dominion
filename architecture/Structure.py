@@ -11,12 +11,9 @@ class Structure(Builder):
     acceptableResources = []
 
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
-        Builder.__init__(self, imagePath, x, y, world, colorkey, description)
-
-        # first to define these attributes
-        # sets where a new entity should be constructed
-        self.buildX,self.buildY = self.rect.center
+                 description = 'No information available.', owner='tmp'):
+        Builder.__init__(self, imagePath, x, y, world, colorkey, description,
+            owner)
 
         self.status = Locals.IDLE
         self.maxHealth=9000
@@ -51,12 +48,10 @@ class TestTownCenter(Structure):
 
     acceptableResources = [Gold]
     
-    def __init__(self, x, y, world):
-        Structure.__init__(self, 'TownCenter.png', x, y, world, 'alpha', 'Test building.')
-
+    def __init__(self, x, y, world, owner='tmp'):
+        Structure.__init__(self, 'TownCenter.png', x, y, world, 'alpha', 'Test building.',owner)
+        
         self.buildDict = {
             Unit: 
                 lambda : Unit('testCraft.png',self.buildX,self.buildY,self.world,'alpha','A Unit.')
             }
-            
-        self.owner = 'blah'

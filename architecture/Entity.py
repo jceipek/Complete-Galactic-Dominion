@@ -18,7 +18,7 @@ class Entity(MapObject):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
-                 movable = False):
+                 movable = False, owner='tmp'):
         """
         Set up an Entity with an image loaded from the filepath
         specified by imagePath, an absolute x and y position in a given
@@ -57,7 +57,7 @@ class Entity(MapObject):
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
-        self.owner = 'tmp'
+        self.owner = owner
         
         # adds the entity to the provided world
         self.entityID = None

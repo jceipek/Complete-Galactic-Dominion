@@ -29,9 +29,10 @@ class Builder(Entity):
     """
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
+                 description = 'No information available.', owner='tmp'):
 		     
-        Entity.__init__(self,imagePath,x,y,world,colorkey,description)
+        Entity.__init__(self,imagePath,x,y,world,colorkey,description,
+            owner)
         
         self.blockable=True
         
@@ -44,6 +45,10 @@ class Builder(Entity):
         self.currentTask = None
         self.currentBuildTime = 0
         self.inventory=Inventory()
+        
+        # first to define these attributes
+        # sets where a new entity should be constructed
+        self.buildX,self.buildY = self.rect.center
 
     def _hasResourcesToBuild(self,entityClass):
         
@@ -53,10 +58,11 @@ class Builder(Entity):
         return True
 
     def addToBuildQueue(self,entityClass):
+
         if entityClass in self.buildDict \
         and self._hasResourcesToBuild(entityClass):
             self.buildQueue.append(entityClass)
-            
+
             for resource,cost in entityClass.costToBuild:
                 self.world.removeResource(self.owner,resource,cost)
 
@@ -82,7 +88,7 @@ class Builder(Entity):
     def Build(self):
         """A particular builder creates builder1 after a certain timeToBuild"""
         self.currentBuildTime += self.getTimeElapsed()/1000.0
-
+        
         if self.currentBuildTime > self.currentTask.timeToBuild:
             self.buildDict[self.currentTask]()
             self.currentBuildTime = 0
@@ -115,8 +121,10 @@ class Unit(Builder):
     costToBuild = [(Gold,75)]
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.',loadList=None):
-        Builder.__init__(self,imagePath,x,y,world,colorkey,description)
+                 description = 'No information available.',loadList=None,
+                 owner='tmp'):
+        Builder.__init__(self,imagePath,x,y,world,colorkey,description,
+            owner='tmp')
 	
         #self.__class__.allUnits.add(self)
         self.imagePath=imagePath
@@ -147,6 +155,12 @@ class Unit(Builder):
             self.objectOfAction = loadList['objectOfAction']
         
         self.regenRate = .5
+        
+        from Structure import TestTownCenter
+        self.buildDict = {
+            TestTownCenter:
+                lambda : TestTownCenter(self.buildX, self.buildY, self.world, self.owner)
+            }
 
     def update(self):
         """Called by game each frame to update object."""
@@ -154,6 +168,8 @@ class Unit(Builder):
         if not self.hasFullHealth():
             self.regenerate()
         if self.status==Locals.MOVING:
+            self.move()
+        elif self.status==Locals.IDLE:
             self.move()
         else: self.path=[]
         if self.status==Locals.ATTACKING:
@@ -165,6 +181,11 @@ class Unit(Builder):
 				self.status=Locals.IDLE
 				self.objectOfAction=None
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
+        if self.currentTask == None:
+            self.nextBuildTask()
+        
+        if not self.currentTask == None:
+            self.Build()
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
@@ -275,8 +296,6 @@ class Unit(Builder):
         size of the world in pixels.  Both the position and the 
         destination point wrap if the grid boundary is crossed.
         """
-        if self.entityID == 1:
-            print self.realCenter, self.dest
 
         for i in xrange(2):
             if not 0<self.realCenter[i]<self.worldSize[i]:
@@ -293,6 +312,7 @@ class Unit(Builder):
         to the path.
         """
         self.path.append(list(coord))
+        print self.path
         
     def getMiniMapColor(self):
         return (20,20,255)
