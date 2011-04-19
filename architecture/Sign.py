@@ -11,18 +11,24 @@ class Fonts:
 
 class Sign:
 
-  def __init__(self, sx, offset, centered = False, margin = 5, fname = None, fsize = 14):
+  def __init__(self, sx, offset, image= None , imageSize= 50, centered = False, margin = 5, fname = None, fsize = 14):
     
     self.color0 = 150, 150, 150
     self.color1 = 180, 180, 180
     self.color2 = 100, 100, 100
     self.tcolor = 0, 0, 0
 
+    self.image=image
+    if self.image==None:
+        self.imageSize=0
+    else: self.imageSize=imageSize
+    
     self.fname = fname
     self.fsize = fsize
     self.offset = offset
     self.font = Fonts().getfont(fname, fsize)
     self.sx, self.sy = sx, None
+    self.tx=sx-self.imageSize
     self.surf = self.rect = None
     self.centered = centered
     self.text = []
@@ -37,7 +43,7 @@ class Sign:
     for t in text.split("\n"):
       while t:
         r = len(t)
-        while self.font.size(t[0:r-1])[0] + self.margin * 2 > self.sx:
+        while self.font.size(t[0:r-1])[0] + self.margin * 2 > self.tx:
           p = t.rfind(" ", 0, r-1)
           if p == -1: r -= 1
           else: r = p
