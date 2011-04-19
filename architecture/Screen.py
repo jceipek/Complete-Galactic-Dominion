@@ -59,10 +59,7 @@ class MainScreen(Screen):
     def draw(self,displaySurface,size):
         self.viewport.draw(displaySurface)
         
-        #self.viewport.drawContainedEntities()
-        
     def processMouseMovedEvent(self,event):
-        #self.viewport.setScrollSpeed(event.pos)
         self.viewport.mouseMoved(event)
 
     def processMouseClickEvent(self,event):

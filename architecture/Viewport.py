@@ -292,7 +292,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def selectMenu(self,eventPos):
         if self.currentMenu is not None:
-            #print 'MOUSE BUTTON UP'
             self.currentMenu.select(eventPos)
         self.currentMenu = None
     

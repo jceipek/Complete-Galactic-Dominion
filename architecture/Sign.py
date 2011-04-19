@@ -1,5 +1,22 @@
 import pygame
 
+"""
+
+CREDITS FOR THIS MODULE: 
+
+Christopher Night, Cambridge MA
+
+Universe Factory games
+
+Homepage
+
+Email: Cosmologicon@gmail.com 
+
+links - http://www.pygame.org/project-Panspermia-1126-.html
+      - http://pyweek.org/u/Cosmologicon/
+
+"""
+
 class Fonts:
   fonts = {}
   def getfont(self, fname = None, fsize = 14):
