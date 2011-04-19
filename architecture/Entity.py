@@ -4,7 +4,7 @@ from collections import deque
 from GameData import Locals # includes statuses
 import specialMath
 from Overlay import HealthBar
-#from Sign import Sign
+from Sign import Sign
 
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
@@ -18,7 +18,7 @@ class Entity(MapObject):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
-                 movable = False):
+                 movable = False, owner='tmp'):
         """
         Set up an Entity with an image loaded from the filepath
         specified by imagePath, an absolute x and y position in a given
@@ -50,8 +50,6 @@ class Entity(MapObject):
         """
         self.world = world
         
-        self.owner = 'tmp'
-        
         # Prevents entities from being initialized off of the grid
         self.worldSize = self.world.grid.getCartGridDimensions()
         x = x%self.worldSize[0]
@@ -59,10 +57,7 @@ class Entity(MapObject):
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
-        #self.__class__.IDcounter += 1 # Increment class counter
-        
-        # sets entityID.  Unique for all Entities
-        #self.entityID = self.__class__.IDcounter
+        self.owner = owner
         
         # adds the entity to the provided world
         self.entityID = None
@@ -149,7 +144,7 @@ class Entity(MapObject):
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
-            #self.drawInfo(screen)
+            self.drawInfo(screen)
         if self.selected or self.focused:
             self.drawHealthBar(screen,drawRect)
             self.focused = False
@@ -162,6 +157,13 @@ class Entity(MapObject):
     def drawHealthBar(self, screen, drawRect):
         self.healthBar.draw(screen,drawRect.midtop)
 
+    def getInfo(self):
+        text = '%s \n Description: \n %s' % (self.healthStr(), self.description)
+        textBox=Sign(150, (0,0))
+        textBox.addtext(text)
+        textBox.render()
+        return textBox
+
     def drawInfo(self, screen): #FIXME I am shitty.
         """Displays health and description"""
         text = '%s \n Description: \n %s' % (self.healthStr(), self.description)
@@ -169,7 +171,6 @@ class Entity(MapObject):
         textBox.addtext(text)
         textBox.render()
         textBox.draw(screen)
-        
 
     def healthStr(self):
         return 'Health: \n' +str(self.curHealth) + ' / ' +str(self.maxHealth)

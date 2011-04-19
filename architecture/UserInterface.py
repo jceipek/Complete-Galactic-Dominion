@@ -26,7 +26,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             Event.SelectionEvent, Event.SingleAddSelectionEvent, \
             Event.InitiateActionEvent, \
             Event.UpdateEvent, Event.WorldChangeEvent, \
-            Event.DisplaySurfaceCreatedEvent, Event.SetDestinationEvent, \
+            Event.DisplaySurfaceCreatedEvent, Event.CompleteActionEvent, \
             Event.DragBeganEvent, Event.DragEvent, \
             Event.DragCompletedEvent, Event.AddDragCompletedEvent, \
             Event.NumberKeyPressEvent ]
@@ -42,7 +42,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         from Screen import MainScreen
         from Overlay import DebugOverlay
         testScreen = MainScreen()
-        testScreen.TEST_createViewport(self.activeWorld)
+        testScreen.TEST_createViewport(self.activeWorld,self.manager)
         self.activeScreen = testScreen
         self.debugOverlay = DebugOverlay()
 
@@ -65,9 +65,12 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance(event, Event.MouseMovedEvent):
             if self.activeScreen: 
                 self.activeScreen.processMouseMovedEvent(event)
-        elif isinstance(event, Event.SetDestinationEvent):
+        #elif isinstance(event, Event.SetDestinationEvent):
+        #    if self.activeScreen:
+        #        self.activeScreen.processSetDestinationEvent(event)
+        elif isinstance(event, Event.CompleteActionEvent):
             if self.activeScreen:
-                self.activeScreen.processSetDestinationEvent(event)
+                self.activeScreen.processCompleteActionEvent(event)
         elif isinstance(event,Event.DragEvent):
             if self.activeScreen:
                 self.activeScreen.processDragEvent(event)

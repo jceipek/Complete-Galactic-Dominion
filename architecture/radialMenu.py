@@ -32,7 +32,9 @@ class RMenu():
     @param visible: whether the menu can be seen (it is open)
     @param root: a list of the menu items contained in the menu
     """
-    def __init__(self,loc = (0,0),rad = 80,minDist=15,title=None):
+    def __init__(self,loc = (0,0),rad = 80,minDist=15,title=None,
+        openDelay=0):
+            
         self.root = []
         self.loc = loc
         self.mousePos = loc
@@ -41,14 +43,25 @@ class RMenu():
         self.visible = False
         self.title=title
         
+        self._timeFocused = 0
+        self._openDelay = openDelay
+        
     def addItem(self,item):
         self.root.append(item)
+        
+    def _delayedOpen(self,msTimeAdd):
+        self._timeFocused+=msTimeAdd/1000.0
+        if self._timeFocused >= self._openDelay:
+            self._timeFocused=0
+            self.visible=True
+            print 'Opening...',self.title
     
     def open(self,loc):
         self.loc = loc
         self.mousePos = loc
-        self.visible = True
-        print 'Opening...',self.title
+        if self._openDelay <= 0:
+            self.visible = True
+            print 'Opening...',self.title
         
     def select(self,loc):
         if self.visible:
@@ -169,6 +182,7 @@ class RMenuItem(DrawableObject):
                 self.submenu.update(mouseLoc)
     
     def highlight(self,surf,loc):
+        loc = (int(loc[0]),int(loc[1]))
         pygame.draw.circle(surf, self.color, loc, self.size,2)
         
         

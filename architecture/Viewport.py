@@ -5,6 +5,9 @@ from Structure import Structure,TestTownCenter
 from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox, MiniMap
 
+from Callback import Callback
+from ContextualMenu import WayPoint
+
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
     Acts as a "window" into the world it contains. Includes deadzone dimensions
@@ -20,9 +23,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     @param selector: a selection rectangle that is activated and drawn when necessary #FIXME: NOT YET IMPLEMENTED
     """
     
-    def __init__(self,world,scrollLoc,screenPos,size):
+    def __init__(self,world,manager,scrollLoc,screenPos,size):
         self.world = world
 
+        self.manager = manager
         self.scrollLoc = scrollLoc
         self.cartScrollLoc = specialMath.isoToCart(scrollLoc)
         self.loc = screenPos
@@ -55,6 +59,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.dragRect = None
         
         self.currentMenu = None
+        
+        from ContextualMenu import getCGDcontextualMenu
+        self.contextualMenu = getCGDcontextualMenu()
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
@@ -93,13 +100,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             cartPos = specialMath.isoToCart(pos)
             destCart = self.cartScrollLoc[0] + cartPos[0], \
                         self.cartScrollLoc[1] + cartPos[1]
-
-        clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
-        if clicked and isinstance(clicked,TestTownCenter) and len(self.selectedEntities)==0:
-            self.currentMenu = clicked.getMenu()
-            self.currentMenu.open(event.pos)
-            return
+        clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
         if clicked:
             drawRect = clicked.rect.move(clicked.drawOffset)
@@ -107,7 +109,77 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
             if not drawRect.collidepoint(pos):
                 clicked = None
+        
+        if clicked is not None:
+            self.currentMenu = self.contextualMenu.getMenu(self.selectedEntities,clicked)
+        else:
+            self.currentMenu = self.contextualMenu.getMenu(self.selectedEntities,WayPoint(*destCart))
+            
+        if self.currentMenu is not None:
+            self.currentMenu.open(event.pos)
+
+        if clicked:
+            drawRect = clicked.rect.move(clicked.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+        
+            if not drawRect.collidepoint(pos):
+                clicked = None
     
+    def completeActionEvent(self,event):
+        attacking = False
+        pos = event.pos
+        
+        # Performs action indicated by menu if menu is visible
+        # and exists.  Otherwise, the menu reference is destroyed.
+        if self.currentMenu is not None and self.currentMenu.visible:
+            self.selectMenu(pos)
+            return # Do not do anything else if the menu is selected
+        else:
+            self.currentMenu = None
+        
+        # Sets destination in cartesian coordinates
+        # Handles minimap clicks
+        if self.minimap.rect.collidepoint(pos):
+            mapClickPoint = self.minimap.clickToGridPos(pos)
+            if mapClickPoint is not None:
+                destCart = mapClickPoint
+            else:            
+                cartPos = specialMath.isoToCart(pos)
+                destCart = self.cartScrollLoc[0] + cartPos[0], \
+                            self.cartScrollLoc[1] + cartPos[1]
+        else:
+            cartPos = specialMath.isoToCart(pos)
+            destCart = self.cartScrollLoc[0] + cartPos[0], \
+                        self.cartScrollLoc[1] + cartPos[1]
+        
+        # Determines closest entity to a click
+        clicked = specialMath.closestEntity(self.viewportEntities,pos)
+        
+        if clicked:
+            drawRect = clicked.rect.move(clicked.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
+        
+            if not drawRect.collidepoint(pos):
+                clicked = None
+        
+        # clicked is now either None or the closest Entity to the click
+        if clicked:
+            for selected in self.selectedEntities:
+                attacking=True
+                if isinstance(selected,Unit):
+                    selected.initAction(clicked)
+       
+        if not attacking:
+            eCenter = specialMath.centerOfEntityList(self.selectedEntities)
+            for entity in self.selectedEntities:
+                if not entity.status==Locals.MOVING:
+                    entity.dest=entity.realCenter
+                entity.status=Locals.MOVING
+                dx = entity.rect.center[0] - eCenter[0]
+                dy = entity.rect.center[1] - eCenter[1]
+                newLoc = (dx+destCart[0],dy+destCart[1])
+                entity.addToPath(newLoc)
+  
     def startDrag(self,event):
             self.dragRect = DragBox(event.pos)
         
@@ -136,56 +208,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         """
         if not self.dragRect == None:
             self.dragRect.draw(self.surface)
-           
-    def setDestinationEvent(self, event):
-        attacking=False
-        pos = event.pos
-        
-        if self.selectMenu is not None:
-            self.selectMenu(pos)
-        
-        if self.minimap.rect.collidepoint(pos):
-            mapClickPoint = self.minimap.clickToGridPos(pos)
-            if mapClickPoint is not None:
-                destCart = mapClickPoint
-            else:            
-                cartPos = specialMath.isoToCart(pos)
-                destCart = self.cartScrollLoc[0] + cartPos[0], \
-                            self.cartScrollLoc[1] + cartPos[1]
-        else:
-            cartPos = specialMath.isoToCart(pos)
-            destCart = self.cartScrollLoc[0] + cartPos[0], \
-                        self.cartScrollLoc[1] + cartPos[1]
-
-        clicked = specialMath.closestEntity(self.viewportEntities,pos)
-        
-        if clicked:
-            drawRect = clicked.rect.move(clicked.drawOffset)
-            drawRect.center = specialMath.cartToIso(drawRect.center)
-        
-            if not drawRect.collidepoint(pos):
-                clicked = None
-        
-        if clicked:
-            for selected in self.selectedEntities:
-                attacking=True
-                if isinstance(selected,Unit):
-                    selected.initAction(clicked)
-            #if isinstance(clicked,Structure):
-            #    clicked.addToBuildQueue(Unit)
-
-                       
-        if not attacking:
-            eCenter = specialMath.centerOfEntityList(self.selectedEntities)
-            for entity in self.selectedEntities:
-                if not entity.status ==Locals.MOVING:
-                    entity.dest=entity.realCenter
-                entity.status=Locals.MOVING
-                dx = entity.rect.center[0] - eCenter[0]
-                dy = entity.rect.center[1] - eCenter[1]
-                newLoc = (dx+destCart[0],dy+destCart[1])
-                entity.addToPath(newLoc)
-        
+    
     def dragSelect(self,event):
         """
         Fill this in.
@@ -259,8 +282,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             else:
                 clicked.select()
                 self.selectedEntities.append(clicked)
-                print clicked.healthStr()
-                if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
+                #print clicked.healthStr()
+                #if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
     
     def updateMenu(self,eventPos):
         if self.currentMenu is not None:
@@ -353,6 +376,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def processUpdateEvent(self,event):
         self.setViewportEntities()
         timeElapsed = event.elapsedTimeSinceLastFrame
+        
+        if self.currentMenu is not None and not self.currentMenu.visible:
+            self.currentMenu._delayedOpen(timeElapsed)
+        
         self.scrollBasedOnElapsedTime(timeElapsed)
         self.world.elapsedTimeSinceLastFrame = timeElapsed
     

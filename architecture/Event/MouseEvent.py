@@ -86,3 +86,9 @@ class InitiateActionEvent(Event):
         Event.__init__(self)
         self.pos = posxy
         self.verboseInfo = "\tPosition: " + str(self.pos) + "\n"
+        
+class CompleteActionEvent(Event):
+    def __init__(self,posxy):
+        Event.__init__(self)
+        self.pos = posxy
+        self.verboseInfo = "\tPosition: " + str(self.pos) + "\n"

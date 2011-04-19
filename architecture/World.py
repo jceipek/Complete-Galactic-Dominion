@@ -89,22 +89,6 @@ class World(object):
 
         # List of tuples - y position of rectangle (bottom) and entity
         entitySortList = []
-        
-        '''
-        xmod,ymod = self.gridDim
-        left,top=viewRect.topleft
-        right,bottom=viewRect.bottomright
-        '''
-        
-        #print self.gridDim
-        #viewRect.top = viewRect.top%ymod
-        #viewRect.left = viewRect.left%xmod
-        
-        # Determines entities in the world which collide with the screen
-        # and appends them to a list
-        #print 'Viewing rect: ',viewRect
-        
-        entCount=0
 
         for entity in self.allEntities.values():
                   
@@ -112,7 +96,6 @@ class World(object):
                 #if entity.collRect.colliderect(viewRect):
                 if self.collideRectDiamond(entity.rect,view):
                     entitySortList.append((entity.rect.bottom,entity))
-                    entCount+=1
                     entity.drawOffset=-view[0][0],-view[0][1]
                     break # if it collides, go to next loop
 
@@ -139,9 +122,6 @@ class World(object):
         bottom,top=sorted((top,bottom))
         left,right=sorted((left,right))
         
-        #pHigh,pLow,pLeft,pRight=diamond
-        #print diamond
-        
         # Point farthest to the right
         pRight=max(diamond)
         # Point farthest to the left
@@ -156,16 +136,12 @@ class World(object):
                 pLow=diamond[i]
         
         if self.line(pHigh,pLeft,right)<=bottom:
-            #print 'fail1'
             return False
         if self.line(pLow,pRight,left)>=top:
-            #print 'fail2'
             return False
         if self.line(pHigh,pRight,left)<=bottom:
-            #print 'fail3'
             return False
         if self.line(pLow,pLeft,right)>=top:
-            #print 'fail4'
             return False
         return True
     
@@ -190,6 +166,9 @@ class World(object):
         
     def removeResource(self,playerID,resource,amount=1):
         return self.resourceContainer.removeResource(playerID,resource,amount)
+        
+    def hasResources(self,playerID,resource,amount=1):
+        return self.resourceContainer.hasResources(playerID,resource,amount)
 
 class WorldResourceContainer(object):
     """
@@ -206,18 +185,38 @@ class WorldResourceContainer(object):
     def addPlayer(self,playerID):
         
         self.resources[playerID] = PlayerResourceContainer(self.world)
+    
+    def hasPlayer(self,playerID):
         
+        return playerID in self.resources
+    
     def addResource(self,playerID,resource,amount=1):
-        
-        return self.resources[playerID].addResource(resource,amount)
+        if self.hasPlayer(playerID):
+            return self.resources[playerID].addResource(resource,amount)
+        else:
+            print 'Player %s not yet added'%playerID
+            return None
         
     def removeResource(self,playerID,resource,amount=1):
-        
-        return self.resources[playerID].removeResouce(resource,amount)
+        if self.hasPlayer(playerID):
+            return self.resources[playerID].removeResouce(resource,amount)
+        else:
+            print 'Player %s not yet added'%playerID
+            return None
         
     def getResources(self,playerID):
-        
-        return self.resources[playerID]
+        if self.hasPlayer(playerID):
+            return self.resources[playerID]
+        else:
+            print 'Player %s not yet added'%playerID
+            return None
+            
+    def hasResources(self,playerID,resource,amount=1):
+        if self.hasPlayer(playerID):
+            return self.resources[playerID].hasResources(resource,amount)
+        else:
+            print 'Player %s not yet added'%playerID
+            return None
         
 class PlayerResourceContainer(object):
     
@@ -251,3 +250,16 @@ class PlayerResourceContainer(object):
             else:
                 self.resources[resource]=0
                 return resourcesRemaining
+                
+    def hasResources(self,resource,amount):
+        
+        if resource in self.resources:
+            return self.resources[resource] >= amount
+        return False
+        
+    def __str__(self):
+		s='Player Resources: \n'
+		for resource in self.resources:
+			sitem=str(resources).rsplit('.',1)[1].strip(punctuation)
+			s+= '%s : %d \n' % (sitem, self.resources[resources])
+		return s	
