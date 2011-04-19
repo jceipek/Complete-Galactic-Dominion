@@ -28,18 +28,24 @@ class Fonts:
 
 class Sign:
 
-  def __init__(self, sx, offset, centered = False, margin = 5, fname = None, fsize = 14):
+  def __init__(self, sx, offset, image= None , imageSize= 50, centered = False, margin = 5, fname = None, fsize = 14):
     
     self.color0 = 150, 150, 150
     self.color1 = 180, 180, 180
     self.color2 = 100, 100, 100
     self.tcolor = 0, 0, 0
 
+    self.image=image
+    if self.image==None:
+        self.imageSize=0
+    else: self.imageSize=imageSize
+    
     self.fname = fname
     self.fsize = fsize
     self.offset = offset
     self.font = Fonts().getfont(fname, fsize)
     self.sx, self.sy = sx, None
+    self.tx=sx-self.imageSize
     self.surf = self.rect = None
     self.centered = centered
     self.text = []
@@ -54,7 +60,7 @@ class Sign:
     for t in text.split("\n"):
       while t:
         r = len(t)
-        while self.font.size(t[0:r-1])[0] + self.margin * 2 > self.sx:
+        while self.font.size(t[0:r-1])[0] + self.margin * 2 > self.tx:
           p = t.rfind(" ", 0, r-1)
           if p == -1: r -= 1
           else: r = p
@@ -67,12 +73,14 @@ class Sign:
     self.rect = self.surf.get_rect()
     self.rect.topleft = self.offset
     self.surf.fill(self.color1)
+    """
     for d in (0,1):
       w, h = self.sx-1-d, self.sy-1-d
       pygame.draw.line(self.surf, self.color0, (d,d), (d,h))
       pygame.draw.line(self.surf, self.color0, (d,d), (w,d))
       pygame.draw.line(self.surf, self.color2, (w,h), (d,h))
       pygame.draw.line(self.surf, self.color2, (w,h), (w,d))
+    """
     y = self.margin
     for t in self.text:
       s = self.font.render(t, self.aa, self.tcolor)
@@ -80,9 +88,12 @@ class Sign:
       if self.centered:
         r.midtop = (self.rect.centerx, y)
       else:
-        r.topleft = (self.margin, y)
+        r.topleft = (self.margin+self.imageSize, y)
       self.surf.blit(s, r)
       y += self.fsize
+    if not self.image==None:
+        thumb=pygame.transform.scale(self.image, (self.imageSize, self.imageSize))
+        self.surf.blit(thumb, (self.margin, self.margin))
     self.rendered = True
   def draw(self, surf, f = 1):
     if not self.rendered: self.render()
