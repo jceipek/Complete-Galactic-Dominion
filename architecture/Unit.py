@@ -29,12 +29,24 @@ class BuildTask(object):
         self.buildClass = buildClass
         self.callback = callback
         self.timeToBuild = self.buildClass.timeToBuild
+        self.buildTime = 0
         
     def execute(self):
         """
         Runs the contained Callback, and returns the result.
+        Can only be called once.  This allows for groups to work
+        on the same BuildTask without its Callback being fired twice.
         """
-        return self.callback.execute()
+        if self.callback is not None:
+            callbackReturn = self.callback.execute()
+        self.callback = None
+        return callbackReturn
+        
+    def addTime(self,time):
+        self.buildTime+=time
+        
+    def isReady(self):
+        return self.buildTime >= self.timeToBuild
 
 class Builder(Entity):
     """
@@ -69,7 +81,6 @@ class Builder(Entity):
         # Queue of entities to build
         self.buildQueue = []
         self.currentTask = None
-        self.currentBuildTime = 0
         self.inventory=Inventory()
         
         # first to define these attributes
@@ -93,9 +104,6 @@ class Builder(Entity):
         if entityClass in self.buildDict \
         and self._hasResourcesToBuild(entityClass):
             
-            #self.buildQueue.append(
-            #    (entityClass,Callback(self.buildDict[entityClass],self.buildX,self.buildY))
-            #    )
             self.buildQueue.append(
                 BuildTask(entityClass,
                     Callback(self.buildDict[entityClass],self.buildX,self.buildY))
@@ -125,14 +133,11 @@ class Builder(Entity):
     
     def Build(self):
         """A particular builder creates builder1 after a certain timeToBuild"""
-        self.currentBuildTime += self.getTimeElapsed()/1000.0
+
+        self.currentTask.addTime(self.getTimeElapsed()/1000.0)
         
-        #if self.currentBuildTime > self.currentTask[0].timeToBuild:
-        if self.currentBuildTime > self.currentTask.timeToBuild:
-            #self.buildDict[self.currentTask]()
-            #self.currentTask[1].execute()
+        if self.currentTask.isReady():
             self.currentTask.execute()
-            self.currentBuildTime = 0
             self.nextBuildTask()
 	
     def buildOptions(self):

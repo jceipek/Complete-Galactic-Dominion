@@ -39,7 +39,6 @@ class Structure(Builder):
         stateDict['buildX'] = self.buildX
         stateDict['buildY'] = self.buildY
         stateDict['status'] = self.status
-        stateDict['buildX'] = self.buildX
         return stateDict
     
 

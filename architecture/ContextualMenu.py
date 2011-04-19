@@ -1,11 +1,5 @@
 import radialMenu
-
 from Callback import Callback, GroupCallback
-
-from Structure import Structure,TestTownCenter
-from Entity import Entity
-from Unit import Unit
-from NaturalObject import Gold
 
 class ContextualMenuMaster(object):
     """
@@ -99,6 +93,11 @@ class WayPoint(object):
         return self.x,self.y
 
 #### ENTER CUSTOM DEFINED MENU FUNCTIONS HERE ####
+
+from Structure import Structure,TestTownCenter
+from Entity import Entity
+from Unit import Unit
+from NaturalObject import Gold
 
 def None_TestTownCenter(obj1,obj2):
     
