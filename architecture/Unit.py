@@ -185,6 +185,8 @@ class Unit(Builder):
     
     costToBuild = [(Gold,75)]
     
+    name = 'Unit'
+    
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',loadList=None,
                  owner='tmp'):

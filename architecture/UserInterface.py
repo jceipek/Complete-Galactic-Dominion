@@ -65,9 +65,6 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance(event, Event.MouseMovedEvent):
             if self.activeScreen: 
                 self.activeScreen.processMouseMovedEvent(event)
-        #elif isinstance(event, Event.SetDestinationEvent):
-        #    if self.activeScreen:
-        #        self.activeScreen.processSetDestinationEvent(event)
         elif isinstance(event, Event.CompleteActionEvent):
             if self.activeScreen:
                 self.activeScreen.processCompleteActionEvent(event)

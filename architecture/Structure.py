@@ -5,6 +5,8 @@ import radialMenu
 from Callback import Callback
 from NaturalObject import Gold
 
+from Event import NotificationEvent
+
 class Structure(Builder):
     """Defines structues which are built by units"""
 
@@ -30,6 +32,10 @@ class Structure(Builder):
                     if resource in self.acceptableResources:
                         amountToDeposit = inventory.removeAll(resource)
                         amountDeposited = self.world.addResource(self.owner,resource,amountToDeposit)
+                        
+                        notifyStr = '%s %d deposited %d %s.'%(unit.name,unit.entityID,amountDeposited,resource.name)
+                        self.addNotification(NotificationEvent(notifyStr))
+                        
                         if amountToDeposit != amountDeposited:
                             print 'Warning: did not deposit correct amount of resources.'
                             
