@@ -9,6 +9,7 @@ from collections import deque
 import specialMath
 
 from Callback import Callback
+from Event import NotificationEvent
 
 import pygame
 
@@ -106,6 +107,10 @@ class Builder(Entity):
         if entityClass in self.buildDict \
         and self._hasResourcesToBuild(entityClass):
             
+            self.addNotification(NotificationEvent(
+                'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild)
+                ))
+            
             self.buildQueue.append(
                 BuildTask(entityClass,
                     Callback(self.buildDict[entityClass],self.buildX,self.buildY))
@@ -120,9 +125,13 @@ class Builder(Entity):
             self.buildX,self.buildY = self.rect.center
         else:
             self.buildX,self.buildY = buildPos
-        print callback
+        
         if entityClass in self.buildDict \
         and self._hasResourcesToBuild(entityClass):
+            
+            self.addNotification(NotificationEvent(
+                'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild)
+                ))
             
             self.buildQueue.append(
                 BuildTask(entityClass,callback)

@@ -22,7 +22,7 @@ class Structure(Builder):
         self.curHealth=self.maxHealth
         
     def depositResources(self,unitList):
-        print 'Depositing...: ',unitList
+        
         for unit in unitList:
             if isinstance(unit,Unit):
                 inventory = unit.inventory
@@ -52,6 +52,8 @@ class TestTownCenter(Structure):
     """Defines structues which are built by units"""
 
     acceptableResources = [Gold]
+    
+    name = 'Town Center'
     
     def __init__(self, x, y, world, owner='tmp'):
         Structure.__init__(self, 'TownCenter.png', x, y, world, 'alpha', 'Test building.',owner)
