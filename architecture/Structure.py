@@ -23,6 +23,7 @@ class Structure(Builder):
         
     def depositResources(self,unitList):
         
+        print len(unitList)
         for unit in unitList:
             if isinstance(unit,Unit):
                 inventory = unit.inventory

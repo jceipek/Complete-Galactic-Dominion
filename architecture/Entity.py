@@ -201,6 +201,7 @@ class Entity(MapObject):
         Removes the current Sprite from all groups.  It will no longer
         be associated with this class.
         """
+        self.deselect()
         self.kill()
         self.world.removeEntity(self)
 
