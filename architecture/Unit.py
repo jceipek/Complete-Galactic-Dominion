@@ -39,6 +39,8 @@ class BuildTask(object):
         """
         if self.callback is not None:
             callbackReturn = self.callback.execute()
+        else:
+            return None
         self.callback = None
         return callbackReturn
         
