@@ -97,48 +97,40 @@ class Builder(Entity):
                 return False
         return True
 
-    def addToBuildQueue(self,entityClass,buildPos=None):
+    def addToBuildQueue(self,entityClass,buildPos=None,callback=None):
         
         if buildPos is None:
             self.buildX,self.buildY = self.rect.center
         else:
             self.buildX,self.buildY = buildPos
 
-        if entityClass in self.buildDict \
-        and self._hasResourcesToBuild(entityClass):
-            
-            self.addNotification(NotificationEvent(
-                'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild)
-                ))
-            
-            self.buildQueue.append(
-                BuildTask(entityClass,
-                    Callback(self.buildDict[entityClass],self.buildX,self.buildY))
-                )
-
-            for resource,cost in entityClass.costToBuild:
-                self.world.removeResource(self.owner,resource,cost)
-
-    def addToBuildQueueWithCallback(self,entityClass,callback,buildPos=None):
-        # FIXME - REFACTOR
-        if buildPos is None:
-            self.buildX,self.buildY = self.rect.center
-        else:
-            self.buildX,self.buildY = buildPos
+        if entityClass in self.buildDict:
+            if self._hasResourcesToBuild(entityClass):    
+                self.addNotification(NotificationEvent(
+                    'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild)
+                    ))
+                
+                if callback is None:
+                    self.buildQueue.append(
+                        BuildTask(entityClass,
+                            Callback(self.buildDict[entityClass],self.buildX,self.buildY))
+                        )
+                else:
+                    self.buildQueue.append(
+                        BuildTask(entityClass,callback)
+                    )
         
-        if entityClass in self.buildDict \
-        and self._hasResourcesToBuild(entityClass):
-            
-            self.addNotification(NotificationEvent(
-                'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild)
-                ))
-            
-            self.buildQueue.append(
-                BuildTask(entityClass,callback)
-                )
-            
-            for resource,cost in entityClass.costToBuild:
-                self.world.removeResource(self.owner,resource,cost)
+                for resource,cost in entityClass.costToBuild:
+                    self.world.removeResource(self.owner,resource,cost)
+            else:
+                self.addNotification(NotificationEvent(
+                    'You do not have sufficient resources to build a %s.'%entityClass.name))
+        else:
+            msg='%s cannot build %s,'%(self.name,entityClass.name)
+            msg+=' but can build:'
+            for option in self.buildDict:
+                msg+=' %s,'%option.name
+            self.addNotification(NotificationEvent(msg[:-1]+'.'))
 
     def update(self):
         if not self.hasFullHealth():
