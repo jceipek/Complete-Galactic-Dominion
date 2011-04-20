@@ -1,5 +1,5 @@
 import radialMenu
-from Callback import Callback, GroupCallback
+from Callback import Callback, GroupCallback, SeriesCallback
 
 class ContextualMenuMaster(object):
     """
@@ -267,6 +267,43 @@ def None_Unit(obj1,obj2):
 
     return menu
     
+def TestTownCenter_WayPoint(obj1,obj2):
+    
+    menu = radialMenu.RMenu(openDelay=.2)
+    
+    # HACK - CAN ONLY ACCEPT 1 TESTTOWNCENTER
+    
+    if len(obj1[0].buildDict) > 0:
+        
+        buildItem = radialMenu.RMenuItem(menu,
+            image = "BuildOrb.png",
+            col = (255,0,255),
+            title = 'Build Options')
+        
+        menu.addItem(buildItem)
+        
+        buildMenu = radialMenu.RMenu()
+        buildItem.addSubmenu(buildMenu)
+        
+        tmpcounter = 0
+        for buildType in obj1[0].buildDict:
+            
+            makeAndMove = SeriesCallback(obj1[0].buildDict[buildType], *obj1[0].rect.center)
+            makeAndMove.addCallback(lambda entity : entity.addToPath(obj2.getPoint()))
+        
+            queueMake = Callback(obj1[0].addToBuildQueueWithCallback,
+                buildType,makeAndMove,obj1[0].rect.center)
+            
+            curItem = radialMenu.RMenuItem(menu,
+                image = "orb.png",
+                col = (255,0,0),
+                title = 'Build Option #'+str(tmpcounter),
+                callback = queueMake)
+            buildMenu.addItem(curItem)
+            tmpcounter+=1
+            
+    return menu
+    
 def getCGDcontextualMenu():
     
     menuMaster = ContextualMenuMaster()
@@ -285,6 +322,9 @@ def getCGDcontextualMenu():
     
     None_Unit_Menu = ContextualMenu(None_Unit)
     menuMaster.addMenu(None, Unit, None_Unit_Menu)
+    
+    TestTownCenter_WayPoint_Menu = ContextualMenu(TestTownCenter_WayPoint)
+    menuMaster.addMenu(TestTownCenter,WayPoint,TestTownCenter_WayPoint_Menu)
     
     print menuMaster.menus
     

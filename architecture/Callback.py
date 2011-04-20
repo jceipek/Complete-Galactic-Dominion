@@ -146,6 +146,7 @@ if __name__ == "__main__":
     seriesTest.execute()
     
     seriesTest2=SeriesCallback(B)
+    print seriesTest2.callback[0]
     x = 'test'
     seriesTest2.addCallback(lambda b: b.myMethod(x,b.y))
     seriesTest2.execute()

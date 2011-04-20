@@ -114,6 +114,23 @@ class Builder(Entity):
             for resource,cost in entityClass.costToBuild:
                 self.world.removeResource(self.owner,resource,cost)
 
+    def addToBuildQueueWithCallback(self,entityClass,callback,buildPos=None):
+        # FIXME - REFACTOR
+        if buildPos is None:
+            self.buildX,self.buildY = self.rect.center
+        else:
+            self.buildX,self.buildY = buildPos
+        print callback
+        if entityClass in self.buildDict \
+        and self._hasResourcesToBuild(entityClass):
+            
+            self.buildQueue.append(
+                BuildTask(entityClass,callback)
+                )
+            
+            for resource,cost in entityClass.costToBuild:
+                self.world.removeResource(self.owner,resource,cost)
+
     def update(self):
         if not self.hasFullHealth():
             self.regenerate()
