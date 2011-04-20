@@ -21,6 +21,15 @@ class Structure(Builder):
         self.status = Locals.IDLE
         self.maxHealth=9000
         self.curHealth=self.maxHealth
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        if self.world != None:
+            state['world']=self.world.worldID
+        state['image']=None
+        
+    def __setstate__(self,state):
+        pass
         
     def depositResources(self,unitList):
         print 'Depositing...: ',unitList
