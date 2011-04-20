@@ -98,26 +98,6 @@ class ParallelCallback(object):
 
         return results
 
-class _TMP_TestCallback(object):
-    
-    def __init__(self, callback, *args):
-        self.callback = callback
-        self.args = args
-    
-    def execute(self,method):
-        a=(self.callback(*self.args))
-        b='It','Worked'
-        eval('a.'+method+'(*b)')
-
-class B():
-    
-    def __init__(self):
-        self.x = 'IBETTERWORK'
-        self.y = 'blahblah'
-    
-    def myMethod(self,t='what',s=' the heck'):
-        print t+s
-
 if __name__ == "__main__":
     a=Callback(lambda a,b: a+b,1,2)
     print a.execute()
@@ -125,6 +105,15 @@ if __name__ == "__main__":
     class A(object):
         def myMethod(self):
             return 1
+    
+    class B(object):
+    
+        def __init__(self):
+            self.x = 'IBETTERWORK'
+            self.y = 'blahblah'
+        
+        def myMethod(self,t='what',s=' the heck'):
+            print t+s
     
     a = [A(),A()]
     

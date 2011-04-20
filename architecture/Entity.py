@@ -6,6 +6,8 @@ import specialMath
 from Overlay import HealthBar
 from Sign import Sign
 
+from Event import NotificationEvent
+
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
     
@@ -189,7 +191,8 @@ class Entity(MapObject):
     def showDescription(self):
         """Show the user the description of the entity.
         Needs to return more than just a string, eventually."""
-        return self.description
+        self.addNotification(NotificationEvent(self.description))
+        #return self.description
 
     def die(self):
         """
@@ -228,6 +231,9 @@ class Entity(MapObject):
         
     def hasFullHealth(self):
         return self.maxHealth == self.curHealth
+        
+    def addNotification(self,event):
+        self.world.addNotification(event)
         
 class TestEntity(Entity):
     """

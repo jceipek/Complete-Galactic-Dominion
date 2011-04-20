@@ -16,7 +16,11 @@ class HUD(object):
 		self.drawSelected()
 		displaySurface.blit(self.surface, (self.loc,self.size))
 
-	def drawNotification(self, text='Something happened!'):
+	def drawNotification(self, event=None):
+		if event is None:
+			text = ''
+		else:
+			text = event.message
 		sign=Sign(self.size[0], (0,0))
 		sign.addtext(text)
 		sign.render()

@@ -47,6 +47,8 @@ class World(object):
         self._TMPmakeBuilding()
         
         self.resourceContainer = WorldResourceContainer(self)
+        
+        self.notifications = []
     
     def _setWorldID(self,ID):
         self.worldID = ID
@@ -144,6 +146,9 @@ class World(object):
         if self.line(pLow,pLeft,right)>=top:
             return False
         return True
+    
+    def addNotification(self,event):
+        self.notifications.append(event)
     
     def addEntity(self, entity):
         """

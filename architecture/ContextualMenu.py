@@ -99,6 +99,8 @@ from Entity import Entity
 from Unit import Unit
 from NaturalObject import Gold
 
+from Event import NotificationEvent
+
 def None_TestTownCenter(obj1,obj2):
     
     menu = radialMenu.RMenu(openDelay=.2)

@@ -13,3 +13,4 @@ from WorldChangeEvent import *
 from DisplaySurfaceCreatedEvent import *
 from WorldManipulationEvent import *
 from EventExecutionEvent import *
+from NotificationEvent import *

@@ -26,7 +26,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def __init__(self,world,manager,scrollLoc,screenPos,size):
         self.world = world
-
         self.manager = manager
         self.scrollLoc = scrollLoc
         self.cartScrollLoc = specialMath.isoToCart(scrollLoc)
@@ -376,6 +375,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
     def processUpdateEvent(self,event):
         self.setViewportEntities()
+        self.postNotification()
         timeElapsed = event.elapsedTimeSinceLastFrame
         
         if self.currentMenu is not None and not self.currentMenu.visible:
@@ -460,6 +460,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         for entity in self.quickSelect[event.key].sprites():
             entity.selected = True
             self.selectedEntities.append(entity)
+    
+    def postNotification(self):
+        """
+        If the world has notifications, post the first 
+        notification.
+        """
+        if len(self.world.notifications) > 0:
+            self.manager.post(self.world.notifications.pop(0))
     
     def changeWorld(self,world):
         self.world = world
