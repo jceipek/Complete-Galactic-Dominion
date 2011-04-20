@@ -59,14 +59,6 @@ def init(host='localhost'):
                                                
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
-    #Note: Do we even need this anymore? - Julian
-    #Response: I don't think so.  - Jared
-    
-    #===========================================
-    #Create and register the standard listeners
-    #With the event manager
-    #===========================================
-    #FIXME: Not yet fully implemented
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
 

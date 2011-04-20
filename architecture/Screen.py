@@ -1,5 +1,6 @@
 import Event
 from Viewport import Viewport
+from HUD import HUD
 from World import World
 
 class Screen(object): #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
@@ -46,22 +47,27 @@ class MainScreen(Screen):
         self.viewport = None
         self.hud = None
         
-    def TEST_createViewport(self,world):
+    def TEST_createViewport(self,world,manager):
         ###FIXME
         #world.TEST_createGrid()
         scrollLoc = (0,0)
         viewportPos = (0,0)
         #viewportSize = (640,480)
         viewportSize = (1024,768-100)
-        testViewport = Viewport(world,scrollLoc,viewportPos,viewportSize)
+        testViewport = Viewport(world,manager,scrollLoc,viewportPos,viewportSize)
         self.viewport = testViewport
+        
+        hudPos=(0, viewportSize[1]-20)
+        hudSize=(viewportSize[0], 120)
+        self.hud=HUD(hudPos, hudSize)
+        self.viewport.hud=self.hud
+        self.hud.viewport=self.viewport
         
     def draw(self,displaySurface,size):
         self.viewport.draw(displaySurface)
-        #self.viewport.drawContainedEntities()
+        self.hud.draw(displaySurface)
         
     def processMouseMovedEvent(self,event):
-        #self.viewport.setScrollSpeed(event.pos)
         self.viewport.mouseMoved(event)
 
     def processMouseClickEvent(self,event):
@@ -88,15 +94,15 @@ class MainScreen(Screen):
     
     def processCompleteActionEvent(self,event):
         self.viewport.completeActionEvent(event)
-    
-    #def processSetDestinationEvent(self, event):
-    #    self.viewport.setDestinationEvent(event)
         
     def processInitiateActionEvent(self,event):
         self.viewport.initiateActionEvent(event)
         
     def processUpdateEvent(self,event):
         self.viewport.processUpdateEvent(event)
-        
+    
+    def processNotificationEvent(self,event):
+        self.hud.drawNotification(event)
+    
     def changeWorld(self,world):
         self.viewport.changeWorld(world)

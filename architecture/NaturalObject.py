@@ -10,6 +10,8 @@ class NaturalObject(Entity):
     size: radius of collision (inherited from Entity)
     """
     
+    name = 'Natural Object'
+    
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.'):
         Entity.__init__(self,imagePath,x,y,world,colorkey,description)
@@ -26,23 +28,28 @@ class Resource(NaturalObject):
     Object on the map which can be collected.  Health may or may 
     not regenerate over time.
     """
+    
+    name = 'Generic Resource'
+    
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.',
-                 resourceName='Null'):
+                 description = 'No information available.'):
                      
-        NaturalObject.__init__(self,imagePath,x,y,world,colorkey,description)
-	
+        NaturalObject.__init__(self,imagePath,x,y,world,colorkey,
+            description)
+    
         self.maxHealth = self.curHealth = 500
-        self.resourceName = resourceName
         
         self.regenRate = 0
         self._regenHealth = 0
 
 class Gold(Resource):
     """Gold."""
+    
+    name = 'Gold Ore'
+    
     def __init__(self,x,y,world):
         Resource.__init__(self,'Gold-ore.png',x,y,world,'alpha',\
-            'Gold ore.','Gold')
+            'Gold ore.')
         
         self.regenRate = 1
 

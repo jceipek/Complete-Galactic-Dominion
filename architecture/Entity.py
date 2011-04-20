@@ -6,6 +6,8 @@ import specialMath
 from Overlay import HealthBar
 from Sign import Sign
 
+from Event import NotificationEvent
+
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
     
@@ -16,9 +18,11 @@ class Entity(MapObject):
     # List of tuples containing a subclass of Resource and a cost
     costToBuild = []
     
+    name = 'Generic Entity'
+    
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
-                 movable = False):
+                 movable = False, owner='tmp'):
         """
         Set up an Entity with an image loaded from the filepath
         specified by imagePath, an absolute x and y position in a given
@@ -57,7 +61,7 @@ class Entity(MapObject):
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
-        self.owner = 'tmp'
+        self.owner = owner
         
         # adds the entity to the provided world
         self.entityID = None
@@ -94,6 +98,7 @@ class Entity(MapObject):
         
         self.regenRate = 0
         self._regenHealth = 0
+        self.inventory=None
 
     def _setEntityID(self,ID):
         self.entityID = ID
@@ -144,7 +149,6 @@ class Entity(MapObject):
         
         if self.selected:
             self.drawSelectionRing(screen,drawRect)
-            self.drawInfo(screen)
         if self.selected or self.focused:
             self.drawHealthBar(screen,drawRect)
             self.focused = False
@@ -157,14 +161,20 @@ class Entity(MapObject):
     def drawHealthBar(self, screen, drawRect):
         self.healthBar.draw(screen,drawRect.midtop)
 
+    def getInfo(self):
+        text = '%s \n Description: \n %s' % (self.healthStr(), self.description)
+        textBox=Sign(150, (0,0))
+        textBox.addtext(text)
+        textBox.render()
+        return textBox
+
     def drawInfo(self, screen): #FIXME I am shitty.
         """Displays health and description"""
         text = '%s \n Description: \n %s' % (self.healthStr(), self.description)
-        textBox=Sign(150, (0,600))
+        textBox=Sign(150, (0, 600), image=self.image)
         textBox.addtext(text)
         textBox.render()
         textBox.draw(screen)
-        
 
     def healthStr(self):
         return 'Health: \n' +str(self.curHealth) + ' / ' +str(self.maxHealth)
@@ -183,13 +193,15 @@ class Entity(MapObject):
     def showDescription(self):
         """Show the user the description of the entity.
         Needs to return more than just a string, eventually."""
-        return self.description
+        self.addNotification(NotificationEvent(self.description))
+        #return self.description
 
     def die(self):
         """
         Removes the current Sprite from all groups.  It will no longer
         be associated with this class.
         """
+        self.deselect()
         self.kill()
         self.world.removeEntity(self)
 
@@ -222,6 +234,9 @@ class Entity(MapObject):
         
     def hasFullHealth(self):
         return self.maxHealth == self.curHealth
+        
+    def addNotification(self,event):
+        self.world.addNotification(event)
         
 class TestEntity(Entity):
     """

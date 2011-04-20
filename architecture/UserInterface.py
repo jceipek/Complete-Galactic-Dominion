@@ -29,7 +29,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             Event.DisplaySurfaceCreatedEvent, Event.CompleteActionEvent, \
             Event.DragBeganEvent, Event.DragEvent, \
             Event.DragCompletedEvent, Event.AddDragCompletedEvent, \
-            Event.NumberKeyPressEvent ]
+            Event.NumberKeyPressEvent, Event.NotificationEvent ]
         Listener.__init__(self,manager,eventTypes)
         self.activeOverlay = None
         self.activeWorld = world
@@ -42,7 +42,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         from Screen import MainScreen
         from Overlay import DebugOverlay
         testScreen = MainScreen()
-        testScreen.TEST_createViewport(self.activeWorld)
+        testScreen.TEST_createViewport(self.activeWorld,self.manager)
         self.activeScreen = testScreen
         self.debugOverlay = DebugOverlay()
 
@@ -65,9 +65,6 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance(event, Event.MouseMovedEvent):
             if self.activeScreen: 
                 self.activeScreen.processMouseMovedEvent(event)
-        #elif isinstance(event, Event.SetDestinationEvent):
-        #    if self.activeScreen:
-        #        self.activeScreen.processSetDestinationEvent(event)
         elif isinstance(event, Event.CompleteActionEvent):
             if self.activeScreen:
                 self.activeScreen.processCompleteActionEvent(event)
@@ -96,6 +93,9 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance(event, Event.NumberKeyPressEvent):
             if self.activeScreen:
                 self.activeScreen.processNumberKeyPressEvent(event)
+        elif isinstance(event, Event.NotificationEvent):
+            if self.activeScreen:
+                self.activeScreen.processNotificationEvent(event)
         elif isinstance(event, Event.WorldChangeEvent):
             if self.activeWorld:
                 self.activeWorld = event.world

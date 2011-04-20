@@ -4,6 +4,10 @@ from Unit import Unit
 from Structure import Structure,TestTownCenter
 from GameData import Locals
 from Overlay import DragBox, MakeBoundingBox, MiniMap
+from HUD import HUD
+
+from Callback import Callback
+from ContextualMenu import WayPoint
 
 class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     """
@@ -20,14 +24,15 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     @param selector: a selection rectangle that is activated and drawn when necessary #FIXME: NOT YET IMPLEMENTED
     """
     
-    def __init__(self,world,scrollLoc,screenPos,size):
+    def __init__(self,world,manager,scrollLoc,screenPos,size):
         self.world = world
-
+        self.manager = manager
         self.scrollLoc = scrollLoc
         self.cartScrollLoc = specialMath.isoToCart(scrollLoc)
         self.loc = screenPos
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
+        self.hud=None
         
         if world is not None:
             self.minimap = MiniMap(self.world)
@@ -55,6 +60,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.dragRect = None
         
         self.currentMenu = None
+        
+        from ContextualMenu import getCGDcontextualMenu
+        self.contextualMenu = getCGDcontextualMenu()
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
@@ -96,14 +104,21 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
-        if clicked and isinstance(clicked,TestTownCenter):# and len(self.selectedEntities)==0:
-            #self.currentMenu = clicked.getMenu()
-            self.currentMenu = clicked.getMenu2(self.selectedEntities)
-            #print self.currentMenu
-            if self.currentMenu is not None:
-                self.currentMenu.open(event.pos)
-                return
+        if clicked:
+            drawRect = clicked.rect.move(clicked.drawOffset)
+            drawRect.center = specialMath.cartToIso(drawRect.center)
         
+            if not drawRect.collidepoint(pos):
+                clicked = None
+        
+        if clicked is not None:
+            self.currentMenu = self.contextualMenu.getMenu(self.selectedEntities,clicked)
+        else:
+            self.currentMenu = self.contextualMenu.getMenu(self.selectedEntities,WayPoint(*destCart))
+            
+        if self.currentMenu is not None:
+            self.currentMenu.open(event.pos)
+
         if clicked:
             drawRect = clicked.rect.move(clicked.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
@@ -115,11 +130,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         attacking = False
         pos = event.pos
         
-        if self.currentMenu is not None:
-            self.selectMenu(pos) # ADD TO THIS
-            #self.selectMenu2(pos)
-            print 'Menu exists!'
+        # Performs action indicated by menu if menu is visible
+        # and exists.  Otherwise, the menu reference is destroyed.
+        if self.currentMenu is not None and self.currentMenu.visible:
+            self.selectMenu(pos)
             return # Do not do anything else if the menu is selected
+        else:
+            self.currentMenu = None
         
         # Sets destination in cartesian coordinates
         # Handles minimap clicks
@@ -156,7 +173,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if not attacking:
             eCenter = specialMath.centerOfEntityList(self.selectedEntities)
             for entity in self.selectedEntities:
-                if not entity.status ==Locals.MOVING:
+                if not entity.status==Locals.MOVING:
                     entity.dest=entity.realCenter
                 entity.status=Locals.MOVING
                 dx = entity.rect.center[0] - eCenter[0]
@@ -266,8 +283,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             else:
                 clicked.select()
                 self.selectedEntities.append(clicked)
-                print clicked.healthStr()
-                if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
+                #print clicked.healthStr()
+                #if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
     
     def updateMenu(self,eventPos):
         if self.currentMenu is not None:
@@ -276,7 +293,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def selectMenu(self,eventPos):
         if self.currentMenu is not None:
-            #print 'MOUSE BUTTON UP'
             self.currentMenu.select(eventPos)
         self.currentMenu = None
     
@@ -359,7 +375,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
     def processUpdateEvent(self,event):
         self.setViewportEntities()
+        self.postNotification()
         timeElapsed = event.elapsedTimeSinceLastFrame
+        
+        if self.currentMenu is not None and not self.currentMenu.visible:
+            self.currentMenu._delayedOpen(timeElapsed)
+        
         self.scrollBasedOnElapsedTime(timeElapsed)
         self.world.elapsedTimeSinceLastFrame = timeElapsed
     
@@ -439,6 +460,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         for entity in self.quickSelect[event.key].sprites():
             entity.selected = True
             self.selectedEntities.append(entity)
+    
+    def postNotification(self):
+        """
+        If the world has notifications, post the first 
+        notification.
+        """
+        if len(self.world.notifications) > 0:
+            self.manager.post(self.world.notifications.pop(0))
     
     def changeWorld(self,world):
         self.world = world

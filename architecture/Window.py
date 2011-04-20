@@ -191,10 +191,6 @@ class Window(Listener):
                             TMP_mouseState = 1
                             TMP_dragStartPos = rawEvent.pos
                             realEvent.append(Event.DragBeganEvent(rawEvent.pos))
-                            #if not TMP_shiftHeld:
-                            #    realEvent.append(Event.DragBeganEvent(rawEvent.pos))
-                            #else:
-                            #    realEvent.append(Event.AddDragBeganEvent(rawEvent.pos))
                         elif buttonId == Event.MouseLocals.RIGHT_CLICK:
                             TMP_mouseState = 2
                             realEvent.append(Event.InitiateActionEvent(rawEvent.pos))

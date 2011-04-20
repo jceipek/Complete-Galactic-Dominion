@@ -1,6 +1,6 @@
 import pygame
 
-class ImageBank():
+class ImageBank(object):
     """
     Contains a dictionary which maps image names to 
     pygame.surface.Surface objects.  This makes the creation of a new
@@ -62,19 +62,9 @@ class ImageBank():
             return self.imageColorKeys[imageName]
         else:
             if self.hasImageKey(imageName):
-                print self.getImage(imageName).get_at((0,0))
                 self.imageColorKeys[imageName] = \
                     getAverageColor(self.getImage(imageName),colorkey)
             return self.imageColorKeys[imageName]
-    '''        
-    def getAverageColor(self, imageName, colorkey=None):
-        
-        if imageName in self.imageColorKeys:
-            return self.imageColorKeys[imageName]
-        else:
-            self.imageColorKeys[imageName]=getAverageColor(imageName,colorkey)
-            return self.imageColorKeys[imageName]
-    '''
     
 def loadImage(imagePath, colorkey=None):
     
