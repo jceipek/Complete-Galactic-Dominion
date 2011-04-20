@@ -201,17 +201,19 @@ class Entity(MapObject):
         Removes the current Sprite from all groups.  It will no longer
         be associated with this class.
         """
+        self.deselect()
         self.kill()
         self.world.removeEntity(self)
 
     def changeHealth(self, numHits):
         """changes current health by numHits, removes object if current health drops to 0"""
         self.curHealth+=numHits
-        self.healthBar.updateHealthBar()
         if self.curHealth<=0:
+            self.curHealth=0
             self.die()
         elif self.curHealth > self.maxHealth:
             self.curHealth = self.maxHealth
+        self.healthBar.updateHealthBar()
             
     def moveWrap(self):
         """

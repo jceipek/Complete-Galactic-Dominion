@@ -60,9 +60,9 @@ class ContextualMenuMaster(object):
         mostCommonClass = []
         
         for key in d:
-            if len(mostCommonClass) < d[key]:
+            if len(d[key]) > len(mostCommonClass):
                 mostCommonClass = d[key]
-        
+
         return mostCommonClass
         
 class ContextualMenu(object):
@@ -293,8 +293,8 @@ def TestTownCenter_WayPoint(obj1,obj2):
             makeAndMove = SeriesCallback(obj1[0].buildDict[buildType], *obj1[0].rect.center)
             makeAndMove.addCallback(lambda entity : entity.addToPath(obj2.getPoint()))
         
-            queueMake = Callback(obj1[0].addToBuildQueueWithCallback,
-                buildType,makeAndMove,obj1[0].rect.center)
+            queueMake = Callback(obj1[0].addToBuildQueue,
+                buildType,obj1[0].rect.center,makeAndMove)
             
             curItem = radialMenu.RMenuItem(menu,
                 image = "orb.png",
@@ -305,7 +305,26 @@ def TestTownCenter_WayPoint(obj1,obj2):
             tmpcounter+=1
             
     return menu
+
+def Unit_Unit(obj1,obj2):
     
+    menu = radialMenu.RMenu(openDelay=.2)
+    
+    setAttackCallbacks = []
+    for unit in obj1:
+        setAttackCallbacks.append(unit.initAction)
+    
+    attackItem = radialMenu.RMenuItem(menu,
+        image = "AttackOrb.png",
+        col = (255,255,255),
+        title = 'Attack!',
+        callback = GroupCallback(setAttackCallbacks,obj2))
+
+    menu.addItem(attackItem)
+        
+    return menu
+    
+
 def getCGDcontextualMenu():
     
     menuMaster = ContextualMenuMaster()
@@ -328,7 +347,8 @@ def getCGDcontextualMenu():
     TestTownCenter_WayPoint_Menu = ContextualMenu(TestTownCenter_WayPoint)
     menuMaster.addMenu(TestTownCenter,WayPoint,TestTownCenter_WayPoint_Menu)
     
-    print menuMaster.menus
+    Unit_Unit_Menu = ContextualMenu(Unit_Unit)
+    menuMaster.addMenu(Unit,Unit,Unit_Unit_Menu)
     
     return menuMaster
 
