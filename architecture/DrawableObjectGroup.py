@@ -17,7 +17,3 @@ class DrawableObjectGroup():
                 self.drawableObjectList.append(DrawableObject(t[0], t[1]))
             else:
                 self.drawableObjectList.append(DrawableObject(t,None))
-
-    def drawObjects(self,screen):
-        for o in self.drawableObjectList:
-            screen.blit(o.image,o.rect.move(500,20))
