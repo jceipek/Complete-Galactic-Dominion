@@ -231,6 +231,7 @@ class Unit(Builder):
             }
 
     def __getstate__(self):
+        print 'In Unit get state'
         state = self.__dict__.copy()
         
         if self.world != None:
@@ -242,7 +243,16 @@ class Unit(Builder):
         if hasattr(state['objectOfAction'],'entityID'):
             state['objectOfAction'] = state['objectOfAction'].entityID
         
+        del state['healthBar']
+        
+        for attr in state:
+            print attr
+            print state[attr].__class__ 
+            print       
+        return state
+        
     def __setstate__(self,state):
+        print "In Unit set state"
         self.__dict__ = state
             
         self.loadImage(self.imagePath, self.colorkey)
@@ -407,6 +417,7 @@ class Unit(Builder):
         
     def getMiniMapColor(self):
         return (20,20,255)
+        
     def __str__(self):
         return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])
 

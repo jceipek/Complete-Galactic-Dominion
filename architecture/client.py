@@ -76,13 +76,16 @@ def init(host='localhost'):
     
     #===========================================
     
-    # Initialize 25 entities in World w
-    for i in xrange(25):
-        #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
-        #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        a=['Unit','testCraft.png',i*50,i*50,'world','alpha']
-        eventManager.post(Event.WorldManipulationEvent(a))
-        #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
+    if networked:
+        print 'Requesting the World'
+        client.sendRequest('GetWorld')
+    else:
+        # Initialize 25 entities in World w
+        for i in xrange(25):
+            #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
+            #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
+            Unit('testCraft.png',i*50,i*50,w,'alpha')
+            #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())

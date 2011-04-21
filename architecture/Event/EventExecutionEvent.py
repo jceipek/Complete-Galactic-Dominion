@@ -7,8 +7,7 @@ class EventExecutionEvent(Event):
     """
     def __init__(self,aStr):
         Event.__init__(self)
-        print aStr
-        self.data = cPickle.loads(aStr)
+        self.data = aStr
         self.verboseInfo = "Data: " + str(self.data) + "\n"
         
     
