@@ -2,6 +2,8 @@ import Event
 from Entity import Entity
 from Listener import Listener
 from Unit import Unit
+from Overlay import HealthBar
+import cPickle
 
 class WorldManipulator(Listener):
     def __init__(self,manager,world,networked=True):
@@ -14,12 +16,21 @@ class WorldManipulator(Listener):
     def notify(self,event):
         if (self.networked and isinstance(event,Event.EventExecutionEvent)) or\
          (not self.networked and isinstance(event, Event.WorldManipulationEvent)):
-             data=event.data
-             if data[0]=='Unit':
-                 
-                 #parse the list and replace the 'world' string with self.world
-                 for i in xrange(len(data)):
-                     if data[i] == 'world':
-                         data[i]=self.world
-                 #self.world.addEntity(Unit(*data[1:]))
-                 Unit(*data[1:])
+             
+             data = event.data
+             if 'GetWorld' in data:
+                 return
+             print 'Got a command to unpickle the string ' + data + '\n'*5
+             entity = cPickle.loads(data)
+             print 'Successfully unpickled the string' + data + '\n'*5
+             
+             print entity.__dict__
+             
+             entity.loadImage(entity.imagePath,entity.colorkey)
+             entity.healthBar = HealthBar(self)
+             entity.rect.center = entity.realCenter
+             
+             entity.world = self.world.universe.worldIDToWorld[entity.world]
+             self.world.universe.entityIDToEntity[entity.entityID] = entity             
+             if isinstance(entity,Unit) and entity.objectOfAction != None:
+                 entity.objectOfAction = self.world.universe.entityIDToEntity[entity.objectOfAction]

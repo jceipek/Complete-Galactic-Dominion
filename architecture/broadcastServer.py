@@ -29,16 +29,21 @@ from Unit import Unit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
 from client import init
+import cPickle
 
 class BroadcastServer(networking.Server):
     def processInput(self,sockThrd,data):
-        #if 'GetWorld' in data and hasattr(self,'world'):
-        #    for 
-        #    sockThrd.write(self.world)
-        for sock in self.socketThreads.keys():
-            sock.write(data)
+        print 'Got input:' + data
+        if 'GetWorld' in data and hasattr(self,'world'):
+            for entity in self.world.allEntities.values():
+                if isinstance(entity,Unit):
+                    print 'Image Path: ' + entity.imagePath
+                    sockThrd.write(cPickle.dumps(entity))
+        else:
+            for sock in self.socketThreads.keys():
+                sock.write(data)
             
-def init(host='localhost'):
+def init(host='localhost',server=None):
     """
     Game initialization function.
         1. Creates a L{Debugger} (debugger) and L{EventTimer} (eventTimer) and 
@@ -78,6 +83,7 @@ def init(host='localhost'):
     gameWindow.updateScreenMode()
     
     w = World(universe)
+    server.world=w
     wManipulator = WorldManipulator(eventManager,w,networked)
     #universe.changeWorld(w)
     
@@ -87,25 +93,7 @@ def init(host='localhost'):
     for i in xrange(25):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        a=['Unit','testCraft.png',i*50,i*50,'world','alpha']
-        eventManager.post(Event.WorldManipulationEvent(a))
-        #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
-
-    #Notify the manager that the window should start to accept input:
-    eventManager.post(Event.StartEvent())
-    
-    return eventManager.eventTypesToListeners
-
-    #universe.changeWorld(w)
-    
-    #===========================================
-    
-    # Initialize 25 entities in World w
-    for i in range(25):
-        #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
-        #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        a=['Unit','testCraft.png',i*50,i*50,'world','alpha']
-        eventManager.post(Event.WorldManipulationEvent(a))
+        a=Unit('testCraft.png',i*50,i*50,w,'alpha')
         #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
 
     #Notify the manager that the window should start to accept input:
@@ -119,6 +107,8 @@ if __name__ == '__main__':
     #Connect to server
     s = BroadcastServer(port = 1567, host = 'localhost')
     s.listenAndConnect()
+    
+    init(server=s)
     #eTypestoListeners = init()
     #for key in eTypestoListeners:
     #    print 'Event type: %s'%str(key)
