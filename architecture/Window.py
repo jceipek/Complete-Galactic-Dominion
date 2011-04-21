@@ -114,7 +114,6 @@ class Window(Listener):
         
         while self.active:
             #Pass all pygame events to a parser thread for wrapping in standardized events
-            #I DON'T KNOW IF THIS WILL WORK PROPERLY FOR MULTIPLE EVENTS, YET - Julian
 
             #Tell the objects on screen to update.
             self.pygameEvents += pygame.event.get()
@@ -166,26 +165,19 @@ class Window(Listener):
         TMP_clickrange = 5
         
         while self.active:
-            #Waiting for the event significantly increases frame rate
-            #print 'Waiting for pygame event'
-            #rawEvent=pygame.event.wait()
-            #print 'Pygame event collected'
             #inputState.updateState(pEventToStr(rawEvent))
             if self.pygameEvents:
                 
                 try:
-                    rawEvent=self.pygameEvents.pop()
-                
+                    rawEvent=self.pygameEvents.pop(0)
+                    
                     #FIXME - more events needed
                     realEvent = []
                     if rawEvent.type == pygame.QUIT:
                         realEvent.append(Event.QuitEvent())
-                        """elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
-                        state = Event.MouseLocals.MOUSE_PRESSED
-                        buttonId = rawEvent.button
-                        realEvent = Event.MouseClickedEvent(rawEvent.pos,state,buttonId)"""
     
                     elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
+                        print "Mousedown"
                         buttonId = rawEvent.button
                         if buttonId == Event.MouseLocals.LEFT_CLICK:
                             TMP_mouseState = 1
@@ -196,6 +188,7 @@ class Window(Listener):
                             realEvent.append(Event.InitiateActionEvent(rawEvent.pos))
                     
                     elif rawEvent.type == pygame.MOUSEBUTTONUP:
+                        print "Mouseup"
                         TMP_mouseState = 0
                         buttonId = rawEvent.button
                         if buttonId == Event.MouseLocals.LEFT_CLICK:
@@ -247,6 +240,9 @@ class Window(Listener):
                             realEvent.append( \
                                 Event.NumberKeyPressEvent(rawEvent.key,Event.KeyLocals.UP,keyHeldDict) \
                             )
+                        #The following was an attempt to toggle fullscreen mode. 
+                        #It broke things and must thus be handled separately
+                        #via a carefully constructed menu
                         #if rawEvent.key == pygame.K_F11:
                         #    realEvent.append( \
                         #        Event.DisplaySurfaceToggle(not self.fullscreenMode) \

@@ -70,9 +70,9 @@ class Builder(Entity):
     """
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.', owner='tmp'):
+                 description = 'No information available.', movable=False, owner='tmp'):
              
-        Entity.__init__(self,imagePath,x,y,world,colorkey,description,
+        Entity.__init__(self,imagePath,x,y,world,colorkey,description, movable,
             owner)
         
         self.blockable=True
@@ -192,7 +192,7 @@ class Unit(Builder):
                  description = 'No information available.',
                  owner='tmp'):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description,
-            owner='tmp')
+            owner='tmp', movable=True)
     
         #self.__class__.allUnits.add(self)
         if True:#loadList == None:
@@ -284,7 +284,7 @@ class Unit(Builder):
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
-        if not self.moveCloseToObject(self.radius[Locals.ATTACK]) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
+        if self.moveCloseToObject(self.radius[Locals.ATTACK]) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
             self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
             self.timeSinceLast[Locals.ATTACK]=0
         if self.objectOfAction.curHealth<=0:
@@ -293,7 +293,7 @@ class Unit(Builder):
 
     def gather(self):
         """moves unit close to resource, adds resource to containment"""
-        if not self.moveCloseToObject(self.radius[Locals.GATHER]):
+        if self.moveCloseToObject(self.radius[Locals.GATHER]):
             amount = self.inventory.add(self.objectOfAction,self.efficiency[Locals.GATHER])
             if amount > self.objectOfAction.curHealth:
                 amount=self.objectOfAction.curHealth

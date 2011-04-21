@@ -40,14 +40,16 @@ def centerOfEntityList(entities):
     @param entities: List of entities
     """
     center = [0,0]
-    e = 0
+    i = 0
     for e in xrange(1,len(entities)+1):
-        c = entities[e-1].rect.center
-        center[0] += c[0]
-        center[1] += c[1]
-    if e > 0:
-        center[0] /= (e)
-        center[1] /= (e)
+        if entities[e-1].movable:
+            c = entities[e-1].rect.center
+            center[0] += c[0]
+            center[1] += c[1]
+            i+=1
+    if i > 0:
+        center[0] /= (i)
+        center[1] /= (i)
     return tuple(center)
 
 def closestEntity(entities,loc):
