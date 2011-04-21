@@ -8,7 +8,7 @@ class HUD(object):
         self.loc=loc
         self.size=size
         self.surface=pygame.Surface(size)
-        self.descBox = DescriptionBox() #This is the problem
+        self.descBox = DescriptionBox()
         self.rect = pygame.Rect(self.loc,self.size)
         self.width=200
         self.viewport=None
@@ -17,8 +17,8 @@ class HUD(object):
         
     def draw(self, displaySurface):
         self.drawSelected()
-        self.descBox.draw(displaySurface) #This is the problem
         displaySurface.blit(self.surface, (self.loc,self.size))
+        self.descBox.draw(displaySurface)
 
     def drawNotification(self, event=None):
         if event is None:

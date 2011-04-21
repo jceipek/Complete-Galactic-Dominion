@@ -1,7 +1,7 @@
 import pygame
 from DrawableObject import DrawableObject
 
-class DrawableObjectGroup(DrawableObject):
+class DrawableObjectGroup():
     def __init__(self,imageList):
         #imageList is a list of tuples and values that indicate
         #image paths and colorkeys
@@ -17,8 +17,3 @@ class DrawableObjectGroup(DrawableObject):
                 self.drawableObjectList.append(DrawableObject(t[0], t[1]))
             else:
                 self.drawableObjectList.append(DrawableObject(t,None))
-
-    def drawObjects(self,screen):
-        for o in self.drawableObjectList:
-            print o.rect
-            screen.blit(o.image,o.rect)
