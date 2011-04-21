@@ -44,6 +44,8 @@ class HUD(object):
         i=0
         pygame.draw.rect(self.surface, (0,0,0), self.infoRect)
         for e in self.viewport.selectedEntities:
+            if not e.selected:
+                continue
             self.showInfo(e, pos=(i,20))
             i+=self.width
             
