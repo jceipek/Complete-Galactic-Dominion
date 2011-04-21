@@ -1,13 +1,14 @@
 import pygame
 from Sign import Sign
 from DescriptionBox import DescriptionBox
+from GameData import Locals
 
 class HUD(object):
     def __init__(self, loc, size):
         self.loc=loc
         self.size=size
         self.surface=pygame.Surface(size)
-        #self.descBox = DescriptionBox() #This is the problem
+        self.descBox = DescriptionBox() #This is the problem
         self.rect = pygame.Rect(self.loc,self.size)
         self.width=200
         self.viewport=None
@@ -16,7 +17,7 @@ class HUD(object):
         
     def draw(self, displaySurface):
         self.drawSelected()
-        #self.descBox.draw(displaySurface) #This is the problem
+        self.descBox.draw(displaySurface) #This is the problem
         displaySurface.blit(self.surface, (self.loc,self.size))
 
     def drawNotification(self, event=None):
@@ -31,7 +32,7 @@ class HUD(object):
 
     def showInfo(self, entity, pos=(0,0)):
         
-        text = '%s \nDescription: \n%s' % (entity.healthStr(), entity.description)
+        text = '%s \nDescription: \n%s \n%s' % (entity.healthStr(), entity.description, Locals.status[entity.status])
         box=Sign(200, pos, entity.image)
         if entity.inventory:
             text+='\n'+ str(entity.inventory)
@@ -43,6 +44,8 @@ class HUD(object):
         i=0
         pygame.draw.rect(self.surface, (0,0,0), self.infoRect)
         for e in self.viewport.selectedEntities:
+            if not e.selected:
+                continue
             self.showInfo(e, pos=(i,20))
             i+=self.width
             

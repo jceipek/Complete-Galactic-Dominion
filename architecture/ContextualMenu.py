@@ -24,28 +24,30 @@ class ContextualMenuMaster(object):
         acting on obj2Class.
         """
         self.menus[(obj1Class,obj2Class)] = menu
-        
+            
     def getMenu(self,obj1,obj2):
         """
         Returns context specific menu for obj1 acting on obj2.
         """
-        # Obj1 is a list
+        # Obj1 is normally a list
+        
+        # gets a list of lists of objects sorted by frequency of class
         if type(obj1) == list:
-            obj1 = self._sortByClass(obj1)
-            if len(obj1) > 0:
-                obj1Class = obj1[0].__class__
-            else:
-                obj1Class = None
+            sortedObjects = self._sortByClass(obj1)
         else:
-            obj1Class = obj1.__class__
+            sortedObjects = [[obj1]]
+            
         obj2Class = obj2.__class__
         
-        menu = self.menus.get((obj1Class,obj2Class),None)
-        if menu is not None:
-            return menu.getMenu(obj1,obj2)
-        else:
-            return None
-
+        for typeGroup in sortedObjects:
+            curClass = typeGroup[0].__class__
+            menu = self.menus.get((curClass,obj2Class),None)
+            
+            if menu is not None:
+                return menu.getMenu(typeGroup,obj2)
+                
+        return None
+            
     def _sortByClass(self,t):
         
         d = {}
@@ -54,16 +56,22 @@ class ContextualMenuMaster(object):
             d.setdefault(item.__class__,[]).append(item)
         
         return self._mostCommonClass(d)
-            
+        
     def _mostCommonClass(self,d):
         
         mostCommonClass = []
         
         for key in d:
-            if len(d[key]) > len(mostCommonClass):
-                mostCommonClass = d[key]
+            mostCommonClass.append((len(d[key]),d[key]))
+        mostCommonClass.sort(reverse=True)
+        
+        objList = []
+        
+        for number,objects in mostCommonClass:
+            
+            objList.append(objects)
 
-        return mostCommonClass
+        return objList
         
 class ContextualMenu(object):
     
