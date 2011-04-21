@@ -65,13 +65,13 @@ class Builder(Entity):
     ---------------------methods inherited from SuperClasses
     die(self): entity is removed from map
     changeHealth(self, numHits): decreases the health of the entity based 
-	on number of hits
-	
+    on number of hits
+    
     """
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.', owner='tmp'):
-		     
+             
         Entity.__init__(self,imagePath,x,y,world,colorkey,description,
             owner)
         
@@ -159,13 +159,13 @@ class Builder(Entity):
         if self.currentTask.isReady():
             self.currentTask.execute()
             self.nextBuildTask()
-	
+    
     def buildOptions(self):
         """
         Returns list of class options from self.buildDict.
         """
         return self.buildDict.keys()
-	
+    
     def buildOptionChoice(self,choice):
         """
         Returns the callback of the Builder constructor called for by
@@ -189,14 +189,13 @@ class Unit(Builder):
     name = 'Unit'
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.',loadList=None,
+                 description = 'No information available.',
                  owner='tmp'):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description,
             owner='tmp')
-	
+    
         #self.__class__.allUnits.add(self)
-        self.imagePath=imagePath
-        if loadList == None:
+        if True:#loadList == None:
             self.status=Locals.IDLE
             self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals. ATTACK: 10} #move, build, gather, attack
             self.path=[] #queue of future tuple destinations
@@ -207,6 +206,7 @@ class Unit(Builder):
             self.radius={Locals.GATHER: 100, Locals.ATTACK: 200}
             self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
             self.objectOfAction=None
+        '''
         else:
             #loadList = [status,efficiency,path,dest,speed,
             #attackRange,attackRechargeTime,radius,timeSinceLast
@@ -221,15 +221,34 @@ class Unit(Builder):
             self.radius = loadList['radius']
             self.timeSinceLast = loadList['timeSinceLast']
             self.objectOfAction = loadList['objectOfAction']
+            '''
         
-        self.regenRate = .5
-        
+        self.regenRate = .5        
         from Structure import TestTownCenter
         self.buildDict = {
             TestTownCenter:
                 lambda x,y : 
                     TestTownCenter(x, y, self.world, self.owner)
             }
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        
+        if self.world != None:
+            state['world'] = self.world.worldID
+            
+        if state['image'] != None:
+            del state['image']
+            
+        if hasattr(state['objectOfAction'],'entityID'):
+            state['objectOfAction'] = state['objectOfAction'].entityID
+        
+    def __setstate__(self,state):
+        self.__dict__ = state
+            
+        self.loadImage(self.imagePath, self.colorkey)
+        self.rect.center = self.realCenter
+            
 
     def update(self):
         """Called by game each frame to update object."""
@@ -247,8 +266,8 @@ class Unit(Builder):
             if not self.inventory.isFull():
                 self.gather()
             else:
-				self.status=Locals.IDLE
-				self.objectOfAction=None
+                self.status=Locals.IDLE
+                self.objectOfAction=None
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
         if self.currentTask == None:
             self.nextBuildTask()
@@ -392,14 +411,6 @@ class Unit(Builder):
         return (20,20,255)
     def __str__(self):
         return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])
-    def __getstate__(self):
-        d=dict()
-        d['imagePath']=self.imagePath
-        d[positio]
-        pass#return a dict
-    def __setstate__(self,dict):
-        pass        
-
 
 if __name__ == "__main__":
     
