@@ -1,7 +1,7 @@
 import Event
 from Entity import Entity
 from Listener import Listener
-from Unit import Unit
+from Unit import Unit,TestUnit
 from Overlay import HealthBar
 import cPickle
 
@@ -20,17 +20,16 @@ class WorldManipulator(Listener):
              data = event.data
              if 'GetWorld' in data:
                  return
-             print 'Got a command to unpickle the string ' + data + '\n'*5
+            
+             #print 'Got a command to unpickle the string ' + data + '\n'*5
              entity = cPickle.loads(data)
-             print 'Successfully unpickled the string' + data + '\n'*5
-             
-             print entity.__dict__
-             
-             entity.loadImage(entity.imagePath,entity.colorkey)
-             entity.healthBar = HealthBar(entity)
-             entity.rect.center = entity.realCenter
+             #print 'Successfully unpickled the string' + data + '\n'*5
              
              entity.world = self.world.universe.worldIDToWorld[entity.world]
-             self.world.universe.entityIDToEntity[entity.entityID] = entity             
-             if isinstance(entity,Unit) and entity.objectOfAction != None:
-                 entity.objectOfAction = self.world.universe.entityIDToEntity[entity.objectOfAction]
+             self.world.universe.entityIDToEntity[entity.entityID] = entity
+             self.world.allEntities[entity.entityID] = entity
+             print entity.__class__, entity.objectOfAction
+             if (isinstance(entity,TestUnit) or isinstance(entity,Unit)) and entity.objectOfAction != None:
+                 # DOES NOT TRY TO SET AGAIN IF IT FAILS CURRENTLY
+                 entity.objectOfAction = self.world.universe.entityIDToEntity.get(entity.objectOfAction,None)
+                 print entity.objectOfAction

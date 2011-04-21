@@ -260,11 +260,7 @@ class Unit(Builder):
             state['objectOfAction'] = state['objectOfAction'].entityID
         
         del state['healthBar']
-        
-        for attr in state:
-            print attr
-            print state[attr].__class__ 
-            print       
+      
         return state
         
     def __setstate__(self,state):
@@ -272,7 +268,9 @@ class Unit(Builder):
         self.__dict__ = state
             
         self.loadImage(self.imagePath, self.colorkey)
+        
         self.healthBar = HealthBar(self)
+        
         self.rect.center = self.realCenter
 
     def update(self):
@@ -444,3 +442,30 @@ class TestUnit(Unit):
     
     def __init__(self, x, y, world, owner='tmp'):
         Unit.__init__(self,'testCraft.png',x,y,world,'alpha','A test unit.',owner)
+    
+    def __getstate__(self):
+        print 'In Unit get state'
+        state = self.__dict__.copy()
+        
+        if self.world != None:
+            state['world'] = self.world.worldID
+            
+        if state['image'] != None:
+            del state['image']
+            
+        if hasattr(state['objectOfAction'],'entityID'):
+            state['objectOfAction'] = state['objectOfAction'].entityID
+        
+        del state['healthBar']
+      
+        return state
+        
+    def __setstate__(self,state):
+        print "In TestUnit set state"
+        self.__dict__ = state
+            
+        self.loadImage(self.imagePath, self.colorkey)
+        
+        self.healthBar = HealthBar(self)
+        
+        self.rect.center = self.realCenter

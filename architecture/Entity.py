@@ -86,7 +86,7 @@ class Entity(MapObject):
         self.timePassed = self.time-self.timePrev
         self.selected = False
         self.blocking = False
-        self.drawOffset=(0,0)
+        self.drawOffset=None
         
         self.focused = False
 
@@ -133,11 +133,14 @@ class Entity(MapObject):
         specialMath.isoToCart((-worldOffset[0],-worldOffset[1]))
         drawRect = self.rect.move(drawOffset)
         '''
+        if self.drawOffset is None:
+            return
+        
         drawRect = self.rect.move(self.drawOffset)
         #left,top=self.world.grid.cartToIso(drawRect.topleft)
         #right,bottom=self.world.grid.cartToIso(drawRect.bottomright)
         #drawRect = pygame.Rect(left,top,right-left,bottom-top)
-        
+
         drawRect.center = self.world.grid.cartToIso(drawRect.center)
         
         #drawRect.top = drawRect.top%gridHeight
