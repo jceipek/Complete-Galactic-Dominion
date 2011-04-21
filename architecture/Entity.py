@@ -74,13 +74,6 @@ class Entity(MapObject):
         # First initialization of description
         self.description = description
         self.realCenter=self.rect.center
-
-        # First initialization of options---
-        # Dictionary mapping strings for display in a menu shown
-        # upon being clicked to a callback function to execute.
-        # Menu options should be added to this dictionary.
-        self.options = {'Description': self.showDescription}
-        #self.pos = (x,y) # defined by superclass
         
         self.movable = movable
         

@@ -27,7 +27,7 @@ class WorldManipulator(Listener):
              print entity.__dict__
              
              entity.loadImage(entity.imagePath,entity.colorkey)
-             entity.healthBar = HealthBar(self)
+             entity.healthBar = HealthBar(entity)
              entity.rect.center = entity.realCenter
              
              entity.world = self.world.universe.worldIDToWorld[entity.world]

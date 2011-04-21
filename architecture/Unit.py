@@ -146,7 +146,7 @@ class Builder(Entity):
             self.nextBuildTask()
         
         if not self.currentTask == None:
-            self.Build()
+            self.build()
     
     def hasBuildTask(self):
         return len(self.buildQueue) > 0
@@ -157,7 +157,7 @@ class Builder(Entity):
         else:
             self.currentTask = None
     
-    def Build(self):
+    def build(self):
         """A particular builder creates builder1 after a certain timeToBuild"""
 
         self.currentTask.addTime(self.getTimeElapsed()/1000.0)
@@ -272,6 +272,7 @@ class Unit(Builder):
         self.__dict__ = state
             
         self.loadImage(self.imagePath, self.colorkey)
+        self.healthBar = HealthBar(self)
         self.rect.center = self.realCenter
 
     def update(self):
@@ -297,7 +298,7 @@ class Unit(Builder):
             self.nextBuildTask()
         
         if not self.currentTask == None:
-            self.Build()
+            self.build()
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
