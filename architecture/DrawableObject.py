@@ -72,10 +72,10 @@ class DrawableObject(object):
 
 class DrawableObjectGroup(DrawableObject):
     
-    def __init__(self,imageList):
+    def __init__(self,imageList,pos=(0,0)):
         #imageList is a list of tuples and values that indicate
         #image paths and colorkeys
-        
+        self.pos = pos
         self.drawableObjectList = []
         self.addObjectsFromImageList(imageList)
     
@@ -83,28 +83,36 @@ class DrawableObjectGroup(DrawableObject):
         
     def _imageInformationSetup(self):
         if pygame.display.get_init():
-            for drawableObject in self.drawableObjectList:
+            for drawableObjectTuple in self.drawableObjectList:
+                drawableObject = drawableObjectTuple[0]
                 drawableObject.loadImage(drawableObject.imagePath,drawableObject.colorkey)
                 drawableObject.setAverageColor(drawableObject.imagePath,drawableObject.colorkey)
                 drawableObject.realCenter = drawableObject.rect.center
                 drawableObject.isImageInitialized = True
     
     def addObjectsFromImageList(self,aList):
-        #aList is a list of tuples and values that indicate
-        #image paths and colorkeys
+        #aList is a list of tuples and values with the format:
+        #       (imagePath, [colorKey, [offset]])
         
         for t in aList:
-            if isinstance(t,tuple):
-                self.drawableObjectList.append(DrawableObject(t[0], t[1]))
-            else:
-                self.drawableObjectList.append(DrawableObject(t,None))
+            
+            if not isinstance(t,tuple):
+                #Handle case where there is a single value, not a tuple
+                self.drawableObjectList.append((DrawableObject(t,None),(0,0)))
+            elif len(t) == 3:
+                self.drawableObjectList.append((DrawableObject(t[0],t[1]),t[2]))
+            elif len(t) == 2:
+                self.drawableObjectList.append((DrawableObject(t[0],t[1]),(0,0)))
+            elif len(t) == 1:
+                self.drawableObjectList.append((DrawableObject(t[0],None),(0,0)))
 
     def draw(self,screen):
         
-        for drawableObject in self.drawableObjectList:
+        for drawableObjectTuple in self.drawableObjectList:
+            drawableObject = drawableObjectTuple[0]
+            offset = drawableObjectTuple[1]
             if drawableObject.isImageInitialized:
-                #print drawableObject.rect
-                screen.blit(drawableObject.image,drawableObject.rect)
+                screen.blit(drawableObject.image,drawableObject.rect.move(*self.pos).move(*offset))
             else:
                 self._imageInformationSetup()
 
