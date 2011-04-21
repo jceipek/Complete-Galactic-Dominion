@@ -294,6 +294,8 @@ class Unit(Builder):
             self.move()
         else:
             amount = self.inventory.add(self.objectOfAction,self.efficiency[Locals.GATHER])
+            if amount > self.objectOfAction.curHealth:
+                amount=self.objectOfAction.curHealth
         
             if amount == 0:
                 self.status = Locals.IDLE
@@ -313,6 +315,11 @@ class Unit(Builder):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
+
+    def moveCloseToObject(self,rad):
+        self.objectOfAction=obj
+        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+        self.dest=closest
             
     def move(self):
         """changes position of unit in direction of dest"""
