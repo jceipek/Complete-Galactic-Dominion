@@ -277,7 +277,7 @@ class Unit(Builder):
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
-        if not self.moveCloseToObject(self.radius[Locals.ATTACK]) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
+        if self.moveCloseToObject(self.radius[Locals.ATTACK]) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
             self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
             self.timeSinceLast[Locals.ATTACK]=0
         if self.objectOfAction.curHealth<=0:
@@ -286,7 +286,7 @@ class Unit(Builder):
 
     def gather(self):
         """moves unit close to resource, adds resource to containment"""
-        if not self.moveCloseToObject(self.radius[Locals.GATHER]):
+        if self.moveCloseToObject(self.radius[Locals.GATHER]):
             amount = self.inventory.add(self.objectOfAction,self.efficiency[Locals.GATHER])
             if amount > self.objectOfAction.curHealth:
                 amount=self.objectOfAction.curHealth

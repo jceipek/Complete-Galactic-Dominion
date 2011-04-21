@@ -1,6 +1,7 @@
 import pygame
 from Sign import Sign
 from DescriptionBox import DescriptionBox
+from GameData import Locals
 
 class HUD(object):
     def __init__(self, loc, size):
@@ -31,7 +32,7 @@ class HUD(object):
 
     def showInfo(self, entity, pos=(0,0)):
         
-        text = '%s \nDescription: \n%s' % (entity.healthStr(), entity.description)
+        text = '%s \nDescription: \n%s \n%s' % (entity.healthStr(), entity.description, Locals.status[entity.status])
         box=Sign(200, pos, entity.image)
         if entity.inventory:
             text+='\n'+ str(entity.inventory)
