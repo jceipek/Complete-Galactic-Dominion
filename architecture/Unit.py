@@ -420,3 +420,11 @@ class Unit(Builder):
         
     def __str__(self):
         return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])
+
+class TestUnit(Unit):
+    """Defines implementation of a unit."""
+    
+    name = 'TestUnit'
+    
+    def __init__(self, x, y, world, owner='tmp'):
+        Unit.__init__(self,'testCraft.png',x,y,world,'alpha','A test unit.',owner)

@@ -42,7 +42,7 @@ class ContextualMenuMaster(object):
         for typeGroup in sortedObjects:
             curClass = typeGroup[0].__class__
             menu = self.menus.get((curClass,obj2Class),None)
-            
+            print curClass,obj2Class,menu
             if menu is not None:
                 return menu.getMenu(typeGroup,obj2)
                 
@@ -104,7 +104,7 @@ class WayPoint(object):
 
 from Structure import Structure,TestTownCenter
 from Entity import Entity
-from Unit import Unit
+from Unit import Unit,TestUnit
 from NaturalObject import Gold
 
 from Event import NotificationEvent
@@ -339,24 +339,29 @@ def getCGDcontextualMenu():
     
     Unit_TestTownCenter_Menu = ContextualMenu(Unit_TestTownCenter)
     menuMaster.addMenu(Unit,TestTownCenter,Unit_TestTownCenter_Menu)
+    menuMaster.addMenu(TestUnit,TestTownCenter,Unit_TestTownCenter_Menu)
     
     None_TestTownCenter_Menu = ContextualMenu(None_TestTownCenter)
     menuMaster.addMenu(None,TestTownCenter,None_TestTownCenter_Menu)
     
     Unit_WayPoint_Menu = ContextualMenu(Unit_WayPoint)
     menuMaster.addMenu(Unit, WayPoint, Unit_WayPoint_Menu)
+    menuMaster.addMenu(TestUnit, WayPoint, Unit_WayPoint_Menu)
     
     Unit_Resource_Menu = ContextualMenu(Unit_Resource)
     menuMaster.addMenu(Unit, Gold, Unit_Resource_Menu)
+    menuMaster.addMenu(TestUnit, Gold, Unit_Resource_Menu)
     
     None_Unit_Menu = ContextualMenu(None_Unit)
     menuMaster.addMenu(None, Unit, None_Unit_Menu)
+    menuMaster.addMenu(None, TestUnit, None_Unit_Menu)
     
     TestTownCenter_WayPoint_Menu = ContextualMenu(TestTownCenter_WayPoint)
     menuMaster.addMenu(TestTownCenter,WayPoint,TestTownCenter_WayPoint_Menu)
     
     Unit_Unit_Menu = ContextualMenu(Unit_Unit)
     menuMaster.addMenu(Unit,Unit,Unit_Unit_Menu)
+    menuMaster.addMenu(TestUnit,TestUnit,Unit_Unit_Menu)
     
     return menuMaster
 
