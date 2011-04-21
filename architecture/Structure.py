@@ -23,12 +23,19 @@ class Structure(Builder):
 
     def __getstate__(self):
         state = self.__dict__.copy()
+        
         if self.world != None:
             state['world']=self.world.worldID
+            
         state['image']=None
         
+        return state
+        
     def __setstate__(self,state):
-        pass
+        self.__dict__ = state
+        
+        self.loadImage(self.imagePath,self.colorkey)
+        self.rect.center = self.realCenter
         
     def depositResources(self,unitList):
         
