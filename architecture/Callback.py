@@ -63,6 +63,7 @@ class SeriesCallback(object):
         
         for callNumber in xrange(len(self.callback)):
             args = (self.callback.pop(0))(*args)
+            
             if not (isinstance(args,tuple) or isinstance(args,list)):
                 args = [args]
         

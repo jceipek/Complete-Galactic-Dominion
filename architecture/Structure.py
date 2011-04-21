@@ -1,4 +1,4 @@
-from Unit import Builder, Unit
+from Unit import Builder, Unit, TestUnit
 from Entity import Locals
 
 import radialMenu
@@ -39,7 +39,6 @@ class Structure(Builder):
         
     def depositResources(self,unitList):
         
-        print len(unitList)
         for unit in unitList:
             if isinstance(unit,Unit):
                 inventory = unit.inventory
@@ -64,7 +63,6 @@ class Structure(Builder):
         stateDict['status'] = self.status
         return stateDict
     
-
 class TestTownCenter(Structure):
     """Defines structues which are built by units"""
 
@@ -76,8 +74,12 @@ class TestTownCenter(Structure):
     def __init__(self, x, y, world, owner='tmp'):
         Structure.__init__(self, 'TownCenter.png', x, y, world, 'alpha', 'Test building.',owner)
         
+        #self.buildDict = {
+        #    Unit: 
+        #        lambda x,y: 
+        #            Unit('testCraft.png',x,y,self.world,'alpha','A Unit.',self.owner)
+        #    }
+            
         self.buildDict = {
-            Unit: 
-                lambda x,y: 
-                    Unit('testCraft.png',x,y,self.world,'alpha','A Unit.',self.owner)
-            }
+            TestUnit: TestUnit
+        }

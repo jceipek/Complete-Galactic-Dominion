@@ -177,7 +177,7 @@ class Window(Listener):
                         realEvent.append(Event.QuitEvent())
     
                     elif rawEvent.type == pygame.MOUSEBUTTONDOWN:
-                        print "Mousedown"
+                        
                         buttonId = rawEvent.button
                         if buttonId == Event.MouseLocals.LEFT_CLICK:
                             TMP_mouseState = 1
@@ -188,7 +188,7 @@ class Window(Listener):
                             realEvent.append(Event.InitiateActionEvent(rawEvent.pos))
                     
                     elif rawEvent.type == pygame.MOUSEBUTTONUP:
-                        print "Mouseup"
+                        
                         TMP_mouseState = 0
                         buttonId = rawEvent.button
                         if buttonId == Event.MouseLocals.LEFT_CLICK:

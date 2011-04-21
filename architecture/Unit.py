@@ -112,12 +112,19 @@ class Builder(Entity):
                 if callback is None:
                     self.buildQueue.append(
                         BuildTask(entityClass,
-                            Callback(self.buildDict[entityClass],self.buildX,self.buildY))
+                            Callback(self.buildDict[entityClass],*self.getBuildArgs()))
                         )
+                    #self.buildQueue.append(
+                    #    BuildTask(entityClass,
+                    #        Callback(self.buildDict[entityClass],self.buildX,self.buildY))
+                    #    )
                 else:
                     self.buildQueue.append(
                         BuildTask(entityClass,callback)
                     )
+                    #self.buildQueue.append(
+                    #    BuildTask(entityClass,callback)
+                    #)
         
                 for resource,cost in entityClass.costToBuild:
                     self.world.removeResource(self.owner,resource,cost)
@@ -173,6 +180,16 @@ class Builder(Entity):
         @param choice: string as key for self.buildDict
         """
         return self.buildDict.get(choice,None)
+        
+    def getBuildArgs(self,buildX=None,buildY=None):
+        """
+        Takes an optional 
+        """
+        if buildX is None:
+            buildX = self.buildX
+        if buildY is None:
+            buildY = self.buildY
+        return (self.buildX,self.buildY,self.world,self.owner)
 
 
 class Unit(Builder):
@@ -229,7 +246,11 @@ class Unit(Builder):
                 lambda x,y : 
                     TestTownCenter(x, y, self.world, self.owner)
             }
-
+            
+        self.buildDict2 = {
+            TestTownCenter: TestTownCenter
+        }
+        
     def __getstate__(self):
         print 'In Unit get state'
         state = self.__dict__.copy()

@@ -298,7 +298,10 @@ def TestTownCenter_WayPoint(obj1,obj2):
         tmpcounter = 0
         for buildType in obj1[0].buildDict:
             
-            makeAndMove = SeriesCallback(obj1[0].buildDict[buildType], *obj1[0].rect.center)
+            #makeAndMove = SeriesCallback(obj1[0].buildDict[buildType], *obj1[0].rect.center)
+            makeAndMove = SeriesCallback(obj1[0].getBuildArgs)
+            makeAndMove.addCallback(obj1[0].buildDict[buildType])
+            #makeAndMove = SeriesCallback(obj1[0].buildDict[buildType],
             makeAndMove.addCallback(lambda entity : entity.addToPath(obj2.getPoint()))
         
             queueMake = Callback(obj1[0].addToBuildQueue,
@@ -312,7 +315,8 @@ def TestTownCenter_WayPoint(obj1,obj2):
             buildMenu.addItem(curItem)
             tmpcounter+=1
             
-    return menu
+        return menu
+    return None
 
 def Unit_Unit(obj1,obj2):
     

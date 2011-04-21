@@ -18,7 +18,7 @@ class HUD(object):
     def draw(self, displaySurface):
         self.drawSelected()
         displaySurface.blit(self.surface, (self.loc,self.size))
-        self.descBox.draw(displaySurface)
+        #self.descBox.draw(displaySurface)
 
     def drawNotification(self, event=None):
         if event is None:
