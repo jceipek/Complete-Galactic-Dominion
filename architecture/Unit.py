@@ -11,7 +11,7 @@ import specialMath
 from Callback import Callback
 from Event import NotificationEvent
 
-import pygame
+#import pygame
 
 class BuildTask(object):
     """
@@ -420,63 +420,3 @@ class Unit(Builder):
         
     def __str__(self):
         return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])
-
-if __name__ == "__main__":
-    
-    # BROKEN!
-    
-    screenSize = (width, height) = (1024, 768)
-    screenLoc = [0.0, 0.0]
-    
-    import pygame
-    
-    from World import World
-    import specialMath
-
-    RUNNING = True
-    pygame.init()
-    screen = pygame.display.set_mode(screenSize)
-    screenZone = screen.get_rect()
-
-    w = World()
-    print 'World initialized'
-    
-    # Creates entities to test with in world w
-    for i in xrange(50):
-        w.addEntity(Unit('ball.png',i*50,i*50, w, (255,255,255)))
-        #print Entity.IDcounter
-    
-    MAX_FPS = 60
-    gameClock = pygame.time.Clock()
-    pygame.init()
-    
-    testRect = pygame.Rect((0,0,200,100))
-    
-    trect = testRect
-    left,top = trect.topleft
-    right,bottom = trect.bottomright
-    
-    print specialMath.cartToIso((left,top))
-    print specialMath.cartToIso((right,top))
-    print specialMath.cartToIso((right,bottom))
-    print specialMath.cartToIso((left,bottom))
-
-    while RUNNING:
-        
-        # calls update function of all Entities in world
-        w.update()
-        
-        screen.fill((0,0,0))
-        
-        # Grabs all entities that are currently on the screen from the 
-        # world
-        curScreenEntities = w.getScreenEntities(screenZone)
-        
-        for ent in w.getScreenEntities(screenZone):
-            
-            ent.draw(screen)
-            
-        pygame.display.flip()
-        
-        ms_elapsed = gameClock.tick(MAX_FPS)
-        #print 'Current frames per second: %d'%int(1000.0/ms_elapsed)
