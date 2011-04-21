@@ -169,8 +169,8 @@ class Window(Listener):
             if self.pygameEvents:
                 
                 try:
-                    rawEvent=self.pygameEvents.pop()
-                
+                    rawEvent=self.pygameEvents.pop(0)
+                    
                     #FIXME - more events needed
                     realEvent = []
                     if rawEvent.type == pygame.QUIT:

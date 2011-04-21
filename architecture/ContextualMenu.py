@@ -286,7 +286,7 @@ def TestTownCenter_WayPoint(obj1,obj2):
     if len(obj1[0].buildDict) > 0:
         
         buildItem = radialMenu.RMenuItem(menu,
-            image = "BuildOrb.png",
+            image = "RecruitOrb.png",
             col = (255,0,255),
             title = 'Build Options')
         
