@@ -115,6 +115,14 @@ class DrawableObjectGroup(DrawableObject):
                 screen.blit(drawableObject.image,drawableObject.rect.move(*self.pos).move(*offset))
             else:
                 self._imageInformationSetup()
+                
+    def move(self,x,y):
+        self.pos[0] += x
+        self.pos[1] += y
+
+    def setPos(self,x,y):
+        self.pos[0] = x
+        self.pos[1] = y
 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)

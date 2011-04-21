@@ -1,6 +1,6 @@
 import pygame
 from Sign import Sign
-from DescriptionBox import DescriptionBox
+from HUDElements import DescriptionBox, SelectedUnitBar
 from GameData import Locals
 
 class HUD(object):
@@ -9,6 +9,7 @@ class HUD(object):
         self.size=size
         self.surface=pygame.Surface(size)
         self.descBox = DescriptionBox()
+        self.selectedUnitBar = SelectedUnitBar()
         self.rect = pygame.Rect(self.loc,self.size)
         self.width=200
         self.viewport=None
@@ -18,6 +19,7 @@ class HUD(object):
     def draw(self, displaySurface):
         self.drawSelected()
         displaySurface.blit(self.surface, (self.loc,self.size))
+        self.selectedUnitBar.draw(displaySurface)
         self.descBox.draw(displaySurface)
 
     def drawNotification(self, event=None):
