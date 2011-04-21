@@ -44,6 +44,29 @@ class DrawableObject():
         """
         return self.averageColor
 
+class DrawableObjectGroup(DrawableObject):
+    
+    def __init__(self,imageList):
+        #imageList is a list of tuples and values that indicate
+        #image paths and colorkeys
+        self.drawableObjectList = []
+        self.addObjectsFromImageList(imageList)
+        
+    def addObjectsFromImageList(self,aList):
+        #aList is a list of tuples and values that indicate
+        #image paths and colorkeys
+        
+        for t in aList:
+            if isinstance(t,tuple):
+                self.drawableObjectList.append(DrawableObject(t[0], t[1]))
+            else:
+                self.drawableObjectList.append(DrawableObject(t,None))
+
+    def drawObjects(self,screen):
+        for o in self.drawableObjectList:
+            print o.rect
+            screen.blit(o.image,o.rect)
+
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)
     screenLoc = [0.0, 0.0]
