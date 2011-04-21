@@ -31,5 +31,5 @@ class WorldManipulator(Listener):
              print entity.__class__, entity.objectOfAction
              if (isinstance(entity,TestUnit) or isinstance(entity,Unit)) and entity.objectOfAction != None:
                  # DOES NOT TRY TO SET AGAIN IF IT FAILS CURRENTLY
-                 entity.objectOfAction = self.world.universe.entityIDToEntity.get(entity.objectOfAction,None)
+                 entity.objectOfAction = self.world.universe.entityIDToEntity.get(entity.objectOfAction,entity.objectOfAction)
                  print entity.objectOfAction

@@ -276,6 +276,9 @@ class Unit(Builder):
     def update(self):
         """Called by game each frame to update object."""
         #FIXME !!!
+        if isinstance(self.objectOfAction,int):
+            self.objectOfAction = self.world.universe.entityIDToEntity.get(self.objectOfAction,self.objectOfAction)
+        
         if not self.hasFullHealth():
             self.regenerate()
         if self.status==Locals.MOVING:
