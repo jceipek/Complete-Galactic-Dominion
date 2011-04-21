@@ -48,4 +48,3 @@ class HUD(object):
                 continue
             self.showInfo(e, pos=(i,20))
             i+=self.width
-            

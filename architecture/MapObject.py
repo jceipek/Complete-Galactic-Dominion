@@ -17,7 +17,6 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
         #self.realCenter=[x,y]
         #self.rect.center = (x,y)
         
-
         # this is the first initialization of owner
         self.owner=None # default to no owner
         

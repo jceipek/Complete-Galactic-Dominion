@@ -61,6 +61,9 @@ class Entity(MapObject):
         
         MapObject.__init__(self, imagePath, x, y, colorkey)
         
+        # MAYBE FIXME - ADDED WED, APR 20 TO TRY TO FIX OBJ PLACEMENT
+        self.rect.center = (x,y)
+        
         self.owner = owner
         
         # adds the entity to the provided world

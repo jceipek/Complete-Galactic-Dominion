@@ -66,7 +66,6 @@ class Builder(Entity):
     die(self): entity is removed from map
     changeHealth(self, numHits): decreases the health of the entity based 
     on number of hits
-    
     """
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
@@ -197,7 +196,7 @@ class Unit(Builder):
         #self.__class__.allUnits.add(self)
         if True:#loadList == None:
             self.status=Locals.IDLE
-            self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals. ATTACK: 10} #move, build, gather, attack
+            self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10} #move, build, gather, attack
             self.path=[] #queue of future tuple destinations
             self.dest=self.realCenter=list(self.rect.center) #current destination
             self.speed=.1
@@ -225,11 +224,11 @@ class Unit(Builder):
         
         self.regenRate = .5        
         from Structure import TestTownCenter
-#        self.buildDict = {
-#            TestTownCenter:
-#                lambda x,y : 
-#                    TestTownCenter(x, y, self.world, self.owner)
-#            }
+        self.buildDict = {
+            TestTownCenter:
+                lambda x,y : 
+                    TestTownCenter(x, y, self.world, self.owner)
+            }
 
     def __getstate__(self):
         print 'In Unit get state'
@@ -256,6 +255,8 @@ class Unit(Builder):
         print "In Unit set state"
         self.__dict__ = state
             
+        self.loadImage(self.imagePath, self.colorkey)
+        self.rect.center = self.realCenter
 
     def update(self):
         """Called by game each frame to update object."""
@@ -418,7 +419,7 @@ class Unit(Builder):
         return (20,20,255)
         
     def __str__(self):
-        return 'Unit'
+        return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])
 
 if __name__ == "__main__":
     

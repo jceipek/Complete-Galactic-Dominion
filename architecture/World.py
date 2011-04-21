@@ -1,7 +1,8 @@
 from Entity import Entity
 from Structure import TestTownCenter
-
 from NaturalObject import Gold
+
+import specialMath
 
 class World(object):
     """
@@ -97,7 +98,8 @@ class World(object):
             for view in viewRects:
                 #if entity.collRect.colliderect(viewRect):
                 if self.collideRectDiamond(entity.rect,view):
-                    entitySortList.append((entity.rect.bottom,entity))
+                    #entitySortList.append((entity.rect.bottom,entity))
+                    entitySortList.append((specialMath.cartToIso(entity.rect.center),entity))
                     entity.drawOffset=-view[0][0],-view[0][1]
                     break # if it collides, go to next loop
 
