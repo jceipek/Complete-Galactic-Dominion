@@ -13,6 +13,7 @@ class Universe(Listener):
         
         #self.worldList = []
         self.worldIDToWorld = {}
+        self.entityIDToEntity = {}
         self.activeWorld = world
 
     def addWorld(self,world,setToActive=False):
@@ -30,10 +31,13 @@ class Universe(Listener):
         #return world.worldID
 
     def addEntity(self,entity):
-        self.creator.registerEntity(entity)
+        ID = self.creator.registerEntity(entity)
+        self.entityIDToEntity[ID] = entity
     
     def removeEntity(self,entity):
+        ID = entity.entityID
         self.creator.unregisterEntity(entity)
+        self.entityIDToEntity[ID] = None
 
     def changeWorld(self,newWorld):
         """
@@ -103,7 +107,7 @@ class Creator(object):
         else:
             ID = self.releasedEntityIDs.pop(0)
         entity._setEntityID(ID)
-        #return ID
+        return ID
     
     def unregisterEntity(self,entity):
         

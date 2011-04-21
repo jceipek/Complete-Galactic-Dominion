@@ -10,12 +10,17 @@ class DrawableObject():
     def __init__(self, imagePath, colorkey=None):
         
         # First class to have image and rect objects
+        self.imagePath = imagePath
+        self.colorkey = colorkey
         
         self.loadImage(imagePath,colorkey)
         self.setAverageColor(imagePath,colorkey)
         self.realCenter = self.rect.center
         
     # First loadImage method
+    
+        
+    
     def loadImage(self, imagePath, colorkey=None):
         
         objImageAndRect = self.__class__.imageBank.getImageAndRect(imagePath)

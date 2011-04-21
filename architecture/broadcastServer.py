@@ -50,7 +50,7 @@ def init(host='localhost'):
         3. We send the eventManager a message to start the game
             - This message is interpreted by the gameWindow
     """
-
+    
     debugger = Debugger()
     eventTimer = EventTimer()
     
@@ -60,21 +60,12 @@ def init(host='localhost'):
     networked = True
     try:                                            
         client = GameClient(eventManager,host=host,port=1567)
-        #client.sendRequest('GetWorld')
+    #    client.sendRequest('GetWorld')
     except:
         networked = False
-                                                    
+                                               
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
-    #Note: Do we even need this anymore? - Julian
-    #Response: I don't think so.  - Jared
-    #Response: I still think we should.  - Patrick
-    
-    #===========================================
-    #Create and register the standard listeners
-    #With the event manager
-    #===========================================
-    #FIXME: Not yet fully implemented
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
 
@@ -86,13 +77,30 @@ def init(host='localhost'):
     gameWindow.fullscreenMode = False
     gameWindow.updateScreenMode()
     
-    w = World()
+    w = World(universe)
     wManipulator = WorldManipulator(eventManager,w,networked)
-    universe.changeWorld(w)
+    #universe.changeWorld(w)
     
     #===========================================
     
     # Initialize 500 entities in World w
+    for i in xrange(25):
+        #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
+        #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
+        a=['Unit','testCraft.png',i*50,i*50,'world','alpha']
+        eventManager.post(Event.WorldManipulationEvent(a))
+        #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
+
+    #Notify the manager that the window should start to accept input:
+    eventManager.post(Event.StartEvent())
+    
+    return eventManager.eventTypesToListeners
+
+    #universe.changeWorld(w)
+    
+    #===========================================
+    
+    # Initialize 25 entities in World w
     for i in range(25):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))

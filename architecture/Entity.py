@@ -208,11 +208,12 @@ class Entity(MapObject):
     def changeHealth(self, numHits):
         """changes current health by numHits, removes object if current health drops to 0"""
         self.curHealth+=numHits
-        self.healthBar.updateHealthBar()
         if self.curHealth<=0:
+            self.curHealth=0
             self.die()
         elif self.curHealth > self.maxHealth:
             self.curHealth = self.maxHealth
+        self.healthBar.updateHealthBar()
             
     def moveWrap(self):
         """

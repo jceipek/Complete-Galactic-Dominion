@@ -169,6 +169,9 @@ class Locals:
     BUILDING = 2
     GATHERING = 3
     ATTACKING = 4
+
+    status={IDLE: 'Idle', MOVING: 'Moving', BUILDING:'Building', GATHERING:'Gathering', ATTACKING: 'Attacking'}
+    
     #Efficiency
     MOVE=0
     BUILD=1
