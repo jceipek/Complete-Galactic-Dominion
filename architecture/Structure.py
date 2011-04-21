@@ -69,6 +69,7 @@ class TestTownCenter(Structure):
     """Defines structues which are built by units"""
 
     acceptableResources = [Gold]
+    costToBuild = [(Gold,500)]
     
     name = 'Town Center'
     
