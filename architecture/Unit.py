@@ -258,11 +258,7 @@ class Unit(Builder):
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
-        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
-        self.dest=closest
-        if specialMath.distance(self.realCenter, self.dest) > self.radius[Locals.ATTACK]:
-            self.move() 
-        elif self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
+        if not self.moveCloseToObject(self.radius[Locals.ATTACK]) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
             self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
             self.timeSinceLast[Locals.ATTACK]=0
         if self.objectOfAction.curHealth<=0:
@@ -271,9 +267,7 @@ class Unit(Builder):
 
     def gather(self):
         """moves unit close to resource, adds resource to containment"""
-        if specialMath.distance(self.realCenter, self.dest) > self.radius[Locals.GATHER]:
-            self.move()
-        else:
+        if not self.moveCloseToObject(self.radius[Locals.GATHER]):
             amount = self.inventory.add(self.objectOfAction,self.efficiency[Locals.GATHER])
             if amount > self.objectOfAction.curHealth:
                 amount=self.objectOfAction.curHealth
@@ -290,17 +284,21 @@ class Unit(Builder):
         Initialized appropriate action by setting dest and status given the type of entity.
         """
         self.objectOfAction=obj
-        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
-        self.dest=closest
         if isinstance(obj, Builder):#Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
 
-    def moveCloseToObject(self,rad):
-        self.objectOfAction=obj
+    def moveCloseToObject(self,radius):
+        """
+        Moves unit within specified radius of objectOfAction. Returns True if within radius, False if otherwise
+        """
         closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
         self.dest=closest
+        if specialMath.distance(self.realCenter, self.dest) > radius:
+            self.move()
+            return False
+        else: return True
             
     def move(self):
         """changes position of unit in direction of dest"""
