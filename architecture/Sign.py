@@ -52,7 +52,6 @@ class Sign:
     self.aa = True
     self.margin = margin
     self.rendered = False
-    self.callback = lambda : 'It worked!'
   def clear(self):
     self.text = []
     self.rendered = False

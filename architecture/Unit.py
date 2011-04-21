@@ -102,7 +102,7 @@ class Builder(Entity):
             self.buildX,self.buildY = self.rect.center
         else:
             self.buildX,self.buildY = buildPos
-
+        
         if entityClass in self.buildDict:
             if self._hasResourcesToBuild(entityClass):    
                 self.addNotification(NotificationEvent(
@@ -241,13 +241,8 @@ class Unit(Builder):
         
         self.regenRate = .5        
         from Structure import TestTownCenter
+
         self.buildDict = {
-            TestTownCenter:
-                lambda x,y : 
-                    TestTownCenter(x, y, self.world, self.owner)
-            }
-            
-        self.buildDict2 = {
             TestTownCenter: TestTownCenter
         }
         
@@ -434,7 +429,6 @@ class Unit(Builder):
         to the path.
         """
         self.path.append(list(coord))
-        print self.path
         
     def getMiniMapColor(self):
         return (20,20,255)

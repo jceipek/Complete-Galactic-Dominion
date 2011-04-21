@@ -42,7 +42,7 @@ class ContextualMenuMaster(object):
         for typeGroup in sortedObjects:
             curClass = typeGroup[0].__class__
             menu = self.menus.get((curClass,obj2Class),None)
-            print curClass,obj2Class,menu
+
             if menu is not None:
                 return menu.getMenu(typeGroup,obj2)
                 
@@ -75,7 +75,7 @@ class ContextualMenuMaster(object):
         
 class ContextualMenu(object):
     
-    def __init__(self,menuMakerFunction = lambda obj1,obj2: None):
+    def __init__(self,menuMakerFunction):
         """
         Wrapper for a radialMenu maker.  menuMakerFunction takes
         a list of objects acting on an object to produce a menu.
@@ -98,7 +98,7 @@ class WayPoint(object):
         self.x,self.y = x,y
     
     def getPoint(self):
-        return self.x,self.y
+        return (self.x,self.y)
 
 #### ENTER CUSTOM DEFINED MENU FUNCTIONS HERE ####
 

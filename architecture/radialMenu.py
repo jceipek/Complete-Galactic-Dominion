@@ -54,14 +54,12 @@ class RMenu():
         if self._timeFocused >= self._openDelay:
             self._timeFocused=0
             self.visible=True
-            print 'Opening...',self.title
     
     def open(self,loc):
         self.loc = loc
         self.mousePos = loc
         if self._openDelay <= 0:
             self.visible = True
-            print 'Opening...',self.title
         
     def select(self,loc):
         if self.visible:
@@ -81,7 +79,7 @@ class RMenu():
                  
     def close(self):
         self.visible = False
-        print 'Closing...',self.title
+        
         count = len(self.root)
         for i in xrange(count):
             if self.root[i].submenu:

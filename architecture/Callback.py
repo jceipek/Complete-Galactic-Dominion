@@ -143,4 +143,8 @@ if __name__ == "__main__":
     
     parallelTest=ParallelCallback(giveAnumber)
     parallelTest.addCallback(printAnumber,50)
+    
+    #import pickle
+    #pickle.loads(pickle.dumps(parallelTest)).execute()
+    
     parallelTest.execute()
