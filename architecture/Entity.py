@@ -86,7 +86,7 @@ class Entity(MapObject):
         self.timePassed = self.time-self.timePrev
         self.selected = False
         self.blocking = False
-        self.drawOffset=None
+        self.drawOffset=(0,0)#?
         
         self.focused = False
 
