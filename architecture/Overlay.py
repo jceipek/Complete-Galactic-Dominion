@@ -79,6 +79,8 @@ def MakeBoundingBox(p1,p2):
     bboxRect.normalize() # Normalizes to remove negative sizes.
     return bboxRect
 
+
+
 class HealthBar():
     
     def __init__(self,owner,hBarHeight=5,padY=3,scaleX=1,capWidth=True):

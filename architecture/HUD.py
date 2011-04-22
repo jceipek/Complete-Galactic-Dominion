@@ -45,6 +45,7 @@ class HUD(object):
     def drawSelected(self):
         i=0
         pygame.draw.rect(self.surface, (0,0,0), self.infoRect)
+        self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)
         for e in self.viewport.selectedEntities:
             if not e.selected:
                 continue
