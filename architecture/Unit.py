@@ -387,21 +387,16 @@ class Unit(Builder):
             
             # Unit vector of velocity
             dirx /= distLocToDest #unit x direction of movement
-            diry /= distLocToDest #unit y direction of movement
-            #print dirx, diry, (dirx**2 + diry**2)
-            
+            diry /= distLocToDest #unit y direction of movement            
             
             newX = curX + dirx*self.speed*self.getTimeElapsed()
             newY = curY + diry*self.speed*self.getTimeElapsed()
             
-            #print 'Dir info: ',curX,curY,newX,newY
-            #print 'Dest info: ',self.dest
-            
-            #if specialMath.hypotenuse(newX-curX,newY-curX) > distLocToDest:
-            #    self.rect.center = self.dest
-            #else:
-            #    self.rect.center = newX, newY
-            self.realCenter = [newX,newY]
+            # Prevents units from overshooting target when moving
+            if self.speed*self.getTimeElapsed() > distLocToDest:
+                self.realCenter = self.dest
+            else:
+                self.realCenter = [newX, newY]
             self.rect.center = tuple(self.realCenter)
             self.moveWrap()
             

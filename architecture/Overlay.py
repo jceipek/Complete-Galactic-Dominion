@@ -132,6 +132,7 @@ class HealthBar(Bar):
         Draws health bar to the given surface, centered at the provided
         (x,y) coordinate tuple midTop.
         """
+        
         centerX, top = midTop
         hBarTop = top - self.padY - self.barHeight
         Bar.draw(self,surface,(centerX-self.barWidth//2,hBarTop))

@@ -384,6 +384,14 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.postNotification()
         timeElapsed = event.elapsedTimeSinceLastFrame
         
+        # FIXME - NOT EFFICIENT
+        for entity in self.world.getDeadEntities():
+            if entity in self.selectedEntities:
+                try:
+                    self.selectedEntities.remove(entity)
+                except ValueError: # thrown if entity not in selectedEntity list
+                    pass
+        
         if self.currentMenu is not None and not self.currentMenu.visible:
             self.currentMenu._delayedOpen(timeElapsed)
         
