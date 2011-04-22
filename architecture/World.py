@@ -20,12 +20,27 @@ class World(object):
                                dependent on sub-worlds
     """
     
+    """
+    NETWORKING DIRECTIONS
+    
+    To pickle:
+        self.allEntities
+        self.grid
+        self.gridDim
+        self.universe
+        self.worldID
+        self.resourceContainer
+        
+    To not-pickle:
+        self.notifications
+        self.deadEntities
+    """
+    
     def __init__(self, universe, grid=None): #FIXME got rid of a comma, did we lose something?
         
         # maps entityID of each entity to a pointer to the entity
         # may need to map tuple of entityID and ownerID later when
         # multiple players own units in a world
-        
         self.allEntities = dict()
         
         if grid == None:
@@ -50,6 +65,10 @@ class World(object):
         self.resourceContainer = WorldResourceContainer(self)
         
         self.notifications = []
+        
+        # Contains a list of entities which have died, and called upon
+        # the removeEntity method.
+        self.deadEntities = []
     
     def _setWorldID(self,ID):
         self.worldID = ID
@@ -150,7 +169,17 @@ class World(object):
         return True
     
     def addNotification(self,event):
+        """
+        Adds a NotificationEvent to a list of such events.
+        """
         self.notifications.append(event)
+    
+    def getDeadEntities(self):
+        """
+        Returns the current list of dead entities, and resets the list.
+        """
+        self.deadEntities,deadEntities = [],self.deadEntities
+        return deadEntities
     
     def addEntity(self, entity):
         """
@@ -165,6 +194,7 @@ class World(object):
     def removeEntity(self, entity):
         """Removes an entity from the World."""
         if entity.entityID in self.allEntities:
+            self.deadEntities.append(entity)
             self.universe.removeEntity(entity)
             del self.allEntities[entity.entityID]
             

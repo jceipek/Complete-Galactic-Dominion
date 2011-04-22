@@ -33,4 +33,5 @@ class HUD(object):
         sign.draw(self.surface)
 
     def drawSelected(self):
-        self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)
+		
+		self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)

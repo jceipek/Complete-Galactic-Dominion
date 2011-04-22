@@ -7,10 +7,10 @@ from Inventory import Inventory
 
 from collections import deque
 import specialMath
-from math import atan
+from math import atan2
 
 from Callback import Callback
-from Event import NotificationEvent
+from Event import NotificationEvent,WorldManipulationEvent
 
 #import pygame
 
@@ -346,11 +346,19 @@ class Unit(Builder):
         """
         Initialized appropriate action by setting dest and status given the type of entity.
         """
+        data=['act',self.entityID,obj.entityID]
+        self.world.universe.manager.post(WorldManipulationEvent(data))
+            
+    def execAction(self,obj):
+        """
+        Execute the appropriate action taken from a network command
+        """
         self.objectOfAction=obj
         if isinstance(obj, Builder):#Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
+        
 
     def moveCloseToObject(self,radius):
         """
@@ -386,14 +394,11 @@ class Unit(Builder):
             newX = curX + dirx*self.speed*self.getTimeElapsed()
             newY = curY + diry*self.speed*self.getTimeElapsed()
             
-            #print 'Dir info: ',curX,curY,newX,newY
-            #print 'Dest info: ',self.dest
-            
-            #if specialMath.hypotenuse(newX-curX,newY-curX) > distLocToDest:
-            #    self.rect.center = self.dest
-            #else:
-            #    self.rect.center = newX, newY
-            self.realCenter = [newX,newY]
+            # Prevents units from overshooting target when moving
+            if self.speed*self.getTimeElapsed() > distLocToDest:
+                self.realCenter = self.dest
+            else:
+                self.realCenter = [newX, newY]
             self.rect.center = tuple(self.realCenter)
             self.moveWrap()
 
