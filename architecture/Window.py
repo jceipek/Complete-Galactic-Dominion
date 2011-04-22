@@ -118,9 +118,6 @@ class Window(Listener):
             #Tell the objects on screen to update.
             self.pygameEvents += pygame.event.get()
             self.manager.post(Event.UpdateEvent(self.gameFrametime,self.gameTime))
-            
-            #Note: the renderer does not update or display anything.
-            #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
 
         pygame.quit()
         
@@ -203,7 +200,6 @@ class Window(Listener):
                                 else:
                                     realEvent.append(Event.SingleAddSelectionEvent(rawEvent.pos))
                         elif buttonId == Event.MouseLocals.RIGHT_CLICK:
-                            #realEvent.append(Event.SetDestinationEvent(rawEvent.pos))
                             realEvent.append(Event.CompleteActionEvent(rawEvent.pos))
     
                     elif rawEvent.type == pygame.MOUSEMOTION:
@@ -223,8 +219,6 @@ class Window(Listener):
                         if rawEvent.key == pygame.K_RALT or \
                             rawEvent.key == pygame.K_LALT:
                             keyHeldDict['alt'] = True
-                        #if pygame.K_0 <= rawEvent.key <= pygame.K_9:
-                        #    pass
     
                     elif rawEvent.type == pygame.KEYUP:
                         if rawEvent.key == pygame.K_RSHIFT or \
