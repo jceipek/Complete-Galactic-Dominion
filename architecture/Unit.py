@@ -115,17 +115,11 @@ class Builder(Entity):
                         BuildTask(entityClass,
                             Callback(self.buildDict[entityClass],*self.getBuildArgs()))
                         )
-                    #self.buildQueue.append(
-                    #    BuildTask(entityClass,
-                    #        Callback(self.buildDict[entityClass],self.buildX,self.buildY))
-                    #    )
+                        
                 else:
                     self.buildQueue.append(
                         BuildTask(entityClass,callback)
                     )
-                    #self.buildQueue.append(
-                    #    BuildTask(entityClass,callback)
-                    #)
         
                 for resource,cost in entityClass.costToBuild:
                     self.world.removeResource(self.owner,resource,cost)
