@@ -54,6 +54,9 @@ class SelectedUnitBar():
         #Optimally, should be called only when selection changes
         self.boxes = []
         unitCount = len(unitList)
+        print "New"
+        print unitCount
+        print len(unitList)
         rowNum = 1
         for u in xrange(unitCount-1):
             if (u+1)%self.columnMax == 0:
