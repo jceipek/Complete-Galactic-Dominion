@@ -142,7 +142,7 @@ def getAverageColor(surface, colorkey=None):
             for y in xrange(imageHeight):
                 rAdd,gAdd,bAdd,aAdd = surface.get_at((x,y))
                 
-                if not backgroundColor == (rAdd,gAdd,bAdd,aAdd):
+                if not backgroundColor == (rAdd,gAdd,bAdd):
                     
                     pixelFrac = ((aAdd)/255.0)
                     
