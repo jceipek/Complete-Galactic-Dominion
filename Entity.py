@@ -1,12 +1,24 @@
 import MapObject
 import pygame
 from collections import deque
+from Event import WorldManipulationEvent
 
 class Entity(MapObject,pygame.sprite.Sprite):
     """A foreground MapObject with which one can interact."""
-	
+	manager = None
+    def __new__(cls, imagePath, x, y, colorkey=None,
+                 description = 'No information available.',serverCmd=False):
+        if serverCmd:
+            superCls = super(TestClass, cls)
+            return superCls.__new__(cls)
+        else:
+            a=[self.__class__]
+            a.append(imagePath, x, y, colorkey,
+                 description,True)
+            Entity.manager.post(WorldManipulationEvent(a))
+    
     def __init__(self, imagePath, x, y, colorkey=None,
-                 description = 'No information available.'):    
+                 description = 'No information available.',serverCmd=False):    
         MapObject.__init__(self, imagePath, colorkey)
 
         # First class to inherit from Sprite
