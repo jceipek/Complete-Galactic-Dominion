@@ -169,11 +169,13 @@ class Locals:
     BUILDING = 2
     GATHERING = 3
     ATTACKING = 4
+    DEPOSITING=5
 
-    status={IDLE: 'Idle', MOVING: 'Moving', BUILDING:'Building', GATHERING:'Gathering', ATTACKING: 'Attacking'}
+    status={IDLE: 'Idle', MOVING: 'Moving', BUILDING:'Building', GATHERING:'Gathering', ATTACKING: 'Attacking', DEPOSITING: 'Depositing Resources'}
     
     #Efficiency
     MOVE=0
     BUILD=1
     GATHER=2
     ATTACK=3
+    DEPOSIT=4

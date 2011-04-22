@@ -207,13 +207,13 @@ class Unit(Builder):
         #self.__class__.allUnits.add(self)
         if True:#loadList == None:
             self.status=Locals.IDLE
-            self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10} #move, build, gather, attack
+            self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10}
             self.path=[] #queue of future tuple destinations
             self.dest=self.realCenter=list(self.rect.center) #current destination
             self.speed=.1
             self.attackRange=300
             self.attackRechargeTime=500
-            self.radius={Locals.GATHER: 100, Locals.ATTACK: 200}
+            self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100}
             self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
             self.objectOfAction=None
         '''
@@ -288,6 +288,8 @@ class Unit(Builder):
             else:
                 self.status=Locals.IDLE
                 self.objectOfAction=None
+        elif self.status==Locals.DEPOSITING:
+            self.deposit()
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
         if self.currentTask == None:
             self.nextBuildTask()
@@ -316,7 +318,27 @@ class Unit(Builder):
                 self.dest=self.realCenter
             else:
                 self.objectOfAction.changeHealth(-1*amount)
-                self.timeSinceLast[Locals.ATTACK]=0 
+                self.timeSinceLast[Locals.ATTACK]=0
+
+    def setStatusAndObjectOfAction(self,status,obj):
+        self.status = status
+        self.objectOfAction = obj
+    
+    def deposit(self):
+        """
+        Moves unit close to structure and deposits all the accepted resources
+        """
+        if self.moveCloseToObject(self.radius[Locals.DEPOSIT]):
+            for resource in self.inventory.items:
+                    if resource in self.objectOfAction.acceptableResources:
+                        amountToDeposit = self.inventory.removeAll(resource)
+                        amountDeposited = self.world.addResource(self.owner,resource,amountToDeposit)
+                        
+                        notifyStr = '%s %d deposited %d %s.'%(self.name,self.entityID,amountDeposited,resource.name)
+                        self.addNotification(NotificationEvent(notifyStr))
+                        
+                        if amountToDeposit != amountDeposited:
+                            print 'Warning: did not deposit correct amount of resources.'
         
     def initAction(self, obj): 
         """
