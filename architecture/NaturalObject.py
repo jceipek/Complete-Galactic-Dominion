@@ -1,4 +1,5 @@
 from Entity import Entity
+from Overlay import HealthBar
 
 class NaturalObject(Entity):
     """
@@ -22,6 +23,33 @@ class NaturalObject(Entity):
     def collect(self):
         if not self.collectable:
             pass
+            
+    def __getState__(self):
+        state = self.__dict__.copy()
+        
+        print 'In Natural Object get state' + '\n'*3
+        print state
+        print '\n'*3
+        
+        if self.world != None:
+            state['world'] = self.world.worldID
+            
+        if state['image'] != None:
+            del state['image']
+        
+        del state['healthBar']
+      
+        return state
+        
+    def __setstate__(self,state):
+        self.__dict__ = state
+            
+        self.loadImage(self.imagePath, self.colorkey)
+        
+        self.healthBar = HealthBar(self)
+        
+        self.rect.center = self.realCenter
+        self.selected = False
 
 class Resource(NaturalObject):
     """
@@ -52,6 +80,12 @@ class Gold(Resource):
             'Gold ore.')
         
         self.regenRate = 1
+        
+    def __getstate__(self):
+        return NaturalObject.__getState__(self)
+        
+    def __setstate__(self,state):
+        return NaturalObject.__setstate__(self,state)
 
 class Obstacle(NaturalObject):
     """

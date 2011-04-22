@@ -266,6 +266,7 @@ class Unit(Builder):
         self.healthBar = HealthBar(self)
         
         self.rect.center = self.realCenter
+        self.selected = False
 
     def update(self):
         """Called by game each frame to update object."""

@@ -28,7 +28,6 @@ from Entity import Entity,TestEntity
 from Unit import Unit,TestUnit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
-
 from NaturalObject import Gold
 
 def init(host='localhost'):

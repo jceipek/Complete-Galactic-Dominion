@@ -4,6 +4,7 @@ from Entity import Locals
 import radialMenu
 from Callback import Callback
 from NaturalObject import Gold
+from Overlay import HealthBar
 
 from Event import NotificationEvent
 
@@ -27,7 +28,10 @@ class Structure(Builder):
         if self.world != None:
             state['world']=self.world.worldID
             
-        state['image']=None
+        if state['image'] != None:
+            del state['image']
+            
+        del state['healthBar']
         
         return state
         
@@ -35,7 +39,10 @@ class Structure(Builder):
         self.__dict__ = state
         
         self.loadImage(self.imagePath,self.colorkey)
+        self.healthBar = HealthBar(self)
+        
         self.rect.center = self.realCenter
+        self.selected = False
         
     def depositResources(self,unitList):
         
