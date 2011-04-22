@@ -53,6 +53,7 @@ class SelectedUnitBar():
     def updateWithUnits(self,unitList):
         #Optimally, should be called only when selection changes
         self.boxes = []
+        
         unitCount = len(unitList)
         rowNum = 1
         for u in xrange(unitCount-1):
