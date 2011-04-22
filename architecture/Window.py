@@ -121,9 +121,9 @@ class Window(Listener):
             #Tell the objects on screen to update.
             self.pygameEvents += pygame.event.get()
             self.manager.post(Event.UpdateEvent(self.gameFrametime,self.gameTime))
-   			with self.eventLock:
-            	for event in self.eventQueue:
-                	self.manager.post(event)
+            with self.eventLock:
+                for event in self.eventQueue:
+                    self.manager.post(event)
                 self.eventQueue = []
             
             #Note: the renderer does not update or display anything.

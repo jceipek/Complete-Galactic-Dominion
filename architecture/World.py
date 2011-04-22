@@ -44,8 +44,8 @@ class World(object):
         # updated every new frame by viewport with reference to this world
         self.elapsedTimeSinceLastFrame = 0
     
-        self._generateResources()
-        self._TMPmakeBuilding()
+        #self._generateResources()
+        #self._TMPmakeBuilding()
         
         self.resourceContainer = WorldResourceContainer(self)
         

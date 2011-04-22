@@ -81,6 +81,11 @@ def init(host='localhost'):
         client.sendRequest('GetWorld')
     else:
         # Initialize 25 entities in World w
+        # Initialize a TestTownCenter
+        
+        w._generateResources()
+        w._TMPmakeBuilding()
+        
         for i in xrange(25):
             #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
             #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
