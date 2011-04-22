@@ -124,6 +124,7 @@ class HealthBar(Bar):
         self.updateHealthBar()
     
     def updateHealthBar(self):
+        self.maxValue = self.owner.maxHealth
         self.updateBarWithValue(self.owner.curHealth)
     
     def draw(self,surface,midTop):
