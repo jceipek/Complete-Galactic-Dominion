@@ -222,6 +222,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 for e in self.selectedEntities:
                     e.deselect()
                 self.selectedEntities = []
+            
             #else: pass # if it is an Event.AddDragCompletedEvent, do
             # # not deselect
             
@@ -237,8 +238,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 drawRect.center = specialMath.cartToIso(drawRect.center)
             
                 if drawRect.colliderect(MakeBoundingBox(start,end)):
-                    entity.select()
-                    self.selectedEntities.append(entity)
+                    if isinstance(event,Event.DragCompletedEvent):
+                        entity.select()
+                        self.selectedEntities.append(entity)
+                    else: # Add drag completed event
+                        if entity not in self.selectedEntities:
+                            entity.select()
+                            self.selectedEntities.append(entity)
     
     def clickEvent(self,event):
         """
