@@ -34,6 +34,3 @@ class Grass(Terrain):
         if imagePath == None:
             imagePath = 'newGrass.png'
         Terrain.__init__(self, imagePath, colorkey, exists=True)
-        
-    def getAverageColor(self):
-        return (20,100,20)
