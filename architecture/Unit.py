@@ -9,7 +9,7 @@ from collections import deque
 import specialMath
 
 from Callback import Callback
-from Event import NotificationEvent
+from Event import NotificationEvent,WorldManipulationEvent
 
 #import pygame
 
@@ -345,11 +345,19 @@ class Unit(Builder):
         """
         Initialized appropriate action by setting dest and status given the type of entity.
         """
+        data=['act',self.entityID,obj.entityID]
+        self.world.universe.manager.post(WorldManipulationEvent(data))
+            
+    def execAction(self,obj):
+        """
+        Execute the appropriate action taken from a network command
+        """
         self.objectOfAction=obj
         if isinstance(obj, Builder):#Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
+        
 
     def moveCloseToObject(self,radius):
         """
