@@ -213,7 +213,7 @@ class Unit(Builder):
             self.speed=.1
             self.attackRange=300
             self.attackRechargeTime=500
-            self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.GATHER: 100}
+            self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100}
             self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
             self.objectOfAction=None
         '''
@@ -288,6 +288,8 @@ class Unit(Builder):
             else:
                 self.status=Locals.IDLE
                 self.objectOfAction=None
+        elif self.status==Locals.DEPOSITING:
+            self.deposit()
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
         if self.currentTask == None:
             self.nextBuildTask()
@@ -317,7 +319,11 @@ class Unit(Builder):
             else:
                 self.objectOfAction.changeHealth(-1*amount)
                 self.timeSinceLast[Locals.ATTACK]=0
-                
+
+    def setStatusAndObjectOfAction(self,status,obj):
+        self.status = status
+        self.objectOfAction = obj
+    
     def deposit(self):
         """
         Moves unit close to structure and deposits all the accepted resources
