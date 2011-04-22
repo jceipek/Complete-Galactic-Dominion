@@ -18,7 +18,7 @@ class Structure(Builder):
             owner)
 
         self.status = Locals.IDLE
-        self.maxHealth=9000
+        self.maxHealth=100
         self.curHealth=self.maxHealth
 
     def __getstate__(self):

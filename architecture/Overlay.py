@@ -79,62 +79,62 @@ def MakeBoundingBox(p1,p2):
     bboxRect.normalize() # Normalizes to remove negative sizes.
     return bboxRect
 
-class HealthBar():
+
+class Bar():
     
-    def __init__(self,owner,hBarHeight=5,padY=3,scaleX=1,capWidth=True):
-        
+    def __init__(self,maxValue,barWidth,barHeight,fullness=1.0,fullColor=(0,255,0),emptyColor=(255,0,0)):
         from pygame import Surface
+        self.maxValue = maxValue
+        self.fullness = fullness
+        self.fullColor = fullColor
+        self.emptyColor = emptyColor
+        self.barWidth = barWidth
+        self.barHeight = barHeight
+        
+        self.surface = pygame.Surface((self.barWidth,self.barHeight))
+        
+    def updateBarWithValue(self,value):
+        """
+        Updates the self.surface to reflect the new value.
+        """
+        
+        self.fullness = (float(value)/self.maxValue)
+        
+        valueRemaining = int(self.fullness*self.barWidth)
+        valueRemainingRect = (0,0,int(self.fullness*self.barWidth),self.barHeight)
+        valueLost = (valueRemaining,0,self.barWidth-valueRemaining,self.barHeight)
+        
+        self.surface.fill(self.fullColor, valueRemainingRect)
+        self.surface.fill(self.emptyColor, valueLost)
+
+    def draw(self,surface,pos):
+        surface.blit(self.surface,(pos,(self.barWidth,self.barHeight)))
+
+
+class HealthBar(Bar):
+    
+    def __init__(self,owner,hBarHeight=5,padY=3):
         
         self.owner = owner
-        self.maxHealth = owner.maxHealth
-        self.curHealth = owner.curHealth
+        fullness = owner.curHealth/float(owner.maxHealth)
         
+        Bar.__init__(self,owner.maxHealth,50,hBarHeight,fullness=fullness,fullColor=(0,255,0),emptyColor=(255,0,0))
         self.padY = padY
-        self.hBarHeight = hBarHeight
-        if capWidth:
-            self.hBarWidth = min(owner.rect.width*scaleX,50)
-        else:
-            self.hBarWidth = owner.rect.width
-        self.scaleHealth = 1
         
-        self.healthBar = pygame.Surface((self.hBarWidth,self.hBarHeight))
-        
-        # set self.healthRemaining set self.healthLost
         self.updateHealthBar()
-        
-    def updateHealthBar(self):
-        """
-        Updates the self.healthBar surface to reflect the current state
-        of the owner.
-        """
-        
-        self.updateHealthStatus()
-        healthRemaining = (0,0,self.scaleHealth,self.hBarHeight)
-        healthLost = (self.scaleHealth,0,self.hBarWidth-self.scaleHealth,self.hBarHeight)
-        
-        self.healthBar.fill((0,255,0), healthRemaining)
-        self.healthBar.fill((255,0,0), healthLost)
     
-    def updateHealthStatus(self):
-        """
-        Updates max health, current health, and scale health (percentage
-        of current health to max health) from the owner.
-        """
-        
-        self.maxHealth = self.owner.maxHealth
-        self.curHealth = self.owner.curHealth
-        
-        self.scaleHealth = round((float(self.curHealth)/self.maxHealth)*self.hBarWidth)
+    def updateHealthBar(self):
+        self.maxValue = self.owner.maxHealth
+        self.updateBarWithValue(self.owner.curHealth)
     
     def draw(self,surface,midTop):
         """
         Draws health bar to the given surface, centered at the provided
         (x,y) coordinate tuple midTop.
         """
-        
         centerX, top = midTop
-        hBarTop = top - self.padY - self.hBarHeight
-        surface.blit(self.healthBar,(centerX-self.hBarWidth//2,hBarTop))
+        hBarTop = top - self.padY - self.barHeight
+        Bar.draw(self,surface,(centerX-self.barWidth//2,hBarTop))
 
 class MiniMap(object):
     

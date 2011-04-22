@@ -100,12 +100,19 @@ class ParallelCallback(object):
         return results
 
 if __name__ == "__main__":
-    a=Callback(lambda a,b: a+b,1,2)
-    print a.execute()
+
+    def printSomething(myStr):
+        print myStr
+    
+    #a=Callback(lambda a,b: a+b,1,2)
+    #print a.execute()
+
+    a=Callback(printSomething,'Berit')
+    a.execute()
 
     class A(object):
-        def myMethod(self):
-            return 1
+        def myMethod(self,num):
+            return num
     
     class B(object):
     
@@ -122,7 +129,7 @@ if __name__ == "__main__":
     for item in a:
         aCalls.append(item.myMethod)
     
-    test = GroupCallback(aCalls)
+    test = GroupCallback(aCalls,999)
     print test.execute()
     
     def giveAnumber():

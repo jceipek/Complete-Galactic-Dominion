@@ -1,5 +1,5 @@
 import radialMenu
-from Callback import Callback, GroupCallback, SeriesCallback
+from Callback import Callback, GroupCallback, SeriesCallback, ParallelCallback
 
 class ContextualMenuMaster(object):
     """
@@ -155,12 +155,26 @@ def Unit_TestTownCenter(obj1,obj2):
         hasSameOwner = (obj1.owner == obj2.owner)
         
     if hasSameOwner:
+
+        from GameData import Locals
+        #setDestCallbacks = []
+        #for unit in obj1:
+        #setDestCallbacks.append(unit.addToPath)
+        #depositItem = radialMenu.RMenuItem(menu,
+        #    image = "DepositOrb.png",
+        #    col = (255,0,255),
+        #    title = 'Deposit Resources',
+        #    callback = Callback(obj2.depositResources,obj1))
+        #Locals.DEPOSITING
+        gatherCallbacks = []
+        for unit in obj1:
+            gatherCallbacks.append(unit.setStatusAndObjectOfAction)
         
         depositItem = radialMenu.RMenuItem(menu,
             image = "DepositOrb.png",
             col = (255,0,255),
             title = 'Deposit Resources',
-            callback = Callback(obj2.depositResources,obj1))
+            callback = GroupCallback(gatherCallbacks,Locals.DEPOSITING,obj2))
         menu.addItem(depositItem)
         
         return menu
@@ -338,6 +352,25 @@ def Unit_Unit(obj1,obj2):
     
 
 def getCGDcontextualMenu():
+    """
+    Defines all of the contextual menus for the CGD game.
+    It returns a ContextualMenuMaster.
+
+    ContextualMenuMaster has a getMenu method which takes a list of
+    objects (#1) and a second, single object (#2) (a listed of selected objects
+    and the object which has been clicked it).  The selected object list
+    is sorted by class.  Starting with the most frequent class, if there
+    is a defined interaction between that class and the class of the
+    second object, the corresponding menu is returned.  If not,
+    the next most frequent class is checked, and so on.  If there is
+    no defined interaction, None is returned.
+
+    The naming convention of custom-defined CGD functions above is of the
+    form <Class of object #1>_<Class of object #2>
+
+    ContextualMenus are made by passing these custom-defined CGD functions
+    into the constructor.  _Menu is appended to the name.
+    """
     
     menuMaster = ContextualMenuMaster()
     
