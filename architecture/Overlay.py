@@ -82,7 +82,7 @@ def MakeBoundingBox(p1,p2):
 
 class Bar():
     
-    def __init__(self,maxValue,barWidth,barHeight,fullness=1.0,fullColor=(0,0,255),emptyColor=(255,0,0)):
+    def __init__(self,maxValue,barWidth,barHeight,fullness=1.0,fullColor=(0,255,0),emptyColor=(255,0,0)):
         from pygame import Surface
         self.maxValue = maxValue
         self.fullness = fullness
@@ -110,62 +110,30 @@ class Bar():
     def draw(self,surface,pos):
         surface.blit(self.surface,(pos,(self.barWidth,self.barHeight)))
 
-class HealthBar():
+
+class HealthBar(Bar):
     
-    def __init__(self,owner,hBarHeight=5,padY=3,scaleX=1,capWidth=True):
-        
-        from pygame import Surface
+    def __init__(self,owner,hBarHeight=5,padY=3):
         
         self.owner = owner
-        self.maxHealth = owner.maxHealth
-        self.curHealth = owner.curHealth
+        fullness = owner.curHealth/float(owner.maxHealth)
         
+        Bar.__init__(self,owner.maxHealth,50,hBarHeight,fullness=fullness,fullColor=(0,255,0),emptyColor=(255,0,0))
         self.padY = padY
-        self.hBarHeight = hBarHeight
-        if capWidth:
-            self.hBarWidth = min(owner.rect.width*scaleX,50)
-        else:
-            self.hBarWidth = owner.rect.width
-        self.scaleHealth = 1
         
-        self.healthBar = pygame.Surface((self.hBarWidth,self.hBarHeight))
-        
-        # set self.healthRemaining set self.healthLost
         self.updateHealthBar()
-        
-    def updateHealthBar(self):
-        """
-        Updates the self.healthBar surface to reflect the current state
-        of the owner.
-        """
-        
-        self.updateHealthStatus()
-        healthRemaining = (0,0,self.scaleHealth,self.hBarHeight)
-        healthLost = (self.scaleHealth,0,self.hBarWidth-self.scaleHealth,self.hBarHeight)
-        
-        self.healthBar.fill((0,255,0), healthRemaining)
-        self.healthBar.fill((255,0,0), healthLost)
     
-    def updateHealthStatus(self):
-        """
-        Updates max health, current health, and scale health (percentage
-        of current health to max health) from the owner.
-        """
-        
-        self.maxHealth = self.owner.maxHealth
-        self.curHealth = self.owner.curHealth
-        
-        self.scaleHealth = round((float(self.curHealth)/self.maxHealth)*self.hBarWidth)
+    def updateHealthBar(self):
+        self.updateBarWithValue(self.owner.curHealth)
     
     def draw(self,surface,midTop):
         """
         Draws health bar to the given surface, centered at the provided
         (x,y) coordinate tuple midTop.
         """
-        
         centerX, top = midTop
-        hBarTop = top - self.padY - self.hBarHeight
-        surface.blit(self.healthBar,(centerX-self.hBarWidth//2,hBarTop))
+        hBarTop = top - self.padY - self.barHeight
+        Bar.draw(self,surface,(centerX-self.barWidth//2,hBarTop))
 
 class MiniMap(object):
     
