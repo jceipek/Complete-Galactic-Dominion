@@ -238,6 +238,7 @@ class Entity(MapObject):
     def addNotification(self,event):
         self.world.addNotification(event)
         
+        
 class TestEntity(Entity):
     """
     This should be deleted once subclasses are implemented.  This

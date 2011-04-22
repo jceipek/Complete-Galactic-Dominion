@@ -39,6 +39,10 @@ class WorldManipulator(Listener):
                      print entity.objectOfAction
              elif isinstance(cmd,list):
                 if cmd[0] == 'act':
+                    #this list should be in the form ['act',entityID_1,entityID_2]
                     entity = self.world.universe.entityIDToEntity[cmd[1]]
                     object = self.world.universe.entityIDToEntity[cmd[2]]
                     entity.execAction(object)
+                if cmd[0] == 'create':
+                    #this list should be in the form ['create',class,*initArgs]
+                    cmd[1](*cmd[2:])
