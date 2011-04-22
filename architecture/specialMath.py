@@ -56,9 +56,9 @@ def centerOfEntityList(entities):
     """
     center = [0,0]
     i = 0
-    for e in xrange(1,len(entities)+1):
-        if entities[e-1].movable:
-            c = entities[e-1].rect.center
+    for e in range(len(entities)):
+        if entities[e].movable:
+            c = entities[e].rect.center
             center[0] += c[0]
             center[1] += c[1]
             i+=1
@@ -84,6 +84,14 @@ def closestEntity(entities,loc):
             minDist = dist
             closest = e
     return closest
+
+def imageNum(x,y,n):
+    """returns image number for entity facing cartesian x,y direction"""
+    isoVectX,isoVectY =cartToIso(x, y)
+    isoTheta=atan2(isoVectY, isoVectX)
+    isoTheta=-1*isoTheta/(2*3.14)%1
+
+    return int(n*isoTheta)
 
 if __name__ == "__main__":
     print isoToCart((-10,-10))

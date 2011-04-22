@@ -7,9 +7,10 @@ from Inventory import Inventory
 
 from collections import deque
 import specialMath
+from math import atan2
 
 from Callback import Callback
-from Event import NotificationEvent
+from Event import NotificationEvent,WorldManipulationEvent
 
 #import pygame
 
@@ -339,11 +340,19 @@ class Unit(Builder):
         """
         Initialized appropriate action by setting dest and status given the type of entity.
         """
+        data=['act',self.entityID,obj.entityID]
+        self.world.universe.manager.post(WorldManipulationEvent(data))
+            
+    def execAction(self,obj):
+        """
+        Execute the appropriate action taken from a network command
+        """
         self.objectOfAction=obj
         if isinstance(obj, Builder):#Unit):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
+        
 
     def moveCloseToObject(self,radius):
         """
@@ -373,7 +382,8 @@ class Unit(Builder):
             
             # Unit vector of velocity
             dirx /= distLocToDest #unit x direction of movement
-            diry /= distLocToDest #unit y direction of movement            
+            diry /= distLocToDest #unit y direction of movement
+            
             
             newX = curX + dirx*self.speed*self.getTimeElapsed()
             newY = curY + diry*self.speed*self.getTimeElapsed()
@@ -385,6 +395,8 @@ class Unit(Builder):
                 self.realCenter = [newX, newY]
             self.rect.center = tuple(self.realCenter)
             self.moveWrap()
+
+    
             
     def _definePath(self):
         if self._isAtDestination(): #may need to have room for error
