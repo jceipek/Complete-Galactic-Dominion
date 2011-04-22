@@ -52,6 +52,7 @@ class Manager(object):
             self.debugger.logMsg(event)
         ##SOME LISTENERS SHOULD START THEIR OWN THREADS
         
+        
         for listener in self.eventTypesToListeners.get(type(event),[]):
 			listener.notify(event)
             #NOTE: If the weakref has died, it will be 

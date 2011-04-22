@@ -1,5 +1,5 @@
 import radialMenu
-from Callback import Callback, GroupCallback, SeriesCallback
+from Callback import Callback, GroupCallback, SeriesCallback, ParallelCallback
 
 class ContextualMenuMaster(object):
     """
@@ -49,7 +49,10 @@ class ContextualMenuMaster(object):
         return None
             
     def _sortByClass(self,t):
-        
+        """
+        Returns a list of lists of instances sorted by class.  The
+        lists are ordered in the returned list by the length of the list.
+        """
         d = {}
         
         for item in t:
@@ -58,7 +61,11 @@ class ContextualMenuMaster(object):
         return self._mostCommonClass(d)
         
     def _mostCommonClass(self,d):
-        
+        """
+        Receives a dictionary mapping classes to instances of the class,
+        and returns a list of lists of instances sorted by these classes
+        and ordered in the returned list by the length of the list.
+        """
         mostCommonClass = []
         
         for key in d:
@@ -91,21 +98,37 @@ class ContextualMenu(object):
         return self._menuMakerFunction(obj1,obj2)
 
 class WayPoint(object):
-    
+    """
+    Object which defines a point in 2-D space.  It is meant to be
+    used to represent a point in the internal Cartesian space of a
+    World object in the game.
+    """
     def __init__(self,x,y):
         object.__init__(self)
         
         self.x,self.y = x,y
     
     def getPoint(self):
+        """
+        Returns the point as a tuple.
+        """
         return (self.x,self.y)
 
 #### ENTER CUSTOM DEFINED MENU FUNCTIONS HERE ####
+
+"""
+Note: functions below of the form <class #1>_<class #2> create
+contextual menus associated with the interaction between a group of
+instances of class #1 acting on an instance of class #2.
+
+See getCGDcontextualMenu() below for more information.
+"""
 
 from Structure import Structure,TestTownCenter
 from Entity import Entity
 from Unit import Unit,TestUnit
 from NaturalObject import Gold
+from GameData import Locals
 
 from Event import NotificationEvent
 
@@ -155,12 +178,16 @@ def Unit_TestTownCenter(obj1,obj2):
         hasSameOwner = (obj1.owner == obj2.owner)
         
     if hasSameOwner:
+
+        gatherCallbacks = []
+        for unit in obj1:
+            gatherCallbacks.append(unit.setStatusAndObjectOfAction)
         
         depositItem = radialMenu.RMenuItem(menu,
             image = "DepositOrb.png",
             col = (255,0,255),
             title = 'Deposit Resources',
-            callback = Callback(obj2.depositResources,obj1))
+            callback = GroupCallback(gatherCallbacks,Locals.DEPOSITING,obj2))
         menu.addItem(depositItem)
         
         return menu
@@ -335,9 +362,36 @@ def Unit_Unit(obj1,obj2):
     menu.addItem(attackItem)
         
     return menu
-    
 
 def getCGDcontextualMenu():
+    """
+    Defines all of the contextual menus for the CGD game.
+    It returns a ContextualMenuMaster.
+
+    ContextualMenuMaster has a getMenu method which takes a list of
+    objects (#1) and a second, single object (#2) (a listed of selected objects
+    and the object which has been clicked it).  The selected object list
+    is sorted by class.  Starting with the most frequent class, if there
+    is a defined interaction between that class and the class of the
+    second object, the corresponding menu is returned.  If not,
+    the next most frequent class is checked, and so on.  If there is
+    no defined interaction, None is returned.
+
+    The naming convention of custom-defined CGD functions above is of the
+    form <Class of object #1>_<Class of object #2>
+
+    ContextualMenus are made by passing these custom-defined CGD functions
+    into the constructor.  _Menu is appended to the name.
+    
+    ContextualMenus are then added to a dictionary of contextual menus
+    stored in the ContextualMenuMaster through the addMenu function.
+    The class of objects #1 and the class of objects #1 which a 
+    particular contextual menu can should respond to are passed as
+    arguments.  These will be used to form a tuple (of length two)
+    serving as a key to access the contextual menu.
+    
+    This function loads all of the contextual menus specific to CGD.
+    """
     
     menuMaster = ContextualMenuMaster()
     
@@ -370,24 +424,3 @@ def getCGDcontextualMenu():
     return menuMaster
 
 #### END CUSTOM DEFINED MENU FUNCTIONS HERE ####
-
-if __name__=="__main__":
-    
-    class A(): pass
-    class B(): pass
-
-    mtestmaster = ContextualMenuMaster()
-    
-    mtest = ContextualMenu(lambda obj1,obj2: 'It worked')
-    
-    mtestmaster.addMenu(A,B,mtest)
-    mtestmaster.addMenu(A,A,mtest)
-
-    t1 = [A(),A(),B()]
-    t3 = [None,B(),B()]
-    t2 = B()
-    
-    print mtestmaster.getMenu(t1,t2)
-    print mtestmaster.getMenu(t3,t2)
-    
-    getCGDcontextualMenu()

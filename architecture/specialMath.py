@@ -1,4 +1,8 @@
 def distance(x1,x2):
+    """
+    Returns the square root of the sum of squares of two lists 
+    of equal length.  It acts as an n-dimensional distance formula.
+    """
     sqSum=0
     #print x1, x2
     for x,y in zip(x1,x2):
@@ -23,14 +27,25 @@ def findClosest(x1, x2, worldSize):
     print 'Something has gone wrong!- specialMath.findClosest'
     return list[x2] #returns original point if optimal not found
                     
-    
 def cartToIso(coord):
+    """
+    Performs the cartesian-to-isometric linear transformation on a 
+    coordinate (tuple of length two, representing an x,y coordinate).
+    """
     return coord[0]+coord[1],-.5*coord[0]+.5*coord[1]
     
 def isoToCart(coord):
+    """
+    Performs the isometric-to-cartesian linear transformation on a 
+    coordinate (tuple of length two, representing an x,y coordinate).
+    """
     return .5*coord[0]-coord[1],.5*coord[0]+coord[1]
 
 def hypotenuse(x,y):
+    """
+    Calculates the length of the hypotenuse of two sides of a right 
+    triangle with length x and y.
+    """
     return pow(x**2+y**2,.5)
 
 def centerOfEntityList(entities):
@@ -53,6 +68,10 @@ def centerOfEntityList(entities):
     return tuple(center)
 
 def closestEntity(entities,loc):
+    """
+    Returns the entity closest to an isometric coordinate (x,y tuple) on
+    the display of the world (from the viewport).
+    """
     #Note: using sort() seems like it would be really slow,
     #which is why I am using this technique.
     minDist = None

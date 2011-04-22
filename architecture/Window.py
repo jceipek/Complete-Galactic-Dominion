@@ -107,7 +107,10 @@ class Window(Listener):
         """
     
         self.updateClock()
-
+        
+        self.eventLock = threading.Lock()
+        self.eventQueue = []
+        
         self.pygameEventThread = threading.Thread(target=self.pygameEventPoster)
         self.pygameEventThread.setDaemon(True)
         self.pygameEventThread.start()
@@ -118,6 +121,10 @@ class Window(Listener):
             #Tell the objects on screen to update.
             self.pygameEvents += pygame.event.get()
             self.manager.post(Event.UpdateEvent(self.gameFrametime,self.gameTime))
+            with self.eventLock:
+                for event in self.eventQueue:
+                    self.manager.post(event)
+                self.eventQueue = []
             
             #Note: the renderer does not update or display anything.
             #It simply draws to the displaySurface i.e. self.displaySurface.fill((0,0,0))
@@ -135,7 +142,7 @@ class Window(Listener):
         B{WARNING: THIS IS A THREADED FUNCTION. BE VERY CAREFUL WHEN CODING HERE.}
         """
 
-        inputState=InputDeviceMastermind()
+        #inputState=InputDeviceMastermind()
         '''
         def pEventToStr(event):
             e=str(event)
@@ -203,7 +210,6 @@ class Window(Listener):
                                 else:
                                     realEvent.append(Event.SingleAddSelectionEvent(rawEvent.pos))
                         elif buttonId == Event.MouseLocals.RIGHT_CLICK:
-                            #realEvent.append(Event.SetDestinationEvent(rawEvent.pos))
                             realEvent.append(Event.CompleteActionEvent(rawEvent.pos))
     
                     elif rawEvent.type == pygame.MOUSEMOTION:
@@ -223,8 +229,6 @@ class Window(Listener):
                         if rawEvent.key == pygame.K_RALT or \
                             rawEvent.key == pygame.K_LALT:
                             keyHeldDict['alt'] = True
-                        #if pygame.K_0 <= rawEvent.key <= pygame.K_9:
-                        #    pass
     
                     elif rawEvent.type == pygame.KEYUP:
                         if rawEvent.key == pygame.K_RSHIFT or \
@@ -249,9 +253,11 @@ class Window(Listener):
                         #    )
                         if rawEvent.key == pygame.K_ESCAPE:
                             realEvent.append(Event.QuitEvent())
-    
-                    for i in realEvent:
-                        self.manager.post(i) #Warning: make sure that threading doesn't cause \
+                    with self.eventLock:
+                        for event in realEvent:
+                            self.eventQueue.append(event)
+#                    for i in realEvent:
+#                        self.manager.post(i) #Warning: make sure that threading doesn't cause \
                                                     #problems here!
                 except:
                     import sys,traceback

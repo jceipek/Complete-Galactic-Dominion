@@ -25,9 +25,12 @@ from World import World
 from UserInterface import UserInterface
 from Universe import Universe
 from Entity import Entity,TestEntity
-from Unit import Unit
+from Unit import Unit,TestUnit
+from Structure import Structure
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
+from NaturalObject import NaturalObject,Gold
+
 from client import init
 import cPickle
 
@@ -36,7 +39,7 @@ class BroadcastServer(networking.Server):
         print 'Got input:' + data
         if 'GetWorld' in data and hasattr(self,'world'):
             for entity in self.world.allEntities.values():
-                if isinstance(entity,Unit):
+                if isinstance(entity,Unit) or isinstance(entity,Structure) or isinstance(entity,NaturalObject):
                     print 'Image Path: ' + entity.imagePath
                     sockThrd.write(cPickle.dumps(entity))
         else:
@@ -89,18 +92,21 @@ def init(host='localhost',server=None):
     
     #===========================================
     
+    w._generateResources()
+    w._TMPmakeBuilding()
+    
     # Initialize 500 entities in World w
     for i in xrange(25):
         #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
         #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        a=Unit('testCraft.png',i*50,i*50,w,'alpha')
+        #a=Unit('testCraft.png',i*50,i*50,w,'alpha')
+        a=TestUnit(i*50,i*50,w)
         #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
     
     return eventManager.eventTypesToListeners
-
 
 if __name__ == '__main__':
     #FIXME: Very little implemented here.
