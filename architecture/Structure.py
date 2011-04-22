@@ -73,12 +73,6 @@ class TestTownCenter(Structure):
     
     def __init__(self, x, y, world, owner='tmp'):
         Structure.__init__(self, 'TownCenter.png', x, y, world, 'alpha', 'Test building.',owner)
-        
-        #self.buildDict = {
-        #    Unit: 
-        #        lambda x,y: 
-        #            Unit('testCraft.png',x,y,self.world,'alpha','A Unit.',self.owner)
-        #    }
             
         self.buildDict = {
             TestUnit: TestUnit

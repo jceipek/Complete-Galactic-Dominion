@@ -32,21 +32,5 @@ class HUD(object):
         sign.render()
         sign.draw(self.surface)
 
-    def showInfo(self, entity, pos=(0,0)):
-        
-        text = '%s \nDescription: \n%s \n%s' % (entity.healthStr(), entity.description, Locals.status[entity.status])
-        box=Sign(200, pos, entity.image)
-        if entity.inventory:
-            text+='\n'+ str(entity.inventory)
-        box.addtext(text)
-        box.render()
-        box.draw(self.surface)
-
     def drawSelected(self):
-        i=0
-        pygame.draw.rect(self.surface, (0,0,0), self.infoRect)
-        for e in self.viewport.selectedEntities:
-            if not e.selected:
-                continue
-            self.showInfo(e, pos=(i,20))
-            i+=self.width
+        self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)

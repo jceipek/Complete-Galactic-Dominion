@@ -191,14 +191,8 @@ class Builder(Entity):
             buildY = self.buildY
         return (self.buildX,self.buildY,self.world,self.owner)
 
-
 class Unit(Builder):
     """A kind of Builder that can move around."""
-
-    # Static class attribute--keeps track of all units initialized
-    # by this computer (one particular player)
-    #from pygame.sprite import Group
-    #allUnits = Group()
     
     costToBuild = [(Gold,75)]
     
@@ -463,7 +457,7 @@ class TestUnit(Unit):
         Unit.__init__(self,'testCraft.png',x,y,world,'alpha','A test unit.',owner)
     
     def __getstate__(self):
-        print 'In Unit get state'
+        print 'In TestUnit get state'
         state = self.__dict__.copy()
         
         if self.world != None:
