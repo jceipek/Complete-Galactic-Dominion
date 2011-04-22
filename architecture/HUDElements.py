@@ -18,6 +18,7 @@ class UnitBox():
     
     def __init__(self,entity,pos=(0,0),endCap=False):
         import pygame #FIXME Remove this dependency
+        from Overlay import Bar
         
         #Format for each tuple is (imagePath, [colorKey, [offset]])
         images = ["UnitInfoBoxMain.png"]
@@ -28,10 +29,14 @@ class UnitBox():
         self.entity = entity
         self.thumbnailOffset = (6,10)
         self.thumbnail = pygame.transform.scale(self.entity.image, (36, 36))
+        
+        self.healthBar = Bar(self.entity.maxHealth,38,5,fullColor=(0,255,0),emptyColor=(30,30,30))
 
     def draw(self,screen):
+        self.healthBar.updateBarWithValue(self.entity.curHealth)
         self.baseLayer.draw(screen)
         screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[0]))
+        self.healthBar.draw(screen,(self.pos[0]+4,self.pos[1]+50))
 
 class SelectedUnitBar():
     #A bar containing the tiny boxes displayed when a unit is selected

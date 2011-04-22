@@ -80,6 +80,35 @@ def MakeBoundingBox(p1,p2):
     return bboxRect
 
 
+class Bar():
+    
+    def __init__(self,maxValue,barWidth,barHeight,fullness=1.0,fullColor=(0,0,255),emptyColor=(255,0,0)):
+        from pygame import Surface
+        self.maxValue = maxValue
+        self.fullness = fullness
+        self.fullColor = fullColor
+        self.emptyColor = emptyColor
+        self.barWidth = barWidth
+        self.barHeight = barHeight
+        
+        self.surface = pygame.Surface((self.barWidth,self.barHeight))
+        
+    def updateBarWithValue(self,value):
+        """
+        Updates the self.surface to reflect the new value.
+        """
+        
+        self.fullness = (float(value)/self.maxValue)
+        
+        valueRemaining = int(self.fullness*self.barWidth)
+        valueRemainingRect = (0,0,int(self.fullness*self.barWidth),self.barHeight)
+        valueLost = (valueRemaining,0,self.barWidth-valueRemaining,self.barHeight)
+        
+        self.surface.fill(self.fullColor, valueRemainingRect)
+        self.surface.fill(self.emptyColor, valueLost)
+
+    def draw(self,surface,pos):
+        surface.blit(self.surface,(pos,(self.barWidth,self.barHeight)))
 
 class HealthBar():
     
