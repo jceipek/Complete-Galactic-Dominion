@@ -106,7 +106,8 @@ def networkClassCreator(className,serverCommand,*args):
     if serverCommand:
         return className(*args)
     else:
-        return WorldManipulationEvent('create',className,*args)
+        print 'In networkClassCreator: ',args
+        return WorldManipulationEvent(['create',className,args])
 
 if __name__ == "__main__":
 

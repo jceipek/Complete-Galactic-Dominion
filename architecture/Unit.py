@@ -9,7 +9,7 @@ from collections import deque
 import specialMath
 from math import atan2
 
-from Callback import Callback
+from Callback import Callback, networkClassCreator
 from Event import NotificationEvent,WorldManipulationEvent
 
 #import pygame
@@ -39,6 +39,7 @@ class BuildTask(object):
         Can only be called once.  This allows for groups to work
         on the same BuildTask without its Callback being fired twice.
         """
+        
         if self.callback is not None:
             callbackReturn = self.callback.execute()
         else:
@@ -111,11 +112,17 @@ class Builder(Entity):
                     ))
                 
                 if callback is None:
+                    #self.buildQueue.append(
+                    #    BuildTask(entityClass,
+                    #        Callback(self.buildDict[entityClass],*self.getBuildArgs()))
+                    #    )
                     self.buildQueue.append(
                         BuildTask(entityClass,
-                            Callback(self.buildDict[entityClass],*self.getBuildArgs()))
+                            Callback(self.world.universe.manager.post,
+                                networkClassCreator(entityClass,False,*self.getBuildArgs2())
+                            )
                         )
-                        
+                    )
                 else:
                     self.buildQueue.append(
                         BuildTask(entityClass,callback)
@@ -185,6 +192,16 @@ class Builder(Entity):
         if buildY is None:
             buildY = self.buildY
         return (self.buildX,self.buildY,self.world,self.owner)
+        
+    def getBuildArgs2(self,buildX=None,buildY=None):
+        """
+        Takes an optional 
+        """
+        if buildX is None:
+            buildX = self.buildX
+        if buildY is None:
+            buildY = self.buildY
+        return (self.buildX,self.buildY,self.world.worldID,self.owner)
 
 class Unit(Builder):
     """A kind of Builder that can move around."""
@@ -352,7 +369,6 @@ class Unit(Builder):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
-        
 
     def moveCloseToObject(self,radius):
         """
