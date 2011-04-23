@@ -21,6 +21,7 @@ class Structure(Builder):
         self.status = Locals.IDLE
         self.maxHealth=100
         self.curHealth=self.maxHealth
+        self.movable=False
 
     def __getstate__(self):
         state = self.__dict__.copy()

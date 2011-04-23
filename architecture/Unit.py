@@ -7,7 +7,6 @@ from Inventory import Inventory
 
 from collections import deque
 import specialMath
-from math import atan2
 
 from Callback import Callback
 from Event import NotificationEvent,WorldManipulationEvent
@@ -405,7 +404,7 @@ class Unit(Builder):
     
             
     def _definePath(self):
-        if self._isAtDestination(): #may need to have room for error
+        while self._isAtDestination(): #may need to have room for error
             if self.path == []:
                 self.status = Locals.IDLE
                 self.dest = self.realCenter
@@ -427,7 +426,9 @@ class Unit(Builder):
         of the unit and the desired end point.  Returns None if none
         is found.
         """
-        destX,destY = self.path.pop(0) 
+        destX,destY = self.path.pop(0)
+        destX=destX%self.worldSize[0]
+        destY=destY%self.worldSize[1]
         
         # Rectangle the size of the world which is centered
         # at the current location
