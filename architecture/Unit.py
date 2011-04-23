@@ -355,14 +355,22 @@ class Unit(Builder):
         Initialized appropriate action by setting dest and status given the type of entity.
         """
         data=['act',self.entityID,obj.entityID]
-        self.world.universe.manager.post(WorldManipulationEvent(data))
+        self.sendEventToManager(WorldManipulationEvent(data))
             
     def execAction(self,obj):
         """
         Execute the appropriate action taken from a network command
         """
+        from Structure import TestTownCenter
+
         self.objectOfAction=obj
-        if isinstance(obj, Builder):#Unit):
+        if isinstance(obj, Builder):#Unit):\
+            print 1
+            if isinstance(obj, TestTownCenter) and self.owner == obj.owner:
+                print 2
+                self.status=Locals.DEPOSITING
+                return
+                
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
@@ -472,7 +480,7 @@ class Unit(Builder):
         self.path.append(list(coord))
         
     def getMiniMapColor(self):
-        return (20,20,255)
+        return (255,255,255)
         
     def __str__(self):
         return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])

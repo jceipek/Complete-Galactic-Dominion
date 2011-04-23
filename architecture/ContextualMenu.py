@@ -181,13 +181,14 @@ def Unit_TestTownCenter(obj1,obj2):
 
         gatherCallbacks = []
         for unit in obj1:
-            gatherCallbacks.append(unit.setStatusAndObjectOfAction)
+            #gatherCallbacks.append(unit.setStatusAndObjectOfAction)
+            gatherCallbacks.append(unit.initAction)
         
         depositItem = radialMenu.RMenuItem(menu,
             image = "DepositOrb.png",
             col = (255,0,255),
             title = 'Deposit Resources',
-            callback = GroupCallback(gatherCallbacks,Locals.DEPOSITING,obj2))
+            callback = GroupCallback(gatherCallbacks,obj2))
         menu.addItem(depositItem)
         
         return menu

@@ -44,25 +44,7 @@ class Structure(Builder):
         
         self.rect.center = self.realCenter
         self.selected = False
-    '''    
-    def depositResources(self,unitList):
-        
-        for unit in unitList:
-            if isinstance(unit,Unit):
-                inventory = unit.inventory
-    
-                for resource in inventory.items:
-                    
-                    if resource in self.acceptableResources:
-                        amountToDeposit = inventory.removeAll(resource)
-                        amountDeposited = self.world.addResource(self.owner,resource,amountToDeposit)
-                        
-                        notifyStr = '%s %d deposited %d %s.'%(unit.name,unit.entityID,amountDeposited,resource.name)
-                        self.addNotification(NotificationEvent(notifyStr))
-                        
-                        if amountToDeposit != amountDeposited:
-                            print 'Warning: did not deposit correct amount of resources.'
-    '''                        
+          
     '''Pickle functions for network transfer:'''
     def __getState__(self):
         stateDict = Builder.__getState__(self)
