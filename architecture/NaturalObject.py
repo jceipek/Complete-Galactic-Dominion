@@ -82,6 +82,9 @@ class Gold(Resource):
         
     def __setstate__(self,state):
         return NaturalObject.__setstate__(self,state)
+        
+    def getMiniMapColor(self):
+        return (255,215,0)
 
 class Obstacle(NaturalObject):
     """
