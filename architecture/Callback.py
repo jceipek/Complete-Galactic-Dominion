@@ -1,3 +1,5 @@
+from Event import WorldManipulationEvent
+
 class Callback(object):
     """
     Performs a basic, one operation callback with a variable length
@@ -98,6 +100,14 @@ class ParallelCallback(object):
             results.append( (self.callback.pop(0))(*self.args.pop(0)) )
 
         return results
+
+def networkClassCreator(className,serverCommand,*args):
+    
+    if serverCommand:
+        return className(*args)
+    else:
+        print 'In networkClassCreator: ',args
+        return WorldManipulationEvent(['create',className,args])
 
 if __name__ == "__main__":
 

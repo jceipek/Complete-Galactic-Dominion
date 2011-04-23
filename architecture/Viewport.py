@@ -36,6 +36,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         if world is not None:
             self.minimap = MiniMap(self.world)
+            self.worldSize=self.world.grid.getCartGridDimensions()
         else:
             self.minimap = None
         
@@ -46,7 +47,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.surface = pygame.Surface(size)
         self.surface.set_clip(((0,0),size))
         self.scrollSpeed = [0,0]
-        
+
         self.selectedEntities = []
         
         #self.calcDistance = lambda a,b: (a**2 + b**2)**0.5
@@ -144,14 +145,15 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             mapClickPoint = self.minimap.clickToGridPos(pos)
             if mapClickPoint is not None:
                 destCart = mapClickPoint
-            else:            
+            else:
+
                 cartPos = specialMath.isoToCart(pos)
-                destCart = self.cartScrollLoc[0] + cartPos[0], \
-                            self.cartScrollLoc[1] + cartPos[1]
+                destCart = (self.cartScrollLoc[0] + cartPos[0])%self.worldSize[0], \
+                            (self.cartScrollLoc[1] + cartPos[1])%self.worldSize[1]
         else:
             cartPos = specialMath.isoToCart(pos)
-            destCart = self.cartScrollLoc[0] + cartPos[0], \
-                        self.cartScrollLoc[1] + cartPos[1]
+            destCart = (self.cartScrollLoc[0] + cartPos[0])%self.worldSize[0], \
+                        (self.cartScrollLoc[1] + cartPos[1])%self.worldSize[1]
         
         # Determines closest entity to a click
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
@@ -171,7 +173,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     selected.initAction(clicked)
        
         if not attacking:
-            eCenter = specialMath.centerOfEntityList(self.selectedEntities)
+            eCenter = specialMath.centerOfEntityList(self.selectedEntities, self.worldSize)
             for entity in self.selectedEntities:
                 if not entity.status==Locals.MOVING:
                     entity.dest=entity.realCenter
@@ -262,10 +264,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             if mapClickPoint is not None:
                 self._setCartScrollLocation(mapClickPoint)
                 return
-
         cartPos = specialMath.isoToCart(pos)
-        destCart = self.cartScrollLoc[0] + cartPos[0], \
-                       self.cartScrollLoc[1] + cartPos[1]
+        destCart = (self.cartScrollLoc[0] + cartPos[0])/self.worldSize[0], \
+                       (self.cartScrollLoc[1] + cartPos[1])/self.worldSize[1]
+                       
         clicked = specialMath.closestEntity(self.viewportEntities,pos)
         
         if clicked:
@@ -486,3 +488,4 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     def changeWorld(self,world):
         self.world = world
         self.minimap = MiniMap(self.world)
+        self.worldSize=self.world.grid.getCartGridDimensions()

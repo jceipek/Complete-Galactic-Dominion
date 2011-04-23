@@ -7,9 +7,8 @@ from Inventory import Inventory
 
 from collections import deque
 import specialMath
-from math import atan2
 
-from Callback import Callback
+from Callback import Callback, networkClassCreator
 from Event import NotificationEvent,WorldManipulationEvent
 
 #import pygame
@@ -39,6 +38,7 @@ class BuildTask(object):
         Can only be called once.  This allows for groups to work
         on the same BuildTask without its Callback being fired twice.
         """
+        
         if self.callback is not None:
             callbackReturn = self.callback.execute()
         else:
@@ -111,11 +111,17 @@ class Builder(Entity):
                     ))
                 
                 if callback is None:
+                    #self.buildQueue.append(
+                    #    BuildTask(entityClass,
+                    #        Callback(self.buildDict[entityClass],*self.getBuildArgs()))
+                    #    )
                     self.buildQueue.append(
                         BuildTask(entityClass,
-                            Callback(self.buildDict[entityClass],*self.getBuildArgs()))
+                            Callback(self.world.universe.manager.post,
+                                networkClassCreator(entityClass,False,*self.getBuildArgs2())
+                            )
                         )
-                        
+                    )
                 else:
                     self.buildQueue.append(
                         BuildTask(entityClass,callback)
@@ -185,6 +191,16 @@ class Builder(Entity):
         if buildY is None:
             buildY = self.buildY
         return (self.buildX,self.buildY,self.world,self.owner)
+        
+    def getBuildArgs2(self,buildX=None,buildY=None):
+        """
+        Takes an optional 
+        """
+        if buildX is None:
+            buildX = self.buildX
+        if buildY is None:
+            buildY = self.buildY
+        return (self.buildX,self.buildY,self.world.worldID,self.owner)
 
 class Unit(Builder):
     """A kind of Builder that can move around."""
@@ -350,7 +366,6 @@ class Unit(Builder):
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
-        
 
     def moveCloseToObject(self,radius):
         """
@@ -397,7 +412,7 @@ class Unit(Builder):
     
             
     def _definePath(self):
-        if self._isAtDestination(): #may need to have room for error
+        while self._isAtDestination(): #may need to have room for error
             if self.path == []:
                 self.status = Locals.IDLE
                 self.dest = self.realCenter
@@ -419,7 +434,9 @@ class Unit(Builder):
         of the unit and the desired end point.  Returns None if none
         is found.
         """
-        destX,destY = self.path.pop(0) 
+        destX,destY = self.path.pop(0)
+        destX=destX%self.worldSize[0]
+        destY=destY%self.worldSize[1]
         
         # Rectangle the size of the world which is centered
         # at the current location

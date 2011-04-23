@@ -1,3 +1,4 @@
+from math import atan2
 def distance(x1,x2):
     """
     Returns the square root of the sum of squares of two lists 
@@ -48,7 +49,7 @@ def hypotenuse(x,y):
     """
     return pow(x**2+y**2,.5)
 
-def centerOfEntityList(entities):
+def centerOfEntityList(entities, worldSize):
     """
     Determines the average location of a list of entities.
     This is useful for moving groups without losing integrity.
@@ -56,9 +57,14 @@ def centerOfEntityList(entities):
     """
     center = [0,0]
     i = 0
+    first=-1
     for e in range(len(entities)):
         if entities[e].movable:
-            c = entities[e].rect.center
+            if first<0:
+                first=e
+                c=entities[e].realCenter
+            else:
+                c = findClosest(entities[first].realCenter, entities[e].realCenter, worldSize)
             center[0] += c[0]
             center[1] += c[1]
             i+=1
@@ -66,6 +72,8 @@ def centerOfEntityList(entities):
         center[0] /= (i)
         center[1] /= (i)
     return tuple(center)
+
+
 
 def closestEntity(entities,loc):
     """
