@@ -132,9 +132,10 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode(screenSize)
     screenZone = screen.get_rect()
-
-    a = DrawableObject('orbPurpleBlack.png',(255,255,255))
+    from GameData import getMinimalRect
+    a = DrawableObject('TownCenter.png',(255,255,255))
     print a.getAverageColor()
+    print getMinimalRect(a.image,(255,255,255))
     
     while RUNNING:
         pygame.init()
