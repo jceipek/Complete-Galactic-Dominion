@@ -40,7 +40,6 @@ class BroadcastServer(networking.Server):
         if 'GetWorld' in data and hasattr(self,'world'):
             for entity in self.world.allEntities.values():
                 if isinstance(entity,Unit) or isinstance(entity,Structure) or isinstance(entity,NaturalObject):
-                    print 'Image Path: ' + entity.imagePath
                     sockThrd.write(cPickle.dumps(entity))
         else:
             for sock in self.socketThreads.keys():

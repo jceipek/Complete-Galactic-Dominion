@@ -36,7 +36,7 @@ class WorldManipulator(Listener):
                  if (isinstance(entity,TestUnit) or isinstance(entity,Unit)) and entity.objectOfAction != None:
                      # DOES NOT TRY TO SET AGAIN IF IT FAILS CURRENTLY
                      entity.objectOfAction = self.world.universe.entityIDToEntity.get(entity.objectOfAction,entity.objectOfAction)
-                     print entity.objectOfAction
+                     #print entity.objectOfAction
              elif isinstance(cmd,list):
                 if cmd[0] == 'act':
                     #this list should be in the form ['act',entityID_1,entityID_2]

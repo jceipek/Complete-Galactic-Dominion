@@ -27,10 +27,6 @@ class NaturalObject(Entity):
     def __getState__(self):
         state = self.__dict__.copy()
         
-        print 'In Natural Object get state' + '\n'*3
-        print state
-        print '\n'*3
-        
         if self.world != None:
             state['world'] = self.world.worldID
             

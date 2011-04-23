@@ -236,7 +236,6 @@ class Unit(Builder):
         }
         
     def __getstate__(self):
-        print 'In Unit get state'
         state = self.__dict__.copy()
         
         if self.world != None:
@@ -253,7 +252,6 @@ class Unit(Builder):
         return state
         
     def __setstate__(self,state):
-        print "In Unit set state"
         self.__dict__ = state
             
         self.loadImage(self.imagePath, self.colorkey)
@@ -465,7 +463,6 @@ class TestUnit(Unit):
         Unit.__init__(self,'testCraft.png',x,y,world,'alpha','A test unit.',owner)
     
     def __getstate__(self):
-        print 'In TestUnit get state'
         state = self.__dict__.copy()
         
         if self.world != None:
@@ -482,7 +479,6 @@ class TestUnit(Unit):
         return state
         
     def __setstate__(self,state):
-        print "In TestUnit set state"
         self.__dict__ = state
             
         self.loadImage(self.imagePath, self.colorkey)
