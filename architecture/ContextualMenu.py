@@ -1,5 +1,5 @@
 import radialMenu
-from Callback import Callback, GroupCallback, SeriesCallback, ParallelCallback
+from Callback import Callback, GroupCallback, SeriesCallback, ParallelCallback, networkClassCreator
 
 class ContextualMenuMaster(object):
     """
@@ -130,7 +130,7 @@ from Unit import Unit,TestUnit
 from NaturalObject import Gold
 from GameData import Locals
 
-from Event import NotificationEvent
+from Event import NotificationEvent,WorldManipulationEvent
 
 def None_TestTownCenter(obj1,obj2):
     
@@ -325,11 +325,18 @@ def TestTownCenter_WayPoint(obj1,obj2):
         tmpcounter = 0
         for buildType in obj1[0].buildDict:
             
-            #makeAndMove = SeriesCallback(obj1[0].buildDict[buildType], *obj1[0].rect.center)
-            makeAndMove = SeriesCallback(obj1[0].getBuildArgs)
-            makeAndMove.addCallback(obj1[0].buildDict[buildType])
-            #makeAndMove = SeriesCallback(obj1[0].buildDict[buildType],
-            makeAndMove.addCallback(lambda entity : entity.addToPath(obj2.getPoint()))
+            #makeAndMove = SeriesCallback(obj1[0].getBuildArgs)
+            #makeAndMove.addCallback(obj1[0].buildDict[buildType])
+            #makeAndMove.addCallback(lambda entity : entity.addToPath(obj2.getPoint()))
+            makeAndMove = ParallelCallback(
+                obj1[0].world.universe.manager.post,
+                networkClassCreator(buildType,False,*obj1[0].getBuildArgs2())
+                )
+            makeAndMove.addCallback(
+                obj1[0].world.universe.manager.post,
+                WorldManipulationEvent(['setpath',
+                    obj1[0].world.universe.getNextEntityID(),obj2.getPoint()])
+                )
         
             queueMake = Callback(obj1[0].addToBuildQueue,
                 buildType,obj1[0].rect.center,makeAndMove)

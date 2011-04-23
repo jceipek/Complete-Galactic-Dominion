@@ -184,7 +184,7 @@ class Builder(Entity):
         
     def getBuildArgs(self,buildX=None,buildY=None):
         """
-        Takes an optional 
+        Takes an optional
         """
         if buildX is None:
             buildX = self.buildX
@@ -408,8 +408,6 @@ class Unit(Builder):
                 self.realCenter = [newX, newY]
             self.rect.center = tuple(self.realCenter)
             self.moveWrap()
-
-    
             
     def _definePath(self):
         while self._isAtDestination(): #may need to have room for error
@@ -463,6 +461,13 @@ class Unit(Builder):
         Takes an x,y coordinate tuple in the grid and adds this location
         to the path.
         """
+        #['setpath',entityID,coordinate_tuple]
+        #self.path.append(list(coord))
+        self.world.universe.manager.post(
+            WorldManipulationEvent(['setpath',self.entityID,coord])
+        )
+    
+    def _addToPath(self,coord):
         self.path.append(list(coord))
         
     def getMiniMapColor(self):

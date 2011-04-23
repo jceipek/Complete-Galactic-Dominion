@@ -38,6 +38,12 @@ class Universe(Listener):
         ID = entity.entityID
         self.creator.unregisterEntity(entity)
         self.entityIDToEntity[ID] = None
+        
+    def getNextEntityID(self):
+        if len(self.creator.releasedEntityIDs) > 0:
+            return self.creator.releasedEntityIDs[0]
+        else:
+            return self.creator.numberOfEntities + 1
 
     def changeWorld(self,newWorld):
         """
