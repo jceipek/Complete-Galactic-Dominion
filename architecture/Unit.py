@@ -118,7 +118,7 @@ class Builder(Entity):
                     self.buildQueue.append(
                         BuildTask(entityClass,
                             Callback(self.sendEventToManager,
-                                networkClassCreator(entityClass,False,*self.getBuildArgs2())
+                                networkClassCreator(entityClass,*self.getBuildArgs2())
                             )
                         )
                     )

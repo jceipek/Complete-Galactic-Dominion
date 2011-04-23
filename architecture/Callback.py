@@ -101,13 +101,15 @@ class ParallelCallback(object):
 
         return results
 
-def networkClassCreator(className,serverCommand,*args):
-    
-    if serverCommand:
-        return className(*args)
-    else:
-        print 'In networkClassCreator: ',args
-        return WorldManipulationEvent(['create',className,args])
+def networkClassCreator(className,*args):
+    """
+    Creates a world manipulation event which will create an instance
+    of the given class with the given arguments if received by
+    the server.
+    """
+
+    print 'In networkClassCreator: ',args
+    return WorldManipulationEvent(['create',className,args])
 
 if __name__ == "__main__":
 
