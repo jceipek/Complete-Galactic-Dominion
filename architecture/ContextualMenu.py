@@ -329,7 +329,7 @@ def TestTownCenter_WayPoint(obj1,obj2):
             #makeAndMove.addCallback(obj1[0].buildDict[buildType])
             #makeAndMove.addCallback(lambda entity : entity.addToPath(obj2.getPoint()))
             makeAndMove = ParallelCallback(
-                obj1[0].world.universe.manager.post,
+                obj1[0].sendEventToManager,
                 networkClassCreator(buildType,False,*obj1[0].getBuildArgs2())
                 )
             makeAndMove.addCallback(

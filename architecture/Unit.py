@@ -117,7 +117,7 @@ class Builder(Entity):
                     #    )
                     self.buildQueue.append(
                         BuildTask(entityClass,
-                            Callback(self.world.universe.manager.post,
+                            Callback(self.sendEventToManager,
                                 networkClassCreator(entityClass,False,*self.getBuildArgs2())
                             )
                         )
@@ -456,16 +456,17 @@ class Unit(Builder):
             
         self.rect.center = tuple(self.realCenter)
     
-    def addToPath(self,coord):
+    def addToPath(self,coord,servercommand=False):
         """
         Takes an x,y coordinate tuple in the grid and adds this location
         to the path.
         """
-        #['setpath',entityID,coordinate_tuple]
-        #self.path.append(list(coord))
-        self.world.universe.manager.post(
-            WorldManipulationEvent(['setpath',self.entityID,coord])
-        )
+        if servercommand:
+            self.path.append(list(coord))
+        else:
+            self.world.universe.manager.post(
+                WorldManipulationEvent(['setpath',self.entityID,coord])
+            )
     
     def _addToPath(self,coord):
         self.path.append(list(coord))

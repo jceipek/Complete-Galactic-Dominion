@@ -113,9 +113,6 @@ if __name__ == "__main__":
 
     def printSomething(myStr):
         print myStr
-    
-    #a=Callback(lambda a,b: a+b,1,2)
-    #print a.execute()
 
     a=Callback(printSomething,'Berit')
     a.execute()

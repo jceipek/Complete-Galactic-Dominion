@@ -52,4 +52,4 @@ class WorldManipulator(Listener):
                     print 'Trying to set path', cmd[2]
                     #list should be in the form ['setpath',entityID,coordinate_tuple]
                     entity=self.world.universe.entityIDToEntity[cmd[1]]
-                    entity._addToPath(cmd[2])
+                    entity.addToPath(cmd[2],servercommand=True)

@@ -206,6 +206,12 @@ class World(object):
         
     def hasResources(self,playerID,resource,amount=1):
         return self.resourceContainer.hasResources(playerID,resource,amount)
+    
+    def sendEventToManager(self,event):
+        """
+        Sends an event to an event manager.
+        """
+        self.universe.sendEventToManager(event)
 
 class WorldResourceContainer(object):
     """

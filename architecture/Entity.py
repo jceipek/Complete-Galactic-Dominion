@@ -230,14 +230,29 @@ class Entity(MapObject):
         return self.world.elapsedTimeSinceLastFrame
     
     def addToPath(self,newLoc):
+        """
+        Adds a coordinate to the path of an entity.  This should be
+        overriden for entities which can move.
+        """
         pass
         
     def hasFullHealth(self):
+        """
+        Returns whether or not an entity is at full health.
+        """
         return self.maxHealth == self.curHealth
         
     def addNotification(self,event):
+        """
+        Adds a notification to the list of world notifications.
+        """
         self.world.addNotification(event)
         
+    def sendEventToManager(self,event):
+        """
+        Sends an event to an event manager.
+        """
+        self.world.sendEventToManager(event)
         
 class TestEntity(Entity):
     """

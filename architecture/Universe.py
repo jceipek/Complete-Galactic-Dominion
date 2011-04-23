@@ -81,6 +81,13 @@ class Universe(Listener):
     def notify(self,event):
         if isinstance(event,Event.UpdateEvent):
             self.update()#this may become a thread
+    
+    def sendEventToManager(self,event):
+        """
+        Sends an event to an event manager.
+        """
+        if self.manager is not None:
+            self.manager.post(event)
 
 class Creator(object):
     
