@@ -65,6 +65,8 @@ def init(host='localhost',server=None):
     #Create the event manager for low-level events
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
+    Entity.manager = eventManager    
+    
     networked = True
     try:                                            
         client = GameClient(eventManager,host=host,port=1567)

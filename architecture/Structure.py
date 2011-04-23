@@ -44,7 +44,7 @@ class Structure(Builder):
         
         self.rect.center = self.realCenter
         self.selected = False
-        
+    '''    
     def depositResources(self,unitList):
         
         for unit in unitList:
@@ -62,7 +62,7 @@ class Structure(Builder):
                         
                         if amountToDeposit != amountDeposited:
                             print 'Warning: did not deposit correct amount of resources.'
-                            
+    '''                        
     '''Pickle functions for network transfer:'''
     def __getState__(self):
         stateDict = Builder.__getState__(self)

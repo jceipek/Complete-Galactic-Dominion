@@ -151,7 +151,11 @@ class MiniMap(object):
         self.gridSize = self.world.grid.gridSize
         self.gridDim = self.world.grid.getCartGridDimensions()
         self.tileSize = self.world.grid.tileWidth,self.world.grid.tileHeight
-        self.scale = self.width//(2*self.gridSize[0])
+        
+        # Meant to make minimap infinitely scalable.  May break things.
+        self.scale = float(self.width)/(2*self.gridSize[0])
+        # Old version
+        # self.scale = self.width//(2*self.gridSize[0])
         
         # Offsets for drawing minimap data
         self.xOffset = self.width//2 - self.gridSize[0]*self.scale
