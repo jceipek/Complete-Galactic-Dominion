@@ -67,3 +67,6 @@ class TestTownCenter(Structure):
         self.buildDict = {
             TestUnit: TestUnit
         }
+    
+    def getMiniMapColor(self):
+        return (0,0,255)

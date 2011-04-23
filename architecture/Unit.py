@@ -365,9 +365,9 @@ class Unit(Builder):
 
         self.objectOfAction=obj
         if isinstance(obj, Builder):#Unit):\
-            print 1
+            
             if isinstance(obj, TestTownCenter) and self.owner == obj.owner:
-                print 2
+                
                 self.status=Locals.DEPOSITING
                 return
                 
@@ -385,7 +385,7 @@ class Unit(Builder):
             self.move()
             return False
         else: return True
-            
+    
     def move(self):
         """changes position of unit in direction of dest"""
         

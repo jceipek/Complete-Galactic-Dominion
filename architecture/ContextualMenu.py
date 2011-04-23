@@ -150,14 +150,17 @@ def None_TestTownCenter(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj2.buildDict:
-            curItem = radialMenu.RMenuItem(menu,
-                image = "orb.png",
-                col = (255,0,0),
-                title = 'Build Option #'+str(tmpcounter),
-                callback = Callback(obj2.addToBuildQueue,buildType))
-                #callback = self.buildDict[buildType])
-            buildMenu.addItem(curItem)
-            tmpcounter+=1
+            if obj2._hasResourcesToBuild(buildType):
+                curItem = radialMenu.RMenuItem(menu,
+                    image = "orb.png",
+                    col = (255,0,0),
+                    title = 'Build Option #'+str(tmpcounter),
+                    callback = Callback(obj2.addToBuildQueue,buildType))
+                    #callback = self.buildDict[buildType])
+                buildMenu.addItem(curItem)
+                tmpcounter+=1
+        if tmpcounter == 0:
+            menu.removeItem(buildItem)
 
     showDesc = radialMenu.RMenuItem(menu,
         image = "orbQBlack.png",
@@ -242,14 +245,17 @@ def Unit_WayPoint(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj1[0].buildDict:
-            curItem = radialMenu.RMenuItem(menu,
-                image = "orb.png",
-                col = (255,0,0),
-                title = 'Build Option #'+str(tmpcounter),
-                callback = Callback(obj1[0].addToBuildQueue,buildType,obj2.getPoint()))
-            buildMenu.addItem(curItem)
-            tmpcounter+=1
-        
+            if obj1[0]._hasResourcesToBuild(buildType):
+                curItem = radialMenu.RMenuItem(menu,
+                    image = "orb.png",
+                    col = (255,0,0),
+                    title = 'Build Option #'+str(tmpcounter),
+                    callback = Callback(obj1[0].addToBuildQueue,buildType,obj2.getPoint()))
+                buildMenu.addItem(curItem)
+                tmpcounter+=1
+        if tmpcounter == 0:
+            menu.removeItem(buildItem)
+    
     return menu
     
 def Unit_Resource(obj1,obj2):
@@ -288,13 +294,16 @@ def None_Unit(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj2.buildDict:
-            curItem = radialMenu.RMenuItem(menu,
-                image = "orb.png",
-                col = (255,0,0),
-                title = 'Build Option #'+str(tmpcounter),
-                callback = Callback(obj2.addToBuildQueue,buildType,obj2.rect.center))
-            buildMenu.addItem(curItem)
-            tmpcounter+=1
+            if obj2._hasResourcesToBuild(buildType):
+                curItem = radialMenu.RMenuItem(menu,
+                    image = "orb.png",
+                    col = (255,0,0),
+                    title = 'Build Option #'+str(tmpcounter),
+                    callback = Callback(obj2.addToBuildQueue,buildType,obj2.rect.center))
+                buildMenu.addItem(curItem)
+                tmpcounter+=1
+        if tmpcounter == 0:
+            menu.removeItem(buildItem)
 
     showDesc = radialMenu.RMenuItem(menu,
         image = "orbQBlack.png",
@@ -325,32 +334,35 @@ def TestTownCenter_WayPoint(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj1[0].buildDict:
+            if obj1[0]._hasResourcesToBuild(buildType):
+                makeAndMove = ParallelCallback(
+                    obj1[0].sendEventToManager,
+                    networkClassCreator(buildType,*obj1[0].getBuildArgs2())
+                    )
+                makeAndMove.addCallback(
+                    obj1[0].world.universe.manager.post,
+                    WorldManipulationEvent(['setpath',
+                        obj1[0].world.universe.getNextEntityID(),obj2.getPoint()])
+                    )
             
-            #makeAndMove = SeriesCallback(obj1[0].getBuildArgs)
-            #makeAndMove.addCallback(obj1[0].buildDict[buildType])
-            #makeAndMove.addCallback(lambda entity : entity.addToPath(obj2.getPoint()))
-            makeAndMove = ParallelCallback(
-                obj1[0].sendEventToManager,
-                networkClassCreator(buildType,*obj1[0].getBuildArgs2())
-                )
-            makeAndMove.addCallback(
-                obj1[0].world.universe.manager.post,
-                WorldManipulationEvent(['setpath',
-                    obj1[0].world.universe.getNextEntityID(),obj2.getPoint()])
-                )
+                queueMake = Callback(obj1[0].addToBuildQueue,
+                    buildType,obj1[0].rect.center,makeAndMove)
+                
+                curItem = radialMenu.RMenuItem(menu,
+                    image = "orb.png",
+                    col = (255,0,0),
+                    title = 'Build Option #'+str(tmpcounter),
+                    callback = queueMake)
+                buildMenu.addItem(curItem)
+                tmpcounter+=1
+        if tmpcounter == 0:
+            menu.removeItem(buildItem)
         
-            queueMake = Callback(obj1[0].addToBuildQueue,
-                buildType,obj1[0].rect.center,makeAndMove)
-            
-            curItem = radialMenu.RMenuItem(menu,
-                image = "orb.png",
-                col = (255,0,0),
-                title = 'Build Option #'+str(tmpcounter),
-                callback = queueMake)
-            buildMenu.addItem(curItem)
-            tmpcounter+=1
-            
-        return menu
+        # Has empty menu?
+        if len(menu.root) > 0:    
+            return menu
+        else:
+            return None 
     return None
 
 def Unit_Unit(obj1,obj2):

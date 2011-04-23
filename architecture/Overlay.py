@@ -256,7 +256,7 @@ class MiniMap(object):
             #rawPos = specialMath.cartToIso(gridPos)
             #drawPos = int(self.scale*rawPos[0]+self.xOffset),int(self.scale*rawPos[1]+self.yOffset)
             
-            color = entity.getAverageColor()
+            color = entity.getMiniMapColor()
             pygame.draw.circle(newSurface, color, drawPos, 3)
         
         if screenPoints is not None:

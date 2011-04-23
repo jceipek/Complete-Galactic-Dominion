@@ -65,7 +65,21 @@ class ImageBank(object):
                 self.imageColorKeys[imageName] = \
                     getAverageColor(self.getImage(imageName),colorkey)
             return self.imageColorKeys[imageName]
+
+def errorSurfaceAndRect():
+
+    blank = pygame.Surface((100,80))
+    blank.fill((180,180,180))
     
+    if not pygame.font.get_init():
+        pygame.font.init()
+    
+    font=pygame.font.Font(pygame.font.get_default_font(),12)
+    txt=font.render('Image not found.',False,(0,0,0))
+    blank.blit(txt,(5,30))
+    
+    return blank, blank.get_rect()
+
 def loadImage(imagePath, colorkey=None):
     
     # If there is a filepath given, load that file.
@@ -74,30 +88,25 @@ def loadImage(imagePath, colorkey=None):
         try:
             image = pygame.image.load(imagePath)
         except pygame.error, message:
-            print 'Cannot load image:', imagePath
-            #raise SystemExit, message
-            blank = pygame.Surface((100,80))
-            blank.fill((180,180,180))
-            
-            if not pygame.font.get_init():
-                pygame.font.init()
-            
-            font=pygame.font.Font(pygame.font.get_default_font(),12)
-            txt=font.render('Image not found.',False,(0,0,0))
-            blank.blit(txt,(5,30))
-            
-            return blank, blank.get_rect()
-            
-        if colorkey == 'alpha':
-            image = image.convert_alpha()  
-        else:
-            image = image.convert()
-            
-            if colorkey is not None:
+            print 'Cannot load image: %s'%imagePath
+            print 'Image not found surface returned instead.'
+            return errorSurfaceAndRect()
+        try:
+            if colorkey == 'alpha':
+                image = image.convert_alpha()  
+            else:
+                image = image.convert()
                 
-                if colorkey is -1:
-                    colorkey = image.get_at((0,0))
-                image.set_colorkey(colorkey)
+                if colorkey is not None:
+                
+                    if colorkey is -1:
+                        colorkey = image.get_at((0,0))
+                    image.set_colorkey(colorkey)
+                
+        except pygame.error, message:
+            print 'Pygame error: %s'%message
+            print 'Image not found surface returned instead.'
+            return errorSurfaceAndRect()
             
     # If there is a pygame.Surface given        
     elif isinstance(imagePath, pygame.Surface):
@@ -105,6 +114,67 @@ def loadImage(imagePath, colorkey=None):
     else:
         raise TypeError, 'please provide pygame.Surface or filepath.'
     return image, image.get_rect()
+
+def getMinimalRect(surface, colorkey=None):
+    
+    imageRect = surface.get_rect()
+    imageWidth = imageRect.width
+    imageHeight = imageRect.height
+    
+    xmin,xmax = 0,imageWidth
+    ymin,ymax = 0,imageHeight
+    
+    if colorkey == -1:
+        backgroundColor = testPixel
+    elif isinstance(colorkey,tuple):
+        backgroundColor = colorkey
+    else:
+        backgroundColor = None
+    
+    rectTop,rectBottom,rectLeft,rectRight = None,None,None,None
+    for x in xrange(xmin,xmax):
+        if rectTop is None:
+            for y in xrange(ymin,ymax):
+                pixel = surface.get_at((x,y))
+                if pixel[3] != 0 and pixel != backgroundColor:
+                    #rectTop = y
+                    rectLeft = x
+                    break
+        else:
+            break
+                
+    for x in xrange(xmin,xmax):
+        if rectBottom is None:
+            for y in xrange(ymin,ymax):
+                pixel = surface.get_at((x,ymax-y-1))
+                if pixel[3] != 0 and pixel != backgroundColor:
+                    rectBottom = ymax-y-1
+                    break
+        else:
+            break
+                
+    for y in xrange(ymin,ymax):
+        if rectLeft is None:
+            for x in xrange(xmin,xmax):
+                pixel = surface.get_at((x,y))
+                if pixel[3] != 0 and pixel != backgroundColor:
+                    rectTop = y
+                    break
+        else:
+            break
+                
+    for y in xrange(ymin,ymax):
+        if rectRight is None:
+            for x in xrange(xmin,xmax):
+                pixel = surface.get_at((xmax-x-1,y))
+                if pixel[3] != 0 and pixel != backgroundColor:
+                    rectRight = xmax-x-1
+                    break
+        else:
+            break
+    
+    print rectLeft,rectTop,rectRight,rectBottom
+    return pygame.Rect(rectLeft,rectTop,rectRight-rectLeft,rectBottom-rectTop)
 
 def getAverageColor(surface, colorkey=None):
     """
