@@ -21,14 +21,13 @@ class WorldManipulator(Listener):
              if 'GetWorld' in data:
                  return
             
-             print 'Got a command to unpickle the string ' + data + '\n'*5
              if self.networked:
                 try:
                     cmd = cPickle.loads(data)
                 except:
+                    print 'LOAD FAILED, this is a fatal error PLEASE try to fix this\n'
                     if data == '':
                         return
-                    print 'load failed'
                     cmd = cPickle.loads(data)
              else:
                 cmd = data
@@ -55,10 +54,7 @@ class WorldManipulator(Listener):
                     #this list should be in the form ['create',class,*initArgs]
                     args = list(cmd[2])
                     args[2] = self.world.universe.worldIDToWorld[args[2]]
-                    print 'Begin creating the entity'
-                    a=cmd[1](*args)
-                    print 'Done creating the entity'
-                    print 'Entity ID:',a.entityID
+                    cmd[1](*args)
                 elif cmd[0] == 'setpath':
                     print 'Trying to set the path'
                     #list should be in the form ['setpath',entityID,coordinate_tuple]

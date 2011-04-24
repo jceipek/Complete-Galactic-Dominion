@@ -13,9 +13,12 @@ class GameClient(networking.Client,Listener):
         print self.socketThread
         eventTypes = [Event.WorldManipulationEvent]
         Listener.__init__(self,manager,eventTypes)
+        self.loaded=False
         
     def processInput(self,sockThrd,data):
-        if self.ID == None and data[:3] == 'ID:':
+        if not self.loaded and 'finishedLoading' in data:
+            self.loaded = True
+        elif self.ID == None and data[:3] == 'ID:':
             IDList = data.split(':')
             GameClient.ID = int(IDList[1])
             print 'Got my ID:',self.ID

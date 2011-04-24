@@ -12,7 +12,7 @@ servers and clients as needed. For now, no servers have been created.
 """
 
 #Import python modules required for the client
-import threading
+import threading, traceback, time
 
 #Import necessary user defined classes required for the client
 import Event, networking
@@ -90,6 +90,8 @@ def init(host='localhost'):
     for i in xrange(25):
         eventManager.post(Event.WorldManipulationEvent(['create',TestUnit,(i*50,i*50,w.worldID,GameClient.ID)]))
     #Notify the manager that the window should start to accept input:
+    while networked and not client.loaded:
+        time.sleep(.1)
     eventManager.post(Event.StartEvent())
     
     

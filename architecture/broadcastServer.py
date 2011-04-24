@@ -39,6 +39,7 @@ class BroadcastServer(networking.Server):
             for entity in self.world.allEntities.values():
                 if isinstance(entity,Unit) or isinstance(entity,Structure) or isinstance(entity,NaturalObject):
                     sockThrd.write(cPickle.dumps(entity))
+            sockThrd.write('finishedLoading')
         else:
             for sock in self.socketThreads.keys():
                 sock.write(data)
