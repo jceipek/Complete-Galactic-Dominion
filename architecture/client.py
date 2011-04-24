@@ -76,8 +76,9 @@ def init(host='localhost'):
     #universe.changeWorld(w)
     
     #===========================================
-    
-    if not networked:
+    if networked:
+        client.sendRequest('GetWorld')
+    else:
         # Initialize 25 entities in World w
         # Initialize a TestTownCenter
         
@@ -92,7 +93,6 @@ def init(host='localhost'):
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
-    
     return eventManager.eventTypesToListeners
 
 if __name__ == '__main__':
