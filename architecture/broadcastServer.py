@@ -4,7 +4,7 @@
 
 #import code necessary to run the server
 #built-in modules
-import threading, cPickle
+import threading, cPickle, traceback
 #developer defined modules
 import Event, networking
 from networking import SocketThread
@@ -31,7 +31,7 @@ class BroadcastServer(networking.Server):
     This server takes requests from a client and does one of two things
     -If the client is new
     """
-    numberOfEntities = 0
+    numberOfClients = 0
     
     def processInput(self,sockThrd,data):
         print 'Got input:' + data
@@ -58,11 +58,9 @@ class BroadcastServer(networking.Server):
                 print 'Connection Established'
                 s=SocketThread(self,clientSocket)
                 self.socketThreads[s]=s.file
-                ID=BroadcastServer.numberOfEntities
+                ID=BroadcastServer.numberOfClients
+                BroadcastServer.numberOfClients += 1
                 s.write('ID:'+str(ID))
-                BroadcastServer.numberOfEntities += 1
-                self.processInput(s,'GetWorld')
-                self.processInput(s,'newPlayer:%d'%ID)
 
         self.socket.listen(numPendingConnections)
         self.connecting=True

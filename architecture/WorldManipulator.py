@@ -34,6 +34,7 @@ class WorldManipulator(Listener):
                 cmd = data
              #print 'Successfully unpickled the string' + data + '\n'*5
              if isinstance(cmd,Entity):
+                 print 'Entity %d sent from the network' % cmd.entityID
                  entity = cmd
                  entity.world = self.world.universe.worldIDToWorld[entity.world]
                  self.world.universe.entityIDToEntity[entity.entityID] = entity
