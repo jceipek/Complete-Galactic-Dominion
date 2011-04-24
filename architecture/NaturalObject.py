@@ -19,6 +19,7 @@ class NaturalObject(Entity):
         self.blockable=True
         self.collectable=False
         self.maxHealth = self.curHealth = 0
+        self.world.addEntity(self)
 	
     def collect(self):
         if not self.collectable:
@@ -40,12 +41,13 @@ class NaturalObject(Entity):
         
     def __setstate__(self,state):
         self.__dict__ = state
-            
-        self.loadImage(self.imagePath, self.colorkey)
+        #the realCenter attribute will be overwritten in _imageInformationSetup()
+        #this location needs to be preserved
+        realCenter = self.realCenter
+        self._imageInformationSetup()
+        self.rect.center = self.realCenter = realCenter
         
         self.healthBar = HealthBar(self)
-        
-        self.rect.center = self.realCenter
         self.selected = False
 
 class Resource(NaturalObject):

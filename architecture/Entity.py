@@ -69,7 +69,7 @@ class Entity(MapObject):
         # adds the entity to the provided world
         self.entityID = None
         # sets entityID
-        self.world.addEntity(self)
+        #self.world.addEntity(self)
 
         # First initialization of description
         self.description = description
@@ -240,7 +240,7 @@ class Entity(MapObject):
         """
         return self.world.elapsedTimeSinceLastFrame
     
-    def addToPath(self,newLoc):
+    def addToPath(self,newLoc,servercommand=False):
         """
         Adds a coordinate to the path of an entity.  This should be
         overriden for entities which can move.

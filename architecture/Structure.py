@@ -22,6 +22,7 @@ class Structure(Builder):
         self.maxHealth=100
         self.curHealth=self.maxHealth
         self.movable=False
+        self.world.addEntity(self)
 
     def __getstate__(self):
         state = self.__dict__.copy()

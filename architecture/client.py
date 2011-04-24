@@ -50,13 +50,6 @@ def init(host='localhost'):
     eventManager = Manager(eventTimer,debugger) #FIXME: more specific manager\
                                                 #classes will be needed later?
     Entity.manager = eventManager                                            
-    
-    networked = True
-    try:                                            
-        client = GameClient(eventManager,host=host,port=1567)
-    #    client.sendRequest('GetWorld')
-    except:
-        networked = False
                                                
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
@@ -72,28 +65,33 @@ def init(host='localhost'):
     gameWindow.updateScreenMode()
     
     w = World(universe)
-    wManipulator = WorldManipulator(eventManager,w,networked,GameClient.ID)
     #universe.changeWorld(w)
     
+    networked = True
+    try:                                            
+        client = GameClient(eventManager,host=host,port=1567)
+    #    client.sendRequest('GetWorld')
+    except:
+        networked = False
+    
+    wManipulator = WorldManipulator(eventManager,w,networked)
+    
     #===========================================
-    if networked:
-        client.sendRequest('GetWorld')
-    else:
+    if not networked:
         # Initialize 25 entities in World w
         # Initialize a TestTownCenter
-        
+        GameClient.ID = 0
         w._generateResources()
-        w._TMPmakeBuilding()
-        
-        for i in xrange(25):
-            #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
-            #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-            a=TestUnit(i*50,i*50,w,GameClient.ID)
-            #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
-            print a.owner
 
+        w._TMPmakeBuilding()
+
+    #w._TMPmakeBuilding()
+        
+    for i in xrange(25):
+        eventManager.post(Event.WorldManipulationEvent(['create',TestUnit,(i*50,i*50,w.worldID,GameClient.ID)]))
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
+    
     
     return eventManager.eventTypesToListeners
 
