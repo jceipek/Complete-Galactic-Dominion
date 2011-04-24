@@ -17,11 +17,14 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     credits, etc.)
     @type activeScreen: L{Screen} or subclass thereof
     
+    @param clientID: identifying string or number given by the server
+    when a client is created
+    
     @param debugOverlay: An additional overlay disabled by default during real games. It displays the framerate and may eventually be used for 
     cheatcodes/displaying debug events. Only fps is currently enabled.
     """
     
-    def __init__(self,manager,world):
+    def __init__(self,manager,world,clientID):
         eventTypes = [ Event.RenderEvent, Event.MouseMovedEvent, \
             Event.SelectionEvent, Event.SingleAddSelectionEvent, \
             Event.InitiateActionEvent, \
@@ -35,13 +38,18 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.activeWorld = world
         self.activeScreen = None
         self.debugOverlay = None
+        self.clientID = clientID
         self.TEST_interface()
         #DO MORE SETUP STUFF
-        
+    
+    def setClientID(self,clientID):
+        self.clientID=clientID
+        self.activeScreen.setClientID(clientID)
+    
     def TEST_interface(self):
         from Screen import MainScreen
         from Overlay import DebugOverlay
-        testScreen = MainScreen()
+        testScreen = MainScreen(self.clientID)
         testScreen.TEST_createViewport(self.activeWorld,self.manager)
         self.activeScreen = testScreen
         self.debugOverlay = DebugOverlay()

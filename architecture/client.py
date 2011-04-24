@@ -56,9 +56,11 @@ def init(host='localhost'):
     
     #THIS WILL BE CHANGED LATER TO ACCOUNT FOR LOADING, ETC.
 
+    networked = True
+
     # World w is set to the activeWorld of the universe
     universe = Universe(eventManager)
-    ui = UserInterface(eventManager,universe.activeWorld)
+    ui = UserInterface(eventManager,universe.activeWorld,None)
     
     gameWindow = Window(eventManager,width=1024,height=768)
     gameWindow.fullscreenMode = False
@@ -67,18 +69,15 @@ def init(host='localhost'):
     w = World(universe)
     #universe.changeWorld(w)
     
-    networked = True
     try:                                            
         client = GameClient(eventManager,host=host,port=1567)
         clientID = client.ID
     #    client.sendRequest('GetWorld')
+
     except:
         networked = False
         clientID = None
-    
-    wManipulator = WorldManipulator(eventManager,w,networked)
-    
-    #===========================================
+        
     if not networked:
         # Initialize 25 entities in World w
         # Initialize a TestTownCenter
@@ -90,6 +89,12 @@ def init(host='localhost'):
             from time import sleep
             sleep(.02)
         clientID = client.ID
+        ui.setClientID(clientID)
+    
+    wManipulator = WorldManipulator(eventManager,w,networked)
+    
+    #===========================================
+    
     #w._TMPmakeBuilding()
         
     for i in xrange(25):

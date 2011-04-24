@@ -101,7 +101,7 @@ def init(host='localhost',server=None):
 
     # World w is set to the activeWorld of the universe
     universe = Universe(eventManager)
-    ui = UserInterface(eventManager,universe.activeWorld)
+    ui = UserInterface(eventManager,universe.activeWorld,'BROADCASTSERVER')
     
     gameWindow = Window(eventManager,width=1024,height=768)
     gameWindow.fullscreenMode = False

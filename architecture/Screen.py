@@ -41,12 +41,20 @@ class MainScreen(Screen):
     @param hud: The HUD displays information to the player. It does not contain 
     a debug menu, but does contain resource counts, menus, etc...
     @type hud: L{HUD}
+    
+    @param clientID: identifying string or number given by the server
+    when a client is created
     """
-    def __init__(self):
+    def __init__(self,clientID):
         Screen.__init__(self)
         self.viewport = None
         self.hud = None
-        
+        self.clientID = clientID
+    
+    def setClientID(self,clientID):
+        self.clientID = clientID
+        self.viewport.setClientID(clientID)
+    
     def TEST_createViewport(self,world,manager):
         ###FIXME
         #world.TEST_createGrid()
@@ -54,7 +62,7 @@ class MainScreen(Screen):
         viewportPos = (0,0)
         #viewportSize = (640,480)
         viewportSize = (1024,768-100)
-        testViewport = Viewport(world,manager,scrollLoc,viewportPos,viewportSize)
+        testViewport = Viewport(world,manager,scrollLoc,viewportPos,viewportSize,self.clientID)
         self.viewport = testViewport
         
         hudPos=(0, viewportSize[1]-20)
