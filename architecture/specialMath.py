@@ -93,13 +93,13 @@ def closestEntity(entities,loc):
             closest = e
     return closest
 
-def imageNum(x,y,n):
+def imageNum(x,y,imageCount):
     """returns image number for entity facing cartesian x,y direction"""
-    isoVectX,isoVectY =cartToIso(x, y)
+    isoVectX,isoVectY = cartToIso((x, y))
     isoTheta=atan2(isoVectY, isoVectX)
     isoTheta=-1*isoTheta/(2*3.14)%1
 
-    return int(n*isoTheta)
+    return int(imageCount*isoTheta)
 
 if __name__ == "__main__":
     print isoToCart((-10,-10))

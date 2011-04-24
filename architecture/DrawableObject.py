@@ -40,8 +40,9 @@ class DrawableObject(object):
         self.image = objImage
         self.rect = self.image.get_rect()
           
-    def loadImage(self,a=None,b=None):
-        print "HAI, YOU TRIED TO LOAD A PIC!"
+    def setImageToOrientation(self,orientation):
+        objImage = self.imageBank.getImage(self.imagePath,self.colorkey,orientation)
+        self.image = objImage
 
     def setAverageColor(self,imagePath,colorkey=None):
         """

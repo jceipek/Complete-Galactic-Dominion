@@ -214,7 +214,9 @@ class Unit(Builder):
                  owner='tmp'):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description,
             owner='tmp', movable=True)
-    
+
+        self.imageCount = None    
+
         #self.__class__.allUnits.add(self)
         if True:#loadList == None:
             self.status=Locals.IDLE
@@ -390,6 +392,9 @@ class Unit(Builder):
             dirx = self.dest[0] - curX #unscaled x direction of movement
             diry = self.dest[1] - curY #unscaled y direction of movement
             
+            self.setImageNum(dirx,diry)
+            print self.imageNum
+
             # distance between destination and current location
             distLocToDest = specialMath.hypotenuse(dirx,diry)
             
@@ -409,8 +414,17 @@ class Unit(Builder):
             self.rect.center = tuple(self.realCenter)
             self.moveWrap()
 
-    
-            
+    def setImageNum(self,x,y):
+        oldImageNum = self.imageNum
+        if not self.imageCount == None and self.imageCount > 1:
+            from specialMath import imageNum
+            self.imageNum = imageNum(x,y,self.imageCount)
+        else:
+            self.imageNum = None
+
+        if oldImageNum != self.imageNum:
+            self.setImageToOrientation(self.imageNum)
+
     def _definePath(self):
         while self._isAtDestination(): #may need to have room for error
             if self.path == []:
@@ -477,7 +491,8 @@ class TestUnit(Unit):
     name = 'TestUnit'
     
     def __init__(self, x, y, world, owner='tmp'):
-        Unit.__init__(self,'testCraft.png',x,y,world,'alpha','A test unit.',owner)
+        Unit.__init__(self,'ship',x,y,world,'alpha','A test unit.',owner)
+        self.imageCount = 64
     
     def __getstate__(self):
         state = self.__dict__.copy()
@@ -495,6 +510,7 @@ class TestUnit(Unit):
       
         return state
         
+
     def __setstate__(self,state):
         self.__dict__ = state
             

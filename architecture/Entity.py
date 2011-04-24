@@ -87,7 +87,11 @@ class Entity(MapObject):
         self.selected = False
         self.blocking = False
         self.drawOffset=(0,0)#?
-        
+
+        #Image variables related to orientation
+        self.imageCount = 1
+        self.imageNum = None
+
         self.focused = False
 
         self.healthBar = HealthBar(self)
@@ -95,6 +99,7 @@ class Entity(MapObject):
         self.regenRate = 0
         self._regenHealth = 0
         self.inventory=None
+
 
     def _setEntityID(self,ID):
         self.entityID = ID

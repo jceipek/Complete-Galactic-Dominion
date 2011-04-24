@@ -19,7 +19,6 @@ class ImageBank(object):
         self.setImageNotFound()
         
     def setImageNotFound(self):
-        print "SETTING IMAGE NOT FOUND"
         from specialImage import createImageNotFound
         self.cache[None] = createImageNotFound()
 
@@ -34,33 +33,34 @@ class ImageBank(object):
         return imagePath in self.cache
     
     def loadImage(self, imagePath, colorkey):
-        #print "LOADING IMAGE"
         """
         Loads an image or animation into the cache as an AnimationDict
         """
         if isinstance(imagePath,str) and not self.isCached(imagePath):
             from os import listdir
             from os.path import isdir,join
-            imagePath = join('imageData',imagePath)
+            imagePathFull = join('imageData',imagePath)
             try:
                 #Is this an anim, not a simple image?
                 if isdir(imagePath):
-                    images = listdir(imagePath)
+                    images = listdir(imagePathFull)
                     images.sort()
-                    
                     animDict = AnimationDict(self.getDefaultImage())
                     for imageI in xrange(len(images)):
-                        image = join(imagePath,images[imageI])
+                        image = join(imagePathFull,images[imageI])
+                        image = loadImage(image, colorkey)
                         animDict.addImage(image,colorkey,imageI)
+                        if imageI == 0:
+                            animDict.setDefaultImage(animDict.getImage(imageI))
                 else:
                     animDict = AnimationDict(self.getDefaultImage())
-                    image = loadImage(imagePath, colorkey)
+                    image = loadImage(imagePathFull, colorkey)
                     animDict.addImage(image,colorkey)
                 self.cache[imagePath] = animDict
             except:
                 animDict = AnimationDict(self.getDefaultImage())
                 animDict.addImage(self.getDefaultImage())
-                print "UNABLE TO LOAD '"+imagePath+"'"
+                print("UNABLE TO LOAD '"+imagePath+"'")
 
     def getDefaultImage(self):
         return self.cache[None]
@@ -74,7 +74,7 @@ class ImageBank(object):
         if orientation == None:
             imageDict = self.cache.get(imageName,None)
             if imageDict == None:
-                self.loadImage(imageName,colorkey)
+                self.loadImage(imageName,colorkey)              
                 imageDict = self.cache.get(imageName,None)
                 if imageDict == None:
                     return self.getDefaultImage()
@@ -124,7 +124,7 @@ class AnimationDict():
     def setDefaultImage(self,image,colorKey=None):
         self.data[None] = loadImage(image,colorKey)
 
-    def getDefaultImage():
+    def getDefaultImage(self):
         return self.data[None]
 
     def getImage(self,orientationKey=None):
