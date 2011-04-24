@@ -23,7 +23,8 @@ class NaturalObject(Entity):
     def collect(self):
         if not self.collectable:
             pass
-            
+
+       
     def __getState__(self):
         state = self.__dict__.copy()
         
@@ -66,6 +67,7 @@ class Resource(NaturalObject):
         self.regenRate = 0
         self._regenHealth = 0
 
+
 class Gold(Resource):
     """Gold."""
     
@@ -76,7 +78,10 @@ class Gold(Resource):
             'Gold ore.')
         
         self.regenRate = 1
-        
+
+    def getMiniMapColor(self):
+        return (255,215,0)
+
     def __getstate__(self):
         return NaturalObject.__getState__(self)
         

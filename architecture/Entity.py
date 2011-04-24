@@ -87,7 +87,11 @@ class Entity(MapObject):
         self.selected = False
         self.blocking = False
         self.drawOffset=(0,0)#?
-        
+
+        #Image variables related to orientation
+        self.imageCount = 1
+        self.imageNum = None
+
         self.focused = False
 
         self.healthBar = HealthBar(self)
@@ -97,9 +101,10 @@ class Entity(MapObject):
         self.inventory=None
         
         self.selectionRect = self.imageBank.getMinimalRect(
-            imagePath,colorkey,padding=25,showShadow=False)
-        self.selectionRectOffset = self.selectionRect.topleft
-        
+            imagePath,colorkey,padding=25,showShadows=False)
+        #self.selectionRectOffset = self.selectionRect.topleft
+        #print self.selectionRect
+
     def _setEntityID(self,ID):
         self.entityID = ID
 
@@ -144,22 +149,22 @@ class Entity(MapObject):
         if self.selected or self.focused:
             self.drawHealthBar(screen,selectRect)
             self.focused = False
-        
-        ### FOR DEBUGGING PURPOSES
-        #pygame.draw.rect(screen,(255,0,255),selectRect,2)
-        
+
         screen.blit(self.image,drawRect)
-    
+
     def getSelectionRect(self,drawRect):
         
         from copy import copy
         selRect = copy(self.selectionRect)
         selRect.topleft = drawRect.topleft
-        selRect.top+=self.selectionRectOffset[1]
-        selRect.left+=self.selectionRectOffset[0]
+        selRect.top+=self.selectionRect.top
+        selRect.left+=self.selectionRect.left
         
         return selRect
-    
+        
+    def getSelectionRectOffset(self):
+        return self.selectionRect.topleft
+
     def drawSelectionRing(self, screen, drawRect):
         pygame.draw.circle(screen, (255,255,255), drawRect.center, 20, 1)
 
