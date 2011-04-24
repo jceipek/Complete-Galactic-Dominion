@@ -87,7 +87,10 @@ def closestEntity(entities,loc):
     for e in entities:
         drawRect = e.rect.move(e.drawOffset)
         drawRect.center = cartToIso(drawRect.center)
-        dist = distance(drawRect.center,loc)
+        
+        selectRect = e.getSelectionRect(drawRect)
+        
+        dist = distance(selectRect.center,loc)
         if not minDist or dist < minDist:
             minDist = dist
             closest = e

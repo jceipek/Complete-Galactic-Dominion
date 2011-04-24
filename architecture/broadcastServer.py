@@ -15,8 +15,7 @@ servers and clients as needed. For now, no servers have been created.
 import threading
 
 #Import necessary user defined classes required for the client
-import Event, networking, traceback
-from networking import SocketThread
+import Event, networking
 from Manager import Manager
 from Window import Window
 from Grid import InfiniteGrid,FiniteGrid
@@ -36,7 +35,6 @@ from client import init
 import cPickle
 
 class BroadcastServer(networking.Server):
-    numberOfClients = 0
     def processInput(self,sockThrd,data):
         print 'Got input:' + data
         if 'GetWorld' in data and hasattr(self,'world'):
@@ -46,28 +44,6 @@ class BroadcastServer(networking.Server):
         else:
             for sock in self.socketThreads.keys():
                 sock.write(data)
-                
-    def listenAndConnect(self,numPendingConnections=5):
-        
-        def connectToAllClients():
-            while self.connecting:
-                try:
-                    clientSocket,clientAddress=self.socket.accept()
-                except KeyboardInterrupt:
-                    raise
-                except:
-                    traceback.print_exc()
-                    continue
-                print 'Connection Established'
-                s=SocketThread(self,clientSocket)
-                self.socketThreads[s]=s.file
-                s.write('ID:'+str(BroadcastServer.numberOfClients))
-                BroadcastServer.numberOfClients += 1
-
-        self.socket.listen(numPendingConnections)
-        self.connecting=True
-        self.connectionThread=threading.Thread(target=connectToAllClients)
-        self.connectionThread.start()#this is a non daemonic thread and will prevent the server from exiting
             
 def init(host='localhost',server=None):
     """

@@ -224,22 +224,23 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 for e in self.selectedEntities:
                     e.deselect()
                 self.selectedEntities = []
-            
             #else: pass # if it is an Event.AddDragCompletedEvent, do
             # # not deselect
             
-            #print self.dragRect.isOffScreen(self.size)
-            if self.dragRect.isOffScreen(self.size):
-                searchList = self.world.allEntities.values()
-            else:
-                searchList = self.viewportEntities
+            #if self.dragRect.isOffScreen(self.size):
+            #    searchList = self.world.allEntities.values()
+            #else:
+            #    searchList = self.viewportEntities
+            searchList = self.viewportEntities
             
             for entity in searchList:
             
-                drawRect = entity.rect.move(entity.drawOffset)
+                drawRect = entity.selectionRect.move(entity.drawOffset)
                 drawRect.center = specialMath.cartToIso(drawRect.center)
+                
+                selectRect=entity.getSelectionRect(drawRect)
             
-                if drawRect.colliderect(MakeBoundingBox(start,end)):
+                if selectRect.colliderect(MakeBoundingBox(start,end)):
                     if isinstance(event,Event.DragCompletedEvent):
                         entity.select()
                         self.selectedEntities.append(entity)
@@ -274,7 +275,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             drawRect = clicked.rect.move(clicked.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
             
-            if not drawRect.collidepoint(pos):
+            selectRect=clicked.getSelectionRect(drawRect)
+            
+            if not selectRect.collidepoint(pos):
                 clicked = None
         
         if isinstance(event,Event.SelectionEvent):
@@ -296,7 +299,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def updateMenu(self,eventPos):
         if self.currentMenu is not None:
-            #print 'I MOVED YALL: ',eventPos
             self.currentMenu.update(eventPos)
     
     def selectMenu(self,eventPos):
@@ -361,7 +363,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             drawRect = e.rect.move(e.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
             
-            if drawRect.collidepoint(viewportMouseLoc):
+            selectRect = e.getSelectionRect(drawRect)
+            
+            if selectRect.collidepoint(viewportMouseLoc):
                 e.focused = True
   
     def draw(self,displaySurface):

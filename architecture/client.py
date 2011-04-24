@@ -85,7 +85,7 @@ def init(host='localhost'):
         w._generateResources()
         w._TMPmakeBuilding()
         
-        for i in xrange(25):
+        for i in xrange(1):
             #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
             #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
             a=TestUnit(i*50,i*50,w)
@@ -93,6 +93,7 @@ def init(host='localhost'):
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
+    
     return eventManager.eventTypesToListeners
 
 if __name__ == '__main__':

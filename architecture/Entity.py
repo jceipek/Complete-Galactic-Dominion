@@ -95,6 +95,12 @@ class Entity(MapObject):
         self.regenRate = 0
         self._regenHealth = 0
         self.inventory=None
+        
+        self.selectionRect = self.imageBank.getMinimalRect(
+            imagePath,colorkey,padding=25,showShadow=False)
+        self.selectionRectOffset = self.selectionRect.topleft
+        self.selectionRect.top += self.rect.top
+        self.selectionRect.left += self.rect.left
 
     def _setEntityID(self,ID):
         self.entityID = ID
@@ -126,34 +132,36 @@ class Entity(MapObject):
         the current location of the corner of the viewport in the 
         activeworld.
         """
-        
-        #gridWidth,gridHeight = self.world.gridDim
-        '''
-        drawOffset = \
-        specialMath.isoToCart((-worldOffset[0],-worldOffset[1]))
-        drawRect = self.rect.move(drawOffset)
-        '''
+
         if self.drawOffset is None:
             return
         
         drawRect = self.rect.move(self.drawOffset)
-        #left,top=self.world.grid.cartToIso(drawRect.topleft)
-        #right,bottom=self.world.grid.cartToIso(drawRect.bottomright)
-        #drawRect = pygame.Rect(left,top,right-left,bottom-top)
-
         drawRect.center = self.world.grid.cartToIso(drawRect.center)
         
-        #drawRect.top = drawRect.top%gridHeight
-        #drawRect.left = drawRect.left%gridWidth
+        selectRect = self.getSelectionRect(drawRect)
         
         if self.selected:
-            self.drawSelectionRing(screen,drawRect)
+            self.drawSelectionRing(screen,selectRect)
         if self.selected or self.focused:
-            self.drawHealthBar(screen,drawRect)
+            self.drawHealthBar(screen,selectRect)
             self.focused = False
         
+        ### FOR DEBUGGING PURPOSES
+        #pygame.draw.rect(screen,(255,0,255),selectRect,2)
+        
         screen.blit(self.image,drawRect)
-
+    
+    def getSelectionRect(self,drawRect):
+        
+        from copy import copy
+        selRect = copy(self.selectionRect)
+        selRect.topleft = drawRect.topleft
+        selRect.top+=self.selectionRectOffset[1]
+        selRect.left+=self.selectionRectOffset[0]
+        
+        return selRect
+    
     def drawSelectionRing(self, screen, drawRect):
         pygame.draw.circle(screen, (255,255,255), drawRect.center, 20, 1)
 
@@ -213,7 +221,7 @@ class Entity(MapObject):
         elif self.curHealth > self.maxHealth:
             self.curHealth = self.maxHealth
         self.healthBar.updateHealthBar()
-            
+        
     def moveWrap(self):
         """
         FIXME !!!
