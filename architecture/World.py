@@ -226,11 +226,9 @@ class WorldResourceContainer(object):
         self.addPlayer('tmp')
         
     def addPlayer(self,playerID):
-        
         self.resources[playerID] = PlayerResourceContainer(self.world)
     
     def hasPlayer(self,playerID):
-        
         return playerID in self.resources
     
     def addResource(self,playerID,resource,amount=1):

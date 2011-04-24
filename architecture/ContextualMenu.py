@@ -367,21 +367,23 @@ def TestTownCenter_WayPoint(obj1,obj2):
 
 def Unit_Unit(obj1,obj2):
     
-    menu = radialMenu.RMenu(openDelay=.2)
+    if obj1[0].owner!=obj2.owner:
     
-    setAttackCallbacks = []
-    for unit in obj1:
-        setAttackCallbacks.append(unit.initAction)
+        menu = radialMenu.RMenu(openDelay=.2)
     
-    attackItem = radialMenu.RMenuItem(menu,
-        image = "AttackOrb.png",
-        col = (255,255,255),
-        title = 'Attack!',
-        callback = GroupCallback(setAttackCallbacks,obj2))
-
-    menu.addItem(attackItem)
+        setAttackCallbacks = []
+        for unit in obj1:
+            setAttackCallbacks.append(unit.initAction)
         
-    return menu
+        attackItem = radialMenu.RMenuItem(menu,
+            image = "AttackOrb.png",
+            col = (255,255,255),
+            title = 'Attack!',
+            callback = GroupCallback(setAttackCallbacks,obj2))
+    
+        menu.addItem(attackItem)
+            
+        return menu
 
 def getCGDcontextualMenu():
     """

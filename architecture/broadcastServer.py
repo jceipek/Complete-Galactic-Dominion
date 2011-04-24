@@ -58,9 +58,11 @@ class BroadcastServer(networking.Server):
                 print 'Connection Established'
                 s=SocketThread(self,clientSocket)
                 self.socketThreads[s]=s.file
-                s.write('ID:'+str(BroadcastServer.numberOfEntities))
+                ID=BroadcastServer.numberOfEntities
+                s.write('ID:'+str(ID))
                 BroadcastServer.numberOfEntities += 1
                 self.processInput(s,'GetWorld')
+                self.processInput(s,'newPlayer:%d'%ID)
 
         self.socket.listen(numPendingConnections)
         self.connecting=True

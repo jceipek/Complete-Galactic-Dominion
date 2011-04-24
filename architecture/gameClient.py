@@ -16,7 +16,11 @@ class GameClient(networking.Client,Listener):
         self.loaded=False
         
     def processInput(self,sockThrd,data):
-        if not self.loaded and 'finishedLoading' in data:
+        if 'newPlayer' in data:
+            playerID = data.split(':')[1]
+            playerID = int(playerID)
+            self.manager.post(Event.NewPlayerEvent(playerID))
+        elif not self.loaded and 'finishedLoading' in data:
             self.loaded = True
         elif self.ID == None and data[:3] == 'ID:':
             IDList = data.split(':')
