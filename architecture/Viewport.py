@@ -93,7 +93,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if self.minimap.rect.collidepoint(pos):
             mapClickPoint = self.minimap.clickToGridPos(pos)
             if mapClickPoint is not None:
-                destCart = mapClickPoint
+                return 
             else:            
                 cartPos = specialMath.isoToCart(pos)
                 destCart = self.cartScrollLoc[0] + cartPos[0], \
@@ -119,14 +119,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
         if self.currentMenu is not None:
             self.currentMenu.open(event.pos)
-
-        if clicked:
-            drawRect = clicked.rect.move(clicked.drawOffset)
-            drawRect.center = specialMath.cartToIso(drawRect.center)
         
-            if not drawRect.collidepoint(pos):
-                clicked = None
-    
     def completeActionEvent(self,event):
         attacking = False
         pos = event.pos
@@ -146,7 +139,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             if mapClickPoint is not None:
                 destCart = mapClickPoint
             else:
-
                 cartPos = specialMath.isoToCart(pos)
                 destCart = (self.cartScrollLoc[0] + cartPos[0])%self.worldSize[0], \
                             (self.cartScrollLoc[1] + cartPos[1])%self.worldSize[1]
@@ -475,12 +467,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.quickSelect[event.key].empty()
         for entity in self.selectedEntities:
             self.quickSelect[event.key].add(entity)
-        print self.quickSelect[event.key].sprites()
         
     def getQuickSelect(self,event):
         for entity in self.quickSelect[event.key].sprites():
-            entity.selected = True
-            self.selectedEntities.append(entity)
+            entity.select()
+            if entity not in self.selectedEntities:
+                self.selectedEntities.append(entity)
     
     def postNotification(self):
         """

@@ -401,7 +401,6 @@ class Unit(Builder):
             diry = self.dest[1] - curY #unscaled y direction of movement
             
             self.setImageNum(dirx,diry)
-            print self.imageNum
 
             # distance between destination and current location
             distLocToDest = specialMath.hypotenuse(dirx,diry)
