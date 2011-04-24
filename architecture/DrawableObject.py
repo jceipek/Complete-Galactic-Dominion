@@ -132,12 +132,15 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode(screenSize)
     screenZone = screen.get_rect()
-    from GameData import getMinimalRect
-    a = DrawableObject('TownCenter.png',(255,255,255))
-    print a.getAverageColor()
-    print getMinimalRect(a.image,(255,255,255))
+    
+    a = DrawableObject('testCraft.png','alpha')
+    minimalRect=DrawableObject.imageBank.getMinimalRect('testCraft.png','alpha',padding=30)
+    
+    minimalRect.clamp_ip(a.rect)
     
     while RUNNING:
         pygame.init()
         screen.blit(a.image,a.rect)
+
+        pygame.draw.rect(screen,(255,0,255),minimalRect,2)
         pygame.display.flip()
