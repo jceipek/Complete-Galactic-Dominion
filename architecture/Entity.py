@@ -99,9 +99,7 @@ class Entity(MapObject):
         self.selectionRect = self.imageBank.getMinimalRect(
             imagePath,colorkey,padding=25,showShadow=False)
         self.selectionRectOffset = self.selectionRect.topleft
-        self.selectionRect.top += self.rect.top
-        self.selectionRect.left += self.rect.left
-
+        
     def _setEntityID(self,ID):
         self.entityID = ID
 

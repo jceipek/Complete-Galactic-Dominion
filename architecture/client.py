@@ -24,7 +24,7 @@ from Event import EventTimer
 from World import World
 from UserInterface import UserInterface
 from Universe import Universe
-#from Entity import Entity,TestEntity
+from Entity import Entity,TestEntity
 from Unit import Unit,TestUnit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
@@ -85,7 +85,7 @@ def init(host='localhost'):
         w._generateResources()
         w._TMPmakeBuilding()
         
-        for i in xrange(1):
+        for i in xrange(25):
             #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
             #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
             a=TestUnit(i*50,i*50,w)
