@@ -1,21 +1,13 @@
-"""
-B{RUN ME FIRST!}
-
 ######################\n
-#       Client       #\n
+#       Server       #\n
 ######################\n
-This file is used to set up everything that clients can do and begins the 
-program.
 
-B{FIXME:}We might want to move some of this code into a function that sets up 
-servers and clients as needed. For now, no servers have been created.
-"""
-
-#Import python modules required for the client
-import threading
-
-#Import necessary user defined classes required for the client
+#import code necessary to run the server
+#built-in modules
+import threading, cPickle
+#developer defined modules
 import Event, networking
+from networking import SocketThread
 from Manager import Manager
 from Window import Window
 from Grid import InfiniteGrid,FiniteGrid
@@ -30,11 +22,17 @@ from Structure import Structure
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
 from NaturalObject import NaturalObject,Gold
-
 from client import init
-import cPickle
+
 
 class BroadcastServer(networking.Server):
+    """
+    Extends the Server class in the networking module.
+    This server takes requests from a client and does one of two things
+    -If the client is new
+    """
+    numberOfEntities = 0
+    
     def processInput(self,sockThrd,data):
         print 'Got input:' + data
         if 'GetWorld' in data and hasattr(self,'world'):
@@ -44,6 +42,29 @@ class BroadcastServer(networking.Server):
         else:
             for sock in self.socketThreads.keys():
                 sock.write(data)
+                
+    def listenAndConnect(self,numPendingConnections=5):
+        
+        def connectToAllClients():
+            while self.connecting:
+                try:
+                    clientSocket,clientAddress=self.socket.accept()
+                except KeyboardInterrupt:
+                    raise
+                except:
+                    traceback.print_exc()
+                    continue
+                print 'Connection Established'
+                s=SocketThread(self,clientSocket)
+                self.socketThreads[s]=s.file
+                s.write('ID:'+str(BroadcastServer.numberOfEntities))
+                BroadcastServer.numberOfEntities += 1
+                self.processInput(s,'GetWorld')
+
+        self.socket.listen(numPendingConnections)
+        self.connecting=True
+        self.connectionThread=threading.Thread(target=connectToAllClients)
+        self.connectionThread.start()#this is a non daemonic thread and will prevent the server from exiting
             
 def init(host='localhost',server=None):
     """
@@ -94,15 +115,6 @@ def init(host='localhost',server=None):
     #===========================================
     
     w._generateResources()
-    w._TMPmakeBuilding()
-    
-    # Initialize 500 entities in World w
-    for i in xrange(25):
-        #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
-        #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-        #a=Unit('testCraft.png',i*50,i*50,w,'alpha')
-        a=TestUnit(i*50,i*50,w)
-        #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())

@@ -19,6 +19,7 @@ class NaturalObject(Entity):
         self.blockable=True
         self.collectable=False
         self.maxHealth = self.curHealth = 0
+        self.world.addEntity(self)
 	
     def collect(self):
         if not self.collectable:

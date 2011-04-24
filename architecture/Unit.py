@@ -216,17 +216,17 @@ class Unit(Builder):
             owner='tmp', movable=True)
     
         #self.__class__.allUnits.add(self)
-        if True:#loadList == None:
-            self.status=Locals.IDLE
-            self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10}
-            self.path=[] #queue of future tuple destinations
-            self.dest=self.realCenter=list(self.rect.center) #current destination
-            self.speed=.1
-            self.attackRange=300
-            self.attackRechargeTime=500
-            self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100}
-            self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
-            self.objectOfAction=None
+        self.status=Locals.IDLE
+        self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10}
+        self.path=[] #queue of future tuple destinations
+        self.dest=self.realCenter=list(self.rect.center) #current destination
+        self.speed=.1
+        self.attackRange=300
+        self.attackRechargeTime=500
+        self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100}
+        self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
+        self.objectOfAction=None
+        self.world.addEntity(self)
         '''
         else:
             #loadList = [status,efficiency,path,dest,speed,
