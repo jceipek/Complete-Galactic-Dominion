@@ -72,7 +72,7 @@ def init(host='localhost'):
     gameWindow.updateScreenMode()
     
     w = World(universe)
-    wManipulator = WorldManipulator(eventManager,w,networked)
+    wManipulator = WorldManipulator(eventManager,w,networked,GameClient.ID)
     #universe.changeWorld(w)
     
     #===========================================
@@ -88,8 +88,9 @@ def init(host='localhost'):
         for i in xrange(25):
             #w.addEntity(Entity('ball.png',i*50,i*50, w, (255,255,255)))
             #w.addEntity(TestEntity('testBuilding.png', i*50, i*50, w, 'alpha'))
-            a=TestUnit(i*50,i*50,w)
+            a=TestUnit(i*50,i*50,w,GameClient.ID)
             #w.addEntity(Unit('testCraft.png',i*50,i*50,w,'alpha'))
+            print a.owner
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())

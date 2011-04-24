@@ -6,12 +6,13 @@ from Overlay import HealthBar
 import cPickle
 
 class WorldManipulator(Listener):
-    def __init__(self,manager,world,networked=True):
+    def __init__(self,manager,world,networked=True,gameClientID=None):
         eventTypes = [ Event.EventExecutionEvent,Event.WorldManipulationEvent]
         Listener.__init__(self,manager,eventTypes)
         
         self.networked=networked
         self.world=world
+        self.gameClientID = gameClientID
     
     def notify(self,event):
         if (self.networked and isinstance(event,Event.EventExecutionEvent)) or\
