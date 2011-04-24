@@ -1,52 +1,95 @@
 import pygame
+from specialImage import loadImage
 
 class ImageBank(object):
     """
-    Contains a dictionary which maps image names to 
-    pygame.surface.Surface objects.  This makes the creation of a new
-    sprite much faster, as the filepath does not have to be loaded each
-    time.
+    The ImageBank is an image repository that handles image loading.
+    The bank allows drawableObjects to load image paths. Instead of
+    reloading a preexisting image, the bank returns pygame surfaces
+    initialized previously. This makes the creation of a new
+    sprite much faster and more memory efficient, as the filepath 
+    does not have to be loaded each time.
+    
+    @param cache: a dictionary that maps from folder paths and image
+    paths to AnimationDicts
     """
     def __init__(self):
 
-        # Contains all images
-        self.images = dict()
+        # Cache for images
+        self.cache = {}
+        self.setImageNotFound()
         
-        # Contains color keys of images
-        self.imageColorKeys = dict()
+        self.averageColorCache = {}
+        self.minimalRectCache = {}
         
-        # Contains minimal rectangles of images
-        self.imageMinimalRects = dict()
+    def setImageNotFound(self):
+        from specialImage import createImageNotFound
+        self.cache[None] = createImageNotFound()
+
+    def isCached(self,imagePath):
+        """
+        Checks if the imagePath has already been cached.
         
-    def hasImageKey(self, image):
+        NOTE: should we make this recursively check anim dicts or only
+        top-level keys (like it is now)?
         """
-        Returns whether or not an image is in the dictionary by key.
-        """
-        return image in self.images
         
-    def hasImageValue(self, image):
+        return imagePath in self.cache
+    
+    def loadImage(self, imagePath, colorkey):
         """
-        Returns whether or not an image instance is in the dictionary.
+        Loads an image or animation into the cache as an AnimationDict
         """
-        return image in self.images.values()
+        if isinstance(imagePath,str) and not self.isCached(imagePath):
+            from os import listdir
+            from os.path import isdir,join
+            imagePathFull = join('imageData',imagePath)
+            try:
+                #Is this an anim, not a simple image?
+                if isdir(imagePath):
+                    images = listdir(imagePathFull)
+                    images.sort()
+                    animDict = AnimationDict(self.getDefaultImage())
+                    for imageI in xrange(len(images)):
+                        image = join(imagePathFull,images[imageI])
+                        image = loadImage(image, colorkey)
+                        animDict.addImage(image,colorkey,imageI)
+                        if imageI == 0:
+                            animDict.setDefaultImage(animDict.getImage(imageI))
+                else:
+                    animDict = AnimationDict(self.getDefaultImage())
+                    image = loadImage(imagePathFull, colorkey)
+                    animDict.addImage(image,colorkey)
+                self.cache[imagePath] = animDict
+            except:
+                animDict = AnimationDict(self.getDefaultImage())
+                animDict.addImage(self.getDefaultImage())
+                print("UNABLE TO LOAD '"+imagePath+"'")
+
+    def getDefaultImage(self):
+        return self.cache[None]
+
+    def getImage(self, imageName, colorkey=None, orientation=None):
+        """
+        Returns an image from the cache by key if it exists.  If 
+        not, it attempts to load the image from the filesystem.
+        If this fails, an "image not found" image is returned
+        """
+        if orientation == None:
+            imageDict = self.cache.get(imageName,None)
+            if imageDict == None:
+                self.loadImage(imageName,colorkey)              
+                imageDict = self.cache.get(imageName,None)
+                if imageDict == None:
+                    return self.getDefaultImage()
+                else:
+                    return imageDict.getDefaultImage()
+            else:
+                return imageDict.getImage()
+        else:
+            return self.cache.get(imageName,None).getImage(orientation)
         
-    def loadImage(self, imageName, colorkey):
-        """
-        Loads an image into the image dictionary if filepath specified.
-        """
-        if isinstance(imageName,str) and not self.hasImageKey(imageName):
-            
-            image, imageRect = loadImage(imageName, colorkey)
-            self.images[imageName] = image
-            
-    def getImage(self, imageName):
-        """
-        Returns an image from the dictionary by key if it exists.  If 
-        not, None is returned.
-        """
-        return self.images.get(imageName,None)
-        
-    def getImageAndRect(self, imageName):
+    def getImageAndRect(self, imageName, orientation=None):
         """
         Returns a tuple of 2 elements from the dictionary by key
         if it exists.
@@ -54,202 +97,61 @@ class ImageBank(object):
         [1] - the rectangle associated with said Surface
         If not, None is returned.
         """
-        image = self.images.get(imageName,None)
+        image = self.getImage(imageName, orientation)
+
         if image == None:
-            return None
+            default = self.getDefaultImage()
+            return default,default.get_rect()
         else:
             return (image,image.get_rect())
             
-    def getAverageColor(self, imageName, colorkey=None):
-        if imageName in self.imageColorKeys:
-            return self.imageColorKeys[imageName]
-        else:
-            if self.hasImageKey(imageName):
-                self.imageColorKeys[imageName] = \
-                    getAverageColor(self.getImage(imageName),colorkey)
-            return self.imageColorKeys[imageName]
-            
-    def getMinimalRect(self, imageName, colorkey=None, padding=5, showShadow=False):
-        if imageName in self.imageMinimalRects:
-            return self.self.imageMinimalRects[imageName]
-        else:
-            if self.hasImageKey(imageName):
-                self.imageColorKeys[imageName] = \
-                    getMinimalRect(self.getImage(imageName),colorkey,padding,showShadow)
-            return self.imageColorKeys[imageName]
+    def getAverageColor(self, imageName, colorkey=None, orientation=None):
 
-def errorSurfaceAndRect():
-
-    blank = pygame.Surface((100,80))
-    blank.fill((180,180,180))
-    
-    if not pygame.font.get_init():
-        pygame.font.init()
-    
-    font=pygame.font.Font(pygame.font.get_default_font(),12)
-    txt=font.render('Image not found.',False,(0,0,0))
-    blank.blit(txt,(5,30))
-    
-    return blank, blank.get_rect()
-
-def loadImage(imagePath, colorkey=None):
-    
-    # If there is a filepath given, load that file.
-    if isinstance(imagePath,str):
+        from specialImage import getAverageColor
+        if self.isCached(imageName):
+            if not (imageName,orientation) in self.averageColorCache:
+                self.averageColorCache[(imageName,orientation)] = \
+                    getAverageColor(self.getImage(imageName,colorkey,orientation),
+                        colorkey)
+            return self.averageColorCache[(imageName,orientation)]
+        return (255,0,0) # default color
         
-        try:
-            image = pygame.image.load(imagePath)
-        except pygame.error, message:
-            print 'Cannot load image: %s'%imagePath
-            print 'Image not found surface returned instead.'
-            return errorSurfaceAndRect()
-        try:
-            if colorkey == 'alpha':
-                image = image.convert_alpha()  
-            else:
-                image = image.convert()
-                
-                if colorkey is not None:
-                
-                    if colorkey is -1:
-                        colorkey = image.get_at((0,0))
-                    image.set_colorkey(colorkey)
-                
-        except pygame.error, message:
-            print 'Pygame error: %s'%message
-            print 'Image not found surface returned instead.'
-            return errorSurfaceAndRect()
-            
-    # If there is a pygame.Surface given        
-    elif isinstance(imagePath, pygame.Surface):
-        image = imagePath
-    else:
-        raise TypeError, 'please provide pygame.Surface or filepath.'
-    return image, image.get_rect()
-
-def getMinimalRect(surface, colorkey=None, padding=15, showShadows=False):
-    
-    imageRect = surface.get_rect()
-    imageWidth = imageRect.width
-    imageHeight = imageRect.height
-    
-    xmin,xmax = 0,imageWidth
-    ymin,ymax = 0,imageHeight
-    
-    if colorkey == -1 or colorkey == 'alpha':
-        backgroundColor = surface.get_at((0,0))
-    elif isinstance(colorkey,tuple):
-        backgroundColor = list(colorkey)
-        backgroundColor.append(255)
-    else:
-        backgroundColor = None
-    
-    rectTop,rectBottom,rectLeft,rectRight = None,None,None,None
-    for x in xrange(xmin,xmax):
-        if rectLeft is None:
-            for y in xrange(ymin,ymax):
-                pixel = surface.get_at((x,y))
-                if _isPixelTangible(pixel,backgroundColor,showShadows):
-                    rectLeft = x
-                    break
-        else:
-            break
-                
-    for x in xrange(xmin,xmax):
-        if rectRight is None:
-            for y in xrange(ymin,ymax):
-                pixel = surface.get_at((xmax-x-1,y))
-                if _isPixelTangible(pixel,backgroundColor,showShadows):
-                    rectRight = xmax-x-1
-                    break
-        else:
-            break
-                
-    for y in xrange(ymin,ymax):
-        if rectTop is None:
-            for x in xrange(xmin,xmax):
-                pixel = surface.get_at((x,y))
-                if _isPixelTangible(pixel,backgroundColor,showShadows):
-                    rectTop = y
-                    break
-        else:
-            break
-    
-    for y in xrange(ymin,ymax):
-        if rectBottom is None:
-            for x in xrange(xmin,xmax):
-                pixel = surface.get_at((x,ymax-y-1))
-                if _isPixelTangible(pixel,backgroundColor,showShadows):
-                    rectBottom = ymax-y-1
-                    break
-        else:
-            break
-    
-    minimalRect = pygame.Rect(rectLeft,rectTop,rectRight-rectLeft,rectBottom-rectTop)
-    return minimalRect.inflate(padding,padding)
-
-def _isPixelTangible(pixel, backgroundColor, allowShadows):
-    
-    if allowShadows:
-        return (pixel[3] != 0 and pixel != backgroundColor)
-    else:
-        return (pixel[3] == 255 and pixel != backgroundColor)
-
-def getAverageColor(surface, colorkey=None):
-    """
-    Returns the average color of an image given an image filepath.
-    The colorkey is used to determine which color should not be
-    included in the determination of the average color.  If -1,
-    the topleft-most pixel will be used to determine the average
-    value.  If the colorkey is a tuple, this color value will be
-    excluded from the calculation.
-    
-    Returned value is a tuple of r,g,b value on a 0-255 scale.
-    """
-    
-    testPixel = surface.get_at((0,0))
-    imageRect = surface.get_rect()
-    imageWidth = imageRect.width
-    imageHeight = imageRect.height
-
-    if colorkey == -1:
-        backgroundColor = testPixel
-    elif isinstance(colorkey,tuple):
-        backgroundColor = colorkey
-    else:
-        backgroundColor = None
-    
-    # Counts number of pixels in an image
-    # partial pixels for alpha transparency
-    fullPixelCounter = 0
-    
-    if len(testPixel) == 4:
+    def getMinimalRect(self, imageName, colorkey=None, orientation=None, **kwargs):
         
-        red,green,blue,alpha = 0,0,0,0
-            
-        for x in xrange(imageWidth):
-            for y in xrange(imageHeight):
-                rAdd,gAdd,bAdd,aAdd = surface.get_at((x,y))
-                
-                if not backgroundColor == (rAdd,gAdd,bAdd):
-                    
-                    pixelFrac = ((aAdd)/255.0)
-                    
-                    fullPixelCounter+=pixelFrac
-                    
-                    red+=rAdd*pixelFrac
-                    green+=gAdd*pixelFrac
-                    blue+=bAdd*pixelFrac
-                    alpha+=aAdd
-        
-    else: return None
+        from specialImage import getMinimalRect
+        if self.isCached(imageName):
+            if not (imageName,orientation) in self.minimalRectCache:
+                self.minimalRectCache[(imageName,orientation)] = \
+                    getMinimalRect(self.getImage(imageName,colorkey,orientation),
+                        colorkey, **kwargs)
+            from copy import copy
+            return copy(self.minimalRectCache[(imageName,orientation)])
+        return self.getImage(imageName, orientation).get_rect()
+
+class AnimationDict():
     
-    if fullPixelCounter == 0:
-        return backgroundColor
-    else:
-        return int((red/fullPixelCounter)), \
-                int((green/fullPixelCounter)), \
-                int((blue/fullPixelCounter))
+    def __init__(self,default):
+        self.data = {}
+        self.setDefaultImage(default)
+        
+    def addImage(self,image,colorkey=None,orientationKey=None):
+        if orientationKey == None:
+            self.setDefaultImage(image,colorkey)
+        else:        
+            self.data[orientationKey] = loadImage(image, colorkey)
+    
+    def setDefaultImage(self,image,colorKey=None):
+        self.data[None] = loadImage(image,colorKey)
+
+    def getDefaultImage(self):
+        return self.data[None]
+
+    def getImage(self,orientationKey=None):
+        """
+        Returns an image associated with a status and an orientation.
+        If it does not exist, return the default image.
+        """
+        return self.data.get(orientationKey,self.getDefaultImage())
 
 class Locals:
     #Statuses

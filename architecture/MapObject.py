@@ -28,7 +28,7 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
         # defaults to the image rectangle
         # NOTE: update methods need to move collRect with rect!
         self.collRect = self.rect
-        
+
     def draw(self,surface):
         # Override
         pass

@@ -241,7 +241,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 selectRect=entity.getSelectionRect(drawRect)
             
                 if selectRect.colliderect(MakeBoundingBox(start,end)):
-                    
+
                     if isinstance(event,Event.DragCompletedEvent):
                         entity.select()
                         self.selectedEntities.append(entity)
