@@ -36,7 +36,7 @@ class World(object):
         self.deadEntities
     """
     
-    def __init__(self, universe, grid=None): #FIXME got rid of a comma, did we lose something?
+    def __init__(self, universe, grid=None):
         
         # maps entityID of each entity to a pointer to the entity
         # may need to map tuple of entityID and ownerID later when
