@@ -22,6 +22,7 @@ class Structure(Builder):
         self.maxHealth=100
         self.curHealth=self.maxHealth
         self.movable=False
+        self.world.addEntity(self)
 
     def __getstate__(self):
         state = self.__dict__.copy()
@@ -67,6 +68,6 @@ class TestTownCenter(Structure):
         self.buildDict = {
             TestUnit: TestUnit
         }
-    
+        
     def getMiniMapColor(self):
-        return (0,0,255)
+        return (255,255,255)

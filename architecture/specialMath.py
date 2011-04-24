@@ -73,8 +73,6 @@ def centerOfEntityList(entities, worldSize):
         center[1] /= (i)
     return tuple(center)
 
-
-
 def closestEntity(entities,loc):
     """
     Returns the entity closest to an isometric coordinate (x,y tuple) on
@@ -87,23 +85,25 @@ def closestEntity(entities,loc):
     for e in entities:
         drawRect = e.rect.move(e.drawOffset)
         drawRect.center = cartToIso(drawRect.center)
-        dist = distance(drawRect.center,loc)
+        
+        selectRect = e.getSelectionRect(drawRect)
+        
+        dist = distance(selectRect.center,loc)
         if not minDist or dist < minDist:
             minDist = dist
             closest = e
     return closest
 
-def imageNum(x,y,n):
+def imageNum(x,y,imageCount):
     """returns image number for entity facing cartesian x,y direction"""
-    isoVectX,isoVectY =cartToIso(x, y)
+    isoVectX,isoVectY = cartToIso((x, y))
     isoTheta=atan2(isoVectY, isoVectX)
     isoTheta=-1*isoTheta/(2*3.14)%1
 
-    return int(n*isoTheta)
+    return int(imageCount*isoTheta)
 
 if __name__ == "__main__":
     print isoToCart((-10,-10))
     print isoToCart((-10,10))
     print isoToCart((10,10))
     print isoToCart((1024,768))
-    

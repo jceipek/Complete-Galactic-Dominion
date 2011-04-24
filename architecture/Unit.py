@@ -213,20 +213,22 @@ class Unit(Builder):
                  description = 'No information available.',
                  owner='tmp'):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description,
-            owner='tmp', movable=True)
-    
+            owner=owner, movable=True)
+
+        self.imageCount = None    
+
         #self.__class__.allUnits.add(self)
-        if True:#loadList == None:
-            self.status=Locals.IDLE
-            self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10}
-            self.path=[] #queue of future tuple destinations
-            self.dest=self.realCenter=list(self.rect.center) #current destination
-            self.speed=.1
-            self.attackRange=300
-            self.attackRechargeTime=500
-            self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100}
-            self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
-            self.objectOfAction=None
+        self.status=Locals.IDLE
+        self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10}
+        self.path=[] #queue of future tuple destinations
+        self.dest=self.realCenter=list(self.rect.center) #current destination
+        self.speed=.1
+        self.attackRange=300
+        self.attackRechargeTime=500
+        self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100}
+        self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
+        self.objectOfAction=None
+        self.world.addEntity(self)
         '''
         else:
             #loadList = [status,efficiency,path,dest,speed,
@@ -366,11 +368,13 @@ class Unit(Builder):
         self.objectOfAction=obj
         if isinstance(obj, Builder):#Unit):\
             
-            if isinstance(obj, TestTownCenter) and self.owner == obj.owner:
-                
-                self.status=Locals.DEPOSITING
+            if self.owner == obj.owner:
+            #if isinstance(obj, TestTownCenter) and self.owner == obj.owner:
+                if isinstance(obj,TestTownCenter):
+                    self.status=Locals.DEPOSITING
+                    return
+                self.objectOfAction=None
                 return
-                
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
@@ -398,6 +402,8 @@ class Unit(Builder):
             dirx = self.dest[0] - curX #unscaled x direction of movement
             diry = self.dest[1] - curY #unscaled y direction of movement
             
+            self.setImageNum(dirx,diry)
+
             # distance between destination and current location
             distLocToDest = specialMath.hypotenuse(dirx,diry)
             
@@ -416,7 +422,21 @@ class Unit(Builder):
                 self.realCenter = [newX, newY]
             self.rect.center = tuple(self.realCenter)
             self.moveWrap()
+
+    def setImageNum(self,x,y):
+        oldImageNum = self.imageNum
+        if not self.imageCount == None and self.imageCount > 1:
+            from specialMath import imageNum
+            self.imageNum = imageNum(x,y,self.imageCount)
+        else:
+            self.imageNum = None
+
+        if oldImageNum != self.imageNum:
+            self.setImageToOrientation(self.imageNum)
             
+        self.selectionRect = self.imageBank.getMinimalRect(
+            self.imagePath,self.colorkey,self.imageNum,padding=25,showShadows=False)
+
     def _definePath(self):
         while self._isAtDestination(): #may need to have room for error
             if self.path == []:
@@ -480,7 +500,7 @@ class Unit(Builder):
         self.path.append(list(coord))
         
     def getMiniMapColor(self):
-        return (255,255,255)
+        return (0,0,255)
         
     def __str__(self):
         return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])
@@ -491,7 +511,11 @@ class TestUnit(Unit):
     name = 'TestUnit'
     
     def __init__(self, x, y, world, owner='tmp'):
-        Unit.__init__(self,'testCraft.png',x,y,world,'alpha','A test unit.',owner)
+        Unit.__init__(self,'ship',x,y,world,'alpha','A test unit.',owner)
+        self.imageCount = 64
+    
+    def getMiniMapColor(self):
+        return (0,0,255)
     
     def __getstate__(self):
         state = self.__dict__.copy()
@@ -508,12 +532,14 @@ class TestUnit(Unit):
         del state['healthBar']
       
         return state
-        
+
     def __setstate__(self,state):
         self.__dict__ = state
             
-        self.loadImage(self.imagePath, self.colorkey)
+        #the realCenter attribute will be overwritten in _imageInformationSetup()
+        #this location needs to be preserved
+        realCenter = self.realCenter
+        self._imageInformationSetup()
+        self.rect.center = self.realCenter = realCenter
         
         self.healthBar = HealthBar(self)
-        
-        self.rect.center = self.realCenter

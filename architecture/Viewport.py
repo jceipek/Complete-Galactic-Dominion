@@ -22,9 +22,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     @param deadZoneRect:
     @param selectedEntities:
     @param selector: a selection rectangle that is activated and drawn when necessary #FIXME: NOT YET IMPLEMENTED
+    
+    @param clientID: identifying string or number given by the server
+    when a client is created
     """
     
-    def __init__(self,world,manager,scrollLoc,screenPos,size):
+    def __init__(self,world,manager,scrollLoc,screenPos,size,clientID):
         self.world = world
         self.manager = manager
         self.scrollLoc = scrollLoc
@@ -33,6 +36,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.size = size
         self.rect = pygame.Rect(screenPos,size)
         self.hud=None
+        self.clientID = clientID
         
         if world is not None:
             self.minimap = MiniMap(self.world)
@@ -53,6 +57,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         #self.calcDistance = lambda a,b: (a**2 + b**2)**0.5
         
         self.viewportEntities = []
+        self.myViewportEntities = []
         
         self.quickSelect = {}
         for i in xrange(pygame.K_0,pygame.K_9+1):
@@ -64,7 +69,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         from ContextualMenu import getCGDcontextualMenu
         self.contextualMenu = getCGDcontextualMenu()
-        
+    
+    def setClientID(self,clientID):
+        self.clientID = clientID
+    
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
         offset = int(0.3*float(self.size[0]))
@@ -93,7 +101,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if self.minimap.rect.collidepoint(pos):
             mapClickPoint = self.minimap.clickToGridPos(pos)
             if mapClickPoint is not None:
-                destCart = mapClickPoint
+                return 
             else:            
                 cartPos = specialMath.isoToCart(pos)
                 destCart = self.cartScrollLoc[0] + cartPos[0], \
@@ -119,14 +127,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
         if self.currentMenu is not None:
             self.currentMenu.open(event.pos)
-
-        if clicked:
-            drawRect = clicked.rect.move(clicked.drawOffset)
-            drawRect.center = specialMath.cartToIso(drawRect.center)
         
-            if not drawRect.collidepoint(pos):
-                clicked = None
-    
     def completeActionEvent(self,event):
         attacking = False
         pos = event.pos
@@ -146,7 +147,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             if mapClickPoint is not None:
                 destCart = mapClickPoint
             else:
-
                 cartPos = specialMath.isoToCart(pos)
                 destCart = (self.cartScrollLoc[0] + cartPos[0])%self.worldSize[0], \
                             (self.cartScrollLoc[1] + cartPos[1])%self.worldSize[1]
@@ -224,22 +224,24 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 for e in self.selectedEntities:
                     e.deselect()
                 self.selectedEntities = []
-            
             #else: pass # if it is an Event.AddDragCompletedEvent, do
             # # not deselect
             
-            #print self.dragRect.isOffScreen(self.size)
-            if self.dragRect.isOffScreen(self.size):
-                searchList = self.world.allEntities.values()
-            else:
-                searchList = self.viewportEntities
+            #if self.dragRect.isOffScreen(self.size):
+            #    searchList = self.world.allEntities.values()
+            #else:
+            #    searchList = self.viewportEntities
+            searchList = self.myViewportEntities
             
             for entity in searchList:
             
                 drawRect = entity.rect.move(entity.drawOffset)
                 drawRect.center = specialMath.cartToIso(drawRect.center)
+                
+                selectRect=entity.getSelectionRect(drawRect)
             
-                if drawRect.colliderect(MakeBoundingBox(start,end)):
+                if selectRect.colliderect(MakeBoundingBox(start,end)):
+
                     if isinstance(event,Event.DragCompletedEvent):
                         entity.select()
                         self.selectedEntities.append(entity)
@@ -247,6 +249,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                         if entity not in self.selectedEntities:
                             entity.select()
                             self.selectedEntities.append(entity)
+    
+    def ownsEntity(self,entity):
+        """
+        Returns boolean indicating whether or not this client owns the
+        provided entity.
+        """
+        return self.clientID == entity.owner
     
     def clickEvent(self,event):
         """
@@ -267,14 +276,18 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         cartPos = specialMath.isoToCart(pos)
         destCart = (self.cartScrollLoc[0] + cartPos[0])/self.worldSize[0], \
                        (self.cartScrollLoc[1] + cartPos[1])/self.worldSize[1]
-                       
-        clicked = specialMath.closestEntity(self.viewportEntities,pos)
+        
+        # MAY BREAK THINGS - CHECK
+        #clicked = specialMath.closestEntity(self.viewportEntities,pos)
+        clicked = specialMath.closestEntity(self.myViewportEntities,pos)
         
         if clicked:
             drawRect = clicked.rect.move(clicked.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
             
-            if not drawRect.collidepoint(pos):
+            selectRect=clicked.getSelectionRect(drawRect)
+            
+            if not selectRect.collidepoint(pos):
                 clicked = None
         
         if isinstance(event,Event.SelectionEvent):
@@ -282,7 +295,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 e.deselect()
             self.selectedEntities = []
 
-        if clicked:
+        if clicked and self.ownsEntity(clicked):
             # Determines if the closest entity is already selected.
             # If it is, it makes it no longer selected.
             if clicked.selected:
@@ -296,7 +309,6 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def updateMenu(self,eventPos):
         if self.currentMenu is not None:
-            #print 'I MOVED YALL: ',eventPos
             self.currentMenu.update(eventPos)
     
     def selectMenu(self,eventPos):
@@ -361,7 +373,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             drawRect = e.rect.move(e.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
             
-            if drawRect.collidepoint(viewportMouseLoc):
+            selectRect = e.getSelectionRect(drawRect)
+            
+            if selectRect.collidepoint(viewportMouseLoc):
                 e.focused = True
   
     def draw(self,displaySurface):
@@ -456,6 +470,11 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     screen.append((TL,TR,BR,BL))
             
             self.viewportEntities = self.world.getScreenEntities(screen)
+            
+            self.myViewportEntities = []
+            for entity in self.viewportEntities:
+                if self.ownsEntity(entity):
+                    self.myViewportEntities.append(entity)
     
     def drawDebugFrames(self):  
         """
@@ -470,12 +489,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.quickSelect[event.key].empty()
         for entity in self.selectedEntities:
             self.quickSelect[event.key].add(entity)
-        print self.quickSelect[event.key].sprites()
         
     def getQuickSelect(self,event):
         for entity in self.quickSelect[event.key].sprites():
-            entity.selected = True
-            self.selectedEntities.append(entity)
+            entity.select()
+            if entity not in self.selectedEntities:
+                self.selectedEntities.append(entity)
     
     def postNotification(self):
         """

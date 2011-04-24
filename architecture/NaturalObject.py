@@ -19,11 +19,13 @@ class NaturalObject(Entity):
         self.blockable=True
         self.collectable=False
         self.maxHealth = self.curHealth = 0
+        self.world.addEntity(self)
 	
     def collect(self):
         if not self.collectable:
             pass
-            
+
+       
     def __getState__(self):
         state = self.__dict__.copy()
         
@@ -39,12 +41,13 @@ class NaturalObject(Entity):
         
     def __setstate__(self,state):
         self.__dict__ = state
-            
-        self.loadImage(self.imagePath, self.colorkey)
+        #the realCenter attribute will be overwritten in _imageInformationSetup()
+        #this location needs to be preserved
+        realCenter = self.realCenter
+        self._imageInformationSetup()
+        self.rect.center = self.realCenter = realCenter
         
         self.healthBar = HealthBar(self)
-        
-        self.rect.center = self.realCenter
         self.selected = False
 
 class Resource(NaturalObject):
@@ -66,6 +69,7 @@ class Resource(NaturalObject):
         self.regenRate = 0
         self._regenHealth = 0
 
+
 class Gold(Resource):
     """Gold."""
     
@@ -76,7 +80,10 @@ class Gold(Resource):
             'Gold ore.')
         
         self.regenRate = 1
-        
+
+    def getMiniMapColor(self):
+        return (255,215,0)
+
     def __getstate__(self):
         return NaturalObject.__getState__(self)
         

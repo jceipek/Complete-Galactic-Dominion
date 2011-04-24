@@ -14,7 +14,6 @@ class DrawableObject(object):
         # First class to have image and rect objects
         self.imagePath = imagePath
         self.colorkey = colorkey
-        self.colorkey = colorkey
         
         '''
         self.loadImage(imagePath,colorkey)
@@ -26,23 +25,24 @@ class DrawableObject(object):
         
     def _imageInformationSetup(self):
         if pygame.display.get_init():
-            self.loadImage(self.imagePath,self.colorkey)
+            self.loadDefaultImage(self.imagePath,self.colorkey)
             self.setAverageColor(self.imagePath,self.colorkey)
             self.realCenter = self.rect.center
             self.isImageInitialized = True
     
     # First loadImage method
     
-    def loadImage(self, imagePath, colorkey=None):
+    def loadDefaultImage(self, imagePath, colorkey=None):
         
-        objImageAndRect = self.imageBank.getImageAndRect(imagePath)
+        objImage = self.imageBank.getImage(imagePath,colorkey=colorkey)
         
-        if objImageAndRect == None:
-            self.imageBank.loadImage(imagePath,colorkey)
-            self.image, self.rect = self.imageBank.getImageAndRect(imagePath)
-        else:
-            self.image, self.rect = objImageAndRect
+        self.image = objImage
+        self.rect = self.image.get_rect()
           
+    def setImageToOrientation(self,orientation):
+        objImage = self.imageBank.getImage(self.imagePath,self.colorkey,orientation)
+        self.image = objImage
+
     def setAverageColor(self,imagePath,colorkey=None):
         """
         Sets the averageColor attribute of something with an image.
@@ -85,7 +85,7 @@ class DrawableObjectGroup(DrawableObject):
         if pygame.display.get_init():
             for drawableObjectTuple in self.drawableObjectList:
                 drawableObject = drawableObjectTuple[0]
-                drawableObject.loadImage(drawableObject.imagePath,drawableObject.colorkey)
+                drawableObject.loadDefaultImage(drawableObject.imagePath,drawableObject.colorkey)
                 drawableObject.setAverageColor(drawableObject.imagePath,drawableObject.colorkey)
                 drawableObject.realCenter = drawableObject.rect.center
                 drawableObject.isImageInitialized = True
@@ -132,12 +132,15 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode(screenSize)
     screenZone = screen.get_rect()
-    from GameData import getMinimalRect
-    a = DrawableObject('TownCenter.png',(255,255,255))
-    print a.getAverageColor()
-    print getMinimalRect(a.image,(255,255,255))
+    
+    a = DrawableObject('testCraft.png','alpha')
+    minimalRect=DrawableObject.imageBank.getMinimalRect('testCraft.png','alpha',padding=30)
+    
+    minimalRect.clamp_ip(a.rect)
     
     while RUNNING:
         pygame.init()
         screen.blit(a.image,a.rect)
+
+        pygame.draw.rect(screen,(255,0,255),minimalRect,2)
         pygame.display.flip()

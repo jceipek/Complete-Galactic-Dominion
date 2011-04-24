@@ -69,7 +69,7 @@ class Entity(MapObject):
         # adds the entity to the provided world
         self.entityID = None
         # sets entityID
-        self.world.addEntity(self)
+        #self.world.addEntity(self)
 
         # First initialization of description
         self.description = description
@@ -87,7 +87,11 @@ class Entity(MapObject):
         self.selected = False
         self.blocking = False
         self.drawOffset=(0,0)#?
-        
+
+        #Image variables related to orientation
+        self.imageCount = 1
+        self.imageNum = None
+
         self.focused = False
 
         self.healthBar = HealthBar(self)
@@ -95,6 +99,11 @@ class Entity(MapObject):
         self.regenRate = 0
         self._regenHealth = 0
         self.inventory=None
+        
+        self.selectionRect = self.imageBank.getMinimalRect(
+            imagePath,colorkey,padding=25,showShadows=False)
+        #self.selectionRectOffset = self.selectionRect.topleft
+        #print self.selectionRect
 
     def _setEntityID(self,ID):
         self.entityID = ID
@@ -126,33 +135,35 @@ class Entity(MapObject):
         the current location of the corner of the viewport in the 
         activeworld.
         """
-        
-        #gridWidth,gridHeight = self.world.gridDim
-        '''
-        drawOffset = \
-        specialMath.isoToCart((-worldOffset[0],-worldOffset[1]))
-        drawRect = self.rect.move(drawOffset)
-        '''
+
         if self.drawOffset is None:
             return
         
         drawRect = self.rect.move(self.drawOffset)
-        #left,top=self.world.grid.cartToIso(drawRect.topleft)
-        #right,bottom=self.world.grid.cartToIso(drawRect.bottomright)
-        #drawRect = pygame.Rect(left,top,right-left,bottom-top)
-
         drawRect.center = self.world.grid.cartToIso(drawRect.center)
         
-        #drawRect.top = drawRect.top%gridHeight
-        #drawRect.left = drawRect.left%gridWidth
+        selectRect = self.getSelectionRect(drawRect)
         
         if self.selected:
-            self.drawSelectionRing(screen,drawRect)
+            self.drawSelectionRing(screen,selectRect)
         if self.selected or self.focused:
-            self.drawHealthBar(screen,drawRect)
+            self.drawHealthBar(screen,selectRect)
             self.focused = False
-        
+
         screen.blit(self.image,drawRect)
+
+    def getSelectionRect(self,drawRect):
+        
+        from copy import copy
+        selRect = copy(self.selectionRect)
+        selRect.topleft = drawRect.topleft
+        selRect.top+=self.selectionRect.top
+        selRect.left+=self.selectionRect.left
+        
+        return selRect
+        
+    def getSelectionRectOffset(self):
+        return self.selectionRect.topleft
 
     def drawSelectionRing(self, screen, drawRect):
         pygame.draw.circle(screen, (255,255,255), drawRect.center, 20, 1)
@@ -213,7 +224,7 @@ class Entity(MapObject):
         elif self.curHealth > self.maxHealth:
             self.curHealth = self.maxHealth
         self.healthBar.updateHealthBar()
-            
+        
     def moveWrap(self):
         """
         FIXME !!!
@@ -229,7 +240,7 @@ class Entity(MapObject):
         """
         return self.world.elapsedTimeSinceLastFrame
     
-    def addToPath(self,newLoc):
+    def addToPath(self,newLoc,servercommand=False):
         """
         Adds a coordinate to the path of an entity.  This should be
         overriden for entities which can move.

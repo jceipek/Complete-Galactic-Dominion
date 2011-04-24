@@ -19,10 +19,9 @@ class GameClient(networking.Client,Listener):
             IDList = data.split(':')
             GameClient.ID = int(IDList[1])
             print 'Got my ID:',self.ID
-            print 'Requesting the world'
-            self.sendRequest('GetWorld')
-        event = Event.EventExecutionEvent(data)
-        self.manager.post(event)
+        else:
+            event = Event.EventExecutionEvent(data)
+            self.manager.post(event)
         
     def notify(self,evt):
         evtString = evt.toPacket()
