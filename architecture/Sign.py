@@ -66,12 +66,13 @@ class Sign:
         self.text.append(t[0:r])
         t = t[r:].strip()
     self.rendered = False
-  def render(self):
+  def render(self, surf=None):
+    if surf==None:surf=self.surf
     self.sy = len(self.text) * self.fsize + 2 * self.margin
     self.surf = pygame.Surface((self.sx, self.sy))
     self.rect = self.surf.get_rect()
     self.rect.topleft = self.offset
-    self.surf.fill(self.color1)
+    #self.surf.fill(self.color1)
     
     #for d in (0,1):
     #  w, h = self.sx-1-d, self.sy-1-d
@@ -88,7 +89,7 @@ class Sign:
         r.midtop = (self.rect.centerx, y)
       else:
         r.topleft = (self.margin+self.imageSize, y)
-      self.surf.blit(s, r)
+      surf.blit(s, (800 ,y))
       y += self.fsize
     if not self.image==None:
         thumb=pygame.transform.scale(self.image, (self.imageSize, self.imageSize))

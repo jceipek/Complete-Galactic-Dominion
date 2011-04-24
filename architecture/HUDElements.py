@@ -1,4 +1,5 @@
 from DrawableObject import DrawableObjectGroup
+from Sign import Sign
 
 class DescriptionBox():
     #The largest HUD element which describes the selected (or hovered?) unit
@@ -74,3 +75,29 @@ class SelectedUnitBar():
     def draw(self,screen):
         for b in self.boxes:
             b.draw(screen)
+            
+class Notification(Sign):
+    def __init__ (self, text='This is a Notification. Consider yourself notified.', pos=(800,0), color=(255, 255, 0), width=200, time=500):
+        Sign.__init__(self, width, pos)
+        self.addtext(text)
+        self.tcolor=color
+        self.timeLeft=time
+    def draw(self, surface):
+        self.render(surface)
+        #Sign.draw(self,surface)
+
+class NotificationList():
+    def __init__(self, pos=(500, 0), width=200):
+        self.elements=[]
+        self.pos=pos
+        self.width=width
+        
+    def add(self, notification):
+        self.elements.append(notification)
+    def update(self):
+        for n in self.elements:
+            if n.timeLeft<=0: self.elements.remove(n)
+    def draw(self, surf):
+        for n in self.elements:
+            n.draw(surf)
+        
