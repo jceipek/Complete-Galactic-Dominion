@@ -73,8 +73,6 @@ def centerOfEntityList(entities, worldSize):
         center[1] /= (i)
     return tuple(center)
 
-
-
 def closestEntity(entities,loc):
     """
     Returns the entity closest to an isometric coordinate (x,y tuple) on
@@ -109,4 +107,3 @@ if __name__ == "__main__":
     print isoToCart((-10,10))
     print isoToCart((10,10))
     print isoToCart((1024,768))
-    
