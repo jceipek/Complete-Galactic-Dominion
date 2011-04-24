@@ -77,7 +77,10 @@ def init(host='localhost'):
     
     #===========================================
     
-    if not networked:
+    if networked:
+        print 'Requesting the World'
+        client.sendRequest('GetWorld')
+    else:
         # Initialize 25 entities in World w
         # Initialize a TestTownCenter
         
