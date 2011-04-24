@@ -213,7 +213,7 @@ class Unit(Builder):
                  description = 'No information available.',
                  owner='tmp'):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description,
-            owner='tmp', movable=True)
+            owner=owner, movable=True)
 
         self.imageCount = None    
 
@@ -368,11 +368,13 @@ class Unit(Builder):
         self.objectOfAction=obj
         if isinstance(obj, Builder):#Unit):\
             
-            if isinstance(obj, TestTownCenter) and self.owner == obj.owner:
-                
-                self.status=Locals.DEPOSITING
+            if self.owner == obj.owner:
+            #if isinstance(obj, TestTownCenter) and self.owner == obj.owner:
+                if isinstance(obj,TestTownCenter):
+                    self.status=Locals.DEPOSITING
+                    return
+                self.objectOfAction=None
                 return
-                
             self.status=Locals.ATTACKING
         elif isinstance(obj, Resource): 
             self.status=Locals.GATHERING
@@ -534,8 +536,10 @@ class TestUnit(Unit):
     def __setstate__(self,state):
         self.__dict__ = state
             
-        self.loadImage(self.imagePath, self.colorkey)
+        #the realCenter attribute will be overwritten in _imageInformationSetup()
+        #this location needs to be preserved
+        realCenter = self.realCenter
+        self._imageInformationSetup()
+        self.rect.center = self.realCenter = realCenter
         
         self.healthBar = HealthBar(self)
-        
-        self.rect.center = self.realCenter

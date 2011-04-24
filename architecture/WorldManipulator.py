@@ -45,17 +45,18 @@ class WorldManipulator(Listener):
                     print cmd
                     entity = self.world.universe.entityIDToEntity[cmd[1]]
                     obj = self.world.universe.entityIDToEntity[cmd[2]]
+                    print entity.owner,obj.owner
                     entity.execAction(obj)
                 elif cmd[0] == 'create':
                     #this list should be in the form ['create',class,*initArgs]
                     args = list(cmd[2])
                     args[2] = self.world.universe.worldIDToWorld[args[2]]
-                    print 'Begin creating the entity'
+                    #print 'Begin creating the entity'
                     a=cmd[1](*args)
-                    print 'Done creating the entity'
-                    print 'Entity ID:',a.entityID
+                    #print 'Done creating the entity'
+                    #print 'Entity ID:',a.entityID
                 elif cmd[0] == 'setpath':
-                    print 'Trying to set the path'
+                    #print 'Trying to set the path'
                     #list should be in the form ['setpath',entityID,coordinate_tuple]
                     entity=self.world.universe.entityIDToEntity[cmd[1]]
                     entity.addToPath(cmd[2],servercommand=True)

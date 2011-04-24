@@ -70,9 +70,11 @@ def init(host='localhost'):
     networked = True
     try:                                            
         client = GameClient(eventManager,host=host,port=1567)
+        clientID = client.ID
     #    client.sendRequest('GetWorld')
     except:
         networked = False
+        clientID = None
     
     wManipulator = WorldManipulator(eventManager,w,networked)
     
@@ -82,16 +84,18 @@ def init(host='localhost'):
         # Initialize a TestTownCenter
         GameClient.ID = 0
         w._generateResources()
-
         w._TMPmakeBuilding()
-
+    else:
+        while client.ID == None:
+            from time import sleep
+            sleep(.02)
+        clientID = client.ID
     #w._TMPmakeBuilding()
         
     for i in xrange(25):
-        eventManager.post(Event.WorldManipulationEvent(['create',TestUnit,(i*50,i*50,w.worldID,GameClient.ID)]))
+        eventManager.post(Event.WorldManipulationEvent(['create',TestUnit,(i*50,i*50,w.worldID,clientID)]))
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
-    
     
     return eventManager.eventTypesToListeners
 
