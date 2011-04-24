@@ -238,8 +238,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
                 drawRect = entity.rect.move(entity.drawOffset)
                 drawRect.center = specialMath.cartToIso(drawRect.center)
+                
+                selectRect=entity.getSelectionRect(drawRect)
             
-                if drawRect.colliderect(MakeBoundingBox(start,end)):
+                if selectRect.colliderect(MakeBoundingBox(start,end)):
                     if isinstance(event,Event.DragCompletedEvent):
                         entity.select()
                         self.selectedEntities.append(entity)
@@ -274,7 +276,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             drawRect = clicked.rect.move(clicked.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
             
-            if not drawRect.collidepoint(pos):
+            selectRect=clicked.getSelectionRect(drawRect)
+            
+            if not selectRect.collidepoint(pos):
                 clicked = None
         
         if isinstance(event,Event.SelectionEvent):
@@ -361,7 +365,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             drawRect = e.rect.move(e.drawOffset)
             drawRect.center = specialMath.cartToIso(drawRect.center)
             
-            if drawRect.collidepoint(viewportMouseLoc):
+            selectRect = e.getSelectionRect(drawRect)
+            
+            if selectRect.collidepoint(viewportMouseLoc):
                 e.focused = True
   
     def draw(self,displaySurface):

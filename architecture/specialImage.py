@@ -112,3 +112,71 @@ def loadImage(imagePath, colorkey=None, status=None):
     else:
         raise TypeError, 'please provide pygame.Surface or filepath.'
     return image
+    
+def getMinimalRect(surface, colorkey=None, padding=15, showShadows=False):
+    
+    imageRect = surface.get_rect()
+    imageWidth = imageRect.width
+    imageHeight = imageRect.height
+    
+    xmin,xmax = 0,imageWidth
+    ymin,ymax = 0,imageHeight
+    
+    if colorkey == -1 or colorkey == 'alpha':
+        backgroundColor = surface.get_at((0,0))
+    elif isinstance(colorkey,tuple):
+        backgroundColor = list(colorkey)
+        backgroundColor.append(255)
+    else:
+        backgroundColor = None
+    
+    rectTop,rectBottom,rectLeft,rectRight = None,None,None,None
+    for x in xrange(xmin,xmax):
+        if rectLeft is None:
+            for y in xrange(ymin,ymax):
+                pixel = surface.get_at((x,y))
+                if _isPixelTangible(pixel,backgroundColor,showShadows):
+                    rectLeft = x
+                    break
+        else:
+            break
+                
+    for x in xrange(xmin,xmax):
+        if rectRight is None:
+            for y in xrange(ymin,ymax):
+                pixel = surface.get_at((xmax-x-1,y))
+                if _isPixelTangible(pixel,backgroundColor,showShadows):
+                    rectRight = xmax-x-1
+                    break
+        else:
+            break
+                
+    for y in xrange(ymin,ymax):
+        if rectTop is None:
+            for x in xrange(xmin,xmax):
+                pixel = surface.get_at((x,y))
+                if _isPixelTangible(pixel,backgroundColor,showShadows):
+                    rectTop = y
+                    break
+        else:
+            break
+    
+    for y in xrange(ymin,ymax):
+        if rectBottom is None:
+            for x in xrange(xmin,xmax):
+                pixel = surface.get_at((x,ymax-y-1))
+                if _isPixelTangible(pixel,backgroundColor,showShadows):
+                    rectBottom = ymax-y-1
+                    break
+        else:
+            break
+    
+    minimalRect = pygame.Rect(rectLeft,rectTop,rectRight-rectLeft,rectBottom-rectTop)
+    return minimalRect.inflate(padding,padding)
+
+def _isPixelTangible(pixel, backgroundColor, allowShadows):
+    
+    if allowShadows:
+        return (pixel[3] != 0 and pixel != backgroundColor)
+    else:
+        return (pixel[3] == 255 and pixel != backgroundColor)

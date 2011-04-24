@@ -242,6 +242,12 @@ class MiniMap(object):
         return min(point[0],self.gridDim[0])+xadj,min(point[1],self.gridDim[1])+yadj
     '''
     
+    def _floatCoordToIntCoord(self,floatCoord):
+        """
+        Converts a floating point coordinate to an integer coordinate.
+        """
+        return int(floatCoord[0]),int(floatCoord[1])
+    
     def _updateDynamicSurface(self,screenPoints=None):
 
         newSurface = copy(self.baseSurface)#pygame.Surface((self.width,self.height))
@@ -256,8 +262,8 @@ class MiniMap(object):
             #rawPos = specialMath.cartToIso(gridPos)
             #drawPos = int(self.scale*rawPos[0]+self.xOffset),int(self.scale*rawPos[1]+self.yOffset)
             
-            color = entity.getAverageColor()
-            pygame.draw.circle(newSurface, color, drawPos, 3)
+            color = entity.getMiniMapColor()
+            pygame.draw.circle(newSurface, color, self._floatCoordToIntCoord(drawPos), 3)
         
         if screenPoints is not None:
             

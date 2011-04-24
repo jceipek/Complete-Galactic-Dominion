@@ -99,7 +99,11 @@ class Entity(MapObject):
         self.regenRate = 0
         self._regenHealth = 0
         self.inventory=None
-
+        
+        self.selectionRect = self.imageBank.getMinimalRect(
+            imagePath,colorkey,padding=25,showShadows=False)
+        #self.selectionRectOffset = self.selectionRect.topleft
+        #print self.selectionRect
 
     def _setEntityID(self,ID):
         self.entityID = ID
@@ -158,6 +162,19 @@ class Entity(MapObject):
             self.focused = False
         
         screen.blit(self.image,drawRect)
+
+    def getSelectionRect(self,drawRect):
+        
+        from copy import copy
+        selRect = copy(self.selectionRect)
+        selRect.topleft = drawRect.topleft
+        selRect.top+=self.selectionRect.top
+        selRect.left+=self.selectionRect.left
+        
+        return selRect
+        
+    def getSelectionRectOffset(self):
+        return self.selectionRect.topleft
 
     def drawSelectionRing(self, screen, drawRect):
         pygame.draw.circle(screen, (255,255,255), drawRect.center, 20, 1)

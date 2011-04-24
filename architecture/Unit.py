@@ -424,6 +424,9 @@ class Unit(Builder):
 
         if oldImageNum != self.imageNum:
             self.setImageToOrientation(self.imageNum)
+            
+        self.selectionRect = self.imageBank.getMinimalRect(
+            self.imagePath,self.colorkey,self.imageNum,padding=25,showShadows=False)
 
     def _definePath(self):
         while self._isAtDestination(): #may need to have room for error
@@ -494,6 +497,9 @@ class TestUnit(Unit):
         Unit.__init__(self,'ship',x,y,world,'alpha','A test unit.',owner)
         self.imageCount = 64
     
+    def getMiniMapColor(self):
+        return (0,0,255)
+    
     def __getstate__(self):
         state = self.__dict__.copy()
         
@@ -509,7 +515,6 @@ class TestUnit(Unit):
         del state['healthBar']
       
         return state
-        
 
     def __setstate__(self,state):
         self.__dict__ = state

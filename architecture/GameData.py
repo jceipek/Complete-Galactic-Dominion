@@ -15,8 +15,12 @@ class ImageBank(object):
     """
     def __init__(self):
 
+        # Cache for images
         self.cache = {}
         self.setImageNotFound()
+        
+        self.averageColorCache = {}
+        self.minimalRectCache = {}
         
     def setImageNotFound(self):
         from specialImage import createImageNotFound
@@ -101,13 +105,28 @@ class ImageBank(object):
         else:
             return (image,image.get_rect())
             
-    def getAverageColor(self, imageName, colorkey=None):
-        return (255,0,0)
+    def getAverageColor(self, imageName, colorkey=None, orientation=None):
+
         from specialImage import getAverageColor
         if self.isCached(imageName):
-            self.imageColorKeys[imageName] = \
-                getAverageColor(self.getImage(imageName),colorkey)
-        return self.imageColorKeys[imageName]
+            if not (imageName,orientation) in self.averageColorCache:
+                self.averageColorCache[(imageName,orientation)] = \
+                    getAverageColor(self.getImage(imageName,colorkey,orientation),
+                        colorkey)
+            return self.averageColorCache[(imageName,orientation)]
+        return (255,0,0) # default color
+        
+    def getMinimalRect(self, imageName, colorkey=None, orientation=None, **kwargs):
+        
+        from specialImage import getMinimalRect
+        if self.isCached(imageName):
+            if not (imageName,orientation) in self.minimalRectCache:
+                self.minimalRectCache[(imageName,orientation)] = \
+                    getMinimalRect(self.getImage(imageName,colorkey,orientation),
+                        colorkey, **kwargs)
+            from copy import copy
+            return copy(self.minimalRectCache[(imageName,orientation)])
+        return self.getImage(imageName, orientation).get_rect()
 
 class AnimationDict():
     

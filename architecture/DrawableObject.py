@@ -14,7 +14,6 @@ class DrawableObject(object):
         # First class to have image and rect objects
         self.imagePath = imagePath
         self.colorkey = colorkey
-        self.colorkey = colorkey
         
         '''
         self.loadImage(imagePath,colorkey)

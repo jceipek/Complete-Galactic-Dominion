@@ -79,6 +79,9 @@ class Gold(Resource):
         
         self.regenRate = 1
 
+    def getMiniMapColor(self):
+        return (255,215,0)
+
     def __getstate__(self):
         return NaturalObject.__getState__(self)
         
