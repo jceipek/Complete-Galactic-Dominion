@@ -8,6 +8,6 @@ class EventExecutionEvent(Event):
     def __init__(self,aStr):
         Event.__init__(self)
         self.data = aStr
-        self.verboseInfo = "Data: " + str(self.data) + "\n"
+        self.verboseInfo = ''#"Data: " + str(self.data) + "\n"
         
     

@@ -76,9 +76,7 @@ def init(host='localhost'):
     #universe.changeWorld(w)
     
     #===========================================
-    
     if networked:
-        print 'Requesting the World'
         client.sendRequest('GetWorld')
     else:
         # Initialize 25 entities in World w
