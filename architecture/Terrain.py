@@ -34,3 +34,6 @@ class Grass(Terrain):
         if imagePath == None:
             imagePath = 'newGrass.png'
         Terrain.__init__(self, imagePath, colorkey, exists=True)
+        
+    def getMiniMapColor(self):
+        return (100,100,100)
