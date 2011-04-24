@@ -214,7 +214,9 @@ class Unit(Builder):
                  owner='tmp'):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description,
             owner='tmp', movable=True)
-    
+
+        self.imageCount = None    
+
         #self.__class__.allUnits.add(self)
         self.status=Locals.IDLE
         self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10}
@@ -398,6 +400,9 @@ class Unit(Builder):
             dirx = self.dest[0] - curX #unscaled x direction of movement
             diry = self.dest[1] - curY #unscaled y direction of movement
             
+            self.setImageNum(dirx,diry)
+            print self.imageNum
+
             # distance between destination and current location
             distLocToDest = specialMath.hypotenuse(dirx,diry)
             
@@ -416,7 +421,21 @@ class Unit(Builder):
                 self.realCenter = [newX, newY]
             self.rect.center = tuple(self.realCenter)
             self.moveWrap()
+
+    def setImageNum(self,x,y):
+        oldImageNum = self.imageNum
+        if not self.imageCount == None and self.imageCount > 1:
+            from specialMath import imageNum
+            self.imageNum = imageNum(x,y,self.imageCount)
+        else:
+            self.imageNum = None
+
+        if oldImageNum != self.imageNum:
+            self.setImageToOrientation(self.imageNum)
             
+        self.selectionRect = self.imageBank.getMinimalRect(
+            self.imagePath,self.colorkey,self.imageNum,padding=25,showShadows=False)
+
     def _definePath(self):
         while self._isAtDestination(): #may need to have room for error
             if self.path == []:
@@ -480,7 +499,7 @@ class Unit(Builder):
         self.path.append(list(coord))
         
     def getMiniMapColor(self):
-        return (255,255,255)
+        return (0,0,255)
         
     def __str__(self):
         return cPickle.dumps(['Unit', self.imagePath, self.realCenter, 'world'])
@@ -491,7 +510,11 @@ class TestUnit(Unit):
     name = 'TestUnit'
     
     def __init__(self, x, y, world, owner='tmp'):
-        Unit.__init__(self,'testCraft.png',x,y,world,'alpha','A test unit.',owner)
+        Unit.__init__(self,'ship',x,y,world,'alpha','A test unit.',owner)
+        self.imageCount = 64
+    
+    def getMiniMapColor(self):
+        return (0,0,255)
     
     def __getstate__(self):
         state = self.__dict__.copy()
@@ -508,7 +531,7 @@ class TestUnit(Unit):
         del state['healthBar']
       
         return state
-        
+
     def __setstate__(self,state):
         self.__dict__ = state
             

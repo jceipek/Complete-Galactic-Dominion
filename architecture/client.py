@@ -28,7 +28,7 @@ from Entity import Entity,TestEntity
 from Unit import Unit,TestUnit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
-from NaturalObject import Gold
+#from NaturalObject import Gold
 
 def init(host='localhost'):
     """
@@ -83,9 +83,11 @@ def init(host='localhost'):
         GameClient.ID = 0
         w._generateResources()
 
+        w._TMPmakeBuilding()
+
     #w._TMPmakeBuilding()
         
-    for i in xrange(1):
+    for i in xrange(25):
         eventManager.post(Event.WorldManipulationEvent(['create',TestUnit,(i*50,i*50,w.worldID,GameClient.ID)]))
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())

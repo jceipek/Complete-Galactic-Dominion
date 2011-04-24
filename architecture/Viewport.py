@@ -235,12 +235,13 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             
             for entity in searchList:
             
-                drawRect = entity.selectionRect.move(entity.drawOffset)
+                drawRect = entity.rect.move(entity.drawOffset)
                 drawRect.center = specialMath.cartToIso(drawRect.center)
                 
                 selectRect=entity.getSelectionRect(drawRect)
             
                 if selectRect.colliderect(MakeBoundingBox(start,end)):
+
                     if isinstance(event,Event.DragCompletedEvent):
                         entity.select()
                         self.selectedEntities.append(entity)
