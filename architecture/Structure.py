@@ -40,10 +40,12 @@ class Structure(Builder):
     def __setstate__(self,state):
         self.__dict__ = state
         
-        self.loadImage(self.imagePath,self.colorkey)
+        realCenter = self.realCenter
+        self._imageInformationSetup()
+        self.rect.center = self.realCenter = realCenter
+        
         self.healthBar = HealthBar(self)
         
-        self.rect.center = self.realCenter
         self.selected = False
           
     '''Pickle functions for network transfer:'''

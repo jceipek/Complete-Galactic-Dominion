@@ -21,9 +21,15 @@ class WorldManipulator(Listener):
              if 'GetWorld' in data:
                  return
             
-             #print 'Got a command to unpickle the string ' + data + '\n'*5
+             print 'Got a command to unpickle the string ' + data + '\n'*5
              if self.networked:
-                cmd = cPickle.loads(data)
+                try:
+                    cmd = cPickle.loads(data)
+                except:
+                    if data == '':
+                        return
+                    print 'load failed'
+                    cmd = cPickle.loads(data)
              else:
                 cmd = data
              #print 'Successfully unpickled the string' + data + '\n'*5

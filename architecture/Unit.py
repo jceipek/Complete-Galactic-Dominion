@@ -271,12 +271,12 @@ class Unit(Builder):
         
     def __setstate__(self,state):
         self.__dict__ = state
-            
-        self.loadImage(self.imagePath, self.colorkey)
+        realCenter = self.realCenter
+        self._imageInformationSetup()
+        self.rect.center = self.realCenter = realCenter
         
         self.healthBar = HealthBar(self)
         
-        self.rect.center = self.realCenter
         self.selected = False
 
     def update(self):
@@ -532,10 +532,4 @@ class TestUnit(Unit):
         return state
 
     def __setstate__(self,state):
-        self.__dict__ = state
-            
-        self.loadImage(self.imagePath, self.colorkey)
-        
-        self.healthBar = HealthBar(self)
-        
-        self.rect.center = self.realCenter
+        Unit.__setstate__(self,state)
