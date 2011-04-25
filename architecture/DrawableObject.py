@@ -133,13 +133,17 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(screenSize)
     screenZone = screen.get_rect()
     
+    screen.fill((255,255,255))
+    
     a = DrawableObject('testCraft.png','alpha')
+    a.image.fill((255,50,255),special_flags=pygame.BLEND_RGB_MULT)
     minimalRect=DrawableObject.imageBank.getMinimalRect('testCraft.png','alpha',padding=30)
-    
     minimalRect.clamp_ip(a.rect)
-    
+        
+    pygame.init()
+
     while RUNNING:
-        pygame.init()
+
         screen.blit(a.image,a.rect)
 
         pygame.draw.rect(screen,(255,0,255),minimalRect,2)
