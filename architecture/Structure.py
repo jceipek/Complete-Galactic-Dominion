@@ -15,9 +15,9 @@ class Structure(Builder):
 
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.', owner='tmp'):
-        Builder.__init__(self, imagePath, x, y, world, colorkey, description,
-            owner)
-
+        Builder.__init__(self, imagePath, x, y, world, colorkey=colorkey, description=description,
+            owner=owner)
+        print 'Structure owner:',owner
         self.status = Locals.IDLE
         self.maxHealth=100
         self.curHealth=self.maxHealth
@@ -40,13 +40,15 @@ class Structure(Builder):
     def __setstate__(self,state):
         self.__dict__ = state
         
-        self.loadImage(self.imagePath,self.colorkey)
+        realCenter = self.realCenter
+        self._imageInformationSetup()
+        self.rect.center = self.realCenter = realCenter
+        
         self.healthBar = HealthBar(self)
         
-        self.rect.center = self.realCenter
         self.selected = False
           
-    '''Pickle functions for network transfer:'''
+    """Pickle functions for network transfer:"""
     def __getState__(self):
         stateDict = Builder.__getState__(self)
         stateDict['buildX'] = self.buildX

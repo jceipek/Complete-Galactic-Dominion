@@ -4,7 +4,7 @@
 
 #import code necessary to run the server
 #built-in modules
-import threading, cPickle
+import threading, cPickle, traceback
 #developer defined modules
 import Event, networking
 from networking import SocketThread
@@ -31,14 +31,14 @@ class BroadcastServer(networking.Server):
     This server takes requests from a client and does one of two things
     -If the client is new
     """
-    numberOfEntities = 0
+    numberOfClients = 0
     
     def processInput(self,sockThrd,data):
-        print 'Got input:' + data
         if 'GetWorld' in data and hasattr(self,'world'):
             for entity in self.world.allEntities.values():
                 if isinstance(entity,Unit) or isinstance(entity,Structure) or isinstance(entity,NaturalObject):
                     sockThrd.write(cPickle.dumps(entity))
+            sockThrd.write('finishedLoading')
         else:
             for sock in self.socketThreads.keys():
                 sock.write(data)
@@ -57,9 +57,9 @@ class BroadcastServer(networking.Server):
                 print 'Connection Established'
                 s=SocketThread(self,clientSocket)
                 self.socketThreads[s]=s.file
-                s.write('ID:'+str(BroadcastServer.numberOfEntities))
-                BroadcastServer.numberOfEntities += 1
-                self.processInput(s,'GetWorld')
+                ID=BroadcastServer.numberOfClients
+                BroadcastServer.numberOfClients += 1
+                s.write('ID:'+str(ID))
 
         self.socket.listen(numPendingConnections)
         self.connecting=True
@@ -128,10 +128,6 @@ if __name__ == '__main__':
     s.listenAndConnect()
     
     init(server=s)
-    #eTypestoListeners = init()
-    #for key in eTypestoListeners:
-    #    print 'Event type: %s'%str(key)
-    #    print eTypestoListeners[key],'\n'
 
     
     

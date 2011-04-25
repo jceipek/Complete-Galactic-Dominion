@@ -14,3 +14,4 @@ from DisplaySurfaceCreatedEvent import *
 from WorldManipulationEvent import *
 from EventExecutionEvent import *
 from NotificationEvent import *
+from NewPlayerEvent import *

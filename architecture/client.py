@@ -12,7 +12,7 @@ servers and clients as needed. For now, no servers have been created.
 """
 
 #Import python modules required for the client
-import threading
+import threading, traceback, time
 
 #Import necessary user defined classes required for the client
 import Event, networking
@@ -25,6 +25,7 @@ from World import World
 from UserInterface import UserInterface
 from Universe import Universe
 from Entity import Entity,TestEntity
+from Structure import TestTownCenter
 from Unit import Unit,TestUnit
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
@@ -76,14 +77,14 @@ def init(host='localhost'):
 
     except:
         networked = False
-        clientID = None
         
     if not networked:
         # Initialize 25 entities in World w
         # Initialize a TestTownCenter
-        GameClient.ID = 0
+        clientID = GameClient.ID = 0
+        ui.setClientID(clientID)
+        eventManager.post(Event.NewPlayerEvent(clientID))
         w._generateResources()
-        w._TMPmakeBuilding()
     else:
         while client.ID == None:
             from time import sleep
@@ -96,10 +97,20 @@ def init(host='localhost'):
     #===========================================
     
     #w._TMPmakeBuilding()
-        
+    #create 25 TestUnits
     for i in xrange(25):
         eventManager.post(Event.WorldManipulationEvent(['create',TestUnit,(i*50,i*50,w.worldID,clientID)]))
+    #create a TestTownCenter
+    from random import randint,choice
+    xpos = randint(0,w.gridDim[0])
+    ypos = randint(0,w.gridDim[1])
+    eventManager.post(Event.WorldManipulationEvent(['create',TestTownCenter,(xpos,ypos,w.worldID,clientID)]))
+    
     #Notify the manager that the window should start to accept input:
+    while networked and not client.loaded:
+        print 'Waiting for the game state to be loaded.'
+        time.sleep(.1)
+    print 'The game state should now be loaded'
     eventManager.post(Event.StartEvent())
     
     return eventManager.eventTypesToListeners
@@ -109,6 +120,3 @@ if __name__ == '__main__':
     #Connect to server
     
     eTypestoListeners = init()
-    #for key in eTypestoListeners:
-    #    print 'Event type: %s'%str(key)
-    #    print eTypestoListeners[key],'\n'

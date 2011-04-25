@@ -71,7 +71,7 @@ class Builder(Entity):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.', movable=False, owner='tmp'):
-             
+        print 'Builder owner:',owner
         Entity.__init__(self,imagePath,x,y,world,colorkey,description, movable,
             owner)
         
@@ -271,12 +271,12 @@ class Unit(Builder):
         
     def __setstate__(self,state):
         self.__dict__ = state
-            
-        self.loadImage(self.imagePath, self.colorkey)
+        realCenter = self.realCenter
+        self._imageInformationSetup()
+        self.rect.center = self.realCenter = realCenter
         
         self.healthBar = HealthBar(self)
         
-        self.rect.center = self.realCenter
         self.selected = False
 
     def update(self):
@@ -346,6 +346,10 @@ class Unit(Builder):
                         amountToDeposit = self.inventory.removeAll(resource)
                         amountDeposited = self.world.addResource(self.owner,resource,amountToDeposit)
                         
+                        print self.name
+                        print self.entityID
+                        print amountDeposited
+                        print resource.name
                         notifyStr = '%s %d deposited %d %s.'%(self.name,self.entityID,amountDeposited,resource.name)
                         self.addNotification(NotificationEvent(notifyStr))
                         
@@ -534,12 +538,4 @@ class TestUnit(Unit):
         return state
 
     def __setstate__(self,state):
-        self.__dict__ = state
-            
-        #the realCenter attribute will be overwritten in _imageInformationSetup()
-        #this location needs to be preserved
-        realCenter = self.realCenter
-        self._imageInformationSetup()
-        self.rect.center = self.realCenter = realCenter
-        
-        self.healthBar = HealthBar(self)
+        Unit.__setstate__(self,state)
