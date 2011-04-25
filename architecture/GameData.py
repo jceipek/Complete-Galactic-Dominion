@@ -115,30 +115,18 @@ class ImageBank(object):
         If this fails, an "image not found" image is returned
         """
         
-        if orientation == None:
+        #print imageName,orientation,playerID,blendPath
+        #return self.cache.get(imageName,None).getImage((orientation,playerID))
+        imageDict = self.cache.get(imageName,None)
+        if imageDict == None:
+            self.loadImage(imageName,colorkey,playerID=playerID,blendPath=blendPath)
             imageDict = self.cache.get(imageName,None)
             if imageDict == None:
-                self.loadImage(imageName,colorkey,playerID=playerID,blendPath=blendPath)              
-                imageDict = self.cache.get(imageName,None)
-                if imageDict == None:
-                    return self.getDefaultImage(playerID)
-                else:
-                    return imageDict.getDefaultImage(playerID)
+                return self.getDefaultImage(playerID)
             else:
-                return imageDict.getImage(playerID=playerID)
+                return imageDict.getDefaultImage(playerID)
         else:
-            #print imageName,orientation,playerID,blendPath
-            #return self.cache.get(imageName,None).getImage((orientation,playerID))
-            imageDict = self.cache.get(imageName,None)
-            if imageDict == None:
-                self.loadImage(imageName,colorkey,playerID=playerID,orientation=orientation,blendPath=blendPath)
-                imageDict = self.cache.get(imageName,None)
-                if imageDict == None:
-                    return self.getDefaultImage(playerID)
-                else:
-                    return imageDict.getDefaultImage(playerID)
-            else:
-                return imageDict.getImage(orientation,playerID)
+            return imageDict.getImage(orientation,playerID)
         
     def getImageAndRect(self, imageName, orientation=None):
         """
