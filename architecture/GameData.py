@@ -54,14 +54,15 @@ class ImageBank(object):
                     blendImages = listdir(blendPathFull)
                     blendImages.sort()
                 else: # str?
-                    blendImages = join('imageData',blendPath)
+                    blendPathFull = 'imageData'
+                    blendImages = join(blendPathFull,blendPath)
                 blending = True
                 from specialImage import idToColorHash, imageBlend
                 blendColor = idToColorHash(playerID)
             else: # None
                 blendImages = None
                 blending = False
-            blendColor = (255,0,0)
+            
             try:
                 #Is this an anim, not a simple image?
                 if isdir(imagePathFull):
@@ -87,12 +88,17 @@ class ImageBank(object):
                         if imageI == 0:
                             animDict.setDefaultImage(animDict.getImage(imageI))
                 else:
-                    
                     if blendImages is not None and len(blendImages) != 1:
                         print 'PROBLEM WITH LENGTH OF BLEND + IMAGES'
                     
                     animDict = AnimationDict(self.getDefaultImage())
-                    image = loadImage(imagePathFull, colorkey)
+                    
+                    image = loadImage(imagePathFull, colorkey) 
+                    if blending:
+                        print blendImages
+                        mask = loadImage(blendImages,(0,0,0))
+                        image = imageBlend(image,mask,blendColor)
+                    
                     animDict.addImage(image,colorkey)
                 self.cache[imagePath] = animDict
             except:
