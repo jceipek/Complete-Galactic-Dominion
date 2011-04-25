@@ -39,7 +39,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.clientID = clientID
         
         if world is not None:
-            self.minimap = MiniMap(self.world)
+            self.minimap = MiniMap(self.world,clientID=clientID)
             self.worldSize=self.world.grid.getCartGridDimensions()
         else:
             self.minimap = None
@@ -72,6 +72,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def setClientID(self,clientID):
         self.clientID = clientID
+        self.minimap.setClientID(clientID)
     
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE

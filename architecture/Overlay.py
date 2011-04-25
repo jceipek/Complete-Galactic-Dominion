@@ -79,7 +79,6 @@ def MakeBoundingBox(p1,p2):
     bboxRect.normalize() # Normalizes to remove negative sizes.
     return bboxRect
 
-
 class Bar():
     
     def __init__(self,maxValue,barWidth,barHeight,fullness=1.0,fullColor=(0,255,0),emptyColor=(255,0,0)):
@@ -140,9 +139,10 @@ class HealthBar(Bar):
 class MiniMap(object):
     
     def __init__(self, world, width=400, height=200, \
-        borderColor=(0,0,0), borderWidth=5):
+        borderColor=(0,0,0), borderWidth=5, clientID=None):
         
         self.world = world
+        self.clientID = clientID
         
         self.width = width
         self.height = height
@@ -173,9 +173,31 @@ class MiniMap(object):
         
         self.dynamicSurface = pygame.Surface((width,height))
         self._updateDynamicSurface()
+    
+        self.colorHashes = {}
+    
+    def idToColorHash(self,playerID):
         
+        colorNum = hash(str(playerID))%255**3
+        col = [0, 0, 0]
+        
+        for i in xrange(3):
+            colorNum,col[i] = divmod(colorNum,255)
+        
+        return tuple(col)
+        
+    def getColorHash(self,playerID):
+        
+        if playerID not in self.colorHashes:
+            self.colorHashes[playerID] = self.idToColorHash(playerID)
+        
+        return self.colorHashes[playerID]
+    
     def update(self,screenPoints=None):
         self._updateDynamicSurface(screenPoints)
+    
+    def setClientID(self,clientID):
+        self.clientID = clientID
     
     def draw(self,surf):
         surf.blit(self.baseSurface,self.rect)
@@ -262,7 +284,8 @@ class MiniMap(object):
             #rawPos = specialMath.cartToIso(gridPos)
             #drawPos = int(self.scale*rawPos[0]+self.xOffset),int(self.scale*rawPos[1]+self.yOffset)
             
-            color = entity.getMiniMapColor()
+            #color = entity.getMiniMapColor()
+            color = self.getColorHash(entity.owner)
             pygame.draw.circle(newSurface, color, self._floatCoordToIntCoord(drawPos), 3)
         
         if screenPoints is not None:
