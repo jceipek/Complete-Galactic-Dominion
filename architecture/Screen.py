@@ -108,9 +108,10 @@ class MainScreen(Screen):
         
     def processUpdateEvent(self,event):
         self.viewport.processUpdateEvent(event)
+        self.hud.processUpdateEvent(event)
     
     def processNotificationEvent(self,event):
-        self.hud.drawNotification(event)
+        self.hud.addNotification(event)
     
     def changeWorld(self,world):
         self.viewport.changeWorld(world)

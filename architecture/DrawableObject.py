@@ -135,8 +135,18 @@ if __name__ == "__main__":
     
     screen.fill((255,255,255))
     
-    a = DrawableObject('testCraft.png','alpha')
-    a.image.fill((255,50,255),special_flags=pygame.BLEND_RGB_MULT)
+    from specialImage import loadImage
+    
+    #a = DrawableObject('testCraft.png','alpha')
+    a = DrawableObject('ShipFlags/shipFlag_0000.png','alpha')
+    
+    tstImage = loadImage('ship/ship_0000.png','alpha')
+    tstImage.fill((255,50,255),special_flags=pygame.BLEND_RGB_MULT)
+    
+    #a.image.blit(loadImage('ship/ship_0000.png','alpha'),a.rect)
+    #a.image.fill((255,50,255),special_flags=pygame.BLEND_RGB_MULT)
+    #    a = DrawableObject('ship/ship_0000.png','alpha')
+
     minimalRect=DrawableObject.imageBank.getMinimalRect('testCraft.png','alpha',padding=30)
     minimalRect.clamp_ip(a.rect)
         
@@ -144,7 +154,8 @@ if __name__ == "__main__":
 
     while RUNNING:
 
-        screen.blit(a.image,a.rect)
+        #screen.blit(a.image,a.rect)
+        screen.blit(tstImage,a.rect)
 
         pygame.draw.rect(screen,(255,0,255),minimalRect,2)
         pygame.display.flip()

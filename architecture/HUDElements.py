@@ -77,27 +77,45 @@ class SelectedUnitBar():
             b.draw(screen)
             
 class Notification(Sign):
-    def __init__ (self, text='This is a Notification. Consider yourself notified.', pos=(800,0), color=(255, 255, 0), width=200, time=500):
+    def __init__ (self, text='This is a Notification. Consider yourself notified.', pos=(800,0), color=(255, 255, 0), width=200, time=5):
         Sign.__init__(self, width, pos)
         self.addtext(text)
         self.tcolor=color
-        self.timeLeft=time
+        self.timeLeft=time*1000
     def draw(self, surface):
         self.render(surface)
         #Sign.draw(self,surface)
 
+
 class NotificationList():
-    def __init__(self, pos=(500, 0), width=200):
-        self.elements=[]
+    """
+    List of notifications. Displays multiple notifications which will disappear after some amount of time.
+    """
+    def __init__(self, pos=(800, 0), width=200, maxLength=5):
+        self.notes=[]
         self.pos=pos
         self.width=width
+        self.maxLength=maxLength
         
     def add(self, notification):
-        self.elements.append(notification)
-    def update(self):
-        for n in self.elements:
-            if n.timeLeft<=0: self.elements.remove(n)
+        self.notes.append(notification)
+        notification.offset[0]=self.pos[0]
+    def update(self, timeElapsed):
+        y=self.pos[1]
+        #removes notifications that have timed out
+        for n in self.notes:
+            n.timeLeft-=timeElapsed
+            if n.timeLeft<=0: self.notes.remove(n)
+        #keeps list down to the last maxLength number of notifications
+        if len(self.notes)>self.maxLength:
+            self.notes=self.notes[-1*self.maxLength:]
+        #adjusts position of notifications
+        for n in self.notes:
+            n.offset[1]=y
+            y+=n.sy
+            
+        
     def draw(self, surf):
-        for n in self.elements:
+        for n in self.notes:
             n.draw(surf)
         
