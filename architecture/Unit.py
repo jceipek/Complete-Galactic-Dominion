@@ -356,6 +356,7 @@ class Unit(Builder):
                         
                         if amountToDeposit != amountDeposited:
                             print 'Warning: did not deposit correct amount of resources.'
+            self.status=Locals.IDLE
         
     def initAction(self, obj): 
         """

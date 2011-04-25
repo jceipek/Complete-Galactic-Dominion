@@ -1,6 +1,6 @@
 import pygame
 from Sign import Sign
-from HUDElements import DescriptionBox, SelectedUnitBar, Notification
+from HUDElements import DescriptionBox, SelectedUnitBar, Notification, NotificationList
 from GameData import Locals
 
 class HUD(object):
@@ -14,7 +14,10 @@ class HUD(object):
         self.width=200
         self.viewport=None
         self.infoRect=pygame.Rect((0,20), (self.size[0], self.size[1]-20))
-        self.note=Notification()
+        self.note=NotificationList()
+        self.note.add(Notification('Imma notify you'))
+        self.note.add(Notification('This is a slightly shorter lasting notification', time=2))
+        self.note.add(Notification('This is a longer lasting notification', time=8))
         
     def draw(self, displaySurface):
         self.drawSelected()
@@ -35,10 +38,14 @@ class HUD(object):
         sign.draw(self.surface)
 
     """
-    def drawNotification(self, event=None):
-        note=Notification()
-        note.draw(self.surface)
+    def addNotification(self, event=None):
+        note=Notification(event.message)
+        self.note.add(note)
 
     def drawSelected(self):
 		
 		self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)
+
+    def processUpdateEvent(self, event):
+        timeElapsed = event.elapsedTimeSinceLastFrame
+        self.note.update(timeElapsed)
