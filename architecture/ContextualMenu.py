@@ -193,8 +193,6 @@ def Unit_TestTownCenter(obj1,obj2):
             title = 'Deposit Resources',
             callback = GroupCallback(gatherCallbacks,obj2))
         menu.addItem(depositItem)
-        
-        return menu
     
     else: # not hasSameOwner
     
@@ -211,7 +209,14 @@ def Unit_TestTownCenter(obj1,obj2):
         
         menu.addItem(attackBuilding)
         
-        return menu
+    showDesc = radialMenu.RMenuItem(menu,
+        image = "orbQBlack.png",
+        col = (255,0,255),
+        title = 'Description',
+        callback = Callback(obj2.showDescription))
+    menu.addItem(showDesc)
+        
+    return menu
         
 def Unit_WayPoint(obj1,obj2):
     
@@ -273,7 +278,16 @@ def Unit_Resource(obj1,obj2):
         callback = GroupCallback(setGatherCallbacks,obj2))
 
     menu.addItem(gatherItem)
+    
+    showDesc = radialMenu.RMenuItem(menu,
+        image = "orbQBlack.png",
+        col = (255,0,255),
+        title = 'Description',
+        callback = Callback(obj2.showDescription))
+    menu.addItem(showDesc)
         
+    return menu
+    
     return menu
     
 def None_Unit(obj1,obj2):
@@ -367,9 +381,9 @@ def TestTownCenter_WayPoint(obj1,obj2):
 
 def Unit_Unit(obj1,obj2):
     
-    if obj1[0].owner!=obj2.owner:
+    menu = radialMenu.RMenu(openDelay=.2)
     
-        menu = radialMenu.RMenu(openDelay=.2)
+    if obj1[0].owner!=obj2.owner:
     
         setAttackCallbacks = []
         for unit in obj1:
@@ -382,8 +396,15 @@ def Unit_Unit(obj1,obj2):
             callback = GroupCallback(setAttackCallbacks,obj2))
     
         menu.addItem(attackItem)
-            
-        return menu
+    
+    showDesc = radialMenu.RMenuItem(menu,
+        image = "orbQBlack.png",
+        col = (255,0,255),
+        title = 'Description',
+        callback = Callback(obj2.showDescription))
+    menu.addItem(showDesc)
+        
+    return menu
 
 def getCGDcontextualMenu():
     """
