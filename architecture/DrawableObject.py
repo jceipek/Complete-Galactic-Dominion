@@ -138,9 +138,10 @@ if __name__ == "__main__":
     
     from specialImage import loadImage
     
-    a = DrawableObject('ship/ship_0000.png','alpha')
-    
-    mask = loadImage('imageData/ShipFlags/shipFlag_0000.png',(0,0,0))
+    #a = DrawableObject('ship/ship_0000.png','alpha')
+    #mask = loadImage('imageData/ShipFlags/shipFlag_0000.png',(0,0,0))
+    a = DrawableObject('TownCenterGeneric.png','alpha')
+    mask = loadImage('imageData/TownCenterFlag.png',(0,0,0))
     
     def imageBlend(image,mask,color=None):
         if color==None:

@@ -53,18 +53,15 @@ class ImageBank(object):
                 if isdir(blendPathFull):
                     blendImages = listdir(blendPathFull)
                     blendImages.sort()
-                blending = True
-                from specialImage import idToColorHash, imageBlend
-                blendColor = idToColorHash(playerID)
-            elif isinstance(blendPath,str):
-                blendImages = blendImages
+                else: # str?
+                    blendImages = join('imageData',blendPath)
                 blending = True
                 from specialImage import idToColorHash, imageBlend
                 blendColor = idToColorHash(playerID)
             else: # None
                 blendImages = None
                 blending = False
-            
+            blendColor = (255,0,0)
             try:
                 #Is this an anim, not a simple image?
                 if isdir(imagePathFull):
