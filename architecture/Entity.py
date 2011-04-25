@@ -22,7 +22,7 @@ class Entity(MapObject):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
-                 movable = False, owner='tmp'):
+                 movable = False, owner='tmp',blendPath=None):
         """
         Set up an Entity with an image loaded from the filepath
         specified by imagePath, an absolute x and y position in a given
@@ -59,7 +59,7 @@ class Entity(MapObject):
         x = x%self.worldSize[0]
         y = y%self.worldSize[1]
         
-        MapObject.__init__(self, imagePath, x, y, colorkey)
+        MapObject.__init__(self, imagePath, x, y, colorkey, blendPath=blendPath)
         
         # MAYBE FIXME - ADDED WED, APR 20 TO TRY TO FIX OBJ PLACEMENT
         self.rect.center = (x,y)

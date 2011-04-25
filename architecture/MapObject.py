@@ -6,10 +6,10 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
     Represents any object which is located in the L{World}.
     First class to implement position in the world.
     """
-    def __init__(self, imagePath, x, y, colorkey=None):
+    def __init__(self, imagePath, x, y, colorkey=None, blendPath=None):
         # sets image and rect attributes
         # First class to inherit from Sprite
-        DrawableObject.__init__(self, imagePath, colorkey)
+        DrawableObject.__init__(self, imagePath, colorkey, blendPath=blendPath)
         pygame.sprite.Sprite.__init__(self)
         
         # sets the topleft corner of the rectangle to (x,y)

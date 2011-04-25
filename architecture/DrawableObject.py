@@ -9,10 +9,11 @@ class DrawableObject(object):
     imageBank = ImageBank()
     isImageInitialized = False
     
-    def __init__(self, imagePath, colorkey=None):
+    def __init__(self, imagePath, colorkey=None, blendPath=None):
         
         # First class to have image and rect objects
         self.imagePath = imagePath
+        self.blendPath = blendPath
         self.colorkey = colorkey
         
         '''
@@ -25,16 +26,16 @@ class DrawableObject(object):
         
     def _imageInformationSetup(self):
         if pygame.display.get_init():
-            self.loadDefaultImage(self.imagePath,self.colorkey)
+            self.loadDefaultImage(self.imagePath,self.colorkey,blendPath=self.blendPath)
             self.setAverageColor(self.imagePath,self.colorkey)
             self.realCenter = self.rect.center
             self.isImageInitialized = True
     
     # First loadImage method
     
-    def loadDefaultImage(self, imagePath, colorkey=None):
+    def loadDefaultImage(self, imagePath, colorkey=None, blendPath=None):
         
-        objImage = self.imageBank.getImage(imagePath,colorkey=colorkey)
+        objImage = self.imageBank.getImage(imagePath,colorkey=colorkey,blendPath=blendPath)
         
         self.image = objImage
         self.rect = self.image.get_rect()
@@ -133,29 +134,41 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(screenSize)
     screenZone = screen.get_rect()
     
-    screen.fill((255,255,255))
+    screen.fill((100,100,100))
     
     from specialImage import loadImage
     
-    #a = DrawableObject('testCraft.png','alpha')
-    a = DrawableObject('ShipFlags/shipFlag_0000.png','alpha')
+    a = DrawableObject('ship/ship_0000.png','alpha')
     
-    tstImage = loadImage('ship/ship_0000.png','alpha')
-    tstImage.fill((255,50,255),special_flags=pygame.BLEND_RGB_MULT)
+    mask = loadImage('imageData/ShipFlags/shipFlag_0000.png',(0,0,0))
     
-    #a.image.blit(loadImage('ship/ship_0000.png','alpha'),a.rect)
-    #a.image.fill((255,50,255),special_flags=pygame.BLEND_RGB_MULT)
-    #    a = DrawableObject('ship/ship_0000.png','alpha')
-
-    minimalRect=DrawableObject.imageBank.getMinimalRect('testCraft.png','alpha',padding=30)
+    def imageBlend(image,mask,color=None):
+        if color==None:
+            color = (255,0,255)
+        rect = image.get_rect()
+        maskBackground = pygame.Surface(rect.size)
+        maskBackground.fill(color)
+        maskBackground.blit(mask,rect,special_flags=pygame.BLEND_MULT)
+        image.blit(maskBackground,rect,special_flags=pygame.BLEND_ADD)
+        return image
+    '''
+    # GOOD
+    tstSurface = pygame.Surface(a.rect.size)
+    tstSurface.fill((255,255,0))
+    tstSurface.blit(mask,a.rect,special_flags=pygame.BLEND_MULT)
+    a.image.blit(tstSurface,a.rect,special_flags=pygame.BLEND_ADD)
+    '''
+    minimalRect=DrawableObject.imageBank.getMinimalRect('ship/ship_0000.png','alpha',padding=30)
     minimalRect.clamp_ip(a.rect)
-        
+    
+    a.image = imageBlend(a.image,mask,(255,0,0))
+    
     pygame.init()
 
     while RUNNING:
 
         #screen.blit(a.image,a.rect)
-        screen.blit(tstImage,a.rect)
+        screen.blit(a.image,a.rect)
 
         pygame.draw.rect(screen,(255,0,255),minimalRect,2)
         pygame.display.flip()

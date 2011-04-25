@@ -70,10 +70,11 @@ class Builder(Entity):
     """
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.', movable=False, owner='tmp'):
+                 description = 'No information available.', movable=False, 
+                 owner='tmp',blendPath=None):
         print 'Builder owner:',owner
         Entity.__init__(self,imagePath,x,y,world,colorkey,description, movable,
-            owner)
+            owner,blendPath=blendPath)
         
         self.blockable=True
         
@@ -211,9 +212,9 @@ class Unit(Builder):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
-                 owner='tmp'):
+                 owner='tmp',blendPath=None):
         Builder.__init__(self,imagePath,x,y,world,colorkey,description,
-            owner=owner, movable=True)
+            owner=owner, movable=True, blendPath=blendPath)
 
         self.imageCount = None    
 
@@ -515,7 +516,8 @@ class TestUnit(Unit):
     name = 'TestUnit'
     
     def __init__(self, x, y, world, owner='tmp'):
-        Unit.__init__(self,'ship',x,y,world,'alpha','A test unit.',owner)
+        Unit.__init__(self,'ship',x,y,world,'alpha','A test unit.',owner,
+            blendPath='ShipFlags')
         self.imageCount = 64
     
     def getMiniMapColor(self):

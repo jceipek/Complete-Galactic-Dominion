@@ -180,3 +180,28 @@ def _isPixelTangible(pixel, backgroundColor, allowShadows):
         return (pixel[3] != 0 and pixel != backgroundColor)
     else:
         return (pixel[3] == 255 and pixel != backgroundColor)
+        
+def imageBlend(image,mask,color=None):
+    """
+    Returns an image blended with the given color applied to a given mask.
+    Both image and mask should by pygame.Surfaces.  Color should be
+    a three element tuple or rgb ints.
+    """
+    if color==None:
+        color = (0,0,0)
+    rect = image.get_rect()
+    maskBackground = pygame.Surface(rect.size)
+    maskBackground.fill(color)
+    maskBackground.blit(mask,rect,special_flags=pygame.BLEND_MULT)
+    image.blit(maskBackground,rect,special_flags=pygame.BLEND_ADD)
+    return image
+    
+def idToColorHash(playerID):
+    
+    colorNum = hash(str(playerID))%255**3
+    col = [0, 0, 0]
+    
+    for i in xrange(3):
+        colorNum,col[i] = divmod(colorNum,255)
+    
+    return tuple(col)

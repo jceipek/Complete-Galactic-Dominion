@@ -36,7 +36,7 @@ class ImageBank(object):
         
         return imagePath in self.cache
     
-    def loadImage(self, imagePath, colorkey):
+    def loadImage(self, imagePath, colorkey, playerID=0, blendPath=None):
         """
         Loads an image or animation into the cache as an AnimationDict
         """
@@ -44,24 +44,66 @@ class ImageBank(object):
             from os import listdir
             from os.path import isdir,join
             imagePathFull = join('imageData',imagePath)
+            
+            # Sets the blending bool and blendImages
+            # Proven to accept directories.  Not sure if it will
+            # work with non-directories yet.  Works with None.
+            if blendPath is not None:
+                blendPathFull = join('imageData',str(blendPath))
+                if isdir(blendPathFull):
+                    blendImages = listdir(blendPathFull)
+                    blendImages.sort()
+                blending = True
+                from specialImage import idToColorHash, imageBlend
+                blendColor = idToColorHash(playerID)
+            elif isinstance(blendPath,str):
+                blendImages = blendImages
+                blending = True
+                from specialImage import idToColorHash, imageBlend
+                blendColor = idToColorHash(playerID)
+            else: # None
+                blendImages = None
+                blending = False
+            
             try:
                 #Is this an anim, not a simple image?
                 if isdir(imagePathFull):
                     images = listdir(imagePathFull)
+                    
+                    if blendImages is not None and len(images) != len(blendImages):
+                        print 'PROBLEM WITH LENGTH OF BLEND + IMAGES'
+                    
                     images.sort()
                     animDict = AnimationDict(self.getDefaultImage())
+                    
                     for imageI in xrange(len(images)):
                         image = join(imagePathFull,images[imageI])
                         image = loadImage(image, colorkey)
+                        
+                        # Handles blending.
+                        if blending:
+                            blendPath = join(blendPathFull,blendImages[imageI])
+                            mask = loadImage(blendPath,(0,0,0))
+                            image = imageBlend(image,mask,blendColor)
+                            
                         animDict.addImage(image,colorkey,imageI)
                         if imageI == 0:
                             animDict.setDefaultImage(animDict.getImage(imageI))
                 else:
+                    
+                    if blendImages is not None and len(blendImages) != 1:
+                        print 'PROBLEM WITH LENGTH OF BLEND + IMAGES'
+                    
                     animDict = AnimationDict(self.getDefaultImage())
                     image = loadImage(imagePathFull, colorkey)
                     animDict.addImage(image,colorkey)
                 self.cache[imagePath] = animDict
             except:
+                import sys,traceback
+                print 'An unexpected error occurred in the event thread.'
+                exc_type,exc_value,exc_traceback = sys.exc_info()
+                traceback.print_exc()
+                #self.manager.post(Event.QuitEvent())
                 animDict = AnimationDict(self.getDefaultImage())
                 animDict.addImage(self.getDefaultImage())
                 print("UNABLE TO LOAD '"+imagePath+"'")
@@ -69,16 +111,17 @@ class ImageBank(object):
     def getDefaultImage(self):
         return self.cache[None]
 
-    def getImage(self, imageName, colorkey=None, orientation=None):
+    def getImage(self, imageName, colorkey=None, orientation=None, blendPath=None):
         """
         Returns an image from the cache by key if it exists.  If 
         not, it attempts to load the image from the filesystem.
         If this fails, an "image not found" image is returned
         """
+        
         if orientation == None:
             imageDict = self.cache.get(imageName,None)
             if imageDict == None:
-                self.loadImage(imageName,colorkey)              
+                self.loadImage(imageName,colorkey,blendPath=blendPath)              
                 imageDict = self.cache.get(imageName,None)
                 if imageDict == None:
                     return self.getDefaultImage()
