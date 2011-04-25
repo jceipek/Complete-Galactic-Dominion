@@ -23,10 +23,8 @@ class GameClient(networking.Client,Listener):
         elif not self.loaded and 'finishedLoading' in data:
             self.loaded = True
         elif self.ID == None and data[:3] == 'ID:':
-            print 'Data:',data
             IDList = data.split(':')
             GameClient.ID = int(IDList[1])
-            print 'Got my ID:',self.ID
             sockThrd.write('GetWorld')
             sockThrd.write('newPlayer:%d'%self.ID)
         else:

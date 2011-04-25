@@ -34,7 +34,6 @@ class BroadcastServer(networking.Server):
     numberOfClients = 0
     
     def processInput(self,sockThrd,data):
-        print 'Got input:' + data
         if 'GetWorld' in data and hasattr(self,'world'):
             for entity in self.world.allEntities.values():
                 if isinstance(entity,Unit) or isinstance(entity,Structure) or isinstance(entity,NaturalObject):
@@ -129,10 +128,6 @@ if __name__ == '__main__':
     s.listenAndConnect()
     
     init(server=s)
-    #eTypestoListeners = init()
-    #for key in eTypestoListeners:
-    #    print 'Event type: %s'%str(key)
-    #    print eTypestoListeners[key],'\n'
 
     
     
