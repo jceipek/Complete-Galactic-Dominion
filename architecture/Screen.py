@@ -61,13 +61,13 @@ class MainScreen(Screen):
         scrollLoc = (0,0)
         viewportPos = (0,0)
         #viewportSize = (640,480)
-        viewportSize = (1024,768-100)
+        viewportSize = (1024,768)
         testViewport = Viewport(world,manager,scrollLoc,viewportPos,viewportSize,self.clientID)
         self.viewport = testViewport
         
-        hudPos=(0, viewportSize[1]-20)
-        hudSize=(viewportSize[0], 120)
-        self.hud=HUD(hudPos, hudSize)
+        #hudPos=(0, viewportSize[1])
+        #hudSize=(viewportSize[0], 120)
+        self.hud=HUD()
         self.viewport.hud=self.hud
         self.hud.viewport=self.viewport
         
