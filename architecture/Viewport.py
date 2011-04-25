@@ -396,9 +396,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             displaySurface.blit(self.surface, (self.loc,self.size))
 
     def processUpdateEvent(self,event):
+        timeElapsed = event.elapsedTimeSinceLastFrame
+        
         self.setViewportEntities()
         self.postNotification()
-        timeElapsed = event.elapsedTimeSinceLastFrame
         
         # FIXME - NOT EFFICIENT
         for entity in self.world.getDeadEntities():
