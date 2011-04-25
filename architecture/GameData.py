@@ -83,7 +83,7 @@ class ImageBank(object):
                     
                     images.sort() # sort images
                     # set default image of a new animation dictionary
-                    animDict = AnimationDict(self.getDefaultImage())
+                    animDict = AnimationDict(self.getDefaultImage(playerID))
                     
                     for imageI in xrange(len(images)):
                         currentImagePath = join(imagePathFull,images[imageI])
@@ -123,8 +123,11 @@ class ImageBank(object):
                 animDict.addImage(self.getDefaultImage())
                 print("UNABLE TO LOAD '"+imagePath+"'")
 
-    def getDefaultImage(self):
-        return self.cache[None]
+    def getDefaultImage(self,playerID=None):
+        if playerID is None:
+            return self.cache[None]
+        else:
+            return self.cache[(None,playerID)]
 
     def getImage(self, imageName, colorkey=None, orientation=None, playerID=None, blendPath=None):
         """
@@ -133,8 +136,6 @@ class ImageBank(object):
         If this fails, an "image not found" image is returned
         """
         
-        #print imageName,orientation,playerID,blendPath
-        #return self.cache.get(imageName,None).getImage((orientation,playerID))
         imageDict = self.cache.get(imageName,None)
         if imageDict == None:
             self.loadImage(imageName,colorkey,playerID=playerID,blendPath=blendPath)
