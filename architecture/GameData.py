@@ -46,7 +46,7 @@ class ImageBank(object):
             imagePathFull = join('imageData',imagePath)
             try:
                 #Is this an anim, not a simple image?
-                if isdir(imagePath):
+                if isdir(imagePathFull):
                     images = listdir(imagePathFull)
                     images.sort()
                     animDict = AnimationDict(self.getDefaultImage())
