@@ -38,7 +38,15 @@ class ImageBank(object):
     
     def loadImage(self, imagePath, colorkey, playerID=None, blendPath=None):
         """
-        Loads an image or animation into the cache as an AnimationDict
+        Loads an image or animation into the cache as an AnimationDict.
+        Accepts an imagePath as a file or directory, and a blendPath as
+        a file, directory, or None.  The blendPath should be of the same
+        type as imagePath (or None).  The blendPath folder should contain
+        flags/masks which match images in the imagePath folder (or match
+        the individual file if an individual filepath is given.  The given
+        colorkey is used to load the image.  The playerID matches
+        an image to a player, and provides a blending with the mask 
+        specified by blendPath to the image.
         """
         if isinstance(imagePath,str) and not self.isCached(imagePath):
             from os import listdir
@@ -50,16 +58,16 @@ class ImageBank(object):
             # work with non-directories yet.  Works with None.
             if blendPath is not None:
                 blendPathFull = join('imageData',str(blendPath))
-                if isdir(blendPathFull):
+                if isdir(blendPathFull): # directory
                     blendImages = listdir(blendPathFull)
-                    blendImages.sort()
-                else: # str?
+                    blendImages.sort() # sort by order
+                else: # str? - indicating an individual filepath
                     blendPathFull = 'imageData'
                     blendImages = join(blendPathFull,blendPath)
                 blending = True
                 from specialImage import idToColorHash, imageBlend
                 blendColor = idToColorHash(playerID)
-            else: # None
+            else: # None - No blending
                 blendImages = None
                 blending = False
             
@@ -68,28 +76,35 @@ class ImageBank(object):
                 if isdir(imagePathFull):
                     images = listdir(imagePathFull)
                     
+                    # Warn if number of flags is not the same as the number
+                    # of images
                     if blendImages is not None and len(images) != len(blendImages):
-                        print 'PROBLEM WITH LENGTH OF BLEND + IMAGES'
+                        raise ValueError, 'Length of images does not match length of blend images.'
                     
-                    images.sort()
+                    images.sort() # sort images
+                    # set default image of a new animation dictionary
                     animDict = AnimationDict(self.getDefaultImage())
                     
                     for imageI in xrange(len(images)):
-                        image = join(imagePathFull,images[imageI])
-                        image = loadImage(image, colorkey)
+                        currentImagePath = join(imagePathFull,images[imageI])
+                        image = loadImage(currentImagePath, colorkey)
                         
-                        # Handles blending.
+                        # Handles blending on the image
                         if blending:
-                            blendPath = join(blendPathFull,blendImages[imageI])
-                            mask = loadImage(blendPath,(0,0,0))
+                            currentBlendPath = join(blendPathFull,blendImages[imageI])
+                            mask = loadImage(currentBlendPath,(0,0,0))
                             image = imageBlend(image,mask,blendColor)
-                            
+                        
+                        # Adds the image to the animation dictionary
+                        # imageI -> orientation, playerID -> playerID
                         animDict.addImage(image,colorkey,imageI,playerID)
+                        
+                        # sets first image to the default
                         if imageI == 0:
                             animDict.setDefaultImage(animDict.getImage(imageI))
                 else:
                     if blendImages is not None and len(blendImages) != 1:
-                        print 'PROBLEM WITH LENGTH OF BLEND + IMAGES'
+                        raise ValueError, 'Length of images does not match length of blend images.'
                     
                     animDict = AnimationDict(self.getDefaultImage())
                     
@@ -99,7 +114,10 @@ class ImageBank(object):
                         image = imageBlend(image,mask,blendColor)
                     
                     animDict.addImage(image,colorkey)
+                    
+                # cache the animation dictionary result
                 self.cache[imagePath] = animDict
+                
             except:
                 animDict = AnimationDict(self.getDefaultImage())
                 animDict.addImage(self.getDefaultImage())
