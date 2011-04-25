@@ -36,7 +36,7 @@ class ImageBank(object):
         
         return imagePath in self.cache
     
-    def loadImage(self, imagePath, colorkey, playerID=0, blendPath=None):
+    def loadImage(self, imagePath, colorkey, playerID=None, blendPath=None):
         """
         Loads an image or animation into the cache as an AnimationDict
         """
@@ -84,7 +84,7 @@ class ImageBank(object):
                             mask = loadImage(blendPath,(0,0,0))
                             image = imageBlend(image,mask,blendColor)
                             
-                        animDict.addImage(image,colorkey,imageI)
+                        animDict.addImage(image,colorkey,imageI,playerID)
                         if imageI == 0:
                             animDict.setDefaultImage(animDict.getImage(imageI))
                 else:
@@ -95,18 +95,12 @@ class ImageBank(object):
                     
                     image = loadImage(imagePathFull, colorkey) 
                     if blending:
-                        print blendImages
                         mask = loadImage(blendImages,(0,0,0))
                         image = imageBlend(image,mask,blendColor)
                     
                     animDict.addImage(image,colorkey)
                 self.cache[imagePath] = animDict
             except:
-                import sys,traceback
-                print 'An unexpected error occurred in the event thread.'
-                exc_type,exc_value,exc_traceback = sys.exc_info()
-                traceback.print_exc()
-                #self.manager.post(Event.QuitEvent())
                 animDict = AnimationDict(self.getDefaultImage())
                 animDict.addImage(self.getDefaultImage())
                 print("UNABLE TO LOAD '"+imagePath+"'")
@@ -114,7 +108,7 @@ class ImageBank(object):
     def getDefaultImage(self):
         return self.cache[None]
 
-    def getImage(self, imageName, colorkey=None, orientation=None, blendPath=None):
+    def getImage(self, imageName, colorkey=None, orientation=None, playerID=None, blendPath=None):
         """
         Returns an image from the cache by key if it exists.  If 
         not, it attempts to load the image from the filesystem.
@@ -124,16 +118,27 @@ class ImageBank(object):
         if orientation == None:
             imageDict = self.cache.get(imageName,None)
             if imageDict == None:
-                self.loadImage(imageName,colorkey,blendPath=blendPath)              
+                self.loadImage(imageName,colorkey,playerID=playerID,blendPath=blendPath)              
                 imageDict = self.cache.get(imageName,None)
                 if imageDict == None:
-                    return self.getDefaultImage()
+                    return self.getDefaultImage(playerID)
                 else:
-                    return imageDict.getDefaultImage()
+                    return imageDict.getDefaultImage(playerID)
             else:
-                return imageDict.getImage()
+                return imageDict.getImage(playerID=playerID)
         else:
-            return self.cache.get(imageName,None).getImage(orientation)
+            #print imageName,orientation,playerID,blendPath
+            #return self.cache.get(imageName,None).getImage((orientation,playerID))
+            imageDict = self.cache.get(imageName,None)
+            if imageDict == None:
+                self.loadImage(imageName,colorkey,playerID=playerID,orientation=orientation,blendPath=blendPath)
+                imageDict = self.cache.get(imageName,None)
+                if imageDict == None:
+                    return self.getDefaultImage(playerID)
+                else:
+                    return imageDict.getDefaultImage(playerID)
+            else:
+                return imageDict.getImage(orientation,playerID)
         
     def getImageAndRect(self, imageName, orientation=None):
         """
@@ -180,24 +185,24 @@ class AnimationDict():
         self.data = {}
         self.setDefaultImage(default)
         
-    def addImage(self,image,colorkey=None,orientationKey=None):
+    def addImage(self,image,colorkey=None,orientationKey=None,playerID=None):
         if orientationKey == None:
-            self.setDefaultImage(image,colorkey)
+            self.setDefaultImage(image,colorkey,playerID)
         else:        
-            self.data[orientationKey] = loadImage(image, colorkey)
+            self.data[(orientationKey,playerID)] = loadImage(image, colorkey)
     
-    def setDefaultImage(self,image,colorKey=None):
-        self.data[None] = loadImage(image,colorKey)
+    def setDefaultImage(self,image,colorKey=None,playerID=None):
+        self.data[(None,playerID)] = loadImage(image,colorKey)
 
-    def getDefaultImage(self):
-        return self.data[None]
+    def getDefaultImage(self,playerID=None):
+        return self.data[(None,playerID)]
 
-    def getImage(self,orientationKey=None):
+    def getImage(self,orientationKey=None,playerID=None):
         """
         Returns an image associated with a status and an orientation.
         If it does not exist, return the default image.
         """
-        return self.data.get(orientationKey,self.getDefaultImage())
+        return self.data.get((orientationKey,playerID),self.getDefaultImage())
 
 class Locals:
     #Statuses

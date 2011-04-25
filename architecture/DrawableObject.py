@@ -32,14 +32,17 @@ class DrawableObject(object):
             self.isImageInitialized = True
     
     # First loadImage method
-    
     def loadDefaultImage(self, imagePath, colorkey=None, blendPath=None):
+        if hasattr(self,'owner'):
+            playerID = self.owner
+        else:
+            playerID = None
         
-        objImage = self.imageBank.getImage(imagePath,colorkey=colorkey,blendPath=blendPath)
+        objImage = self.imageBank.getImage(imagePath,colorkey=colorkey,playerID=playerID,blendPath=blendPath)
         
         self.image = objImage
         self.rect = self.image.get_rect()
-          
+        
     def setImageToOrientation(self,orientation):
         objImage = self.imageBank.getImage(self.imagePath,self.colorkey,orientation)
         self.image = objImage
