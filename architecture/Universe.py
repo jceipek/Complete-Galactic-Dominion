@@ -6,7 +6,7 @@ from World import World
 class Universe(Listener):
 
     def __init__(self,manager,world=None):
-        eventTypes = [Event.UpdateEvent]
+        eventTypes = [Event.UpdateEvent,Event.NewPlayerEvent]
         Listener.__init__(self,manager,eventTypes)
         
         self.creator = Creator()
@@ -81,6 +81,9 @@ class Universe(Listener):
     def notify(self,event):
         if isinstance(event,Event.UpdateEvent):
             self.update()#this may become a thread
+        elif isinstance(event,Event.NewPlayerEvent):
+            for world in self.worldIDToWorld.values():#FIXME: this needs to change when there are multiple worlds
+                world.resourceContainer.addPlayer(event.ID)
     
     def sendEventToManager(self,event):
         """

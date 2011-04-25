@@ -77,12 +77,13 @@ def init(host='localhost'):
 
     except:
         networked = False
-        clientID = None
         
     if not networked:
         # Initialize 25 entities in World w
         # Initialize a TestTownCenter
-        GameClient.ID = 0
+        clientID = GameClient.ID = 0
+        ui.setClientID(clientID)
+        eventManager.post(Event.NewPlayerEvent(clientID))
         w._generateResources()
     else:
         while client.ID == None:
@@ -107,7 +108,9 @@ def init(host='localhost'):
     
     #Notify the manager that the window should start to accept input:
     while networked and not client.loaded:
+        print 'Waiting for the game state to be loaded.'
         time.sleep(.1)
+    print 'The game state should now be loaded'
     eventManager.post(Event.StartEvent())
     
     return eventManager.eventTypesToListeners

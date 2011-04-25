@@ -64,6 +64,7 @@ class Entity(MapObject):
         # MAYBE FIXME - ADDED WED, APR 20 TO TRY TO FIX OBJ PLACEMENT
         self.rect.center = (x,y)
         
+        print 'Owner set to',str(owner)
         self.owner = owner
         
         # adds the entity to the provided world

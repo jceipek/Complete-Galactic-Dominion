@@ -71,7 +71,7 @@ class Builder(Entity):
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.', movable=False, owner='tmp'):
-             
+        print 'Builder owner:',owner
         Entity.__init__(self,imagePath,x,y,world,colorkey,description, movable,
             owner)
         
@@ -346,6 +346,10 @@ class Unit(Builder):
                         amountToDeposit = self.inventory.removeAll(resource)
                         amountDeposited = self.world.addResource(self.owner,resource,amountToDeposit)
                         
+                        print self.name
+                        print self.entityID
+                        print amountDeposited
+                        print resource.name
                         notifyStr = '%s %d deposited %d %s.'%(self.name,self.entityID,amountDeposited,resource.name)
                         self.addNotification(NotificationEvent(notifyStr))
                         
