@@ -5,14 +5,47 @@ class DescriptionBox():
     #The largest HUD element which describes the selected (or hovered?) unit
     #and its properties (those which are player-relevant)
     def __init__(self,pos = (0,768-36-186)):
+         #FIXME Remove this dependency - replace image with thumbnail
+        from Overlay import Bar
         #Format for each tuple is (imagePath, [colorKey, [offset]])
         images = [("BarTop.png",'alpha')]
         images.append(("BarRight.png",'alpha',(325,36)))
         images.append(("DescBoxCentral.png",None,(0,36)))
         self.baseLayer = DrawableObjectGroup(images,pos=pos)
+        self.entity = None
+        self.descriptionOffset = (35,73+36)
+        self.description = Sign(260, (pos[0]+self.descriptionOffset[0],pos[1]+self.descriptionOffset[1]),fsize = 18)
+        self.description.tcolor=(180,180,0)
+        self.pos = pos
+        self.thumbnailOffset = (12,14+36)
+
+    def updateDisplayedEntity(self,entity):
+        import pygame
+        from Overlay import Bar
+        self.entity = entity
+        self.thumbnail = self.entity.getDefaultImage()
+        self.thumbnail = pygame.transform.scale(self.thumbnail, (44, 44))
+        self.description.clear()
+        self.description.addtext(entity.description)
+        self.healthBar = Bar(self.entity.maxHealth,118,6,fullColor=(0,255,0),emptyColor=(30,30,30)) 
 
     def draw(self,screen):
         self.baseLayer.draw(screen)
+        if self.entity:
+            self.healthBar.updateBarWithValue(self.entity.curHealth)
+            
+            if hasattr(self.entity,'objectOfAction'):
+                if self.entity.objectOfAction:
+                    if hasattr(self.entity.objectOfAction,'buildTime'):
+                        from Overlay import Bar
+                        self.buildBar = Bar(self.entity.objectOfAction.timeToBuild,118,6,fullColor=(0,180,255),emptyColor=(30,30,30))
+                        self.buildBar.updateBarWithValue(self.entity.objectOfAction.buildTime)
+                        self.buildBar.draw(screen,(self.pos[0]+78,self.pos[1]+69))
+            
+            screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))
+            self.healthBar.draw(screen,(self.pos[0]+78,self.pos[1]+56))
+            
+            self.description.render(screen)
 
 class ResourceBar():
     #A bar at the top of the screen indicating the amount of resources the player has on the current world
@@ -38,7 +71,7 @@ class UnitBox():
     #One of the tiny boxes displayed when a unit is selected
     
     def __init__(self,entity,pos=(0,0),endCap=False):
-        import pygame #FIXME Remove this dependency
+        import pygame #FIXME Remove this dependency - replace image with thumbnail
         from Overlay import Bar
         
         #Format for each tuple is (imagePath, [colorKey, [offset]])
@@ -56,7 +89,7 @@ class UnitBox():
     def draw(self,screen):
         self.healthBar.updateBarWithValue(self.entity.curHealth)
         self.baseLayer.draw(screen)
-        screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[0]))
+        screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))
         self.healthBar.draw(screen,(self.pos[0]+4,self.pos[1]+50))
 
 class SelectedUnitBar():

@@ -21,6 +21,7 @@ class NaturalObject(Entity):
         self.collectable=False
         self.maxHealth = self.curHealth = 0
         self.world.addEntity(self)
+        print 'Adding NaturalObject entity:',self.entityID
 	
     def collect(self):
         if not self.collectable:
@@ -76,8 +77,9 @@ class Gold(Resource):
     name = 'Gold Ore'
     
     def __init__(self,x,y,world):
+        desc = """Gold ore is highly valued for its wonderous sheen and usefulness as an interstellar currency."""
         Resource.__init__(self,'Gold-ore.png',x,y,world,'alpha',\
-            'Gold ore.',owner='gaia')
+            desc,owner='gaia')
         
         self.regenRate = 1
 

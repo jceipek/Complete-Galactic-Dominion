@@ -60,11 +60,12 @@ class HUD(Listener):
         if isinstance(event, Event.NotificationEvent):
             self.addNotification(event)
         elif isinstance(event, Event.ResourceChangeEvent):
+            # event has a .resource and .amount attribute
             # ONLY HANDLES GOLD CURRENTLY
             self.resourceBar.setResourceCount(event.amount)
         elif isinstance(event, Event.EntityFocusEvent):
             # has an entity attribute containing a reference to an entity
-            pass
+            self.descBox.updateDisplayedEntity(event.entity)
+
         elif isinstance(event, Event.SelectedEntityEvent):
             self.drawSelected(event)
-
