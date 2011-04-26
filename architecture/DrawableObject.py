@@ -9,7 +9,7 @@ class DrawableObject(object):
     imageBank = ImageBank()
     
     def __init__(self, imagePath, colorkey=None, blendPath=None, 
-        owner='blarg'):
+        owner='error'):
             
         self.isImageInitialized = False
         # First class to have image and rect objects
@@ -41,7 +41,10 @@ class DrawableObject(object):
 
         self.image = objImage
         self.rect = self.image.get_rect()
-        
+    
+    def getDefaultImage(self):
+        return self.imageBank.getPlayerDefaultImage(self.imagePath,self.owner)
+    
     def setImageToOrientation(self,orientation):
 
         objImage = self.imageBank.getImage(self.imagePath,self.colorkey,orientation,playerID=self.owner)
@@ -170,11 +173,11 @@ if __name__ == "__main__":
     #a.image = imageBlend(a.image,mask,(255,0,0))
     
     pygame.init()
-
+    
     while RUNNING:
 
         #screen.blit(a.image,a.rect)
-        screen.blit(a.image,a.rect)
+        screen.blit(a.getDefaultImage(),a.rect)
 
         #pygame.draw.rect(screen,(255,0,255),minimalRect,2)
         pygame.display.flip()
