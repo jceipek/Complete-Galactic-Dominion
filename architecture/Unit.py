@@ -502,6 +502,8 @@ class Unit(Builder):
         """
         if servercommand:
             #self.path.append(list(coord))  #FIXME: use this only for AI
+            #FIXME: The following is a bit hackish - there is probably
+            #a better way, but we have timeconstraints
             self.path = [list(coord)]
             self.dest = self.realCenter
             self._definePath()
