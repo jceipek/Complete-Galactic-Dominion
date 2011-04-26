@@ -34,12 +34,12 @@ class DescriptionBox():
         if self.entity:
             self.healthBar.updateBarWithValue(self.entity.curHealth)
             
-            if hasattr(self.entity,'objectOfAction'):
-                if self.entity.objectOfAction:
-                    if hasattr(self.entity.objectOfAction,'buildTime'):
+            if hasattr(self.entity,'currentTask'):
+                if self.entity.currentTask:
+                    if hasattr(self.entity.currentTask,'buildTime'):
                         from Overlay import Bar
-                        self.buildBar = Bar(self.entity.objectOfAction.timeToBuild,118,6,fullColor=(0,180,255),emptyColor=(30,30,30))
-                        self.buildBar.updateBarWithValue(self.entity.objectOfAction.buildTime)
+                        self.buildBar = Bar(self.entity.currentTask.timeToBuild,118,6,fullColor=(0,180,255),emptyColor=(30,30,30))
+                        self.buildBar.updateBarWithValue(self.entity.currentTask.buildTime)
                         self.buildBar.draw(screen,(self.pos[0]+78,self.pos[1]+69))
             
             screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))

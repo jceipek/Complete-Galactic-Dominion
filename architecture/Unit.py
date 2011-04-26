@@ -86,6 +86,7 @@ class Builder(Entity):
         # Queue of entities to build
         self.buildQueue = []
         self.objectOfAction = None
+        self.currentTask=None
         self.inventory=Inventory()
         
         # first to define these attributes
@@ -151,10 +152,10 @@ class Builder(Entity):
         if not self.hasFullHealth():
             self.regenerate()
             
-        if self.objectOfAction== None:
+        if self.currentTask== None:
             self.nextBuildTask()
         
-        if not self.objectOfAction == None:
+        if not self.currentTask == None:
             self.build()
     
     def hasBuildTask(self):
@@ -162,18 +163,18 @@ class Builder(Entity):
     
     def nextBuildTask(self):
         if self.hasBuildTask():
-            self.objectOfAction = self.buildQueue.pop(0)
+            self.currentTask = self.buildQueue.pop(0)
         else:
-            self.objectOfAction = None
+            self.currentTask = None
             self.status=Locals.IDLE
     
     def build(self):
         """A particular builder creates builder1 after a certain timeToBuild"""
 
-        self.objectOfAction.addTime(self.getTimeElapsed()/1000.0)
+        self.currentTask.addTime(self.getTimeElapsed()/1000.0)
         
-        if self.objectOfAction.isReady():
-            self.objectOfAction.execute()
+        if self.currentTask.isReady():
+            self.currentTask.execute()
             self.nextBuildTask()
     
     def buildOptions(self):
@@ -317,9 +318,9 @@ class Unit(Builder):
         elif self.status==Locals.DEPOSITING:
             self.deposit()
         elif self.status==Locals.BUILDING:        
-            if self.objectOfAction == None:
+            if self.currentTask == None:
                 self.nextBuildTask()
-            if not self.objectOfAction == None:
+            if not self.currentTask == None:
                 self.build()
                 
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
@@ -327,7 +328,7 @@ class Unit(Builder):
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
         if self.objectOfAction is not None:
-            if self.moveCloseToObject(self.radius[Locals.ATTACK]) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
+            if self.moveCloseToObject(self.radius[Locals.ATTACK], self.objectOfAction) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
                 self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
                 self.timeSinceLast[Locals.ATTACK]=0
             if self.objectOfAction.curHealth<=0:
@@ -336,7 +337,7 @@ class Unit(Builder):
 
     def gather(self):
         """moves unit close to resource, adds resource to containment"""
-        if self.moveCloseToObject(self.radius[Locals.GATHER]):
+        if self.moveCloseToObject(self.radius[Locals.GATHER], self.objectOfAction):
             amount = self.inventory.add(self.objectOfAction,self.efficiency[Locals.GATHER])
             if amount > self.objectOfAction.curHealth:
                 amount=self.objectOfAction.curHealth
@@ -355,7 +356,7 @@ class Unit(Builder):
         """
         Moves unit close to structure and deposits all the accepted resources
         """
-        if self.moveCloseToObject(self.radius[Locals.DEPOSIT]):
+        if self.moveCloseToObject(self.radius[Locals.DEPOSIT], self.objectOfAction):
             for resource in self.inventory.items:
                     if resource in self.objectOfAction.acceptableResources:
                         amountToDeposit = self.inventory.removeAll(resource)
@@ -374,7 +375,7 @@ class Unit(Builder):
             self.objectOfAction=None
 
     def build(self):
-        if self.moveCloseToObject(self.radius[Locals.BUILD]):
+        if self.moveCloseToObject(self.radius[Locals.BUILD], self.currentTask):
             Builder.build(self)
         
     def initAction(self, obj): 
@@ -407,12 +408,12 @@ class Unit(Builder):
         elif isinstance(obj, Resource):
             self.status=Locals.GATHERING
 
-    def moveCloseToObject(self,radius):
+    def moveCloseToObject(self,radius, obj):
         """
         Moves unit within specified radius of objectOfAction. Returns True if within radius, False if otherwise
         """
-        if self.objectOfAction is not None:
-            closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+        if obj is not None:
+            closest=specialMath.findClosest(self.realCenter, obj.realCenter, self.worldSize)
             self.dest=closest
             if specialMath.distance(self.realCenter, self.dest) > radius:
                 self.move()
