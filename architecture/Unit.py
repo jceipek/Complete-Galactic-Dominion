@@ -346,10 +346,10 @@ class Unit(Builder):
                         amountToDeposit = self.inventory.removeAll(resource)
                         amountDeposited = self.world.addResource(self.owner,resource,amountToDeposit)
                         
-                        print self.name
-                        print self.entityID
-                        print amountDeposited
-                        print resource.name
+                        #print self.name
+                        #print self.entityID
+                        #print amountDeposited
+                        #print resource.name
                         notifyStr = '%s %d deposited %d %s.'%(self.name,self.entityID,amountDeposited,resource.name)
                         self.addNotification(NotificationEvent(notifyStr))
                         

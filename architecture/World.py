@@ -204,14 +204,16 @@ class World(object):
         #return self.resourceContainer.addResource(playerID,resource,amount)
         deposited = self.resourceContainer.addResource(playerID,resource,amount)
         if deposited > 0:
-            self.addNotification(ResourceChangeEvent(resource,deposited))
+            amountRemaining=self.resourceContainer.getResourceCount(playerID,resource)
+            self.addNotification(ResourceChangeEvent(resource,amountRemaining))
         return deposited
         
     def removeResource(self,playerID,resource,amount=1):
         #return self.resourceContainer.removeResource(playerID,resource,amount)
         removed = self.resourceContainer.removeResource(playerID,resource,amount)
         if removed > 0:
-            self.addNotification(ResourceChangeEvent(resource,removed))
+            amountRemaining=self.resourceContainer.getResourceCount(playerID,resource)
+            self.addNotification(ResourceChangeEvent(resource,amountRemaining))
         return removed
         
     def hasResources(self,playerID,resource,amount=1):
@@ -251,8 +253,12 @@ class WorldResourceContainer(object):
         else:
             print 'Player %s not yet added'%playerID
             return None
-        
-    def getResources(self,playerID):
+    
+    def getResourceCount(self,playerID,resource):
+        if self.hasPlayer(playerID):
+            return self.resources[playerID].getResourceCount(resource)
+    
+    def getResources(self,playerID,resource):
         if self.hasPlayer(playerID):
             return self.resources[playerID]
         else:
@@ -304,7 +310,10 @@ class PlayerResourceContainer(object):
         if resource in self.resources:
             return self.resources[resource] >= amount
         return False
-        
+    
+    def getResourceCount(self,resource):
+        return self.resources.get(resource,None)
+    
     def __str__(self):
 		s='Player Resources: \n'
 		for resource in self.resources:
