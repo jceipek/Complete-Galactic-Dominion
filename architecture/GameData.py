@@ -106,6 +106,7 @@ class ImageBank(object):
                         # sets first image to the default
                         if imageI == 0:
                             animDict.setDefaultImage(animDict.getImage(imageI))
+                            
                 else:
                     
                     # Makes sure that blendImages is a path like imagePathFull
@@ -133,6 +134,12 @@ class ImageBank(object):
 
     def getDefaultImage(self):
         return self.cache[None]
+        
+    def getPlayerDefaultImage(self,imageName,playerID):
+        imageDict = self.cache.get((imageName,playerID),None)
+        if imageDict is not None:
+            return imageDict.getDefaultImage()
+        return self.getDefaultImage()
 
     def getImage(self, imageName, colorkey=None, orientation=None, playerID=None, blendPath=None):
         """
