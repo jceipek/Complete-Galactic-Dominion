@@ -4,14 +4,24 @@ from Sign import Sign
 class DescriptionBox():
     #The largest HUD element which describes the selected (or hovered?) unit
     #and its properties (those which are player-relevant)
-    def __init__(self):
+    def __init__(self,pos = (0,768-36-186)):
         #Format for each tuple is (imagePath, [colorKey, [offset]])
         images = [("BarTop.png",'alpha')]
         images.append(("BarRight.png",'alpha',(325,36)))
         images.append(("DescBoxCentral.png",None,(0,36)))
-        self.baseLayer = DrawableObjectGroup(images,pos=(0,768-36-186))
+        self.baseLayer = DrawableObjectGroup(images,pos=pos)
 
     def draw(self,screen):
+        self.baseLayer.draw(screen)
+
+class ResourceBar():
+    #A bar at the top of the screen indicating the amount of resources the player has on the current world
+    def __init__(self,pos = (0,0)):
+        images = [("ResourceBar.png", 'alpha')]
+        self.baseLayer = DrawableObjectGroup(images,pos=pos)
+
+    def draw(self,screen):
+        #FIXME Add font here
         self.baseLayer.draw(screen)
 
 class UnitBox():

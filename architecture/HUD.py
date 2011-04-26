@@ -1,6 +1,6 @@
 import pygame
 from Sign import Sign
-from HUDElements import DescriptionBox, SelectedUnitBar, Notification, NotificationList
+from HUDElements import DescriptionBox, SelectedUnitBar, Notification, NotificationList,ResourceBar
 from GameData import Locals
 
 class HUD(object):
@@ -9,6 +9,7 @@ class HUD(object):
         self.size=size
         self.surface=pygame.Surface(size)
         self.descBox = DescriptionBox()
+        self.resourceBar = ResourceBar((811,0))
         self.selectedUnitBar = SelectedUnitBar()
         self.rect = pygame.Rect(self.loc,self.size)
         self.width=200
@@ -23,6 +24,7 @@ class HUD(object):
         self.selectedUnitBar.draw(displaySurface)
         self.descBox.draw(displaySurface)
         self.note.draw(displaySurface)
+        self.resourceBar.draw(displaySurface)
 
     def addNotification(self, event=None):
         '''
