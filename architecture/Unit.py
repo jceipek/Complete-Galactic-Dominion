@@ -491,19 +491,30 @@ class Unit(Builder):
         self.rect.center = tuple(self.realCenter)
     
     def addToPath(self,coord,servercommand=False):
+        '''Set the unit's destination to a new location.
+        The title of this function is currently misleading; in the
+        past, it allowed units to keep a movement que in preparation
+        for obstacle avoidance. For now, this functionality is not
+        supported'''
         """
         Takes an x,y coordinate tuple in the grid and adds this location
         to the path.
         """
         if servercommand:
-            self.path.append(list(coord))
+            #self.path.append(list(coord))  #FIXME: use this only for AI
+            self.path = [list(coord)]
+            self.dest = self.realCenter
+            self._definePath()
         else:
             self.world.universe.manager.post(
                 WorldManipulationEvent(['setpath',self.entityID,coord])
             )
     
+    
+    '''
     def _addToPath(self,coord):
-        self.path.append(list(coord))
+        #self.path.append(list(coord))
+        self.path = list(coord)'''
         
     def getMiniMapColor(self):
         return (0,0,255)
