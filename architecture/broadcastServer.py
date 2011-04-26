@@ -122,8 +122,8 @@ def init(host='localhost',server=None):
     #universe.changeWorld(w)
     
     #===========================================
-    
     w._generateResources()
+    """
     for i in xrange(25):
         TestUnit(i*50,i*50,w,clientID)
         
@@ -131,7 +131,8 @@ def init(host='localhost',server=None):
     xpos = randint(0,w.gridDim[0])
     ypos = randint(0,w.gridDim[1])
     TestTownCenter(xpos,ypos,w,clientID)
-
+    """
+    
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
     
