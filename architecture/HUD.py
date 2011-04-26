@@ -36,6 +36,9 @@ class HUD(object):
         self.note.add(note)
 
     def drawSelected(self):
+		# FIXME - This line makes it so that the unit bars are updated
+		# only when a change occurs, but this doesn't preserve
+		# changes in unit orientation
 		#if self.viewport.selectedEntitiesChanged():
 		self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)
 

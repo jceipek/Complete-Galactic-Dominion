@@ -37,7 +37,6 @@ class DrawableObject(object):
     # First loadImage method
     def loadDefaultImage(self, imagePath, colorkey=None):
         
-        print 'LOADING IMAGE: ',self.owner
         objImage = self.imageBank.getImage(imagePath,colorkey,self.orientation,playerID=self.owner,blendPath=self.blendPath)
 
         self.image = objImage

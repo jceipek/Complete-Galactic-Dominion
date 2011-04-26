@@ -363,7 +363,8 @@ class Unit(Builder):
         """
         Initialized appropriate action by setting dest and status given the type of entity.
         """
-
+        
+        print 'OWNERS: ',self.owner, obj.owner
         data=['act',self.entityID,obj.entityID]
         self.sendEventToManager(WorldManipulationEvent(data))
             
@@ -391,12 +392,13 @@ class Unit(Builder):
         """
         Moves unit within specified radius of objectOfAction. Returns True if within radius, False if otherwise
         """
-        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
-        self.dest=closest
-        if specialMath.distance(self.realCenter, self.dest) > radius:
-            self.move()
-            return False
-        else: return True
+        if self.objectOfAction is not None:
+            closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+            self.dest=closest
+            if specialMath.distance(self.realCenter, self.dest) > radius:
+                self.move()
+                return False
+        return False
     
     def move(self):
         """changes position of unit in direction of dest"""

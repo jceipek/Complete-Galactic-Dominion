@@ -26,7 +26,7 @@ class ImageBank(object):
         from specialImage import createImageNotFound
         self.cache[None] = createImageNotFound()
 
-    def isCached(self,imagePath):
+    def isCached(self,imagePath, playerID):
         """
         Checks if the imagePath has already been cached.
         
@@ -34,7 +34,7 @@ class ImageBank(object):
         top-level keys (like it is now)?
         """
         
-        return imagePath in self.cache
+        return (imagePath,playerID) in self.cache
     
     def loadImage(self, imagePath, colorkey, playerID=None, blendPath=None):
         
@@ -49,7 +49,8 @@ class ImageBank(object):
         an image to a player, and provides a blending with the mask 
         specified by blendPath to the image.
         """
-        if isinstance(imagePath,str) and not self.isCached(imagePath):
+        
+        if isinstance(imagePath,str) and not self.isCached(imagePath,playerID):
             from os import listdir
             from os.path import isdir,join
             imagePathFull = join('imageData',imagePath)
@@ -99,11 +100,12 @@ class ImageBank(object):
                         
                         # Adds the image to the animation dictionary
                         # imageI -> orientation, playerID -> playerID
-                        animDict.addImage(image,colorkey,imageI,playerID)
+                        #animDict.addImage(image,colorkey,imageI,playerID)
+                        animDict.addImage(image,colorkey,imageI)
                         
                         # sets first image to the default
                         if imageI == 0:
-                            animDict.setDefaultImage(animDict.getImage(imageI,playerID))
+                            animDict.setDefaultImage(animDict.getImage(imageI))
                 else:
                     
                     # Makes sure that blendImages is a path like imagePathFull
@@ -118,9 +120,8 @@ class ImageBank(object):
                         image = imageBlend(image,mask,blendColor)
                     
                     animDict.addImage(image,colorkey)
-                    
-                # cache the animation dictionary result
-                self.cache[imagePath] = animDict
+
+                self.cache[(imagePath,playerID)] = animDict
                 
             except:
                 import traceback
@@ -140,17 +141,16 @@ class ImageBank(object):
         If this fails, an "image not found" image is returned
         """
 
-        print 'GET IMAGE: ', playerID
-        imageDict = self.cache.get(imageName,None)
+        imageDict = self.cache.get((imageName,playerID),None)
         if imageDict == None:
             self.loadImage(imageName,colorkey,playerID,blendPath)
-            imageDict = self.cache.get(imageName,None)
+            imageDict = self.cache.get((imageName,playerID),None)
             if imageDict == None:
                 return self.getDefaultImage()
             else:
-                return imageDict.getImage(orientation,playerID)#imageDict.getDefaultImage()
+                return imageDict.getImage(orientation)#imageDict.getDefaultImage()
         else:
-            return imageDict.getImage(orientation,playerID)
+            return imageDict.getImage(orientation)
         
     def getImageAndRect(self, imageName, orientation=None):
         """
@@ -171,7 +171,7 @@ class ImageBank(object):
     def getAverageColor(self, imageName, colorkey=None, orientation=None, playerID=None):
 
         from specialImage import getAverageColor
-        if self.isCached(imageName):
+        if self.isCached(imageName,playerID):
             if not (imageName,orientation,playerID) in self.averageColorCache:
                 self.averageColorCache[(imageName,orientation,playerID)] = \
                     getAverageColor(self.getImage(imageName,colorkey,orientation,playerID=playerID),
@@ -184,15 +184,16 @@ class ImageBank(object):
         from specialImage import getMinimalRect
         from copy import copy
         
-        if self.isCached(imageName):
+        if self.isCached(imageName,playerID):
             
             if not (imageName,orientation) in self.minimalRectCache:
 
                 self.minimalRectCache[(imageName,orientation)] = \
                     getMinimalRect(self.getImage(imageName,colorkey,orientation,playerID),
                         colorkey, **kwargs)
-
-        return copy(self.minimalRectCache[(imageName,orientation)])
+            return copy(self.minimalRectCache[(imageName,orientation)])
+            
+        return self.getImage(imageName,colorkey,orientation,playerID).get_rect()
 
 class AnimationDict():
     
@@ -200,24 +201,24 @@ class AnimationDict():
         self.data = {}
         self.setDefaultImage(default)
         
-    def addImage(self,image,colorkey=None,orientationKey=None,playerID=None):
+    def addImage(self,image,colorkey=None,orientationKey=None):
         if orientationKey == None:
-            self.setDefaultImage(image,colorkey,playerID)
+            self.setDefaultImage(image,colorkey)
         else:
-            self.data[(orientationKey,playerID)] = loadImage(image, colorkey)
+            self.data[orientationKey] = loadImage(image, colorkey)
     
-    def setDefaultImage(self,image,colorKey=None,playerID=None):
-        self.data[(None,playerID)] = loadImage(image,colorKey)
+    def setDefaultImage(self,image,colorKey=None):
+        self.data[None] = loadImage(image,colorKey)
 
-    def getDefaultImage(self,playerID=None):
-        return self.data[(None,playerID)]
+    def getDefaultImage(self):
+        return self.data[None]
 
-    def getImage(self,orientationKey=None,playerID=None):
+    def getImage(self,orientationKey=None):
         """
         Returns an image associated with a status and an orientation.
         If it does not exist, return the default image.
         """
-        return self.data.get((orientationKey,playerID),self.getDefaultImage())
+        return self.data.get(orientationKey,self.getDefaultImage())
 
 class Locals:
     #Statuses
