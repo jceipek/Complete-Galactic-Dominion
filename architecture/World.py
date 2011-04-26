@@ -192,8 +192,7 @@ class World(object):
         """
         self.universe.addEntity(entity)
         self.allEntities[entity.entityID] = entity
-        
-        self.playerCount.setdefault(entity.owner,[]).append(entity.entityID)
+
         #return entityID
 
     def removeEntity(self, entity):
@@ -202,14 +201,6 @@ class World(object):
             self.deadEntities.append(entity)
             self.universe.removeEntity(entity)
             del self.allEntities[entity.entityID]
-            
-            try:
-                self.playerCount[entity.owner].remove(entity.entityID)
-            except ValueError: # thrown if entity not in list
-                pass
-            
-            if len(self.playerCount[entity.owner]) == 0:
-                self.addNotification(GameOverEvent())
             
     def addResource(self,playerID,resource,amount=1):
         deposited = self.resourceContainer.addResource(playerID,resource,amount)
