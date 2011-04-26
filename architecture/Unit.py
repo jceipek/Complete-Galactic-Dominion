@@ -307,7 +307,6 @@ class Unit(Builder):
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
         if self.currentTask == None:
             self.nextBuildTask()
-        
         if not self.currentTask == None:
             self.build()
 
@@ -326,7 +325,6 @@ class Unit(Builder):
             amount = self.inventory.add(self.objectOfAction,self.efficiency[Locals.GATHER])
             if amount > self.objectOfAction.curHealth:
                 amount=self.objectOfAction.curHealth
-        
             if amount == 0:
                 self.status = Locals.IDLE
                 self.dest=self.realCenter
@@ -385,7 +383,7 @@ class Unit(Builder):
                 self.objectOfAction=None
                 return
             self.status=Locals.ATTACKING
-        elif isinstance(obj, Resource): 
+        elif isinstance(obj, Resource):
             self.status=Locals.GATHERING
 
     def moveCloseToObject(self,radius):
@@ -398,6 +396,8 @@ class Unit(Builder):
             if specialMath.distance(self.realCenter, self.dest) > radius:
                 self.move()
                 return False
+            else:
+                return True
         return False
     
     def move(self):
@@ -412,7 +412,7 @@ class Unit(Builder):
             dirx = self.dest[0] - curX #unscaled x direction of movement
             diry = self.dest[1] - curY #unscaled y direction of movement
             
-            #self.setImageNum(dirx,diry)
+            self.setImageNum(dirx,diry)
 
             # distance between destination and current location
             distLocToDest = specialMath.hypotenuse(dirx,diry)

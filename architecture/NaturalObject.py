@@ -14,8 +14,9 @@ class NaturalObject(Entity):
     name = 'Natural Object'
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
-        Entity.__init__(self,imagePath,x,y,world,colorkey,description)
+                 description = 'No information available.',owner='gaia'):
+        Entity.__init__(self,imagePath,x,y,world,colorkey,description,
+            owner='gaia')
         self.blockable=True
         self.collectable=False
         self.maxHealth = self.curHealth = 0
@@ -24,7 +25,6 @@ class NaturalObject(Entity):
     def collect(self):
         if not self.collectable:
             pass
-
        
     def __getState__(self):
         state = self.__dict__.copy()
@@ -59,10 +59,10 @@ class Resource(NaturalObject):
     name = 'Generic Resource'
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.'):
+                 description = 'No information available.', owner='gaia'):
                      
         NaturalObject.__init__(self,imagePath,x,y,world,colorkey,
-            description)
+            description,owner=owner)
     
         self.maxHealth = self.curHealth = 500
         
@@ -77,7 +77,7 @@ class Gold(Resource):
     
     def __init__(self,x,y,world):
         Resource.__init__(self,'Gold-ore.png',x,y,world,'alpha',\
-            'Gold ore.')
+            'Gold ore.',owner='gaia')
         
         self.regenRate = 1
 

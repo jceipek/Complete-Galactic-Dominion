@@ -100,12 +100,16 @@ class Entity(MapObject):
         self.regenRate = 0
         self._regenHealth = 0
         self.inventory=None
-        
-        self.selectionRect = self.imageBank.getMinimalRect(
-            imagePath,colorkey,padding=25,showShadows=False)
-        #self.selectionRectOffset = self.selectionRect.topleft
-        #print self.selectionRect
 
+    def _imageInformationSetup(self):
+        if pygame.display.get_init():
+            self.loadDefaultImage(self.imagePath,self.colorkey)
+            self.setAverageColor(self.imagePath,self.colorkey)
+            self.realCenter = self.rect.center
+            self.selectionRect = self.imageBank.getMinimalRect(
+                self.imagePath,self.colorkey,padding=25,showShadows=False)
+            self.isImageInitialized = True
+            
     def _setEntityID(self,ID):
         self.entityID = ID
 
