@@ -19,10 +19,20 @@ class ResourceBar():
     def __init__(self,pos = (0,0)):
         images = [("ResourceBar.png", 'alpha')]
         self.baseLayer = DrawableObjectGroup(images,pos=pos)
+        self.value = 0
+        self.offset = (30,3)
+        self.textField = Sign(200, (pos[0]+self.offset[0],pos[1]+self.offset[1]),fsize = 20)
+        self.textField.tcolor=(180,180,0)
+
+    def setResourceCount(self,val=0):
+        self.value = val
 
     def draw(self,screen):
         #FIXME Add font here
         self.baseLayer.draw(screen)
+        self.textField.clear()
+        self.textField.addtext(str(self.value))
+        self.textField.render(screen)
 
 class UnitBox():
     #One of the tiny boxes displayed when a unit is selected
