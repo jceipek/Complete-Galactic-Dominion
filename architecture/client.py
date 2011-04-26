@@ -120,3 +120,4 @@ if __name__ == '__main__':
     #Connect to server
     
     eTypestoListeners = init()
+    print eTypestoListeners[Event.NotificationEvent]

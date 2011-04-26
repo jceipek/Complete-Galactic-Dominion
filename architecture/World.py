@@ -4,6 +4,8 @@ from NaturalObject import Gold
 
 import specialMath
 
+from Event import ResourceChangeEvent
+
 class World(object):
     """
     A World is an object that contains everything in the current environment
@@ -199,10 +201,18 @@ class World(object):
             del self.allEntities[entity.entityID]
             
     def addResource(self,playerID,resource,amount=1):
-        return self.resourceContainer.addResource(playerID,resource,amount)
+        #return self.resourceContainer.addResource(playerID,resource,amount)
+        deposited = self.resourceContainer.addResource(playerID,resource,amount)
+        if deposited > 0:
+            self.addNotification(ResourceChangeEvent(resource,deposited))
+        return deposited
         
     def removeResource(self,playerID,resource,amount=1):
-        return self.resourceContainer.removeResource(playerID,resource,amount)
+        #return self.resourceContainer.removeResource(playerID,resource,amount)
+        removed = self.resourceContainer.removeResource(playerID,resource,amount)
+        if removed > 0:
+            self.addNotification(ResourceChangeEvent(resource,removed))
+        return removed
         
     def hasResources(self,playerID,resource,amount=1):
         return self.resourceContainer.hasResources(playerID,resource,amount)
@@ -221,9 +231,6 @@ class WorldResourceContainer(object):
         
         self.world = world
         self.resources = {}
-        
-        # TMP - FIXME!
-        self.addPlayer('tmp')
         
     def addPlayer(self,playerID):
         self.resources[playerID] = PlayerResourceContainer(self.world)

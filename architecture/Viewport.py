@@ -517,8 +517,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         If the world has notifications, post the first 
         notification.
         """
-        if len(self.world.notifications) > 0:
-            self.manager.post(self.world.notifications.pop(0))
+
+        for i in xrange(len(self.world.notifications)):
+            self.manager.post(self.world.notifications.pop(0))    
     
     def changeWorld(self,world):
         self.world = world
