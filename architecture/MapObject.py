@@ -6,10 +6,13 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
     Represents any object which is located in the L{World}.
     First class to implement position in the world.
     """
-    def __init__(self, imagePath, x, y, colorkey=None, blendPath=None):
+    def __init__(self, imagePath, x, y, colorkey=None, blendPath=None,
+        owner='gaia'):
         # sets image and rect attributes
         # First class to inherit from Sprite
-        DrawableObject.__init__(self, imagePath, colorkey, blendPath=blendPath)
+        
+        DrawableObject.__init__(self, imagePath, colorkey, blendPath=blendPath,
+            owner=owner)
         pygame.sprite.Sprite.__init__(self)
         
         # sets the topleft corner of the rectangle to (x,y)
@@ -18,7 +21,7 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
         #self.rect.center = (x,y)
         
         # this is the first initialization of owner
-        self.owner=None # default to no owner
+        #self.owner=owner # default to no owner
         
         # this is the first initialization of blockable
         # determines whether or not an object can be walked through

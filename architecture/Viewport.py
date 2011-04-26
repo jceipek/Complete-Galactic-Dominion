@@ -70,10 +70,16 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         from ContextualMenu import getCGDcontextualMenu
         self.contextualMenu = getCGDcontextualMenu()
     
+        self._selectedEntitiesChanged = False
+    
     def setClientID(self,clientID):
         self.clientID = clientID
         self.minimap.setClientID(clientID)
     
+    def selectedEntitiesChanged(self):
+        changed, self._selectedEntitiesChanged = self._selectedEntitiesChanged, False
+        return changed
+        
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
         offset = int(0.3*float(self.size[0]))
@@ -98,7 +104,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
     
     def initiateActionEvent(self,event):
         pos = event.pos
-        
+
         if self.minimap.rect.collidepoint(pos):
             mapClickPoint = self.minimap.clickToGridPos(pos)
             if mapClickPoint is not None:
@@ -224,6 +230,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             if isinstance(event,Event.DragCompletedEvent):
                 for e in self.selectedEntities:
                     e.deselect()
+                    self._selectedEntitiesChanged = True
                 self.selectedEntities = []
             #else: pass # if it is an Event.AddDragCompletedEvent, do
             # # not deselect
@@ -246,10 +253,12 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     if isinstance(event,Event.DragCompletedEvent):
                         entity.select()
                         self.selectedEntities.append(entity)
+                        self._selectedEntitiesChanged = True
                     else: # Add drag completed event
                         if entity not in self.selectedEntities:
                             entity.select()
                             self.selectedEntities.append(entity)
+                            self._selectedEntitiesChanged = True
     
     def ownsEntity(self,entity):
         """
@@ -294,7 +303,9 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         if isinstance(event,Event.SelectionEvent):
             for e in self.selectedEntities:
                 e.deselect()
+
             self.selectedEntities = []
+            self._selectedEntitiesChanged = True
 
         if clicked and self.ownsEntity(clicked):
             # Determines if the closest entity is already selected.
@@ -307,7 +318,8 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.selectedEntities.append(clicked)
                 #print clicked.healthStr()
                 #if isinstance(clicked, Unit): print '\n' + str(clicked.inventory)
-    
+            self._selectedEntitiesChanged = True
+            
     def updateMenu(self,eventPos):
         if self.currentMenu is not None:
             self.currentMenu.update(eventPos)
@@ -407,6 +419,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             if entity in self.selectedEntities:
                 try:
                     self.selectedEntities.remove(entity)
+                    self._selectedEntitiesChanged = True
                 except ValueError: # thrown if entity not in selectedEntity list
                     pass
         
@@ -497,6 +510,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             entity.select()
             if entity not in self.selectedEntities:
                 self.selectedEntities.append(entity)
+                self._selectedEntitiesChanged = True
     
     def postNotification(self):
         """

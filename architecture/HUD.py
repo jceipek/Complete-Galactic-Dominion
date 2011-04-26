@@ -36,7 +36,7 @@ class HUD(object):
         self.note.add(note)
 
     def drawSelected(self):
-		
+		#if self.viewport.selectedEntitiesChanged():
 		self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)
 
     def processUpdateEvent(self, event):
