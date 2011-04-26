@@ -23,8 +23,9 @@ class DebugOverlay(Overlay):
             self.fps = int(1//(event.elapsedTimeSinceLastFrame/1000.0))
             
     def draw(self,displaySurface,size):
-        fontSurf = self.font.render("FPS: "+str(self.fps), False, (255,255,255))
-        displaySurface.blit(fontSurf,(0,0))
+        pass
+        #fontSurf = self.font.render("FPS: "+str(self.fps), False, (255,255,255))
+        #displaySurface.blit(fontSurf,(0,0))
 
 class DragBox(object):
     
