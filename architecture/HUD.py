@@ -11,7 +11,8 @@ class HUD(Listener):
     
     def __init__(self,manager):
         
-        eventTypes = [Event.NotificationEvent, Event.ResourceChangeEvent]
+        eventTypes = [Event.NotificationEvent, Event.ResourceChangeEvent,
+            Event.EntityFocusEvent]
         
         #Using this until someone can explain why super() is or is not the right way to do this
         #Waaaay too many disagreements/articles on this online
@@ -60,4 +61,7 @@ class HUD(Listener):
         elif isinstance(event, Event.ResourceChangeEvent):
             # Event.ResourceChangeEvent contains a .resource and .amount
             # attribute.  Julian, change this.
+            pass
+        elif isinstance(event, Event.EntityFocusEvent):
+            # has an entity attribute containing a reference to an entity
             pass

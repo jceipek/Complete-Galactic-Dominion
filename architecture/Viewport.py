@@ -389,7 +389,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             selectRect = e.getSelectionRect(drawRect)
             
             if selectRect.collidepoint(viewportMouseLoc):
-                e.focused = True
+                e.focus()
   
     def draw(self,displaySurface):
         """

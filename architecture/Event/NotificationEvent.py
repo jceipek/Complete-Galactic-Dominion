@@ -15,3 +15,10 @@ class ResourceChangeEvent(Event):
         Event.__init__(self)
         self.resource = resource
         self.amount = amount
+
+class EntityFocusEvent(Event):
+    
+    def __init__(self,entity):
+        
+        Event.__init__(self)
+        self.entity = entity

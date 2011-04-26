@@ -6,7 +6,7 @@ import specialMath
 from Overlay import HealthBar
 from Sign import Sign
 
-from Event import NotificationEvent
+from Event import NotificationEvent, EntityFocusEvent
 
 class Entity(MapObject):
     """A foreground L{MapObject} with which one can interact."""
@@ -269,6 +269,14 @@ class Entity(MapObject):
         Sends an event to an event manager.
         """
         self.world.sendEventToManager(event)
+        
+    def focus(self):
+        if not self.focused:
+            self.focused = True
+            self.addNotification(EntityFocusEvent(self))
+    
+    def unfocus(self):
+        self.focused = False
         
 class TestEntity(Entity):
     """
