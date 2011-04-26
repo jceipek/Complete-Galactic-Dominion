@@ -201,7 +201,6 @@ class World(object):
             del self.allEntities[entity.entityID]
             
     def addResource(self,playerID,resource,amount=1):
-        #return self.resourceContainer.addResource(playerID,resource,amount)
         deposited = self.resourceContainer.addResource(playerID,resource,amount)
         if deposited > 0:
             amountRemaining=self.resourceContainer.getResourceCount(playerID,resource)
@@ -209,7 +208,6 @@ class World(object):
         return deposited
         
     def removeResource(self,playerID,resource,amount=1):
-        #return self.resourceContainer.removeResource(playerID,resource,amount)
         removed = self.resourceContainer.removeResource(playerID,resource,amount)
         if removed > 0:
             amountRemaining=self.resourceContainer.getResourceCount(playerID,resource)

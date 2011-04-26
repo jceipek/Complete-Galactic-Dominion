@@ -69,16 +69,15 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         
         from ContextualMenu import getCGDcontextualMenu
         self.contextualMenu = getCGDcontextualMenu()
-    
+        
         self._selectedEntitiesChanged = False
     
     def setClientID(self,clientID):
         self.clientID = clientID
         self.minimap.setClientID(clientID)
     
-    def selectedEntitiesChanged(self):
-        changed, self._selectedEntitiesChanged = self._selectedEntitiesChanged, False
-        return changed
+    #def selectedEntitiesChanged(self):
+    #    self.manager.post(SelectedEntityEvent(self.selectedEntities))
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
@@ -422,6 +421,10 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                     self._selectedEntitiesChanged = True
                 except ValueError: # thrown if entity not in selectedEntity list
                     pass
+        
+        if self._selectedEntitiesChanged:
+            self.manager.post(Event.SelectedEntityEvent(self.selectedEntities))
+            self._selectedEntitiesChanged = False
         
         if self.currentMenu is not None and not self.currentMenu.visible:
             self.currentMenu._delayedOpen(timeElapsed)
