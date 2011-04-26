@@ -63,7 +63,8 @@ class HUD(Listener):
     def notify(self, event):
         
         if isinstance(event, Event.NotificationEvent):
-            self.addNotification(event)
+            if event.playerID == self.clientID:
+                self.addNotification(event)
         elif isinstance(event, Event.ResourceChangeEvent):
             # event has a .resource and .amount attribute
             # ONLY HANDLES GOLD CURRENTLY

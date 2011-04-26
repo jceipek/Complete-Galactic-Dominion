@@ -4,10 +4,11 @@ class NotificationEvent(Event):
     """
     Event which contains a string message.
     """
-    def __init__(self,message):
+    def __init__(self,message,playerID):
         Event.__init__(self)
         self.message = message
         self.verboseInfo = "\tMessage: " + str(self.message) + "\n"
+        self.playerID = playerID
 
 class ResourceChangeEvent(Event):
     

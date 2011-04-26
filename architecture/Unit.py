@@ -113,7 +113,7 @@ class Builder(Entity):
         if entityClass in self.buildDict:
             if True: #self._hasResourcesToBuild(entityClass):    
                 self.addNotification(NotificationEvent(
-                    'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild)
+                    'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild),self.owner
                     ))
                 """
                 if callback is None:
@@ -146,7 +146,7 @@ class Builder(Entity):
             msg+=' but can build:'
             for option in self.buildDict:
                 msg+=' %s,'%option.name
-            self.addNotification(NotificationEvent(msg[:-1]+'.'))
+            self.addNotification(NotificationEvent(msg[:-1]+'.',self.owner))
 
     def update(self):
         if not self.hasFullHealth():
@@ -367,7 +367,7 @@ class Unit(Builder):
                         #print amountDeposited
                         #print resource.name
                         notifyStr = '%s %d deposited %d %s.'%(self.name,self.entityID,amountDeposited,resource.name)
-                        self.addNotification(NotificationEvent(notifyStr))
+                        self.addNotification(NotificationEvent(notifyStr,self.owner))
                         
                         if amountToDeposit != amountDeposited:
                             print 'Warning: did not deposit correct amount of resources.'

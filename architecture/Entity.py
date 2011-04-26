@@ -208,7 +208,7 @@ class Entity(MapObject):
     def showDescription(self):
         """Show the user the description of the entity.
         Needs to return more than just a string, eventually."""
-        self.addNotification(NotificationEvent(self.description))
+        self.addNotification(NotificationEvent(self.description,self.owner))
         #return self.description
 
     def die(self):
