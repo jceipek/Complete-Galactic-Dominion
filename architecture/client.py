@@ -64,7 +64,7 @@ def init(host='localhost'):
     ui = UserInterface(eventManager,universe.activeWorld,None)
     
     gameWindow = Window(eventManager,width=1024,height=768)
-    gameWindow.fullscreenMode = True
+    gameWindow.fullscreenMode = False
     gameWindow.updateScreenMode()
     
     w = World(universe)
