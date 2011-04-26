@@ -97,7 +97,7 @@ class World(object):
     
     def TEST_createGrid(self):
         from Grid import InfiniteGrid
-        self.grid = InfiniteGrid((30,30),64)
+        self.grid = InfiniteGrid((200,200),64)
 
     def update(self):
         """Sends an update message to all entities."""
