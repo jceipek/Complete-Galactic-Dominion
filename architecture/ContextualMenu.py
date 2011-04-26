@@ -377,6 +377,10 @@ def TestTownCenter_WayPoint(obj1,obj2):
                     WorldManipulationEvent(['setpath',
                         obj1[0].world.universe.getNextEntityID(),p])
                     )
+
+                for resource,cost in buildType.costToBuild:
+                    makeAndMove.addCallback(obj1[0].world.removeResource, obj1[0].owner,resource,cost)
+
             
                 queueMake = Callback(obj1[0].addToBuildQueue,
                     BuildTask(buildType,p,makeAndMove))

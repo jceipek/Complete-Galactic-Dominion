@@ -10,9 +10,36 @@ class DescriptionBox():
         images.append(("BarRight.png",'alpha',(325,36)))
         images.append(("DescBoxCentral.png",None,(0,36)))
         self.baseLayer = DrawableObjectGroup(images,pos=pos)
+        self.statPos=(0,0)
+        self.description=Sign(150, (0,0))
+        self.thumbnail=None
+        self.entity=None
 
     def draw(self,screen):
         self.baseLayer.draw(screen)
+
+    def changeEntity(self, entity):
+        self.entity=entity
+        self.description.clear()
+        self.description.addtext(entity.description)
+        self.thumbnail = pygame.transform.scale(self.entity.image, (36, 36))
+        self.statBars=[Bar(self.entity.maxHealth,38,5,fullColor=(0,255,0),emptyColor=(30,30,30))]
+
+    def clear(self):
+        self.entity=None
+        self.description.clear()
+        self.thumbnail=None
+        self.statBars=[]
+
+    def drawStatBars(self, screen):
+        pos=self.statPos
+        i=0
+        for bar in self.statBars:
+            bar.draw(screen, (pos[0], pos[1]+i))
+            i+=15
+        
+        
+        
 
 class ResourceBar():
     #A bar at the top of the screen indicating the amount of resources the player has on the current world
