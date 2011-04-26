@@ -20,6 +20,7 @@ class NaturalObject(Entity):
         self.collectable=False
         self.maxHealth = self.curHealth = 0
         self.world.addEntity(self)
+        print 'Adding NaturalObject entity:',self.entityID
 	
     def collect(self):
         if not self.collectable:

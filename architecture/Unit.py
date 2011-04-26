@@ -230,6 +230,7 @@ class Unit(Builder):
         self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
         self.objectOfAction=None
         self.world.addEntity(self)
+        print 'Adding unit entity:',self.entityID
         '''
         else:
             #loadList = [status,efficiency,path,dest,speed,

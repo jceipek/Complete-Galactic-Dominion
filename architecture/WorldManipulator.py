@@ -8,7 +8,7 @@ import cPickle
 
 class WorldManipulator(Listener):
     def __init__(self,manager,world,networked=True,gameClientID=None):
-        eventTypes = [ Event.EventExecutionEvent,Event.WorldManipulationEvent,Event.StartedEvent,Event.GameLoadedEvent,Event.ClientIDCollected]
+        eventTypes = [ Event.EventExecutionEvent,Event.WorldManipulationEvent,Event.StartedEvent,Event.GameLoadedEvent]
         Listener.__init__(self,manager,eventTypes)
         
         self.networked=networked
@@ -18,11 +18,7 @@ class WorldManipulator(Listener):
     
     def notify(self,event):
         if isinstance(event, Event.StartedEvent):
-            print 'Game started, trying to fire LoadGameEvent'
             self.manager.post(Event.LoadGameEvent())
-        if isinstance(event, Event.ClientIDCollected):
-            self.gameClientID = event.clientID
-            print 'new gameClientID',event.clientID
         if isinstance(event, Event.GameLoadedEvent):
             for i in xrange(25):
                 print 'creating a unit with playerID',self.gameClientID
@@ -43,8 +39,8 @@ class WorldManipulator(Listener):
                     cmd = cPickle.loads(data)
                 except:
                     print 'LOAD FAILED, this is a fatal error PLEASE try to fix this\n'
-                    if data == '':
-                        return
+                    #if data == '':
+                    #    return
                     cmd = cPickle.loads(data)
              else:
                 cmd = data
@@ -52,11 +48,11 @@ class WorldManipulator(Listener):
              if isinstance(cmd,Entity):
                  entity = cmd
                  entity.world = self.world.universe.worldIDToWorld[entity.world]
-                 self.world.universe.entityIDToEntity[entity.entityID] = entity
-                 self.world.allEntities[entity.entityID] = entity
-                 self.world.universe.creator.numberOfEntities+=1
+                 entity.world.universe.entityIDToEntity[entity.entityID] = entity
+                 entity.world.allEntities[entity.entityID] = entity
+                 print 'loadedEntity ID',entity.entityID
                  
-                 if (isinstance(entity,TestUnit) or isinstance(entity,Unit)) and entity.objectOfAction != None:
+                 if isinstance(entity,Unit) and entity.objectOfAction != None:
                      entity.objectOfAction = self.world.universe.entityIDToEntity.get(entity.objectOfAction,entity.objectOfAction)
 
              elif isinstance(cmd,list):
@@ -70,6 +66,7 @@ class WorldManipulator(Listener):
                 elif cmd[0] == 'create':
                     #this list should be in the form ['create',class,*initArgs]
                     args = list(cmd[2])
+                    print args[2]
                     args[2] = self.world.universe.worldIDToWorld[args[2]]
                     cmd[1](*args)
                     

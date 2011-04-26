@@ -95,18 +95,9 @@ def init(host='localhost'):
     
     wManipulator = WorldManipulator(eventManager,w,networked,gameClientID = clientID)
     
-    #===========================================
-    
-    #w._TMPmakeBuilding()
-    #create 25 TestUnits
-    #create a TestTownCenter
 
     
     #Notify the manager that the window should start to accept input:
-#    while networked and not client.loaded:
-#        print 'Waiting for the game state to be loaded.'
-#        time.sleep(.1)
-#    print 'The game state should now be loaded'
     eventManager.post(Event.StartEvent())
     
     return eventManager.eventTypesToListeners

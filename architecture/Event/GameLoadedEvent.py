@@ -4,4 +4,7 @@ class GameLoadedEvent(Event):
     """
     Fired when a new player joins the game
     """
-    pass
+    def __init__(self,numberOfEntities,releasedEntityIDs):
+        self.numberOfEntities = numberOfEntities
+        self.releasedEntityIDs = releasedEntityIDs
+        self.verboseInfo = ''
