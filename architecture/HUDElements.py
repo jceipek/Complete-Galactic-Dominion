@@ -94,14 +94,12 @@ class Notification(Sign):
         self.timeLeft=time*1000
     def draw(self, surface):
         self.render(surface)
-        #Sign.draw(self,surface)
-
 
 class NotificationList():
     """
     List of notifications. Displays multiple notifications which will disappear after some amount of time.
     """
-    def __init__(self, pos=(800, 0), width=200, maxLength=5):
+    def __init__(self, pos=(800, 60), width=200, maxLength=5):
         self.notes=[]
         self.pos=pos
         self.width=width
@@ -128,3 +126,4 @@ class NotificationList():
         for n in self.notes:
             n.draw(surf)
         
+
