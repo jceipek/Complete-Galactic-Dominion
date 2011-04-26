@@ -21,16 +21,30 @@ class DescriptionBox():
 
     def updateDisplayedEntity(self,entity):
         import pygame
+        from Overlay import Bar
         self.entity = entity
         self.thumbnail = self.entity.getDefaultImage()
         self.thumbnail = pygame.transform.scale(self.thumbnail, (44, 44))
         self.description.clear()
         self.description.addtext(entity.description)
-        
+        self.healthBar = Bar(self.entity.maxHealth,118,6,fullColor=(0,255,0),emptyColor=(30,30,30)) 
+
     def draw(self,screen):
         self.baseLayer.draw(screen)
         if self.entity:
+            self.healthBar.updateBarWithValue(self.entity.curHealth)
+            
+            if hasattr(self.entity,'objectOfAction'):
+                if self.entity.objectOfAction:
+                    if hasattr(self.entity.objectOfAction,'buildTime'):
+                        from Overlay import Bar
+                        self.buildBar = Bar(self.entity.objectOfAction.timeToBuild,118,6,fullColor=(0,180,255),emptyColor=(30,30,30))
+                        self.buildBar.updateBarWithValue(self.entity.objectOfAction.buildTime)
+                        self.buildBar.draw(screen,(self.pos[0]+78,self.pos[1]+69))
+            
             screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))
+            self.healthBar.draw(screen,(self.pos[0]+78,self.pos[1]+56))
+            
             self.description.render(screen)
 
 class ResourceBar():
