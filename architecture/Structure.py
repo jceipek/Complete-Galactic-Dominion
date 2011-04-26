@@ -14,9 +14,10 @@ class Structure(Builder):
     acceptableResources = []
 
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.', owner='tmp'):
+                 description = 'No information available.', owner='tmp',
+                 blendPath=None):
         Builder.__init__(self, imagePath, x, y, world, colorkey=colorkey, description=description,
-            owner=owner)
+            owner=owner,blendPath=blendPath)
         print 'Structure owner:',owner
         self.status = Locals.IDLE
         self.maxHealth=100
@@ -65,7 +66,7 @@ class TestTownCenter(Structure):
     name = 'Town Center'
     
     def __init__(self, x, y, world, owner='tmp'):
-        Structure.__init__(self, 'TownCenter.png', x, y, world, 'alpha', 'Test building.',owner)
+        Structure.__init__(self, 'TownCenterGeneric.png', x, y, world, 'alpha', 'Test building.',owner,blendPath='TownCenterFlag.png')
             
         self.buildDict = {
             TestUnit: TestUnit

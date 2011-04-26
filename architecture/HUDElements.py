@@ -123,7 +123,6 @@ class NotificationList():
         for n in self.notes:
             n.offset[1]=y
             y+=n.sy
-            
         
     def draw(self, surf):
         for n in self.notes:

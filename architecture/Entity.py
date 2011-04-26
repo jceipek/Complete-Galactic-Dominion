@@ -59,13 +59,13 @@ class Entity(MapObject):
         x = x%self.worldSize[0]
         y = y%self.worldSize[1]
         
-        MapObject.__init__(self, imagePath, x, y, colorkey, blendPath=blendPath)
+        MapObject.__init__(self, imagePath, x, y, colorkey, blendPath=blendPath,
+            owner=owner)
         
         # MAYBE FIXME - ADDED WED, APR 20 TO TRY TO FIX OBJ PLACEMENT
         self.rect.center = (x,y)
         
-        print 'Owner set to',str(owner)
-        self.owner = owner
+        #self.owner = owner
         
         # adds the entity to the provided world
         self.entityID = None

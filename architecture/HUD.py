@@ -4,23 +4,16 @@ from HUDElements import DescriptionBox, SelectedUnitBar, Notification, Notificat
 from GameData import Locals
 
 class HUD(object):
-    def __init__(self, loc, size):
-        self.loc=loc
-        self.size=size
-        self.surface=pygame.Surface(size)
+    def __init__(self):
         self.descBox = DescriptionBox()
         self.resourceBar = ResourceBar((811,0))
         self.selectedUnitBar = SelectedUnitBar()
-        self.rect = pygame.Rect(self.loc,self.size)
-        self.width=200
         self.viewport=None
-        self.infoRect=pygame.Rect((0,20), (self.size[0], self.size[1]-20))
         self.note=NotificationList()
 
         
     def draw(self, displaySurface):
         self.drawSelected()
-        displaySurface.blit(self.surface, (self.loc,self.size))
         self.selectedUnitBar.draw(displaySurface)
         self.descBox.draw(displaySurface)
         self.note.draw(displaySurface)
@@ -39,7 +32,10 @@ class HUD(object):
         self.note.add(note)
 
     def drawSelected(self):
-		
+		# FIXME - This line makes it so that the unit bars are updated
+		# only when a change occurs, but this doesn't preserve
+		# changes in unit orientation
+		#if self.viewport.selectedEntitiesChanged():
 		self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)
 
     def processUpdateEvent(self, event):
