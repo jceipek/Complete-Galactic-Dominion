@@ -126,7 +126,7 @@ See getCGDcontextualMenu() below for more information.
 
 from Structure import Structure,TestTownCenter
 from Entity import Entity
-from Unit import Unit,TestUnit
+from Unit import Unit,TestUnit, BuildTask
 from NaturalObject import Gold
 from GameData import Locals
 
@@ -150,7 +150,7 @@ def None_TestTownCenter(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj2.buildDict:
-            if True: #obj2._hasResourcesToBuild(buildType):
+            if obj2._hasResourcesToBuild(buildType):
                 curItem = radialMenu.RMenuItem(menu,
                     image = "orb.png",
                     col = (255,0,0),
@@ -250,12 +250,30 @@ def Unit_WayPoint(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj1[0].buildDict:
-            if True: #obj1[0]._hasResourcesToBuild(buildType):
+            if obj1[0]._hasResourcesToBuild(buildType):
+                p=obj2.getPoint()
+                buildTask=BuildTask(buildType, p,\
+                            Callback(obj1[0].sendEventToManager,\
+                            networkClassCreator(buildType,\
+                            *obj1[0].getBuildArgs2(*p))))
+                            
+                setBuildCallbacks=[]
+                for unit in obj1:
+                    setBuildCallbacks.append((unit.addToBuildQueue,[buildTask]))
+                    
+                for resource,cost in buildType.costToBuild:
+                    setBuildCallbacks.append((obj1[0].world.removeResource, (obj1[0].owner,resource,cost)))
+                func, args = setBuildCallbacks.pop()
+                call=ParallelCallback(func, *args)
+                for func, args in setBuildCallbacks:
+                    call.addCallback(func, *args)
+                             
                 curItem = radialMenu.RMenuItem(menu,
                     image = "orb.png",
                     col = (255,0,0),
                     title = 'Build Option #'+str(tmpcounter),
-                    callback = Callback(obj1[0].addToBuildQueue,buildType,obj2.getPoint()))
+                    callback = call)
+                    
                 buildMenu.addItem(curItem)
                 tmpcounter+=1
         if tmpcounter == 0:
@@ -308,7 +326,7 @@ def None_Unit(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj2.buildDict:
-            if True: #obj2._hasResourcesToBuild(buildType):
+            if obj2._hasResourcesToBuild(buildType):
                 curItem = radialMenu.RMenuItem(menu,
                     image = "orb.png",
                     col = (255,0,0),
@@ -347,8 +365,9 @@ def TestTownCenter_WayPoint(obj1,obj2):
         buildItem.addSubmenu(buildMenu)
         
         tmpcounter = 0
+        p=obj2.getPoint()
         for buildType in obj1[0].buildDict:
-            if True: #obj1[0]._hasResourcesToBuild(buildType):
+            if obj1[0]._hasResourcesToBuild(buildType):
                 makeAndMove = ParallelCallback(
                     obj1[0].sendEventToManager,
                     networkClassCreator(buildType,*obj1[0].getBuildArgs2())
@@ -356,11 +375,11 @@ def TestTownCenter_WayPoint(obj1,obj2):
                 makeAndMove.addCallback(
                     obj1[0].world.universe.manager.post,
                     WorldManipulationEvent(['setpath',
-                        obj1[0].world.universe.getNextEntityID(),obj2.getPoint()])
+                        obj1[0].world.universe.getNextEntityID(),p])
                     )
             
                 queueMake = Callback(obj1[0].addToBuildQueue,
-                    buildType,obj1[0].rect.center,makeAndMove)
+                    BuildTask(buildType,p,makeAndMove))
                 
                 curItem = radialMenu.RMenuItem(menu,
                     image = "orb.png",

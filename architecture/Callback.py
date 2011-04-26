@@ -113,10 +113,10 @@ def networkClassCreator(className,*args):
 
 if __name__ == "__main__":
 
-    def printSomething(myStr):
-        print myStr
+    def printSomething(myStr,astr):
+        print myStr + astr
 
-    a=Callback(printSomething,'Berit')
+    a=Callback(printSomething,'Berit', 'Yo')
     a.execute()
 
     class A(object):

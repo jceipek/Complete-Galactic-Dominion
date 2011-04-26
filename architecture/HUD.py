@@ -21,7 +21,9 @@ class HUD(Listener):
         self.descBox = DescriptionBox()
         self.resourceBar = ResourceBar((811,0))
         self.selectedUnitBar = SelectedUnitBar()
+
         self.viewport=None
+        #self.infoRect=pygame.Rect((0,20), (self.size[0], self.size[1]-20))
         self.note=NotificationList()
         
     def draw(self, displaySurface):
