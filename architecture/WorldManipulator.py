@@ -60,6 +60,7 @@ class WorldManipulator(Listener):
                     #this list should be in the form ['act',entityID_1,entityID_2]
                     entity = self.world.universe.entityIDToEntity[cmd[1]]
                     obj = self.world.universe.entityIDToEntity[cmd[2]]
+                    print 'Object of action id:',cmd[2]
                     print 'Entity owned by: %s\nActing on entity owned by: %s' % (str(entity.owner),str(obj.owner))
                     entity.execAction(obj)
                     
