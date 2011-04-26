@@ -60,8 +60,14 @@ class HUD(Listener):
             self.addNotification(event)
         elif isinstance(event, Event.ResourceChangeEvent):
             # Event.ResourceChangeEvent contains a .resource and .amount
+<<<<<<< HEAD
             # attribute.  Julian, change this.
             pass
         elif isinstance(event, Event.EntityFocusEvent):
             # has an entity attribute containing a reference to an entity
             pass
+=======
+            # attribute.
+            #FIXME ONLY HANDLES GOLD RIGHT NOW
+            self.resourceBar.setResourceCount(event.amount)
+>>>>>>> 7e81796fe466b7e5ae1610a66c4912fb01498ad4
