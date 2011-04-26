@@ -213,7 +213,7 @@ class World(object):
         removed = self.resourceContainer.removeResource(playerID,resource,amount)
         if removed > 0:
             amountRemaining=self.resourceContainer.getResourceCount(playerID,resource)
-            self.addNotification(ResourceChangeEvent(resource,amountRemaining))
+            self.addNotification(ResourceChangeEvent(resource,amountRemaining,playerID))
         return removed
         
     def hasResources(self,playerID,resource,amount=1):
