@@ -29,3 +29,9 @@ class SelectedEntityEvent(Event):
         
         Event.__init__(self)
         self.entityList = entityList
+
+class GameOverEvent(Event):
+    
+    def __init__(self):
+        
+        Event.__init__(self)

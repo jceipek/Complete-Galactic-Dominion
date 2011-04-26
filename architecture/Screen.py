@@ -111,5 +111,8 @@ class MainScreen(Screen):
         self.viewport.processUpdateEvent(event)
         self.hud.processUpdateEvent(event)
     
+    def processGameOverEvent(self,event):
+        self.viewport.setGameOver()
+    
     def changeWorld(self,world):
         self.viewport.changeWorld(world)
