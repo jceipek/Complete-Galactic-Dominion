@@ -13,7 +13,7 @@ class Entity(MapObject):
     
     # Class variable which determines how long it takes to build
     # an entity
-    timeToBuild = 1
+    timeToBuild = 5
     
     # List of tuples containing a subclass of Resource and a cost
     costToBuild = []

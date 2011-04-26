@@ -7,11 +7,10 @@ class HUD(object):
     def __init__(self):
         self.descBox = DescriptionBox()
         self.selectedUnitBar = SelectedUnitBar()
+
         self.viewport=None
+        #self.infoRect=pygame.Rect((0,20), (self.size[0], self.size[1]-20))
         self.note=NotificationList()
-        self.note.add(Notification('Imma notify you'))
-        self.note.add(Notification('This is a slightly shorter lasting notification', time=2))
-        self.note.add(Notification('This is a longer lasting notification', time=8))
         
     def draw(self, displaySurface):
         self.drawSelected()
