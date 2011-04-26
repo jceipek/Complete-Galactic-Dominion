@@ -4,7 +4,7 @@ from NaturalObject import Gold
 
 import specialMath
 
-from Event import ResourceChangeEvent
+from Event import ResourceChangeEvent,GameOverEvent
 
 class World(object):
     """
@@ -199,6 +199,9 @@ class World(object):
             self.deadEntities.append(entity)
             self.universe.removeEntity(entity)
             del self.allEntities[entity.entityID]
+            
+            if len(self.allEntities) <= 0:
+                self.addNotification(GameOverEvent())
             
     def addResource(self,playerID,resource,amount=1):
         deposited = self.resourceContainer.addResource(playerID,resource,amount)

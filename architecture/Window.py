@@ -84,6 +84,8 @@ class Window(Listener):
         self.active = True
         self.pygameEvents = []
         self.controlMapping = []
+        
+        self.sound = None
         #self.setUpControlMapping() #FIXME
         
     def updateScreenMode(self):
@@ -295,6 +297,7 @@ class Window(Listener):
         """
 
         if isinstance( event, Event.StartEvent ):
+            self.manager.post(Event.StartedEvent())
             self.run()
         elif isinstance( event, Event.QuitEvent ):
             self.deactivate()

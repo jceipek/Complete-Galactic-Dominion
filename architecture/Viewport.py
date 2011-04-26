@@ -71,13 +71,15 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.contextualMenu = getCGDcontextualMenu()
         
         self._selectedEntitiesChanged = False
+        
+        self.gameOver = False
     
     def setClientID(self,clientID):
         self.clientID = clientID
         self.minimap.setClientID(clientID)
     
-    #def selectedEntitiesChanged(self):
-    #    self.manager.post(SelectedEntityEvent(self.selectedEntities))
+    def setGameOver(self):
+        self.gameOver = True
         
     def initDeadZoneBasedOnSize(self):
         #CURRENT IMPLEMENTATION IS FAKE
@@ -398,14 +400,19 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
 
         if not self.world == None:
             
-            self.setFocusedEntities()
-            self.world.grid.draw(self.surface, self.scrollLoc, self.size)
-            self.drawContainedEntities()
-            self.drawDragRect()
-            self.drawMiniMap()
-            #self.drawDebugFrames() #Add this in to see the scroll boxes
-            self.drawMenu()
-            displaySurface.blit(self.surface, (self.loc,self.size))
+            if not self.gameOver:
+                self.setFocusedEntities()
+                self.world.grid.draw(self.surface, self.scrollLoc, self.size)
+                self.drawContainedEntities()
+                self.drawDragRect()
+                self.drawMiniMap()
+                #self.drawDebugFrames() #Add this in to see the scroll boxes
+                self.drawMenu()
+                displaySurface.blit(self.surface, (self.loc,self.size))
+            else:
+                 font=pygame.font.Font(pygame.font.get_default_font(),120)
+                 txt=font.render('YOU LOSE.',False,(0,0,0))
+                 self.surface.blit(txt,(0,0))
 
     def processUpdateEvent(self,event):
         timeElapsed = event.elapsedTimeSinceLastFrame
