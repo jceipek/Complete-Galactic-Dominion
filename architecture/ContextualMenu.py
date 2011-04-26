@@ -150,7 +150,7 @@ def None_TestTownCenter(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj2.buildDict:
-            if obj2._hasResourcesToBuild(buildType):
+            if True: #obj2._hasResourcesToBuild(buildType):
                 curItem = radialMenu.RMenuItem(menu,
                     image = "orb.png",
                     col = (255,0,0),
@@ -250,7 +250,7 @@ def Unit_WayPoint(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj1[0].buildDict:
-            if obj1[0]._hasResourcesToBuild(buildType):
+            if True: #obj1[0]._hasResourcesToBuild(buildType):
                 curItem = radialMenu.RMenuItem(menu,
                     image = "orb.png",
                     col = (255,0,0),
@@ -308,7 +308,7 @@ def None_Unit(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj2.buildDict:
-            if obj2._hasResourcesToBuild(buildType):
+            if True: #obj2._hasResourcesToBuild(buildType):
                 curItem = radialMenu.RMenuItem(menu,
                     image = "orb.png",
                     col = (255,0,0),
@@ -332,7 +332,7 @@ def TestTownCenter_WayPoint(obj1,obj2):
     
     menu = radialMenu.RMenu(openDelay=.2)
     
-    # HACK - CAN ONLY ACCEPT 1 TESTTOWNCENTER
+    # FIXME HACK - CAN ONLY ACCEPT 1 TESTTOWNCENTER
     
     if len(obj1[0].buildDict) > 0:
         
@@ -348,7 +348,7 @@ def TestTownCenter_WayPoint(obj1,obj2):
         
         tmpcounter = 0
         for buildType in obj1[0].buildDict:
-            if obj1[0]._hasResourcesToBuild(buildType):
+            if True: #obj1[0]._hasResourcesToBuild(buildType):
                 makeAndMove = ParallelCallback(
                     obj1[0].sendEventToManager,
                     networkClassCreator(buildType,*obj1[0].getBuildArgs2())

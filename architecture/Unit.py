@@ -93,7 +93,7 @@ class Builder(Entity):
 
     def _hasResourcesToBuild(self,entityClass):
         
-        for resourceClass, amount in entityClass.costToBuild:
+        for resourceClass, amount in entityClass.costToBuild: 
             if not self.world.hasResources(self.owner,resourceClass,amount):
                 return False
         return True
@@ -131,8 +131,8 @@ class Builder(Entity):
                 for resource,cost in entityClass.costToBuild:
                     self.world.removeResource(self.owner,resource,cost)
             else:
-                self.addNotification(NotificationEvent(
-                    'You do not have sufficient resources to build a %s.'%entityClass.name))
+                from specialString import resourcesRequiredStr
+                self.addNotification(NotificationEvent(resourcesRequiredStr(entityClass.costToBuild,entityClass.name)))
         else:
             msg='%s cannot build %s,'%(self.name,entityClass.name)
             msg+=' but can build:'

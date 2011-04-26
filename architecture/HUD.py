@@ -15,9 +15,7 @@ class HUD(object):
         self.viewport=None
         self.infoRect=pygame.Rect((0,20), (self.size[0], self.size[1]-20))
         self.note=NotificationList()
-        self.note.add(Notification('Imma notify you'))
-        self.note.add(Notification('This is a slightly shorter lasting notification', time=2))
-        self.note.add(Notification('This is a longer lasting notification', time=8))
+
         
     def draw(self, displaySurface):
         self.drawSelected()
@@ -26,19 +24,15 @@ class HUD(object):
         self.descBox.draw(displaySurface)
         self.note.draw(displaySurface)
 
-    """
-    def drawNotification(self, event=None):
-        if event is None:
-            text = ''
-        else:
-            text = event.message
-        sign=Sign(self.size[0], (0,0))
-        sign.addtext(text)
-        sign.render()
-        sign.draw(self.surface)
-
-    """
     def addNotification(self, event=None):
+        '''
+        Called when a notification is sent to the player
+        Usage:
+        ========================
+           self.note.add(Notification('Imma notify you'))
+           self.note.add(Notification('This is a slightly shorter lasting notification', time=2))
+           self.note.add(Notification('This is a longer lasting notification', time=8))
+        '''
         note=Notification(event.message)
         self.note.add(note)
 
