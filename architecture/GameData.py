@@ -136,6 +136,10 @@ class ImageBank(object):
         return self.cache[None]
         
     def getPlayerDefaultImage(self,imageName,playerID):
+        """
+        Returns the default player image (orientation 0) or the
+        default error image of the imageBank.
+        """
         imageDict = self.cache.get((imageName,playerID),None)
         if imageDict is not None:
             return imageDict.getDefaultImage()
