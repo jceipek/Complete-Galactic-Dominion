@@ -206,7 +206,7 @@ class World(object):
         deposited = self.resourceContainer.addResource(playerID,resource,amount)
         if deposited > 0:
             amountRemaining=self.resourceContainer.getResourceCount(playerID,resource)
-            self.addNotification(ResourceChangeEvent(resource,amountRemaining))
+            self.addNotification(ResourceChangeEvent(resource,amountRemaining,playerID))
         return deposited
         
     def removeResource(self,playerID,resource,amount=1):

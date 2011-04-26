@@ -9,7 +9,7 @@ import Event
 
 class HUD(Listener):
     
-    def __init__(self,manager):
+    def __init__(self,manager,clientID):
         
         eventTypes = [Event.NotificationEvent, Event.ResourceChangeEvent,
             Event.EntityFocusEvent, Event.SelectedEntityEvent]
@@ -22,6 +22,8 @@ class HUD(Listener):
         self.resourceBar = ResourceBar((811,0))
         self.selectedUnitBar = SelectedUnitBar()
 
+        self.clientID = clientID
+
         self.viewport=None
         #self.infoRect=pygame.Rect((0,20), (self.size[0], self.size[1]-20))
         self.note=NotificationList()
@@ -31,6 +33,9 @@ class HUD(Listener):
         self.descBox.draw(displaySurface)
         self.note.draw(displaySurface)
         self.resourceBar.draw(displaySurface)
+
+    def setClientID(self,clientID):
+        self.clientID = clientID
 
     def addNotification(self, event):
         '''
@@ -62,7 +67,8 @@ class HUD(Listener):
         elif isinstance(event, Event.ResourceChangeEvent):
             # event has a .resource and .amount attribute
             # ONLY HANDLES GOLD CURRENTLY
-            self.resourceBar.setResourceCount(event.amount)
+            if event.playerID == self.clientID:
+                self.resourceBar.setResourceCount(event.amount)
         elif isinstance(event, Event.EntityFocusEvent):
             # has an entity attribute containing a reference to an entity
             self.descBox.updateDisplayedEntity(event.entity)

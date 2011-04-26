@@ -104,4 +104,4 @@ if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
     
-    eTypestoListeners = init('localhost')
+    eTypestoListeners = init('10.41.24.200')

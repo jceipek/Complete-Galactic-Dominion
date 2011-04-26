@@ -54,6 +54,7 @@ class MainScreen(Screen):
     def setClientID(self,clientID):
         self.clientID = clientID
         self.viewport.setClientID(clientID)
+        self.hud.setClientID(clientID)
     
     def TEST_createViewport(self,world,manager):
         ###FIXME
@@ -67,7 +68,7 @@ class MainScreen(Screen):
 
         #hudPos=(0, viewportSize[1])
         #hudSize=(viewportSize[0], 120)
-        self.hud=HUD(manager)
+        self.hud=HUD(manager,self.clientID)
 
         self.viewport.hud=self.hud
         self.hud.viewport=self.viewport

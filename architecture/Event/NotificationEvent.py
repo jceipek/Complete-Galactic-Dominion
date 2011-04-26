@@ -11,10 +11,11 @@ class NotificationEvent(Event):
 
 class ResourceChangeEvent(Event):
     
-    def __init__(self,resource,amount):
+    def __init__(self,resource,amount,playerID):
         Event.__init__(self)
         self.resource = resource
         self.amount = amount
+        self.playerID = playerID
 
 class EntityFocusEvent(Event):
     
