@@ -5,14 +5,26 @@ class DescriptionBox():
     #The largest HUD element which describes the selected (or hovered?) unit
     #and its properties (those which are player-relevant)
     def __init__(self,pos = (0,768-36-186)):
+         #FIXME Remove this dependency - replace image with thumbnail
+        from Overlay import Bar
         #Format for each tuple is (imagePath, [colorKey, [offset]])
         images = [("BarTop.png",'alpha')]
         images.append(("BarRight.png",'alpha',(325,36)))
         images.append(("DescBoxCentral.png",None,(0,36)))
         self.baseLayer = DrawableObjectGroup(images,pos=pos)
+        self.entity = None
+        self.pos = pos
+        self.thumbnailOffset = (12,14+36)
 
+    def updateDisplayedEntity(self,entity):
+        self.entity = entity
+        
     def draw(self,screen):
+        import pygame
         self.baseLayer.draw(screen)
+        if self.entity:
+            self.thumbnail = pygame.transform.scale(self.entity.image, (44, 44))
+            screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))
 
 class ResourceBar():
     #A bar at the top of the screen indicating the amount of resources the player has on the current world
@@ -38,7 +50,7 @@ class UnitBox():
     #One of the tiny boxes displayed when a unit is selected
     
     def __init__(self,entity,pos=(0,0),endCap=False):
-        import pygame #FIXME Remove this dependency
+        import pygame #FIXME Remove this dependency - replace image with thumbnail
         from Overlay import Bar
         
         #Format for each tuple is (imagePath, [colorKey, [offset]])
@@ -56,7 +68,7 @@ class UnitBox():
     def draw(self,screen):
         self.healthBar.updateBarWithValue(self.entity.curHealth)
         self.baseLayer.draw(screen)
-        screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[0]))
+        screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))
         self.healthBar.draw(screen,(self.pos[0]+4,self.pos[1]+50))
 
 class SelectedUnitBar():
