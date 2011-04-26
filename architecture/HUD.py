@@ -12,7 +12,7 @@ class HUD(Listener):
     def __init__(self,manager):
         
         eventTypes = [Event.NotificationEvent, Event.ResourceChangeEvent,
-            Event.EntityFocusEvent]
+            Event.EntityFocusEvent, Event.SelectedEntityEvent]
         
         #Using this until someone can explain why super() is or is not the right way to do this
         #Waaaay too many disagreements/articles on this online
@@ -27,7 +27,6 @@ class HUD(Listener):
         self.note=NotificationList()
         
     def draw(self, displaySurface):
-        self.drawSelected()
         self.selectedUnitBar.draw(displaySurface)
         self.descBox.draw(displaySurface)
         self.note.draw(displaySurface)
@@ -45,12 +44,12 @@ class HUD(Listener):
         note=Notification(event.message)
         self.note.add(note)
 
-    def drawSelected(self):
+    def drawSelected(self,event):
 		# FIXME - This line makes it so that the unit bars are updated
 		# only when a change occurs, but this doesn't preserve
 		# changes in unit orientation
 		#if self.viewport.selectedEntitiesChanged():
-		self.selectedUnitBar.updateWithUnits(self.viewport.selectedEntities)
+		self.selectedUnitBar.updateWithUnits(event.entityList)
 
     def processUpdateEvent(self, event):
         timeElapsed = event.elapsedTimeSinceLastFrame
@@ -68,3 +67,5 @@ class HUD(Listener):
             # has an entity attribute containing a reference to an entity
             self.descBox.updateDisplayedEntity(event.entity)
 
+        elif isinstance(event, Event.SelectedEntityEvent):
+            self.drawSelected(event)

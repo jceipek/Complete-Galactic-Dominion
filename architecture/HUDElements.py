@@ -13,18 +13,25 @@ class DescriptionBox():
         images.append(("DescBoxCentral.png",None,(0,36)))
         self.baseLayer = DrawableObjectGroup(images,pos=pos)
         self.entity = None
+        self.descriptionOffset = (35,73+36)
+        self.description = Sign(260, (pos[0]+self.descriptionOffset[0],pos[1]+self.descriptionOffset[1]),fsize = 18)
+        self.description.tcolor=(180,180,0)
         self.pos = pos
         self.thumbnailOffset = (12,14+36)
 
     def updateDisplayedEntity(self,entity):
+        import pygame
         self.entity = entity
+        self.thumbnail = self.entity.getDefaultImage()
+        self.thumbnail = pygame.transform.scale(self.thumbnail, (44, 44))
+        self.description.clear()
+        self.description.addtext(entity.description)
         
     def draw(self,screen):
-        import pygame
         self.baseLayer.draw(screen)
         if self.entity:
-            self.thumbnail = pygame.transform.scale(self.entity.image, (44, 44))
             screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))
+            self.description.render(screen)
 
 class ResourceBar():
     #A bar at the top of the screen indicating the amount of resources the player has on the current world

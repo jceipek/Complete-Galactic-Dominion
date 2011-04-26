@@ -28,4 +28,4 @@ class SelectedEntityEvent(Event):
     def __init__(self,entityList):
         
         Event.__init__(self)
-        self.entityLIst = entityList
+        self.entityList = entityList
