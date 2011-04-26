@@ -59,5 +59,6 @@ class HUD(Listener):
             self.addNotification(event)
         elif isinstance(event, Event.ResourceChangeEvent):
             # Event.ResourceChangeEvent contains a .resource and .amount
-            # attribute.  Julian, change this.
-            pass
+            # attribute.
+            #FIXME ONLY HANDLES GOLD RIGHT NOW
+            self.resourceBar.setResourceCount(event.amount)
