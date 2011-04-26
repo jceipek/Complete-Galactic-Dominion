@@ -32,7 +32,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             Event.DisplaySurfaceCreatedEvent, Event.CompleteActionEvent, \
             Event.DragBeganEvent, Event.DragEvent, \
             Event.DragCompletedEvent, Event.AddDragCompletedEvent, \
-            Event.NumberKeyPressEvent]
+            Event.NumberKeyPressEvent, Event.GameOverEvent]
         Listener.__init__(self,manager,eventTypes)
         self.activeOverlay = None
         self.activeWorld = world
@@ -108,3 +108,5 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
                 self.activeScreen.changeWorld(event.world)
         elif isinstance(event,Event.DisplaySurfaceCreatedEvent):
             self.setDisplaySurface(event.displaySurface, event.resolution)
+        elif isinstance(event,Event.GameOverEvent):
+            self.activeScreen.processGameOverEvent(event)
