@@ -18,7 +18,7 @@ from UserInterface import UserInterface
 from Universe import Universe
 from Entity import Entity,TestEntity
 from Unit import Unit,TestUnit
-from Structure import Structure
+from Structure import Structure, TestTownCenter
 from gameClient import GameClient
 from WorldManipulator import WorldManipulator
 from NaturalObject import NaturalObject,Gold
@@ -34,11 +34,14 @@ class BroadcastServer(networking.Server):
     numberOfClients = 0
     
     def processInput(self,sockThrd,data):
-        if 'GetWorld' in data and hasattr(self,'world'):
+        if 'GetWorld' in data: #and hasattr(self,'world'):
+            print 'Loading the world to %s' % str(sockThrd.ID),
+            numEntities = 0
             for entity in self.world.allEntities.values():
-                if isinstance(entity,Unit) or isinstance(entity,Structure) or isinstance(entity,NaturalObject):
-                    sockThrd.write(cPickle.dumps(entity))
-            sockThrd.write('finishedLoading')
+                sockThrd.write(cPickle.dumps(entity))
+                numEntities = max(numEntities,entity.entityID)
+            sockThrd.write('finishedLoading:%d:%s' % (self.world.universe.creator.numberOfEntities,str(self.world.universe.creator.releasedEntityIDs)))
+            print 'Done loading to %s' % str(sockThrd.ID),
         else:
             for sock in self.socketThreads.keys():
                 sock.write(data)
@@ -60,6 +63,7 @@ class BroadcastServer(networking.Server):
                 ID=BroadcastServer.numberOfClients
                 BroadcastServer.numberOfClients += 1
                 s.write('ID:'+str(ID))
+                s.ID = str(ID)
 
         self.socket.listen(numPendingConnections)
         self.connecting=True
@@ -87,12 +91,6 @@ def init(host='localhost',server=None):
                                                 #classes will be needed later?
     Entity.manager = eventManager    
     
-    networked = True
-    try:                                            
-        client = GameClient(eventManager,host=host,port=1567)
-    #    client.sendRequest('GetWorld')
-    except:
-        networked = False
                                                
     #Create the occurence manager for high-level events (same across client and server)
     #FIXME: NOT YET IMPLEMENTED
@@ -108,13 +106,31 @@ def init(host='localhost',server=None):
     gameWindow.updateScreenMode()
     
     w = World(universe)
-    server.world=w
-    wManipulator = WorldManipulator(eventManager,w,networked)
+    s.world=w
+    
+    networked = True
+    client = GameClient(eventManager,host='10.41.64.69',port=1567)
+    while client.ID == None:
+        import time
+        time.sleep(.02)
+    print 'Got an ID',client.ID
+    clientID = client.ID
+
+    ui.setClientID(clientID)
+    
+    wManipulator = WorldManipulator(eventManager,w,networked,gameClientID = clientID)
     #universe.changeWorld(w)
     
     #===========================================
     
     w._generateResources()
+    for i in xrange(25):
+        TestUnit(i*50,i*50,w,clientID)
+        
+    from random import randint,choice
+    xpos = randint(0,w.gridDim[0])
+    ypos = randint(0,w.gridDim[1])
+    TestTownCenter(xpos,ypos,w,clientID)
 
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
@@ -124,7 +140,7 @@ def init(host='localhost',server=None):
 if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
-    s = BroadcastServer(port = 1567, host = 'localhost')
+    s = BroadcastServer(port = 1567, host = '10.41.64.69')
     s.listenAndConnect()
     
     init(server=s)

@@ -72,6 +72,10 @@ def init(host='localhost'):
     
     try:                                            
         client = GameClient(eventManager,host=host,port=1567)
+        while client.ID == None:
+            import time
+            time.sleep(.02)
+        print 'Got an ID',client.ID
         clientID = client.ID
     #    client.sendRequest('GetWorld')
 
@@ -86,31 +90,14 @@ def init(host='localhost'):
         eventManager.post(Event.NewPlayerEvent(clientID))
         w._generateResources()
     else:
-        while client.ID == None:
-            from time import sleep
-            sleep(.02)
         clientID = client.ID
         ui.setClientID(clientID)
     
-    wManipulator = WorldManipulator(eventManager,w,networked)
+    wManipulator = WorldManipulator(eventManager,w,networked,gameClientID = clientID)
     
-    #===========================================
-    
-    #w._TMPmakeBuilding()
-    #create 25 TestUnits
-    for i in xrange(25):
-        eventManager.post(Event.WorldManipulationEvent(['create',TestUnit,(i*50,i*50,w.worldID,clientID)]))
-    #create a TestTownCenter
-    from random import randint,choice
-    xpos = randint(0,w.gridDim[0])
-    ypos = randint(0,w.gridDim[1])
-    eventManager.post(Event.WorldManipulationEvent(['create',TestTownCenter,(xpos,ypos,w.worldID,clientID)]))
+
     
     #Notify the manager that the window should start to accept input:
-    while networked and not client.loaded:
-        print 'Waiting for the game state to be loaded.'
-        time.sleep(.1)
-    print 'The game state should now be loaded'
     eventManager.post(Event.StartEvent())
     
     return eventManager.eventTypesToListeners
@@ -119,6 +106,4 @@ if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
     
-    #eTypestoListeners = init('10.41.64.69')
-    eTypestoListeners = init()
-    print eTypestoListeners[Event.NotificationEvent]
+    eTypestoListeners = init('10.41.64.69')

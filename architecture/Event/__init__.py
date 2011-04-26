@@ -15,3 +15,7 @@ from WorldManipulationEvent import *
 from EventExecutionEvent import *
 from NotificationEvent import *
 from NewPlayerEvent import *
+from LoadGameEvent import *
+from GameLoadedEvent import *
+from StartedEvent import *
+from ClientIDCollected import *
