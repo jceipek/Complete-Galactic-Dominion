@@ -109,7 +109,7 @@ def init(host='localhost',server=None):
     s.world=w
     
     networked = True
-    client = GameClient(eventManager,host='127.0.0.1',port=1567)
+    client = GameClient(eventManager,host='10.41.64.69',port=1567)
     while client.ID == None:
         import time
         time.sleep(.02)
@@ -140,7 +140,7 @@ def init(host='localhost',server=None):
 if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
-    s = BroadcastServer(port = 1567, host = 'localhost')
+    s = BroadcastServer(port = 1567, host = '10.41.64.69')
     s.listenAndConnect()
     
     init(server=s)
