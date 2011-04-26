@@ -73,9 +73,9 @@ class Builder(Entity):
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.', movable=False, 
                  owner='tmp',blendPath=None):
-        print 'Builder owner:',owner
+                     
         Entity.__init__(self,imagePath,x,y,world,colorkey,description, movable,
-            owner,blendPath=blendPath)
+            owner=owner,blendPath=blendPath)
         
         self.blockable=True
         
@@ -224,6 +224,7 @@ class Unit(Builder):
     def __init__(self, imagePath, x, y, world, colorkey=None,
                  description = 'No information available.',
                  owner='tmp',blendPath=None):
+        
         Builder.__init__(self,imagePath,x,y,world,colorkey,description,
             owner=owner, movable=True, blendPath=blendPath)
 
@@ -380,6 +381,8 @@ class Unit(Builder):
         """
         Initialized appropriate action by setting dest and status given the type of entity.
         """
+        
+        print 'OWNERS: ',self.owner, obj.owner
         data=['act',self.entityID,obj.entityID]
         self.sendEventToManager(WorldManipulationEvent(data))
             
@@ -407,12 +410,13 @@ class Unit(Builder):
         """
         Moves unit within specified radius of objectOfAction. Returns True if within radius, False if otherwise
         """
-        closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
-        self.dest=closest
-        if specialMath.distance(self.realCenter, self.dest) > radius:
-            self.move()
-            return False
-        else: return True
+        if self.objectOfAction is not None:
+            closest=specialMath.findClosest(self.realCenter, self.objectOfAction.realCenter, self.worldSize)
+            self.dest=closest
+            if specialMath.distance(self.realCenter, self.dest) > radius:
+                self.move()
+                return False
+        return False
     
     def move(self):
         """changes position of unit in direction of dest"""
@@ -426,7 +430,7 @@ class Unit(Builder):
             dirx = self.dest[0] - curX #unscaled x direction of movement
             diry = self.dest[1] - curY #unscaled y direction of movement
             
-            self.setImageNum(dirx,diry)
+            #self.setImageNum(dirx,diry)
 
             # distance between destination and current location
             distLocToDest = specialMath.hypotenuse(dirx,diry)
@@ -434,7 +438,6 @@ class Unit(Builder):
             # Unit vector of velocity
             dirx /= distLocToDest #unit x direction of movement
             diry /= distLocToDest #unit y direction of movement
-            
             
             newX = curX + dirx*self.speed*self.getTimeElapsed()
             newY = curY + diry*self.speed*self.getTimeElapsed()
@@ -457,9 +460,11 @@ class Unit(Builder):
 
         if oldImageNum != self.imageNum:
             self.setImageToOrientation(self.imageNum)
-            
-        self.selectionRect = self.imageBank.getMinimalRect(
-            self.imagePath,self.colorkey,self.imageNum,padding=25,showShadows=False)
+        
+            from specialImage import getMinimalRect
+        
+            self.selectionRect = self.imageBank.getMinimalRect(
+                self.imagePath,self.colorkey,self.imageNum,self.owner,padding=25,showShadows=False)
 
     def _definePath(self):
         while self._isAtDestination(): #may need to have room for error
@@ -470,6 +475,15 @@ class Unit(Builder):
             else: # path not empty - change path
                 self.status = Locals.MOVING
                 self.dest = self._optimalDestination()
+                
+                curX,curY = self.realCenter
+            
+                # difference between destination and current location
+                dirx = self.dest[0] - curX #unscaled x direction of movement
+                diry = self.dest[1] - curY #unscaled y direction of movement
+                
+                self.setImageNum(dirx,diry)
+
         else: # Not at current destination
             pass
     

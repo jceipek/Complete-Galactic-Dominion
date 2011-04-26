@@ -7,52 +7,52 @@ class DrawableObject(object):
     """This is the super class of all object that can be drawn to the screen"""
     
     imageBank = ImageBank()
-    isImageInitialized = False
     
-    def __init__(self, imagePath, colorkey=None, blendPath=None):
-        
+    def __init__(self, imagePath, colorkey=None, blendPath=None, 
+        owner='blarg'):
+            
+        self.isImageInitialized = False
         # First class to have image and rect objects
         self.imagePath = imagePath
         self.blendPath = blendPath
         self.colorkey = colorkey
         
+        self.owner=owner
+        self.orientation=0
         '''
         self.loadImage(imagePath,colorkey)
         self.setAverageColor(imagePath,colorkey)
         self.realCenter = self.rect.center
         '''
-        
+
         self._imageInformationSetup()
         
     def _imageInformationSetup(self):
         if pygame.display.get_init():
-            self.loadDefaultImage(self.imagePath,self.colorkey,blendPath=self.blendPath)
+            self.loadDefaultImage(self.imagePath,self.colorkey)
             self.setAverageColor(self.imagePath,self.colorkey)
             self.realCenter = self.rect.center
             self.isImageInitialized = True
     
     # First loadImage method
-    def loadDefaultImage(self, imagePath, colorkey=None, blendPath=None):
-        if hasattr(self,'owner'):
-            playerID = self.owner
-        else:
-            playerID = None
+    def loadDefaultImage(self, imagePath, colorkey=None):
         
-        objImage = self.imageBank.getImage(imagePath,colorkey=colorkey,playerID=playerID,blendPath=blendPath)
-        
+        objImage = self.imageBank.getImage(imagePath,colorkey,self.orientation,playerID=self.owner,blendPath=self.blendPath)
+
         self.image = objImage
         self.rect = self.image.get_rect()
         
     def setImageToOrientation(self,orientation):
-        objImage = self.imageBank.getImage(self.imagePath,self.colorkey,orientation)
+
+        objImage = self.imageBank.getImage(self.imagePath,self.colorkey,orientation,playerID=self.owner)
         self.image = objImage
 
     def setAverageColor(self,imagePath,colorkey=None):
         """
         Sets the averageColor attribute of something with an image.
         """
-        self.averageColor = self.imageBank.getAverageColor(imagePath,colorkey)
-
+        self.averageColor = self.imageBank.getAverageColor(imagePath,colorkey,playerID=self.owner)
+        
     def getMiniMapColor(self):
         """
         By default, returns the average color.  Override.
@@ -141,10 +141,11 @@ if __name__ == "__main__":
     
     from specialImage import loadImage
     
-    #a = DrawableObject('ship/ship_0000.png','alpha')
-    #mask = loadImage('imageData/ShipFlags/shipFlag_0000.png',(0,0,0))
-    a = DrawableObject('TownCenterGeneric.png','alpha')
-    mask = loadImage('imageData/TownCenterFlag.png',(0,0,0))
+    a = DrawableObject('ship','alpha',blendPath='ShipFlags')
+    #mask = loadImage('ShipFlags',(0,0,0))
+
+    #a = DrawableObject('TownCenterGeneric.png','alpha')
+    #mask = loadImage('imageData/TownCenterFlag.png',(0,0,0))
     
     def imageBlend(image,mask,color=None):
         if color==None:
@@ -162,10 +163,11 @@ if __name__ == "__main__":
     tstSurface.blit(mask,a.rect,special_flags=pygame.BLEND_MULT)
     a.image.blit(tstSurface,a.rect,special_flags=pygame.BLEND_ADD)
     '''
-    minimalRect=DrawableObject.imageBank.getMinimalRect('ship/ship_0000.png','alpha',padding=30)
-    minimalRect.clamp_ip(a.rect)
+
+    #minimalRect=DrawableObject.imageBank.getMinimalRect('ship/ship_0000.png','alpha',padding=30)
+    #minimalRect.clamp_ip(a.rect)
     
-    a.image = imageBlend(a.image,mask,(255,0,0))
+    #a.image = imageBlend(a.image,mask,(255,0,0))
     
     pygame.init()
 
@@ -174,5 +176,5 @@ if __name__ == "__main__":
         #screen.blit(a.image,a.rect)
         screen.blit(a.image,a.rect)
 
-        pygame.draw.rect(screen,(255,0,255),minimalRect,2)
+        #pygame.draw.rect(screen,(255,0,255),minimalRect,2)
         pygame.display.flip()
