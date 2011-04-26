@@ -51,6 +51,7 @@ class WorldManipulator(Listener):
                  entity.world = self.world.universe.worldIDToWorld[entity.world]
                  entity.world.universe.entityIDToEntity[entity.entityID] = entity
                  entity.world.allEntities[entity.entityID] = entity
+                 entity.world.playerCount.setdefault(entity.owner,[]).append(entity.entityID)
                  print 'loadedEntity ID',entity.entityID
                  
                  if isinstance(entity,Unit) and entity.objectOfAction != None:

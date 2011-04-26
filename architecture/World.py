@@ -204,7 +204,7 @@ class World(object):
             del self.allEntities[entity.entityID]
             
             try:
-                self.playerCount[entity.owner].remove(entity)
+                self.playerCount[entity.owner].remove(entity.entityID)
             except ValueError: # thrown if entity not in list
                 pass
             

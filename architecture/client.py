@@ -95,8 +95,6 @@ def init(host='localhost'):
     
     wManipulator = WorldManipulator(eventManager,w,networked,gameClientID = clientID)
     
-
-    
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
     
