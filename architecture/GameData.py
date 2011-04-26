@@ -140,6 +140,7 @@ class ImageBank(object):
         If this fails, an "image not found" image is returned
         """
 
+        print 'GET IMAGE: ', playerID
         imageDict = self.cache.get(imageName,None)
         if imageDict == None:
             self.loadImage(imageName,colorkey,playerID,blendPath)

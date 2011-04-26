@@ -363,7 +363,7 @@ class Unit(Builder):
         """
         Initialized appropriate action by setting dest and status given the type of entity.
         """
-        print 'HAAAAAAAAA'
+
         data=['act',self.entityID,obj.entityID]
         self.sendEventToManager(WorldManipulationEvent(data))
             
@@ -372,7 +372,7 @@ class Unit(Builder):
         Execute the appropriate action taken from a network command
         """
         from Structure import TestTownCenter
-        print 'HAAAAAAAAaSDADSADA'
+
         self.objectOfAction=obj
         if isinstance(obj, Builder):#Unit):\
             
