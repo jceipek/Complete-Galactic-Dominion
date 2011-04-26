@@ -404,7 +404,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             self.drawContainedEntities()
             self.drawDragRect()
             self.drawMiniMap()
-            self.drawDebugFrames()
+            #self.drawDebugFrames() #Add this in to see the scroll boxes
             self.drawMenu()
             displaySurface.blit(self.surface, (self.loc,self.size))
 
