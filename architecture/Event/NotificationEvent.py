@@ -8,3 +8,10 @@ class NotificationEvent(Event):
         Event.__init__(self)
         self.message = message
         self.verboseInfo = "\tMessage: " + str(self.message) + "\n"
+
+class ResourceChangeEvent(Event):
+    
+    def __init__(self,resource,amount):
+        Event.__init__(self)
+        self.resource = resource
+        self.amount = amount

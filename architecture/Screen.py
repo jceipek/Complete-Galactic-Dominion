@@ -67,7 +67,7 @@ class MainScreen(Screen):
         
         #hudPos=(0, viewportSize[1])
         #hudSize=(viewportSize[0], 120)
-        self.hud=HUD()
+        self.hud=HUD(manager)
         self.viewport.hud=self.hud
         self.hud.viewport=self.viewport
         
@@ -109,9 +109,6 @@ class MainScreen(Screen):
     def processUpdateEvent(self,event):
         self.viewport.processUpdateEvent(event)
         self.hud.processUpdateEvent(event)
-    
-    def processNotificationEvent(self,event):
-        self.hud.addNotification(event)
     
     def changeWorld(self,world):
         self.viewport.changeWorld(world)

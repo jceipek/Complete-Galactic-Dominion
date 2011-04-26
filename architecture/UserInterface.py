@@ -32,7 +32,7 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
             Event.DisplaySurfaceCreatedEvent, Event.CompleteActionEvent, \
             Event.DragBeganEvent, Event.DragEvent, \
             Event.DragCompletedEvent, Event.AddDragCompletedEvent, \
-            Event.NumberKeyPressEvent, Event.NotificationEvent ]
+            Event.NumberKeyPressEvent]
         Listener.__init__(self,manager,eventTypes)
         self.activeOverlay = None
         self.activeWorld = world
@@ -101,9 +101,6 @@ class UserInterface(Listener):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         elif isinstance(event, Event.NumberKeyPressEvent):
             if self.activeScreen:
                 self.activeScreen.processNumberKeyPressEvent(event)
-        elif isinstance(event, Event.NotificationEvent):
-            if self.activeScreen:
-                self.activeScreen.processNotificationEvent(event)
         elif isinstance(event, Event.WorldChangeEvent):
             if self.activeWorld:
                 self.activeWorld = event.world

@@ -3,14 +3,25 @@ from Sign import Sign
 from HUDElements import DescriptionBox, SelectedUnitBar, Notification, NotificationList,ResourceBar
 from GameData import Locals
 
-class HUD(object):
-    def __init__(self):
+from Listener import Listener
+
+import Event
+
+class HUD(Listener):
+    
+    def __init__(self,manager):
+        
+        eventTypes = [Event.NotificationEvent, Event.ResourceChangeEvent]
+        
+        #Using this until someone can explain why super() is or is not the right way to do this
+        #Waaaay too many disagreements/articles on this online
+        Listener.__init__(self,manager,eventTypes)
+        
         self.descBox = DescriptionBox()
         self.resourceBar = ResourceBar((811,0))
         self.selectedUnitBar = SelectedUnitBar()
         self.viewport=None
         self.note=NotificationList()
-
         
     def draw(self, displaySurface):
         self.drawSelected()
@@ -19,7 +30,7 @@ class HUD(object):
         self.note.draw(displaySurface)
         self.resourceBar.draw(displaySurface)
 
-    def addNotification(self, event=None):
+    def addNotification(self, event):
         '''
         Called when a notification is sent to the player
         Usage:
@@ -41,3 +52,12 @@ class HUD(object):
     def processUpdateEvent(self, event):
         timeElapsed = event.elapsedTimeSinceLastFrame
         self.note.update(timeElapsed)
+        
+    def notify(self, event):
+        
+        if isinstance(event, Event.NotificationEvent):
+            self.addNotification(event)
+        elif isinstance(event, Event.ResourceChangeEvent):
+            # Event.ResourceChangeEvent contains a .resource and .amount
+            # attribute.  Julian, change this.
+            pass
