@@ -2,20 +2,36 @@ import Event
 from Entity import Entity
 from Listener import Listener
 from Unit import Unit,TestUnit
+from Structure import TestTownCenter
 from Overlay import HealthBar
 import cPickle
 
 class WorldManipulator(Listener):
     def __init__(self,manager,world,networked=True,gameClientID=None):
-        eventTypes = [ Event.EventExecutionEvent,Event.WorldManipulationEvent]
+        eventTypes = [ Event.EventExecutionEvent,Event.WorldManipulationEvent,Event.StartedEvent,Event.GameLoadedEvent,Event.ClientIDCollected]
         Listener.__init__(self,manager,eventTypes)
         
         self.networked=networked
         self.world=world
         self.gameClientID = gameClientID
+        print 'WorldManipulator thinks the gameID is',gameClientID
     
     def notify(self,event):
-        if (self.networked and isinstance(event,Event.EventExecutionEvent)) or\
+        if isinstance(event, Event.StartedEvent):
+            print 'Game started, trying to fire LoadGameEvent'
+            self.manager.post(Event.LoadGameEvent())
+        if isinstance(event, Event.ClientIDCollected):
+            self.gameClientID = event.clientID
+            print 'new gameClientID',event.clientID
+        if isinstance(event, Event.GameLoadedEvent):
+            for i in xrange(25):
+                print 'creating a unit with playerID',self.gameClientID
+                self.manager.post(Event.WorldManipulationEvent(['create',TestUnit,(i*50,i*50,self.world.worldID,self.gameClientID)]))
+            from random import randint,choice
+            xpos = randint(0,self.world.gridDim[0])
+            ypos = randint(0,self.world.gridDim[1])
+            self.manager.post(Event.WorldManipulationEvent(['create',TestTownCenter,(xpos,ypos,self.world.worldID,self.gameClientID)]))
+        elif (self.networked and isinstance(event,Event.EventExecutionEvent)) or\
          (not self.networked and isinstance(event, Event.WorldManipulationEvent)):
              
              data = event.data

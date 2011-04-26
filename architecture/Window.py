@@ -295,6 +295,7 @@ class Window(Listener):
         """
 
         if isinstance( event, Event.StartEvent ):
+            self.manager.post(Event.StartedEvent())
             self.run()
         elif isinstance( event, Event.QuitEvent ):
             self.deactivate()

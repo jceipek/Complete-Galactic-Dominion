@@ -11,7 +11,7 @@ class GameClient(networking.Client,Listener):
     def __init__(self,manager,host = 'localhost',port = 51423):
         networking.Client.__init__(self,host,port)
         print self.socketThread
-        eventTypes = [Event.WorldManipulationEvent]
+        eventTypes = [Event.WorldManipulationEvent,Event.LoadGameEvent]
         Listener.__init__(self,manager,eventTypes)
         self.loaded=False
         
@@ -22,15 +22,20 @@ class GameClient(networking.Client,Listener):
             self.manager.post(Event.NewPlayerEvent(playerID))
         elif not self.loaded and 'finishedLoading' in data:
             self.loaded = True
+            self.manager.post(Event.GameLoadedEvent())
         elif self.ID == None and data[:3] == 'ID:':
             IDList = data.split(':')
             GameClient.ID = int(IDList[1])
-            sockThrd.write('GetWorld')
             sockThrd.write('newPlayer:%d'%self.ID)
+            self.manager.post(Event.ClientIDCollected(self.ID))
         else:
             event = Event.EventExecutionEvent(data)
             self.manager.post(event)
         
     def notify(self,evt):
-        evtString = evt.toPacket()
-        self.sendRequest(evtString)
+        if isinstance(evt,Event.LoadGameEvent):
+            print 'Loading the game'
+            self.socketThread.write('GetWorld')
+        elif isinstance(evt,Event.WorldManipulationEvent):
+            evtString = evt.toPacket()
+            self.sendRequest(evtString)
