@@ -139,7 +139,9 @@ class HealthBar(Bar):
 class MiniMap(object):
     
     def __init__(self, world, width=400, height=200, \
-        borderColor=(0,0,0), borderWidth=5, clientID=None):
+        borderColor=(0,0,0), borderWidth=0, clientID=None, loc=(600,550)):
+
+        #FIXME: I broke the border when moving the minimap, but I don't want it there, so it doesn't matter that much - Julian
         
         self.world = world
         self.clientID = clientID
@@ -164,11 +166,13 @@ class MiniMap(object):
         self.borderColor=borderColor
         self.borderWidth=borderWidth
         
-        self.alphaColor = (255,0,255)
+        self.alphaColor = (0,0,0)
         self.baseSurface = pygame.Surface((width,height)) 
         self.baseSurface.convert()
-        self.baseSurface.set_colorkey(self.alphaColor) 
+        self.baseSurface.set_colorkey(self.alphaColor)
         self.rect = self.baseSurface.get_rect()
+        self.rect.move_ip(loc) #Added this to move the minimap. Probably not the best way to do it - Julian
+        self.loc = loc         #
         self._updateBaseSurface()
         
         self.dynamicSurface = pygame.Surface((width,height))
@@ -386,8 +390,9 @@ class MiniMap(object):
         br = (br[0]+self.xOffset+self.borderWidth,br[1]+self.yOffset)
         bl = (bl[0]+self.xOffset,bl[1]+self.yOffset)#+self.borderWidth)
         
-        pygame.draw.polygon(self.baseSurface,self.borderColor, \
-            [tl,tr,br,bl],self.borderWidth)
+        if self.borderWidth:
+            pygame.draw.polygon(self.baseSurface,self.borderColor, \
+                [tl,tr,br,bl],self.borderWidth)
     
     def offsetToDraw(self,point):
         return (point[0] + self.xOffset, point[1] + self.yOffset)
@@ -402,6 +407,7 @@ class MiniMap(object):
         Cartesian internal space which has been clicked, or None
         if the minimap was not clicked.
         """
+        point = (point[0]-self.loc[0],point[1]-self.loc[1]) #Added this to correct the clicking code with a new map loc - Julian
         unOffsetPoint = (point[0] - self.xOffset, point[1] - self.yOffset)
         unscaledPoint = unOffsetPoint[0]/self.scale, unOffsetPoint[1]/self.scale
         cartPoint = specialMath.isoToCart(unscaledPoint)
