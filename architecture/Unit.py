@@ -18,7 +18,7 @@ class BuildTask(object):
     Used by Builders in the self.buildQueue list to build things.
     """
     
-    def __init__(self, buildClass, callback):
+    def __init__(self, buildClass, pos, callback):
         """
         BuildTask containing a class of entity to be built and a 
         callback which will build the entity.
@@ -31,6 +31,7 @@ class BuildTask(object):
         self.callback = callback
         self.timeToBuild = self.buildClass.timeToBuild
         self.buildTime = 0
+        self.realCenter=pos
         
     def execute(self):
         """
@@ -84,7 +85,7 @@ class Builder(Entity):
         
         # Queue of entities to build
         self.buildQueue = []
-        self.currentTask = None
+        self.objectOfAction = None
         self.inventory=Inventory()
         
         # first to define these attributes
@@ -93,24 +94,27 @@ class Builder(Entity):
 
     def _hasResourcesToBuild(self,entityClass):
         
-        for resourceClass, amount in entityClass.costToBuild: 
+        for resourceClass, amount in entityClass.costToBuild:
             if not self.world.hasResources(self.owner,resourceClass,amount):
                 return False
         return True
 
-    def addToBuildQueue(self,entityClass,buildPos=None,callback=None):
-        
+    def addToBuildQueue(self, task):
+        """
         if buildPos is None:
             self.buildX,self.buildY = self.rect.center
         else:
             self.buildX,self.buildY = buildPos
+        """
+
+        entityClass=task.buildClass
         
         if entityClass in self.buildDict:
-            if self._hasResourcesToBuild(entityClass):    
+            if True: #self._hasResourcesToBuild(entityClass):    
                 self.addNotification(NotificationEvent(
                     'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild)
                     ))
-                
+                """
                 if callback is None:
                     #self.buildQueue.append(
                     #    BuildTask(entityClass,
@@ -127,9 +131,12 @@ class Builder(Entity):
                     self.buildQueue.append(
                         BuildTask(entityClass,callback)
                     )
+                """
+                self.buildQueue.append(task)
+                self.status=Locals.BUILDING
         
-                for resource,cost in entityClass.costToBuild:
-                    self.world.removeResource(self.owner,resource,cost)
+                #for resource,cost in entityClass.costToBuild:
+                #   self.world.removeResource(self.owner,resource,cost)
             else:
                 from specialString import resourcesRequiredStr
                 self.addNotification(NotificationEvent(resourcesRequiredStr(entityClass.costToBuild,entityClass.name)))
@@ -144,10 +151,10 @@ class Builder(Entity):
         if not self.hasFullHealth():
             self.regenerate()
             
-        if self.currentTask == None:
+        if self.objectOfAction== None:
             self.nextBuildTask()
         
-        if not self.currentTask == None:
+        if not self.objectOfAction == None:
             self.build()
     
     def hasBuildTask(self):
@@ -155,17 +162,18 @@ class Builder(Entity):
     
     def nextBuildTask(self):
         if self.hasBuildTask():
-            self.currentTask = self.buildQueue.pop(0)
+            self.objectOfAction = self.buildQueue.pop(0)
         else:
-            self.currentTask = None
+            self.objectOfAction = None
+            self.status=Locals.IDLE
     
     def build(self):
         """A particular builder creates builder1 after a certain timeToBuild"""
 
-        self.currentTask.addTime(self.getTimeElapsed()/1000.0)
+        self.objectOfAction.addTime(self.getTimeElapsed()/1000.0)
         
-        if self.currentTask.isReady():
-            self.currentTask.execute()
+        if self.objectOfAction.isReady():
+            self.objectOfAction.execute()
             self.nextBuildTask()
     
     def buildOptions(self):
@@ -193,20 +201,23 @@ class Builder(Entity):
             buildY = self.buildY
         return (self.buildX,self.buildY,self.world,self.owner)
         
-    def getBuildArgs2(self,buildX=None,buildY=None):
+    def getBuildArgs2(self,x=None,y=None):
         """
         Takes an optional 
         """
-        if buildX is None:
-            buildX = self.buildX
-        if buildY is None:
-            buildY = self.buildY
-        return (self.buildX,self.buildY,self.world.worldID,self.owner)
+        
+        if x is None:
+            x = self.buildX
+        if y is None:
+            y = self.buildY
+        
+        return (x,y,self.world.worldID,self.owner)
 
 class Unit(Builder):
     """A kind of Builder that can move around."""
     
     costToBuild = [(Gold,75)]
+    movable=True
     
     name = 'Unit'
     
@@ -227,7 +238,7 @@ class Unit(Builder):
         self.speed=.1
         self.attackRange=300
         self.attackRechargeTime=500
-        self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100}
+        self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100, Locals.BUILD: 100}
         self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
         self.objectOfAction=None
         self.world.addEntity(self)
@@ -304,11 +315,14 @@ class Unit(Builder):
                 self.objectOfAction=None
         elif self.status==Locals.DEPOSITING:
             self.deposit()
+        elif self.status==Locals.BUILDING:        
+            if self.objectOfAction == None:
+                self.nextBuildTask()
+            
+            if not self.objectOfAction == None:
+                self.build()
+                
         self.timeSinceLast[Locals.ATTACK]+=self.getTimeElapsed()
-        if self.currentTask == None:
-            self.nextBuildTask()
-        if not self.currentTask == None:
-            self.build()
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
@@ -356,6 +370,11 @@ class Unit(Builder):
                         if amountToDeposit != amountDeposited:
                             print 'Warning: did not deposit correct amount of resources.'
             self.status=Locals.IDLE
+            self.objectOfAction=None
+
+    def build(self):
+        if self.moveCloseToObject(self.radius[Locals.BUILD]):
+            Builder.build(self)
         
     def initAction(self, obj): 
         """

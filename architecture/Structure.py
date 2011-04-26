@@ -20,7 +20,7 @@ class Structure(Builder):
             owner=owner,blendPath=blendPath)
         print 'Structure owner:',owner
         self.status = Locals.IDLE
-        self.maxHealth=100
+        self.maxHealth=9001
         self.curHealth=self.maxHealth
         self.movable=False
         self.world.addEntity(self)
