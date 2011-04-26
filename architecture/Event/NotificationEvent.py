@@ -22,3 +22,10 @@ class EntityFocusEvent(Event):
         
         Event.__init__(self)
         self.entity = entity
+        
+class SelectedEntityEvent(Event):
+    
+    def __init__(self,entityList):
+        
+        Event.__init__(self)
+        self.entityLIst = entityList

@@ -97,6 +97,7 @@ class Sign:
         thumb=pygame.transform.scale(self.image, (self.imageSize, self.imageSize))
         self.surf.blit(thumb, (self.margin, self.margin))
     self.rendered = True
+    
   def draw(self, surf, f = 1):
     if not self.rendered: self.render()
     if f >= 1:
