@@ -318,7 +318,6 @@ class Unit(Builder):
         elif self.status==Locals.BUILDING:        
             if self.objectOfAction == None:
                 self.nextBuildTask()
-            
             if not self.objectOfAction == None:
                 self.build()
                 
@@ -326,12 +325,13 @@ class Unit(Builder):
 
     def attack(self):
         """Moves unit such that enemy is within range and attacks it"""
-        if self.moveCloseToObject(self.radius[Locals.ATTACK]) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
-            self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
-            self.timeSinceLast[Locals.ATTACK]=0
-        if self.objectOfAction.curHealth<=0:
-            self.status=Locals.IDLE
-            self.dest=self.realCenter
+        if self.objectOfAction is not None:
+            if self.moveCloseToObject(self.radius[Locals.ATTACK]) and self.timeSinceLast[Locals.ATTACK]>=self.attackRechargeTime:
+                self.objectOfAction.changeHealth(-1*self.efficiency[Locals.ATTACK])
+                self.timeSinceLast[Locals.ATTACK]=0
+            if self.objectOfAction.curHealth<=0:
+                self.status=Locals.IDLE
+                self.dest=self.realCenter
 
     def gather(self):
         """moves unit close to resource, adds resource to containment"""
