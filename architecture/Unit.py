@@ -364,6 +364,7 @@ class Unit(Builder):
         Initialized appropriate action by setting dest and status given the type of entity.
         """
         data=['act',self.entityID,obj.entityID]
+        print self.entityID,'acting on',obj.entityID
         self.sendEventToManager(WorldManipulationEvent(data))
             
     def execAction(self,obj):
