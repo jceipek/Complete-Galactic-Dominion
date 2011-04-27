@@ -2,8 +2,28 @@ from DrawableObject import DrawableObjectGroup
 from Sign import Sign
 
 class DescriptionBox():
-    #The largest HUD element which describes the selected (or hovered?) unit
-    #and its properties (those which are player-relevant)
+    """
+    The largest HUD element which describes the hovered unit
+    and its properties (those which are player-relevant)
+
+    @param baseLayer:  background image
+    @type baseLayer: DrawableObjectGroup(list(tuple(str,  str)), tuple(int, int))
+
+    @param entity: Entity whose information is being displayed
+    @type entity: Entity
+
+    @param descriptionOffset: position of description of entity relative to DescriptionBox
+    @type descriptionOffset: tuple(int, int)
+
+    @param description: Text description of entity
+    @type descritpion: Sign
+
+    @param pos: position of DescriptionBox on screen
+    @type pos: tuple(int, int)
+
+    @param thumbnailOffset: position of thumbnail relative to DescriptionBox
+    @type thumbnailOffset: tuple(int, int)
+    """
     def __init__(self,pos = (0,768-36-186)):
          #FIXME Remove this dependency - replace image with thumbnail
         from Overlay import Bar
@@ -20,6 +40,9 @@ class DescriptionBox():
         self.thumbnailOffset = (12,14+36)
 
     def updateDisplayedEntity(self,entity):
+        """
+        Changes entity displayed
+        """
         import pygame
         from Overlay import Bar
         self.entity = entity
@@ -33,7 +56,9 @@ class DescriptionBox():
         self.baseLayer.draw(screen)
         if self.entity:
             self.healthBar.updateBarWithValue(self.entity.curHealth)
-            
+
+            #if entity is building something, displays
+            #building status
             if hasattr(self.entity,'currentTask'):
                 if self.entity.currentTask:
                     if hasattr(self.entity.currentTask,'buildTime'):
@@ -50,7 +75,21 @@ class DescriptionBox():
         
 
 class ResourceBar():
-    #A bar at the top of the screen indicating the amount of resources the player has on the current world
+    """
+    A bar at the top of the screen indicating the amount of resources the player has on the current world
+
+    @param baseLayer: background image
+    @type baseLayer: DrawableObjectGroup(list(tuple(str,  str)), tuple(int, int))
+
+    @param offset: position of amount of resource relative to ResourceBar
+    @type offset: tuple(int, int)
+
+    @param textField: Displays amount of resources own
+    @type textField: Sign
+
+    @param value: amount of resource owned
+    @type value: int
+    """
     def __init__(self,pos = (0,0)):
         images = [("ResourceBar.png", 'alpha')]
         self.baseLayer = DrawableObjectGroup(images,pos=pos)
@@ -154,6 +193,7 @@ class NotificationList():
     def add(self, notification):
         self.notes.append(notification)
         notification.offset[0]=self.pos[0]
+        
     def update(self, timeElapsed):
         y=self.pos[1]
         #removes notifications that have timed out

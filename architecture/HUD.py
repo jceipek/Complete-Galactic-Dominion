@@ -51,6 +51,7 @@ class HUD(Listener):
         self.note=NotificationList()
         
     def draw(self, displaySurface):
+        #Draws elements of HUD to surface
         self.selectedUnitBar.draw(displaySurface)
         self.descBox.draw(displaySurface)
         self.note.draw(displaySurface)
@@ -65,7 +66,6 @@ class HUD(Listener):
         Usage:
         ========================
            self.note.add(Notification('Imma notify you'))
-           self.note.add(Notification('This is a slightly shorter lasting notification', time=2))
            self.note.add(Notification('This is a longer lasting notification', time=8))
         '''
         note=Notification(event.message)
