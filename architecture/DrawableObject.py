@@ -4,14 +4,21 @@ import pygame.display
 from GameData import loadImage, ImageBank
 
 class DrawableObject(object):
-    """This is the super class of all object that can be drawn to the screen"""
+    """
+    This is the super class of all object that can be drawn to the screen.
+    """
     
+    # Class variable shared by all objects which will be drawn to the
+    # screen.  Serves as a cache for images and other related
+    # information.
     imageBank = ImageBank()
     
     def __init__(self, imagePath, colorkey=None, blendPath=None, 
         owner='error'):
-            
+        
+        # flag determining whether     
         self.isImageInitialized = False
+        
         # First class to have image and rect objects
         self.imagePath = imagePath
         self.blendPath = blendPath
@@ -19,15 +26,18 @@ class DrawableObject(object):
         
         self.owner=owner
         self.orientation=0
-        '''
-        self.loadImage(imagePath,colorkey)
-        self.setAverageColor(imagePath,colorkey)
-        self.realCenter = self.rect.center
-        '''
 
+        # sets up all information related to the image and its bounding
+        # rectangle
         self._imageInformationSetup()
         
     def _imageInformationSetup(self):
+        """
+        If the pygame display is initialized, the image, bounding
+        rectangle, and average color will be determined.  If not,
+        this does nothing.  This must be called before the
+        DrawableObject can be drawn.
+        """
         if pygame.display.get_init():
             self.loadDefaultImage(self.imagePath,self.colorkey)
             self.setAverageColor(self.imagePath,self.colorkey)
@@ -36,13 +46,20 @@ class DrawableObject(object):
     
     # First loadImage method
     def loadDefaultImage(self, imagePath, colorkey=None):
-        
+        """
+        Loads the default image from the imageBank for the DrawableObject
+        for drawing and sets it to the image attribute.  Also sets the
+        rect attribute to the bounding rectangle of this image.
+        """
         objImage = self.imageBank.getImage(imagePath,colorkey,self.orientation,playerID=self.owner,blendPath=self.blendPath)
 
         self.image = objImage
         self.rect = self.image.get_rect()
     
     def getDefaultImage(self):
+        """
+        Returns the default image in the imageBank for this instance.
+        """
         return self.imageBank.getPlayerDefaultImage(self.imagePath,self.owner)
     
     def setImageToOrientation(self,orientation):
@@ -145,39 +162,11 @@ if __name__ == "__main__":
     from specialImage import loadImage
     
     a = DrawableObject('ship','alpha',blendPath='ShipFlags')
-    #mask = loadImage('ShipFlags',(0,0,0))
 
-    #a = DrawableObject('TownCenterGeneric.png','alpha')
-    #mask = loadImage('imageData/TownCenterFlag.png',(0,0,0))
-    
-    def imageBlend(image,mask,color=None):
-        if color==None:
-            color = (255,0,255)
-        rect = image.get_rect()
-        maskBackground = pygame.Surface(rect.size)
-        maskBackground.fill(color)
-        maskBackground.blit(mask,rect,special_flags=pygame.BLEND_MULT)
-        image.blit(maskBackground,rect,special_flags=pygame.BLEND_ADD)
-        return image
-    '''
-    # GOOD
-    tstSurface = pygame.Surface(a.rect.size)
-    tstSurface.fill((255,255,0))
-    tstSurface.blit(mask,a.rect,special_flags=pygame.BLEND_MULT)
-    a.image.blit(tstSurface,a.rect,special_flags=pygame.BLEND_ADD)
-    '''
-
-    #minimalRect=DrawableObject.imageBank.getMinimalRect('ship/ship_0000.png','alpha',padding=30)
-    #minimalRect.clamp_ip(a.rect)
-    
-    #a.image = imageBlend(a.image,mask,(255,0,0))
-    
     pygame.init()
     
     while RUNNING:
 
-        #screen.blit(a.image,a.rect)
-        screen.blit(a.getDefaultImage(),a.rect)
-
-        #pygame.draw.rect(screen,(255,0,255),minimalRect,2)
+        screen.blit(a.image,a.rect)
+        
         pygame.display.flip()

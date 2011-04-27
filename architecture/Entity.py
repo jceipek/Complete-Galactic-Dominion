@@ -257,7 +257,7 @@ class Entity(MapObject):
         Returns whether or not an entity is at full health.
         """
         return self.maxHealth == self.curHealth
-        
+    
     def addNotification(self,event):
         """
         Adds a notification to the list of world notifications.

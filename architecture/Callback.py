@@ -113,6 +113,10 @@ def networkClassCreator(className,*args):
 
 if __name__ == "__main__":
 
+    """
+    Testing callbacks...
+    """
+
     def printSomething(myStr,astr):
         print myStr + astr
 
@@ -129,7 +133,7 @@ if __name__ == "__main__":
             self.x = 'IBETTERWORK'
             self.y = 'blahblah'
         
-        def myMethod(self,t='what',s=' the heck'):
+        def myMethod(self,t='I',s=' worked.  woo.'):
             print t+s
     
     a = [A(),A()]

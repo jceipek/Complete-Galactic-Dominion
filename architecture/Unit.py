@@ -115,24 +115,7 @@ class Builder(Entity):
                 self.addNotification(NotificationEvent(
                     'Building %s in %1.2f seconds.'%(entityClass.name,entityClass.timeToBuild),self.owner
                     ))
-                """
-                if callback is None:
-                    #self.buildQueue.append(
-                    #    BuildTask(entityClass,
-                    #        Callback(self.buildDict[entityClass],*self.getBuildArgs()))
-                    #    )
-                    self.buildQueue.append(
-                        BuildTask(entityClass,
-                            Callback(self.sendEventToManager,
-                                networkClassCreator(entityClass,*self.getBuildArgs2())
-                            )
-                        )
-                    )
-                else:
-                    self.buildQueue.append(
-                        BuildTask(entityClass,callback)
-                    )
-                """
+
                 self.buildQueue.append(task)
                 self.status=Locals.BUILDING
         

@@ -181,7 +181,7 @@ def Unit_TestTownCenter(obj1,obj2):
         hasSameOwner = (obj1.owner == obj2.owner)
         
     if hasSameOwner:
-
+        #deposit resources
         gatherCallbacks = []
         for unit in obj1:
             #gatherCallbacks.append(unit.setStatusAndObjectOfAction)
@@ -223,7 +223,8 @@ def Unit_WayPoint(obj1,obj2):
     # FIXME - DOES NOT CURRENTLY WORK WITH GROUPS
     
     menu = radialMenu.RMenu(openDelay=.2)
-    
+
+    #set destination of unit
     setDestCallbacks = []
     for unit in obj1:
         setDestCallbacks.append(unit.addToPath)
@@ -235,7 +236,8 @@ def Unit_WayPoint(obj1,obj2):
         callback = GroupCallback(setDestCallbacks,obj2.getPoint()))
 
     menu.addItem(setDestItem)
-    
+
+    #tells unit to build a structure
     if len(obj1[0].buildDict) > 0:
         
         buildItem = radialMenu.RMenuItem(menu,
@@ -257,12 +259,15 @@ def Unit_WayPoint(obj1,obj2):
                             networkClassCreator(buildType,\
                             *obj1[0].getBuildArgs2(*p))))
                             
+                #tells unit to build
                 setBuildCallbacks=[]
                 for unit in obj1:
                     setBuildCallbacks.append((unit.addToBuildQueue,[buildTask]))
-                    
+
+                #subtracts cost of building from player's resources
                 for resource,cost in buildType.costToBuild:
                     setBuildCallbacks.append((obj1[0].world.removeResource, (obj1[0].owner,resource,cost)))
+                    
                 func, args = setBuildCallbacks.pop()
                 call=ParallelCallback(func, *args)
                 for func, args in setBuildCallbacks:
@@ -284,7 +289,7 @@ def Unit_WayPoint(obj1,obj2):
 def Unit_Resource(obj1,obj2):
     
     menu = radialMenu.RMenu(openDelay=.2)
-    
+    #gathers resource
     setGatherCallbacks = []
     for unit in obj1:
         setGatherCallbacks.append(unit.initAction)
@@ -350,7 +355,7 @@ def TestTownCenter_WayPoint(obj1,obj2):
     
     menu = radialMenu.RMenu(openDelay=.2)
     
-    # FIXME HACK - CAN ONLY ACCEPT 1 TESTTOWNCENTER
+    # FIXME - CAN ONLY ACCEPT 1 TESTTOWNCENTER
     
     if len(obj1[0].buildDict) > 0:
         
@@ -372,6 +377,8 @@ def TestTownCenter_WayPoint(obj1,obj2):
                     obj1[0].sendEventToManager,
                     networkClassCreator(buildType,*obj1[0].getBuildArgs2())
                     )
+                    
+                #FIXME - Does not set path properly when many units created at once
                 makeAndMove.addCallback(
                     obj1[0].world.universe.manager.post,
                     WorldManipulationEvent(['setpath',

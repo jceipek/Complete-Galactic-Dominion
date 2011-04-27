@@ -1,3 +1,8 @@
+"""
+NOT CURRENTLY IMPORTED AT ALL IN GAME, BUT THIS ALGORITHM IS USED
+BY THE WORLD TO CALCULATE COLLISIONS WITH THE VIEWPORT.
+"""
+
 def collideRectDiamond(self,rect1,diamond):
     left,top=rect1.topleft
     right,bottom=rect1.bottomright

@@ -37,21 +37,33 @@ class Manager(object):
         self.debugger = debugger
 
     def registerListener( self, listener ):
-		for evType in listener.eventTypes:
+        """
+        Registers a listener with the event manager to be nofitied
+        when the events in the attribute eventTypes of the listener
+        are received.
+        """
+        for evType in listener.eventTypes:
 			self.eventTypesToListeners.setdefault(evType,[]).append(listener)
-		self.listeners[ listener ] = 1
+        self.listeners[ listener ] = 1
 
     def unregisterListener( self, listener ):
+        """
+        Removes a listener from the dictionary of listeners.
+        """
         if listener in self.listeners:
             del self.listeners[ listener ]
 
     def post( self, event ):
+        """
+        Sends an event to the listeners which should be notified
+        depending on the type of event.  The manager will also
+        set the time stamp of the event.
+        """
         event.timeFired = self.eventTimer.getTime()
     
         if self.debugger.SYMBOLS_ENABLED:
             self.debugger.logMsg(event)
-        ##SOME LISTENERS SHOULD START THEIR OWN THREADS
-        
+        ##SOME LISTENERS SHOULD START THEIR OWN THREADS (eventually)
         
         for listener in self.eventTypesToListeners.get(type(event),[]):
 			listener.notify(event)

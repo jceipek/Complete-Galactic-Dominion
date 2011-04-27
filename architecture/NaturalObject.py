@@ -70,7 +70,6 @@ class Resource(NaturalObject):
         self.regenRate = 0
         self._regenHealth = 0
 
-
 class Gold(Resource):
     """Gold."""
     

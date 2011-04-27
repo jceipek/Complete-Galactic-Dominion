@@ -132,7 +132,8 @@ class SelectedUnitBar():
             b.draw(screen)
             
 class Notification(Sign):
-    def __init__ (self, text='This is a Notification. Consider yourself notified.', pos=(800,0), color=(255, 255, 0), width=200, time=5):
+    """Displays text to the screen. Must be element of NotificationList to disappear after set amount of time"""
+    def __init__ (self, text='This is a Notification. Consider yourself notified.', pos=(0,0), color=(255, 255, 0), width=200, time=5):
         Sign.__init__(self, width, pos)
         self.addtext(text)
         self.tcolor=color

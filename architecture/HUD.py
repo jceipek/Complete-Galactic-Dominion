@@ -8,14 +8,37 @@ from Listener import Listener
 import Event
 
 class HUD(Listener):
+    """
+    Heads-Up Display contains elements to inform the player of
+    the resources owned, health of selected entities, and
+    description an entity being hovered over.
+    Displays other pertinent information through notifications.
+
+    @param descBox: Shows information about a hovered entity
+    @type descBox: DescriptionBox
+
+    @param resourceBar: Shows the number of resources owned by the player
+    @type descBox: ResourceBar
+
+    @param selectedUnitBar: Bar displaying the units selected
+    @type selectedUnitBar: SelectedUnitBar
+
+    @param clientID: id number of the player
+    @type clientID: int
+
+    @param viewport: reference to the player's viewport, not currently used
+    @type viewport: Viewport
+
+    @param note: Shows information regarding relevent events
+    @type note: NotificationList
+    
+    """
     
     def __init__(self,manager,clientID):
         
         eventTypes = [Event.NotificationEvent, Event.ResourceChangeEvent,
             Event.EntityFocusEvent, Event.SelectedEntityEvent]
         
-        #Using this until someone can explain why super() is or is not the right way to do this
-        #Waaaay too many disagreements/articles on this online
         Listener.__init__(self,manager,eventTypes)
         
         self.descBox = DescriptionBox()
@@ -24,7 +47,6 @@ class HUD(Listener):
 
         self.clientID = clientID
 
-        self.viewport=None
         #self.infoRect=pygame.Rect((0,20), (self.size[0], self.size[1]-20))
         self.note=NotificationList()
         

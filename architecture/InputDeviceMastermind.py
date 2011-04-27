@@ -1,5 +1,12 @@
+"""
+NOT CURRENTLY IMPLEMENTED IN CGD.
+"""
+
 class InputDeviceMastermind(object):
     """
+    Will map from input device to action, read from a configuration file.
+    Not currently implemented (lacks this functionality).
+    
     Attributes:
         scrollPosition
         cursorPosition

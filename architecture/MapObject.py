@@ -25,16 +25,14 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
         
         # this is the first initialization of blockable
         # determines whether or not an object can be walked through
+        # FUNCTIONALITY NOT CURRENTLY IMPLEMENTED
         self.blockable=False
         
         # rectangle used EXCLUSIVELY for collision detection
         # defaults to the image rectangle
         # NOTE: update methods need to move collRect with rect!
+        # FUNCTIONALITY NOT CURRENTLY IMPLEMENTED
         self.collRect = self.rect
-
-    def draw(self,surface):
-        # Override
-        pass
 
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)

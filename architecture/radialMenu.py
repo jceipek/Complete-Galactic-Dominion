@@ -57,7 +57,6 @@ class RMenu():
             except ValueError: # thrown if entity not in selectedEntity list
                 pass
         
-        
     def _delayedOpen(self,msTimeAdd):
         self._timeFocused+=msTimeAdd/1000.0
         if self._timeFocused >= self._openDelay:

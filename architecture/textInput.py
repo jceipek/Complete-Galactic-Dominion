@@ -1,6 +1,10 @@
 # origins by Timothy Downs
 # adjusted by Jared Kirschner
 
+"""
+Proof of concept for a textInput box.  Not implemented in CGD currently.
+"""
+
 import pygame, pygame.font, pygame.event, pygame.draw, string
 from pygame.locals import *
 import thread,time
