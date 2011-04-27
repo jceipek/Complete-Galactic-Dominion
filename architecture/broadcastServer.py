@@ -109,7 +109,8 @@ def init(host='localhost',server=None):
     s.world=w
     
     networked = True
-    client = GameClient(eventManager,host='localhost',port=1567)
+    print "GameClient"
+    client = GameClient(eventManager,host=host,port=1567)
     while client.ID == None:
         import time
         time.sleep(.02)
@@ -141,7 +142,18 @@ def init(host='localhost',server=None):
 if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
-    s = BroadcastServer(port = 1567, host = 'localhost')
+    
+    import sys
+
+    theHost = 'localhost'
+    if (len(sys.argv) == 2):
+        theHost = sys.argv[1]
+    elif len(sys.argv) > 2:
+        print "Usage: python broadcastServer.py ipAddress"
+        print "Reverting to localhost..."
+        theHost = 'localhost'
+    
+    s = BroadcastServer(port = 1567, host = theHost)
     s.listenAndConnect()
     
     init(server=s)

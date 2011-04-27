@@ -104,4 +104,14 @@ if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
     
-    eTypestoListeners = init('10.41.24.200')
+    import sys
+
+    theHost = 'localhost'
+    if (len(sys.argv) == 2):
+        theHost = sys.argv[1]
+    elif len(sys.argv) > 2:
+        print "Usage: python client.py ipAddress"
+        print "Reverting to localhost..."
+        theHost = 'localhost'
+    
+    eTypestoListeners = init(theHost)
