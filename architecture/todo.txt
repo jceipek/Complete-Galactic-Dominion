@@ -10,7 +10,8 @@ High Priority:
     DONE - Fix the issues of entities being able to go off of the world grid (JARED)
 
 Medium Priority:
-- make collision detection with screen more efficient (Patrick and Jared)
+
+    DONE - make collision detection with screen more efficient (Patrick and Jared)
 
 Low Priority:
 - show places you have not explored as black

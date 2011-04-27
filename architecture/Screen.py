@@ -3,7 +3,7 @@ from Viewport import Viewport
 from HUD import HUD
 from World import World
 
-class Screen(object): #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
+class Screen(object):
     """
     Contains all of the elements that might be shown on screen at once.
     This is an abstract class with child classes.
@@ -57,19 +57,14 @@ class MainScreen(Screen):
         self.hud.setClientID(clientID)
     
     def TEST_createViewport(self,world,manager):
-        ###FIXME
-        #world.TEST_createGrid()
+
         scrollLoc = (0,0)
         viewportPos = (0,0)
-        #viewportSize = (640,480)
         viewportSize = (1024,768)
         testViewport = Viewport(world,manager,scrollLoc,viewportPos,viewportSize,self.clientID)
         self.viewport = testViewport
 
-        #hudPos=(0, viewportSize[1])
-        #hudSize=(viewportSize[0], 120)
         self.hud=HUD(manager,self.clientID)
-
         self.viewport.hud=self.hud
         self.hud.viewport=self.viewport
         
