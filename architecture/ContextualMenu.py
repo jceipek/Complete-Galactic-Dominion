@@ -355,7 +355,7 @@ def TestTownCenter_WayPoint(obj1,obj2):
     
     menu = radialMenu.RMenu(openDelay=.2)
     
-    # FIXME HACK - CAN ONLY ACCEPT 1 TESTTOWNCENTER
+    # FIXME - CAN ONLY ACCEPT 1 TESTTOWNCENTER
     
     if len(obj1[0].buildDict) > 0:
         

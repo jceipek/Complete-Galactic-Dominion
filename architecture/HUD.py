@@ -39,8 +39,6 @@ class HUD(Listener):
         eventTypes = [Event.NotificationEvent, Event.ResourceChangeEvent,
             Event.EntityFocusEvent, Event.SelectedEntityEvent]
         
-        #Using this until someone can explain why super() is or is not the right way to do this
-        #Waaaay too many disagreements/articles on this online
         Listener.__init__(self,manager,eventTypes)
         
         self.descBox = DescriptionBox()
@@ -49,7 +47,6 @@ class HUD(Listener):
 
         self.clientID = clientID
 
-        self.viewport=None
         #self.infoRect=pygame.Rect((0,20), (self.size[0], self.size[1]-20))
         self.note=NotificationList()
         

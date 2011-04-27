@@ -18,7 +18,7 @@ import threading, traceback, time
 import Event, networking
 from Manager import Manager
 from Window import Window
-from Grid import InfiniteGrid,FiniteGrid
+from Grid import InfiniteGrid
 from Debugger import Debugger
 from Event import EventTimer
 from World import World
@@ -104,4 +104,4 @@ if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
     
-    eTypestoListeners = init('10.41.24.200')
+    eTypestoListeners = init('localhost')

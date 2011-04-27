@@ -36,8 +36,7 @@ class ImageBank(object):
         
         return (imagePath,playerID) in self.cache
     
-    def loadImage(self, imagePath, colorkey, playerID=None, blendPath=None):
-        
+    def loadImage(self, imagePath, colorkey, playerID=None, blendPath=None):        
         """
         Loads an image or animation into the cache as an AnimationDict.
         Accepts an imagePath as a file or directory, and a blendPath as

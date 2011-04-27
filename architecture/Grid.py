@@ -127,6 +127,8 @@ class InfiniteGrid(Grid):
                 #surface.blit(txt,((left+tileWidth/3,top+tileHeight/3),(50,50)))
         #pygame.draw.polygon(surface,(255,0,0),[(0,0),self.cartToIso((self.gridSize[0],0)),self.cartToIso((0,self.gridSize[1])),self.cartToIso(self.gridSize)])
 
+# NONE OF THE BELOW CLASSES ARE CURRENTLY IMPLEMENTED
+'''
 class FiniteGrid(Grid):
     """
     A standard, finite grid (used in most RTS games).
@@ -217,8 +219,6 @@ class Grid2(object):
         return floor(x*float(gridSize[0])/maxX), \
                 floor(y*float(gridSize[1]/maxY))
         
-        
-
 class GridSquare(object):
     
     def __init__(self,imagePath='newGrass.png',colorkey=(255,0,255)):
@@ -305,4 +305,4 @@ class InfiniteGrid2(Grid2):
                 #txt.get_rect().center = (left+tileWidth/2,top+tileHeight/2)
                 #surface.blit(txt,((left+tileWidth/3,top+tileHeight/3),(50,50)))
         #pygame.draw.polygon(surface,(255,0,0),[(0,0),self.cartToIso((self.gridSize[0],0)),self.cartToIso((0,self.gridSize[1])),self.cartToIso(self.gridSize)])
-
+'''
