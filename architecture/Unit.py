@@ -16,6 +16,20 @@ from Event import NotificationEvent,WorldManipulationEvent
 class BuildTask(object):
     """
     Used by Builders in the self.buildQueue list to build things.
+
+    @param buildClass: class of entity to be built
+
+    @param callback: actions to be carried out at the creation of the entity
+    @type callback: Callback
+
+    @param timeToBuild: amount of time required to build the entity in seconds
+    @type timeToBuild: int
+
+    @param buildTime: amount of time that has been put into building the entity in seconds
+    @type buildTime: float
+
+    @param realCenter: position where entity will be built
+    @type realCenter: tuple(int, int)
     """
     
     def __init__(self, buildClass, pos, callback):
@@ -56,18 +70,22 @@ class BuildTask(object):
 class Builder(Entity):
     """
     A kind of entity that can create things (units or structures).
-    Attributes:
-    description: description of behavior, abilities (inherited from Entity)
-    x: position (inherited from Entity)
-    y: position (inherited from Entity)
-    maxHealth: maximum/ default health points (inherited from Entity)
-    curHealth: current health (inherited from Entity)
-    size: radius of collision (inherited from Entity)
     
-    ---------------------methods inherited from SuperClasses
-    die(self): entity is removed from map
-    changeHealth(self, numHits): decreases the health of the entity based 
-    on number of hits
+    @param buildDict: Dictionary which maps from strings defining units which can be produced by a builder to callbacks
+    @type buildDict: dict{str:Callback}
+
+    @param buildQueue: represents entities that will be built as soon as the currentTask is finished being built
+    @type buildQueue: list(BuildTask)
+
+    @param currentTask: represents entity that is currently being built
+    @type currentTask: BuildTask
+
+    @param inventory: represents resources held
+    @type inventory: Inventory
+
+    @param buildX, buildY: position where new entity will be built
+    @type buildX, buildY: int, int
+
     """
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
@@ -79,13 +97,11 @@ class Builder(Entity):
         
         self.blockable=True
         
-        # Dictionary which maps from strings defining units which can
-        # be produced by a builder to callbacks
+        # 
         self.buildDict={}
         
         # Queue of entities to build
         self.buildQueue = []
-        self.objectOfAction = None
         self.currentTask=None
         self.inventory=Inventory()
         
@@ -187,7 +203,7 @@ class Builder(Entity):
         
     def getBuildArgs2(self,x=None,y=None):
         """
-        Takes an optional 
+        Takes an optional position to build entity
         """
         
         if x is None:
@@ -198,7 +214,51 @@ class Builder(Entity):
         return (x,y,self.world.worldID,self.owner)
 
 class Unit(Builder):
-    """A kind of Builder that can move around."""
+    """
+    A kind of Builder that can move around, attack, and
+    gather resources.
+
+    @param costToBuild: resources required to build Unit
+    @type costToBuild: dict{Resource:int}
+
+    @param movable: dictates that unit can move
+    @type movable: bool
+
+    @param imageCount: number of images associated with Unit's direction
+    @type imageCount: int
+    
+    @param status: represents action being performed by unit
+    @type status: int
+
+    @param efficiency: represents how quickly unit performs various actions
+    @type efficiency: dict{int:float}
+
+    @param path: represents where unit is going
+    @type path: list[list[int,int]]
+
+    @param dest: destination of unit in non-modulo coordinates
+    @type dest: list[int, int]
+
+    @param speed: how fast unit moves
+    @type speed: float
+
+    @param attackRechargeTime: amount of time unit must wait between attacks in milliseconds
+    @type attackRechargeTime: int
+
+    @param radius: how close a unit must be to perform a given action
+    @type radius: dict{int:int}
+
+    @param timeSinceLast: keeps track of time elapsed since last action- currently only keeps track of attacking
+    @type timeSinceLast: dict{int, int}
+
+    @param objectOfAction: object on which unit is acting
+    @type objectOfAction: Entity
+
+    @param regenRate: rate at which unit heals
+    @type regenRate: float
+
+    @param buildDict: dict of classes that Unit can build
+    """
     
     costToBuild = [(Gold,75)]
     movable=True
@@ -214,35 +274,17 @@ class Unit(Builder):
 
         self.imageCount = None    
 
-        #self.__class__.allUnits.add(self)
         self.status=Locals.IDLE
         self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10}
         self.path=[] #queue of future tuple destinations
         self.dest=self.realCenter=list(self.rect.center) #current destination
-        self.speed=.1
-        self.attackRange=300
+        self.speed=self.efficiency[Locals.MOVE]
         self.attackRechargeTime=500
         self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100, Locals.BUILD: 100}
         self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
         self.objectOfAction=None
         self.world.addEntity(self)
         print 'Adding unit entity:',self.entityID
-        '''
-        else:
-            #loadList = [status,efficiency,path,dest,speed,
-            #attackRange,attackRechargeTime,radius,timeSinceLast
-            #objectOfAction]
-            self.status = loadList['status']
-            self.efficiency = loadList['efficiency']
-            self.path = loadList['path']
-            self.dest = loadList['dest']
-            self.speed = loadList['speed']
-            self.attackRange = loadList['attackRange']
-            self.attackRechargeTime = loadList['attackRechargeTime']
-            self.radius = loadList['radius']
-            self.timeSinceLast = loadList['timeSinceLast']
-            self.objectOfAction = loadList['objectOfAction']
-            '''
         
         self.regenRate = .5        
         from Structure import TestTownCenter
@@ -278,7 +320,7 @@ class Unit(Builder):
         self.selected = False
 
     def update(self):
-        """Called by game each frame to update object."""
+        """Called by game each frame to update object. Has unit perform action given its status"""
         #FIXME !!!
         if isinstance(self.objectOfAction,int):
             self.objectOfAction = self.world.universe.entityIDToEntity.get(self.objectOfAction,self.objectOfAction)
@@ -358,6 +400,9 @@ class Unit(Builder):
             self.objectOfAction=None
 
     def build(self):
+        """
+        Moves unit close to build site and builds currentTask
+        """
         if self.moveCloseToObject(self.radius[Locals.BUILD], self.currentTask):
             Builder.build(self)
         
@@ -454,7 +499,10 @@ class Unit(Builder):
                 self.imagePath,self.colorkey,self.imageNum,self.owner,padding=25,showShadows=False)
 
     def _definePath(self):
-        while self._isAtDestination(): #may need to have room for error
+        """
+        Sets next dest if Unit is at its current dest
+        """
+        while self._isAtDestination(): 
             if self.path == []:
                 self.status = Locals.IDLE
                 self.dest = self.realCenter
@@ -475,6 +523,9 @@ class Unit(Builder):
             pass
     
     def _isAtDestination(self, margin=2):
+        """
+        Returns True if Unit is sufficiently close to dest, False otherwise
+        """
         if self.status == Locals.IDLE:
             return True
         return specialMath.distance(self.realCenter,self.dest) <= margin
@@ -482,15 +533,12 @@ class Unit(Builder):
     def _optimalDestination(self):
         """
         Returns the optimal destination given the current location
-        of the unit and the desired end point.  Returns None if none
-        is found.
+        of the unit and the desired end point. Returns given endpoint if none found.
         """
         destX,destY = self.path.pop(0)
         destX=destX%self.worldSize[0]
         destY=destY%self.worldSize[1]
-        
-        # Rectangle the size of the world which is centered
-        # at the current location
+
         return specialMath.findClosest(self.realCenter, (destX, destY), self.worldSize)
     
     def moveWrap(self):
@@ -510,19 +558,15 @@ class Unit(Builder):
         self.rect.center = tuple(self.realCenter)
     
     def addToPath(self,coord,servercommand=False):
-        '''Set the unit's destination to a new location.
+        """Set the unit's destination to a new location.
         The title of this function is currently misleading; in the
         past, it allowed units to keep a movement que in preparation
         for obstacle avoidance. For now, this functionality is not
-        supported'''
-        """
-        Takes an x,y coordinate tuple in the grid and adds this location
-        to the path.
-        """
+        supported"""
         if servercommand:
             #self.path.append(list(coord))  #FIXME: use this only for AI
             #FIXME: The following is a bit hackish - there is probably
-            #a better way, but we have timeconstraints
+            #a better way, but we have time constraints
             self.path = [list(coord)]
             self.dest = self.realCenter
             self._definePath()
@@ -530,12 +574,6 @@ class Unit(Builder):
             self.world.universe.manager.post(
                 WorldManipulationEvent(['setpath',self.entityID,coord])
             )
-    
-    
-    '''
-    def _addToPath(self,coord):
-        #self.path.append(list(coord))
-        self.path = list(coord)'''
         
     def getMiniMapColor(self):
         return (0,0,255)
