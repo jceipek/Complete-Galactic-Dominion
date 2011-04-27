@@ -42,9 +42,9 @@ class Manager(object):
         when the events in the attribute eventTypes of the listener
         are received.
         """
-		for evType in listener.eventTypes:
+        for evType in listener.eventTypes:
 			self.eventTypesToListeners.setdefault(evType,[]).append(listener)
-		self.listeners[ listener ] = 1
+        self.listeners[ listener ] = 1
 
     def unregisterListener( self, listener ):
         """

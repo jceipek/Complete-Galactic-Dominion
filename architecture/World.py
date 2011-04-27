@@ -333,7 +333,7 @@ class WorldResourceContainer(object):
         if self.hasPlayer(playerID):
             return self.resources[playerID].addResource(resource,amount)
         else:
-            print 'Player %s not yet added'%playerID.
+            print 'Player %s not yet added'%playerID
             print 'Now adding Player %s'%playerID
             self.addPlayer(playerID)
             return self.addResource(playerID,resource,amount)
@@ -348,7 +348,7 @@ class WorldResourceContainer(object):
         if self.hasPlayer(playerID):
             return self.resources[playerID].removeResouce(resource,amount)
         else:
-            print 'Player %s not yet added'%playerID.
+            print 'Player %s not yet added'%playerID
             print 'Now adding Player %s'%playerID
             self.addPlayer(playerID)
             return self.removeResource(playerID,resource,amount)
@@ -368,7 +368,7 @@ class WorldResourceContainer(object):
         if self.hasPlayer(playerID):
             return self.resources[playerID]
         else:
-            print 'Player %s not yet added'%playerID.
+            print 'Player %s not yet added'%playerID
             print 'Now adding Player %s'%playerID
             self.addPlayer(playerID)
             return self.getResources(playerID)
@@ -381,7 +381,7 @@ class WorldResourceContainer(object):
         if self.hasPlayer(playerID):
             return self.resources[playerID].hasResources(resource,amount)
         else:
-            print 'Player %s not yet added'%playerID.
+            print 'Player %s not yet added'%playerID
             print 'Now adding Player %s'%playerID
             self.addPlayer(playerID)
             return self.hasResources(playerID,resource,amount)

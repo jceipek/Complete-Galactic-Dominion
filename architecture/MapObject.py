@@ -34,10 +34,6 @@ class MapObject(DrawableObject, pygame.sprite.Sprite):
         # FUNCTIONALITY NOT CURRENTLY IMPLEMENTED
         self.collRect = self.rect
 
-    def draw(self,surface):
-        # Override
-        pass
-
 if __name__ == "__main__":
     screenSize = (width, height) = (1024, 768)
     screenLoc = [0.0, 0.0]

@@ -20,3 +20,8 @@ Low Priority:
 
 Super-Low Priority:
 - Collision detection between entities
+
+WorldManipulator
+Inventory
+WorldResourceContainer
+PlayerResourceContainer
