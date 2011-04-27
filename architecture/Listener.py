@@ -10,10 +10,18 @@ class Listener(object):
     def __init__(self, manager, eventTypes):
 		self.eventTypes = eventTypes
 		self.manager = manager
+        
+        # registers self with the manager
 		self.manager.registerListener(self)
 
     def notify(self, event):
-        #Each type of listener will override this method
+        """
+        Called by the event manager when it receives an event this
+        listener has registered to receive.  Should handle the
+        different types of events.
+        
+        Each listener will override this method.
+        """
         pass
 
 

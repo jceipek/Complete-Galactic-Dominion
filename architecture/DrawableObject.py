@@ -162,39 +162,11 @@ if __name__ == "__main__":
     from specialImage import loadImage
     
     a = DrawableObject('ship','alpha',blendPath='ShipFlags')
-    #mask = loadImage('ShipFlags',(0,0,0))
 
-    #a = DrawableObject('TownCenterGeneric.png','alpha')
-    #mask = loadImage('imageData/TownCenterFlag.png',(0,0,0))
-    
-    def imageBlend(image,mask,color=None):
-        if color==None:
-            color = (255,0,255)
-        rect = image.get_rect()
-        maskBackground = pygame.Surface(rect.size)
-        maskBackground.fill(color)
-        maskBackground.blit(mask,rect,special_flags=pygame.BLEND_MULT)
-        image.blit(maskBackground,rect,special_flags=pygame.BLEND_ADD)
-        return image
-    '''
-    # GOOD
-    tstSurface = pygame.Surface(a.rect.size)
-    tstSurface.fill((255,255,0))
-    tstSurface.blit(mask,a.rect,special_flags=pygame.BLEND_MULT)
-    a.image.blit(tstSurface,a.rect,special_flags=pygame.BLEND_ADD)
-    '''
-
-    #minimalRect=DrawableObject.imageBank.getMinimalRect('ship/ship_0000.png','alpha',padding=30)
-    #minimalRect.clamp_ip(a.rect)
-    
-    #a.image = imageBlend(a.image,mask,(255,0,0))
-    
     pygame.init()
     
     while RUNNING:
 
-        #screen.blit(a.image,a.rect)
-        screen.blit(a.getDefaultImage(),a.rect)
-
-        #pygame.draw.rect(screen,(255,0,255),minimalRect,2)
+        screen.blit(a.image,a.rect)
+        
         pygame.display.flip()
