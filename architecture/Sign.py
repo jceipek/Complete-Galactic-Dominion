@@ -13,7 +13,10 @@ Homepage
 Email: Cosmologicon@gmail.com 
 
 links - http://www.pygame.org/project-Panspermia-1126-.html
-      - http://pyweek.org/u/Cosmologicon/
+      - http://pyweek.org/u/Cosmologicon/ 
+
+
+Modified by Team Complete Galactic Dominion
 
 """
 
@@ -27,12 +30,60 @@ class Fonts:
     return self.fonts[spec]
 
 class Sign:
+    """
+    Displays wrapping text with an optional image
+
+    @param tcolor: text color
+    @type tcolor: tuple(int, int, int)
+
+    @param image: displayed image
+    @type image: Surface
+
+    @param imageSize: size of image displayed
+    @type imageSize:int
+
+    @param fsize: font size
+    @type fsize: int
+
+    @param offset: position of Sign on screen
+    @type offset: list[int, int]
+
+    @param font: Font of text
+    @type font: pgame.font.Font
+
+    @param sx: width of Sign
+    @type sx: int
+
+    @param sy: height of Sign
+    @type sy: int
+
+    @param tx: width containing the text
+    @type tx: int
+
+    @param surf: surface associated with Sign- not used when posting directly to the screen
+    @type surf: Surface
+
+    @param centered: whether or not the text is centered
+    @type centered: bool
+
+    @param text: List of lines of text to be displayed
+    @type text: list[str]
+
+    @param aa: whether or not to use anti-aliasing
+    @type aa: bool
+
+    @param margin: amount of space between text and edges of Sign
+    @type margin: int
+
+    @param rendered: Whether or not Sign has been rendered with its given text
+    @type rendered: bool
+    """
 
   def __init__(self, sx, offset, image= None , imageSize= 50, centered = False, margin = 5, fname = None, fsize = 14):
     
-    self.color0 = 150, 150, 150
-    self.color1 = 180, 180, 180
-    self.color2 = 100, 100, 100
+    #self.color0 = 150, 150, 150
+    #self.color1 = 180, 180, 180
+    #self.color2 = 100, 100, 100
     self.tcolor = 0, 0, 0
 
     self.image=image
@@ -40,7 +91,6 @@ class Sign:
         self.imageSize=0
     else: self.imageSize=imageSize
     
-    self.fname = fname
     self.fsize = fsize
     self.offset = list(offset)
     self.font = Fonts().getfont(fname, fsize)
@@ -56,6 +106,7 @@ class Sign:
     self.text = []
     self.rendered = False
   def addtext(self, text):
+      """Adds text and divides it into lines"""
     for t in text.split("\n"):
       while t:
         r = len(t)
@@ -69,6 +120,9 @@ class Sign:
     self.sy = len(self.text) * self.fsize + 2 * self.margin
       
   def render(self, surf=None):
+      """
+      Draws to given surface, renders if none given
+      """
     if surf==None:surf=self.surf
     
     self.surf = pygame.Surface((self.sx, self.sy))
@@ -93,7 +147,7 @@ class Sign:
         r.topleft = (self.margin+self.imageSize, y)
       surf.blit(s, (self.offset[0] ,self.offset[1]+y))
       y += self.fsize
-    if not self.image==None:
+    if self.image:
         thumb=pygame.transform.scale(self.image, (self.imageSize, self.imageSize))
         self.surf.blit(thumb, (self.margin, self.margin))
     self.rendered = True
