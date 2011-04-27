@@ -10,7 +10,7 @@ import Event, networking
 from networking import SocketThread
 from Manager import Manager
 from Window import Window
-from Grid import InfiniteGrid,FiniteGrid
+from Grid import InfiniteGrid
 from Debugger import Debugger
 from Event import EventTimer
 from World import World
@@ -197,7 +197,18 @@ def init(host='localhost',server=None):
 
 if __name__ == '__main__':
     #Connect to server
-    s = BroadcastServer(port = 1567, host = 'localhost')
+    
+    import sys
+
+    theHost = 'localhost'
+    if (len(sys.argv) == 2):
+        theHost = sys.argv[1]
+    elif len(sys.argv) > 2:
+        print "Usage: python broadcastServer.py ipAddress"
+        print "Reverting to localhost..."
+        theHost = 'localhost'
+    
+    s = BroadcastServer(port = 1567, host = theHost)
     s.listenAndConnect()
     
     init(server=s)
