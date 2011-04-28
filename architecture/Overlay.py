@@ -97,7 +97,7 @@ class Bar():
         """
         Updates the self.surface to reflect the new value.
         """
-        
+        value = max(0,value)
         self.fullness = (float(value)/self.maxValue)
         
         valueRemaining = int(self.fullness*self.barWidth)
