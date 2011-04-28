@@ -14,6 +14,7 @@ class Screen(object):
     
     def __init__(self):
         self.activate()
+        self.active = False
 
     def activate(self):
         self.active = True

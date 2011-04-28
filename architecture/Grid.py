@@ -6,7 +6,7 @@ import specialMath
 
 class Grid(object):
 
-    def __init__(self,gridSize = (100,100),tileSize=None):
+    def __init__(self,gridSize = (100,100)):
         
         self.gridSize = gridSize
         self.tileWidth, self.tileHeight = (0,0)

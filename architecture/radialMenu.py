@@ -32,7 +32,7 @@ class RMenu():
     @param visible: whether the menu can be seen (it is open)
     @param root: a list of the menu items contained in the menu
     """
-    def __init__(self,loc = (0,0),rad = 80,minDist=15,title=None,
+    def __init__(self,loc = (0,0),rad = 80,minDist=15,title='None',
         openDelay=0):
             
         self.root = []

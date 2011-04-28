@@ -97,7 +97,7 @@ class Universe(Listener):
         if self.manager is not None:
             self.manager.post(event)
 
-class Creator(object):
+class Creator():
     
     def __init__(self):
         

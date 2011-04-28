@@ -12,20 +12,15 @@ class NaturalObject(Entity):
     """
     
     name = 'Natural Object'
+    owner = 'gaia'
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.',owner='gaia'):
-        Entity.__init__(self,imagePath,x,y,world,colorkey,description,
-            owner='gaia')
+                 description = 'No information available.'):
+        Entity.__init__(self,imagePath,x,y,world,colorkey,description)
         self.blockable=True
-        self.collectable=False
+        self.collectible=False
         self.maxHealth = self.curHealth = 0
         self.world.addEntity(self)
-        print 'Adding NaturalObject entity:',self.entityID
-	
-    def collect(self):
-        if not self.collectable:
-            pass
        
     def __getState__(self):
         state = self.__dict__.copy()
@@ -60,13 +55,13 @@ class Resource(NaturalObject):
     name = 'Generic Resource'
     
     def __init__(self, imagePath, x, y, world, colorkey=None,
-                 description = 'No information available.', owner='gaia'):
+                 description = 'No information available.'):
                      
         NaturalObject.__init__(self,imagePath,x,y,world,colorkey,
-            description,owner=owner)
+            description)
     
         self.maxHealth = self.curHealth = 500
-        
+        self.collectible = True
         self.regenRate = 0
         self._regenHealth = 0
 
@@ -77,8 +72,7 @@ class Gold(Resource):
     
     def __init__(self,x,y,world):
         desc = """Gold ore is highly valued for its wonderous sheen and usefulness as an interstellar currency."""
-        Resource.__init__(self,'Gold-ore.png',x,y,world,'alpha',\
-            desc,owner='gaia')
+        Resource.__init__(self,'Gold-ore.png',x,y,world,'alpha',desc)
         
         self.regenRate = 1
 
@@ -90,9 +84,6 @@ class Gold(Resource):
         
     def __setstate__(self,state):
         return NaturalObject.__setstate__(self,state)
-        
-    def getMiniMapColor(self):
-        return (255,215,0)
 
 class Obstacle(NaturalObject):
     """

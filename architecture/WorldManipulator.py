@@ -21,7 +21,7 @@ class WorldManipulator(Listener):
         
         # registers the WorldManipulator as a Listener for the given
         # events with the event manager.
-        eventTypes = [ Event.EventExecutionEvent,Event.WorldManipulationEvent,Event.StartedEvent,Event.GameLoadedEvent]
+        eventTypes = [ Event.EventExecutionEvent,Event.WorldManipulationEvent,Event.StartedEvent,Event.LoadGameEvent,Event.GameLoadedEvent]
         Listener.__init__(self,manager,eventTypes)
         
         self.networked=networked
@@ -34,9 +34,14 @@ class WorldManipulator(Listener):
         Called by the event manager when an event of interest is 
         received.
         """
+
+        
         if isinstance(event, Event.StartedEvent):
             self.manager.post(Event.LoadGameEvent())
-        if isinstance(event, Event.GameLoadedEvent):
+        elif isinstance(event, Event.LoadGameEvent) and not self.networked:
+            self.world._generateResources()
+            self.manager.post(Event.GameLoadedEvent(self.world.universe.creator.numberOfEntities,[]))
+        elif isinstance(event, Event.GameLoadedEvent):
             if self.gameClientID != 0: # gameClientID is 0 for the server
             
                 # initialize a new player with 4 units on all clients
@@ -92,7 +97,7 @@ class WorldManipulator(Listener):
                 # world manipulator
                 entity.world.allEntities[entity.entityID] = entity
                  
-                print 'loadedEntity ID',entity.entityID
+                print 'loadedEntity ID',entity.entityID,entity.__class__
                  
                 # if it is a unit with an objectOfAction, unmap the
                 # objectOfAction id (entityID) back to a reference

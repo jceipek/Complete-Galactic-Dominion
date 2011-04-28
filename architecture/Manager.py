@@ -44,12 +44,13 @@ class Manager(object):
         """
         for evType in listener.eventTypes:
 			self.eventTypesToListeners.setdefault(evType,[]).append(listener)
-        self.listeners[ listener ] = 1
+        self.listeners[ listener ] = None
 
     def unregisterListener( self, listener ):
         """
         Removes a listener from the dictionary of listeners.
         """
+        # FIXME---! eventTypesToListeners!
         if listener in self.listeners:
             del self.listeners[ listener ]
 

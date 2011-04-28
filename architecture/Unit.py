@@ -13,7 +13,7 @@ from Event import NotificationEvent,WorldManipulationEvent
 
 #import pygame
 
-class BuildTask(object):
+class BuildTask():
     """
     Used by Builders in the self.buildQueue list to build things.
     """
@@ -25,12 +25,11 @@ class BuildTask(object):
         
         Precondition: callback is of class Callback.
         """
-        object.__init__(self)
         
         self.buildClass = buildClass
         self.callback = callback
         self.timeToBuild = self.buildClass.timeToBuild
-        self.buildTime = 0
+        self.timeSpentBuilding = 0
         self.realCenter=pos
         
     def execute(self):
@@ -48,10 +47,10 @@ class BuildTask(object):
         return callbackReturn
         
     def addTime(self,time):
-        self.buildTime+=time
+        self.timeSpentBuilding+=time
         
     def isReady(self):
-        return self.buildTime >= self.timeToBuild
+        return self.timeSpentBuilding >= self.timeToBuild
 
 class Builder(Entity):
     """
@@ -79,8 +78,8 @@ class Builder(Entity):
         
         self.blockable=True
         
-        # Dictionary which maps from strings defining units which can
-        # be produced by a builder to callbacks
+        # Dictionary which maps from classes to constructors for those
+        # classes
         self.buildDict={}
         
         # Queue of entities to build
