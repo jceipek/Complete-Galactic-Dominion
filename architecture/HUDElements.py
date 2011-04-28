@@ -2,8 +2,28 @@ from DrawableObject import DrawableObjectGroup
 from Sign import Sign
 
 class DescriptionBox():
-    #The largest HUD element which describes the selected (or hovered?) unit
-    #and its properties (those which are player-relevant)
+    """
+    The largest HUD element which describes the hovered unit
+    and its properties (those which are player-relevant)
+
+    @param baseLayer:  background image
+    @type baseLayer: DrawableObjectGroup(list(tuple(str,  str)), tuple(int, int))
+
+    @param entity: Entity whose information is being displayed
+    @type entity: Entity
+
+    @param descriptionOffset: position of description of entity relative to DescriptionBox
+    @type descriptionOffset: tuple(int, int)
+
+    @param description: Text description of entity
+    @type descritpion: Sign
+
+    @param pos: position of DescriptionBox on screen
+    @type pos: tuple(int, int)
+
+    @param thumbnailOffset: position of thumbnail relative to DescriptionBox
+    @type thumbnailOffset: tuple(int, int)
+    """
     def __init__(self,pos = (0,768-36-186)):
          #FIXME Remove this dependency - replace image with thumbnail
         from Overlay import Bar
@@ -20,6 +40,9 @@ class DescriptionBox():
         self.thumbnailOffset = (12,14+36)
 
     def updateDisplayedEntity(self,entity):
+        """
+        Changes entity displayed
+        """
         import pygame
         from Overlay import Bar
         self.entity = entity
@@ -33,7 +56,9 @@ class DescriptionBox():
         self.baseLayer.draw(screen)
         if self.entity:
             self.healthBar.updateBarWithValue(self.entity.curHealth)
-            
+
+            #if entity is building something, displays
+            #building status
             if hasattr(self.entity,'currentTask'):
                 if self.entity.currentTask:
                     if hasattr(self.entity.currentTask,'timeSpentBuilding'):
@@ -50,7 +75,21 @@ class DescriptionBox():
         
 
 class ResourceBar():
-    #A bar at the top of the screen indicating the amount of resources the player has on the current world
+    """
+    A bar at the top of the screen indicating the amount of resources the player has on the current world
+
+    @param baseLayer: background image
+    @type baseLayer: DrawableObjectGroup(list(tuple(str,  str)), tuple(int, int))
+
+    @param offset: position of amount of resource relative to ResourceBar
+    @type offset: tuple(int, int)
+
+    @param textField: Displays amount of resources own
+    @type textField: Sign
+
+    @param value: amount of resource owned
+    @type value: int
+    """
     def __init__(self,pos = (0,0)):
         images = [("ResourceBar.png", 'alpha')]
         self.baseLayer = DrawableObjectGroup(images,pos=pos)
@@ -70,7 +109,27 @@ class ResourceBar():
         self.textField.render(screen)
 
 class UnitBox():
-    #One of the tiny boxes displayed when a unit is selected
+    """
+    One of the tiny boxes displayed when a unit is selected
+
+    @param pos: position of UnitBox on screen
+    @type pos:tuple(int, int)
+
+    @param baselayer: background image
+    @type baselayer: DrawableObjectGroup
+
+    @param entity: entity displayed
+    @type entity: Entity
+
+    @param thumbnailOffset: position of thumbnail image relative to UnitBox
+    @type thumbnailOffset: tuple(int, int)
+
+    @param thumbnail: image of entity displayed
+    @type thumbnail: pygame.Surface
+
+    @param healthBar: shows health of entity
+    @type healthBar: Bar
+    """
     
     def __init__(self,entity,pos=(0,0),endCap=False):
         import pygame #FIXME Remove this dependency - replace image with thumbnail
@@ -89,13 +148,33 @@ class UnitBox():
         self.healthBar = Bar(self.entity.maxHealth,38,5,fullColor=(0,255,0),emptyColor=(30,30,30))
 
     def draw(self,screen):
+        """updates and draws unitBox to screen"""
         self.healthBar.updateBarWithValue(self.entity.curHealth)
         self.baseLayer.draw(screen)
         screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))
         self.healthBar.draw(screen,(self.pos[0]+4,self.pos[1]+50))
 
 class SelectedUnitBar():
-    #A bar containing the tiny boxes displayed when a unit is selected
+    """
+    A bar containing the tiny boxes displayed when a unit is selected
+
+    @param boxes: list of contained UnitBoxes
+
+    @param boxWidth: width of UnitBox
+    @type boxWidth: int
+
+    @param boxHeight: height of UnitBox
+    @type boxHeight: int
+
+    @param rowMax: maximum number of UnitBoxes per row
+    @type rowMax: int
+
+    @param columnMax: maximum number of columns
+    @type columnMax: int
+
+    @param rowSpacing: amount of space between each row of UnitBoxes
+    @type rowSpacing: int
+    """
     
     def __init__(self):
         self.boxes = []
@@ -132,7 +211,17 @@ class SelectedUnitBar():
             b.draw(screen)
             
 class Notification(Sign):
-    def __init__ (self, text='This is a Notification. Consider yourself notified.', pos=(800,0), color=(255, 255, 0), width=200, time=5):
+    """
+    Displays text to the screen. Must be element of
+    NotificationList to disappear after set amount of time
+
+    @param tcolor: text color
+    @type tcolor:tuple(int, int, int)
+
+    @param timeLeft: Amount of time notification will continue to be displayed in milliseconds
+    @type timeLeft: int
+    """
+    def __init__ (self, text='This is a Notification. Consider yourself notified.', pos=(0,0), color=(255, 255, 0), width=200, time=5):
         Sign.__init__(self, width, pos)
         self.addtext(text)
         self.tcolor=color
@@ -143,6 +232,18 @@ class Notification(Sign):
 class NotificationList():
     """
     List of notifications. Displays multiple notifications which will disappear after some amount of time.
+
+    @param notes: list of notifications being displayed
+    @type notes: list[Notification]
+
+    @param pos: position of NotificationList on screen
+    @type pos: tuple(int, int)
+
+    @param width: width of displayed list
+    @type width: int
+
+    @param maxLength: maximum number of Notifications that can be contained
+    @type maxLength: int
     """
     def __init__(self, pos=(800, 60), width=200, maxLength=5):
         self.notes=[]
@@ -151,8 +252,10 @@ class NotificationList():
         self.maxLength=maxLength
         
     def add(self, notification):
+        """adds a Notification and sets x coordinate of Notification's position"""
         self.notes.append(notification)
         notification.offset[0]=self.pos[0]
+        
     def update(self, timeElapsed):
         y=self.pos[1]
         #removes notifications that have timed out

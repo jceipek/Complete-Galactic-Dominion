@@ -8,8 +8,8 @@ class Screen(object):
     Contains all of the elements that might be shown on screen at once.
     This is an abstract class with child classes.
     
-    #Attributes:
-    #   active = bool #Useful for pausing the screen
+    @param active: Whether or not screen is being used, useful for pausing the screen
+    @type active: bool
     """
     
     def __init__(self):

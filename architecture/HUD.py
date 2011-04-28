@@ -8,6 +8,31 @@ from Listener import Listener
 import Event
 
 class HUD(Listener):
+    """
+    Heads-Up Display contains elements to inform the player of
+    the resources owned, health of selected entities, and
+    description an entity being hovered over.
+    Displays other pertinent information through notifications.
+
+    @param descBox: Shows information about a hovered entity
+    @type descBox: DescriptionBox
+
+    @param resourceBar: Shows the number of resources owned by the player
+    @type descBox: ResourceBar
+
+    @param selectedUnitBar: Bar displaying the units selected
+    @type selectedUnitBar: SelectedUnitBar
+
+    @param clientID: id number of the player
+    @type clientID: int
+
+    @param viewport: reference to the player's viewport, not currently used
+    @type viewport: Viewport
+
+    @param note: Shows information regarding relevent events
+    @type note: NotificationList
+    
+    """
     
     def __init__(self,manager,clientID):
         
@@ -26,6 +51,7 @@ class HUD(Listener):
         self.note=NotificationList()
         
     def draw(self, displaySurface):
+        #Draws elements of HUD to surface
         self.selectedUnitBar.draw(displaySurface)
         self.descBox.draw(displaySurface)
         self.note.draw(displaySurface)
@@ -40,7 +66,6 @@ class HUD(Listener):
         Usage:
         ========================
            self.note.add(Notification('Imma notify you'))
-           self.note.add(Notification('This is a slightly shorter lasting notification', time=2))
            self.note.add(Notification('This is a longer lasting notification', time=8))
         '''
         note=Notification(event.message)
