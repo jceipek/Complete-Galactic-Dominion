@@ -13,7 +13,7 @@ from Event import NotificationEvent,WorldManipulationEvent
 
 #import pygame
 
-class BuildTask(object):
+class BuildTask():
     """
     Used by Builders in the self.buildQueue list to build things.
 
@@ -39,12 +39,11 @@ class BuildTask(object):
         
         Precondition: callback is of class Callback.
         """
-        object.__init__(self)
         
         self.buildClass = buildClass
         self.callback = callback
         self.timeToBuild = self.buildClass.timeToBuild
-        self.buildTime = 0
+        self.timeSpentBuilding = 0
         self.realCenter=pos
         
     def execute(self):
@@ -62,14 +61,21 @@ class BuildTask(object):
         return callbackReturn
         
     def addTime(self,time):
-        self.buildTime+=time
+        self.timeSpentBuilding+=time
         
     def isReady(self):
-        return self.buildTime >= self.timeToBuild
+        return self.timeSpentBuilding >= self.timeToBuild
 
 class Builder(Entity):
     """
     A kind of entity that can create things (units or structures).
+    Attributes:
+    description: description of behavior, abilities (inherited from Entity)
+    x: position (inherited from Entity)
+    y: position (inherited from Entity)
+    maxHealth: maximum/ default health points (inherited from Entity)
+    curHealth: current health (inherited from Entity)
+    size: radius of collision (inherited from Entity)
     
     @param buildDict: Dictionary which maps from strings defining units which can be produced by a builder to callbacks
     @type buildDict: dict{str:Callback}
@@ -97,11 +103,13 @@ class Builder(Entity):
         
         self.blockable=True
         
-        # 
+        # Dictionary which maps from classes to constructors for those
+        # classes
         self.buildDict={}
         
         # Queue of entities to build
         self.buildQueue = []
+        self.objectOfAction = None
         self.currentTask=None
         self.inventory=Inventory()
         
@@ -278,7 +286,8 @@ class Unit(Builder):
         self.efficiency={Locals.MOVE:.1, Locals.GATHER: 5, Locals.ATTACK: 10}
         self.path=[] #queue of future tuple destinations
         self.dest=self.realCenter=list(self.rect.center) #current destination
-        self.speed=self.efficiency[Locals.MOVE]
+        self.speed=.1
+        self.attackRange=300
         self.attackRechargeTime=500
         self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100, Locals.BUILD: 100}
         self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
@@ -320,7 +329,7 @@ class Unit(Builder):
         self.selected = False
 
     def update(self):
-        """Called by game each frame to update object. Has unit perform action given its status"""
+        """Called by game each frame to update object.Has unit perform action given its status"""
         #FIXME !!!
         if isinstance(self.objectOfAction,int):
             self.objectOfAction = self.world.universe.entityIDToEntity.get(self.objectOfAction,self.objectOfAction)

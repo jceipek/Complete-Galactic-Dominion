@@ -1,6 +1,6 @@
 from Event import WorldManipulationEvent
 
-class Callback(object):
+class Callback():
     """
     Performs a basic, one operation callback with a variable length
     argument list.
@@ -16,14 +16,14 @@ class Callback(object):
         """
         return self.callback(*self.args)
 
-class GroupCallback(object):
+class GroupCallback(Callback):
     """
     Performs a list of callbacks with the same variable length
     argument list.
     """
     def __init__(self, callbackList, *args):
         
-        self.callbackList = callbackList
+        self.callback = callbackList
         self.args = args
         
     def execute(self):
@@ -32,12 +32,12 @@ class GroupCallback(object):
         """
         results = []
         
-        for callback in self.callbackList:
+        for callback in self.callback:
             results.append(callback(*self.args))
         
         return results
 
-class SeriesCallback(object):
+class SeriesCallback(Callback):
     """
     Performs a series of callbacks in which the variable length
     argument list is passed to the first callback, and the result
@@ -71,7 +71,7 @@ class SeriesCallback(object):
         
         return args
 
-class ParallelCallback(object):
+class ParallelCallback(Callback):
     """
     Performs multiple callbacks in the order given, each with
     a separate argument list.  The results of all callbacks are

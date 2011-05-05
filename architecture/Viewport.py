@@ -53,9 +53,7 @@ class Viewport(object):  #SHOULD PROBABLY INHERIT FROM DRAWABLE OBJECT
         self.scrollSpeed = [0,0]
 
         self.selectedEntities = []
-        
-        #self.calcDistance = lambda a,b: (a**2 + b**2)**0.5
-        
+                
         self.viewportEntities = []
         self.myViewportEntities = []
         

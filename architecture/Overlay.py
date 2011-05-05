@@ -150,6 +150,7 @@ class MiniMap(object):
         self.width = width
         self.height = height
 
+        self.grid = self.world.grid
         self.gridDict = self.world.grid.grid
         self.gridSize = self.world.grid.gridSize
         self.gridDim = self.world.grid.getCartGridDimensions()

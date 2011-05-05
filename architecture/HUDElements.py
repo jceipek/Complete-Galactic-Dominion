@@ -61,10 +61,10 @@ class DescriptionBox():
             #building status
             if hasattr(self.entity,'currentTask'):
                 if self.entity.currentTask:
-                    if hasattr(self.entity.currentTask,'buildTime'):
+                    if hasattr(self.entity.currentTask,'timeSpentBuilding'):
                         from Overlay import Bar
                         self.buildBar = Bar(self.entity.currentTask.timeToBuild,118,6,fullColor=(0,180,255),emptyColor=(30,30,30))
-                        self.buildBar.updateBarWithValue(self.entity.currentTask.buildTime)
+                        self.buildBar.updateBarWithValue(self.entity.currentTask.timeSpentBuilding)
                         self.buildBar.draw(screen,(self.pos[0]+78,self.pos[1]+69))
             
             screen.blit(self.thumbnail, (self.pos[0]+self.thumbnailOffset[0],self.pos[1]+self.thumbnailOffset[1]))

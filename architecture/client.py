@@ -85,10 +85,10 @@ def init(host='localhost'):
     if not networked:
         # Initialize 25 entities in World w
         # Initialize a TestTownCenter
-        clientID = GameClient.ID = 0
+        clientID = GameClient.ID = 1
         ui.setClientID(clientID)
         eventManager.post(Event.NewPlayerEvent(clientID))
-        w._generateResources()
+        
     else:
         clientID = client.ID
         ui.setClientID(clientID)
