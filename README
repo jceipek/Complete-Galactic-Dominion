@@ -1,0 +1,41 @@
+WHAT IS IT?
+===========
+
+Complete Galactic Dominion (CGD) is a a cross-platform, networked real time strategy game (RTS) with a macro focus. 
+It features planets with wrapping terrain (go off one edge and pop up on the other side) and management of cross-planet supply chains.
+
+The graphics are isometric 2d with pre-rendered 3d objects used as sprites.
+
+CGD is written for Python 2.6-2.7 and uses the Pygame module.
+
+
+CAN I PLAY IT YET?
+=================
+CGD is currently in the early stages of development, and as such, it is unplayable at the moment. 
+However, we aim to have a working demo by Summer 2011.
+
+
+HOW CAN I FIGURE OUT WHAT YOUR SOURCE CODE DOES?
+=================================================
+We have tried to document the source code as well as possible, using the epytext (http://epydoc.sourceforge.net/manual-epytext.html) markup language. This type of markup lends itself to some very readable documentation that can be accessed through /docs/index.html.
+
+
+QUICK GIT REFERENCE:
+====================
+For more help go to:
+http://www.kernel.org/pub/software/scm/git/docs/
+
+####To add files to the repository:
+####YOU MUST BE IN THE LOCAL DIRECTORY
+
+##for new files:
+git add <filename>
+
+##to commit changes to your local repository
+git commit -am "message goes here"
+
+##to commit changes to the public repository
+git push origin master
+
+##updates your local repository
+git pull
