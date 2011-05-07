@@ -173,7 +173,7 @@ def init(host='localhost',server=None):
     networked = True
     
     #create a client that connects to the server via localhost
-    client = GameClient(eventManager,host='localhost',port=1567)
+    client = GameClient(eventManager,host=host,port=1567)
     
     #wait until the client is assigned an ID before proceeding
     while client.ID == None:

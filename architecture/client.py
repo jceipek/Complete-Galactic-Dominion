@@ -104,15 +104,15 @@ if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
 
-    import sys,cProfile
+    import sys
 
     theHost = 'localhost'
     if (len(sys.argv) == 2):
         theHost = sys.argv[1]
+        print theHost
     elif len(sys.argv) > 2:
         print "Usage: python client.py ipAddress"
         print "Reverting to localhost..."
         theHost = 'localhost'
-
-    cProfile.run('eTypestoListeners = init(theHost)','ProgramProfile.txt')
-    #eTypestoListeners = init(theHost)
+    
+    init(theHost)
