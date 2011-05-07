@@ -51,7 +51,7 @@ class BroadcastServer(networking.Server):
     @type socketThreads: dict
     """
     numberOfClients = 0
-    
+
     def processInput(self,sockThrd,data):
         """
         All requests to the server come through here.
@@ -89,7 +89,7 @@ class BroadcastServer(networking.Server):
         else:
             for sock in self.socketThreads.keys():
                 sock.write(data)
-                
+
     def listenAndConnect(self,numPendingConnections=5):
         """
         This is the method that starts the connectionThread and should
@@ -162,20 +162,18 @@ def init(host='localhost',server=None):
     # World w is set to the activeWorld of the universe
     universe = Universe(eventManager)
     ui = UserInterface(eventManager,universe.activeWorld,'BROADCASTSERVER')
-    
+
     gameWindow = Window(eventManager,width=1024,height=768)
     gameWindow.fullscreenMode = False
     gameWindow.updateScreenMode()
-    
+
     w = World(universe)
     s.world=w
-    
+
     networked = True
-    
-    #create a client that connects to the server via localhost
-    client = GameClient(eventManager,host=host,port=1567)
-    
-    #wait until the client is assigned an ID before proceeding
+    client = GameClient(eventManager,host='10.41.64.25',port=1567)
+
+	#wait until the client is assigned an ID before proceeding
     while client.ID == None:
         import time
         time.sleep(.02)
@@ -183,7 +181,7 @@ def init(host='localhost',server=None):
     clientID = client.ID
 
     ui.setClientID(clientID)
-    
+
     wManipulator = WorldManipulator(eventManager,w,networked,gameClientID = clientID)
     
     #generate the resources in the server, the existance of these
@@ -192,13 +190,13 @@ def init(host='localhost',server=None):
     
     #Notify the manager that the window should start to accept input:
     eventManager.post(Event.StartEvent())
-    
+
     return eventManager.eventTypesToListeners
 
 if __name__ == '__main__':
     #Connect to server
-    
-    import sys
+    s = BroadcastServer(port = 1567, host = '10.41.64.25')
+    s.listenAndConnect()
 
     theHost = 'localhost'
     if (len(sys.argv) == 2):
