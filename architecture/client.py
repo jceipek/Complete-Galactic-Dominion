@@ -85,10 +85,10 @@ def init(host='localhost'):
     if not networked:
         # Initialize 25 entities in World w
         # Initialize a TestTownCenter
-        clientID = GameClient.ID = 1
+        clientID = GameClient.ID = 0
         ui.setClientID(clientID)
         eventManager.post(Event.NewPlayerEvent(clientID))
-
+        w._generateResources()
     else:
         clientID = client.ID
         ui.setClientID(clientID)
@@ -104,15 +104,4 @@ if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
 
-    import sys
-
-    theHost = 'localhost'
-    if (len(sys.argv) == 2):
-        theHost = sys.argv[1]
-        print theHost
-    elif len(sys.argv) > 2:
-        print "Usage: python client.py ipAddress"
-        print "Reverting to localhost..."
-        theHost = 'localhost'
-    
-    init(theHost)
+    eTypestoListeners = init('10.41.24.200')
