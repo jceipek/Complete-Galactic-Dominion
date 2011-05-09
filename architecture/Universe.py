@@ -39,7 +39,13 @@ class Universe(Listener):
         ID = entity.entityID
         self.creator.unregisterEntity(entity)
         self.entityIDToEntity[ID] = None
-        
+    
+    def addProtoEntity(self,entity):
+        """
+        Returns an ID for an entity-to-be (created by a BuildTask).
+        """
+        return self.creator.registerEntity(entity)
+    
     def getNextEntityID(self):
         if len(self.creator.releasedEntityIDs) > 0:
             return self.creator.releasedEntityIDs[0]

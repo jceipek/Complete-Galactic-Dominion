@@ -116,7 +116,7 @@ class WorldManipulator(Listener):
                     print 'Object of action id:',cmd[2]
                     
                     # execute the action on the objectOfAction
-                    if obj is not None:
+                    if obj is not None and entity is not None:
                         print 'Entity owned by: %s\nActing on entity owned by: %s' % (str(entity.owner),str(obj.owner))
                         entity.execAction(obj)
                     
@@ -132,4 +132,5 @@ class WorldManipulator(Listener):
                     #sets the path of an entity
                     #list should be in the form ['setpath',entityID,coordinate_tuple]
                     entity=self.world.universe.entityIDToEntity[cmd[1]]
-                    entity.addToPath(cmd[2],servercommand=True)
+                    if obj is not None and entity is not None:
+                        entity.addToPath(cmd[2],servercommand=True)

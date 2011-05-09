@@ -20,7 +20,6 @@ class NaturalObject(Entity):
         self.blockable=True
         self.collectible=False
         self.maxHealth = self.curHealth = 0
-        self.world.addEntity(self)
        
     def __getState__(self):
         state = self.__dict__.copy()

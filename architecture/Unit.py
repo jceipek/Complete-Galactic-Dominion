@@ -292,7 +292,7 @@ class Unit(Builder):
         self.radius={Locals.GATHER: 100, Locals.ATTACK: 200, Locals.DEPOSIT: 100, Locals.BUILD: 100}
         self.timeSinceLast={0:0,Locals.ATTACK:self.attackRechargeTime}
         self.objectOfAction=None
-        self.world.addEntity(self)
+        
         print 'Adding unit entity:',self.entityID
         
         self.regenRate = .5        

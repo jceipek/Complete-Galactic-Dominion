@@ -134,8 +134,6 @@ class BroadcastServer(networking.Server):
         self.connectionThread=threading.Thread(target=connectToAllClients)
         self.connectionThread.start()#this is a non daemonic thread and will prevent the server from 
 
-
-
 def init(host='localhost',server=None):
     """
     Most of this code is copied from init() function in client.py
@@ -171,7 +169,7 @@ def init(host='localhost',server=None):
     s.world=w
 
     networked = True
-    client = GameClient(eventManager,host='10.41.64.25',port=1567)
+    client = GameClient(eventManager,host=s.host,port=1567)
 
 	#wait until the client is assigned an ID before proceeding
     while client.ID == None:
@@ -196,7 +194,7 @@ def init(host='localhost',server=None):
 if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
-    s = BroadcastServer(port = 1567, host = '10.41.64.25')
+    s = BroadcastServer(port = 1567, host = '192.168.50.74')
     s.listenAndConnect()
 
     init(server=s)

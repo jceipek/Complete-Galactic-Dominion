@@ -23,7 +23,6 @@ class Structure(Builder):
         self.maxHealth=9001
         self.curHealth=self.maxHealth
         self.movable=False
-        self.world.addEntity(self)
         print 'Adding unit entity:',self.entityID
 
     def __getstate__(self):
