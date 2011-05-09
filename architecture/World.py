@@ -232,10 +232,11 @@ class World(object):
         self.deadEntities,deadEntities = [],self.deadEntities
         return deadEntities
     
-    def addEntity(self, entity):
+    def addEntity(self, entity, entityID=None):
         """
         Adds an entity to a world in the allEntities dictionary.
         maps entityID to an entity.
+        entityID not yet implemented.
         """
         self.universe.addEntity(entity)
         self.allEntities[entity.entityID] = entity
