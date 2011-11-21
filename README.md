@@ -11,7 +11,7 @@ The graphics are isometric 2d with pre-rendered 3d objects used as sprites.
 
 CGD is written for Python 2.6-2.7 and uses the Pygame module.
 
-[![ActionScreenshot](https://github.com/jceipek/Complete-Galactic-Dominion/blob/master/ActionScreenshot.png "CGD in Action")]
+(https://github.com/jceipek/Complete-Galactic-Dominion/blob/master/ActionScreenshot.png "CGD in Action")
 
 
 CAN I PLAY IT YET?
