@@ -165,6 +165,7 @@ class FiniteGrid(Grid):
                 else:
                     self.emptySquare.draw(surface,\
                     (left+offset[0],top+offset[1]))
+'''
 
 class Grid2(object):
 
@@ -200,12 +201,14 @@ class Grid2(object):
         lIdx,tIdx = self.collidePointGridSquare(rect.topleft)
         rIdx,bIdx = self.collidePointGridSquare(rect.bottomright)
         
-        indexList = []
+        return [ (xIter,yIter) for xIter in xrange(lIdx,rIdx+1) for yIter in xrange(tIdx,bIdx+1) ]
         
-        for xIter in xrange(lIdx,rIdx+1):
-            for yIter in xrange(tIdx,bIdx+1):
-                indexList.append((xIter,yIter))
-        return indexList
+        #indexList = []
+        
+        #for xIter in xrange(lIdx,rIdx+1):
+        #    for yIter in xrange(tIdx,bIdx+1):
+        #        indexList.append((xIter,yIter))
+        #return indexList
     
     def collidePointGridSquare(self,point):
         """
@@ -305,4 +308,3 @@ class InfiniteGrid2(Grid2):
                 #txt.get_rect().center = (left+tileWidth/2,top+tileHeight/2)
                 #surface.blit(txt,((left+tileWidth/3,top+tileHeight/3),(50,50)))
         #pygame.draw.polygon(surface,(255,0,0),[(0,0),self.cartToIso((self.gridSize[0],0)),self.cartToIso((0,self.gridSize[1])),self.cartToIso(self.gridSize)])
-'''

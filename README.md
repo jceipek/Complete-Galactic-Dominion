@@ -29,7 +29,7 @@ networking) were not implemented in a robust, scalable fashion, and would need t
 
 RUNNING
 =======
-cd into /architecture
+cd into /game_code
 Modify broadcastServer.py and client.py so that they use the correct ip address.
 Then, run client.py.
 

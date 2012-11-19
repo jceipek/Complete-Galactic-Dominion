@@ -194,10 +194,7 @@ def init(host='localhost',server=None):
 if __name__ == '__main__':
     #FIXME: Very little implemented here.
     #Connect to server
-    s = BroadcastServer(port = 1567, host = '192.168.50.74')
+    s = BroadcastServer(port = 1567, host = '192.168.1.103')
     s.listenAndConnect()
 
     init(server=s)
-
-
-

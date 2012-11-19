@@ -102,6 +102,9 @@ class WorldManipulator(Listener):
                 # if it is a unit with an objectOfAction, unmap the
                 # objectOfAction id (entityID) back to a reference
                 # to an entity
+                
+                # NOTE - THIS IS NOT PERSISTENT.  IF AN OBJECTOFACTION
+                # IS NOT YET LOADED, IT STAYS AS AN INT!  BAD! FIX!
                 if isinstance(entity,Unit) and entity.objectOfAction != None:
                     entity.objectOfAction = self.world.universe.entityIDToEntity.get(entity.objectOfAction,entity.objectOfAction)
 
