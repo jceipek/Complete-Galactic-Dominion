@@ -29,9 +29,10 @@ networking) were not implemented in a robust, scalable fashion, and would need t
 
 RUNNING
 =======
-cd into /game_code
-Modify broadcastServer.py and client.py so that they use the correct ip address.
-Then, run client.py.
+cd into `/game_code`
+Modify `broadcastServer.py` and `client.py` so that they use the correct ip address.
+
+Then, run `client.py`.
 
 HOW CAN I FIGURE OUT WHAT YOUR SOURCE CODE DOES?
 =================================================
